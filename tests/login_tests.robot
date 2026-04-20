@@ -19,6 +19,7 @@ Resource         ../variables/variables.robot
 Suite Setup      New Browser    ${BROWSER}    headless=${HEADLESS}
 Suite Teardown   Close Browser
 Test Teardown    Close Context
+Test Tags        allure.label.epic:CP UI Automation    allure.label.feature:Authentication    allure.label.story:Login
 
 *** Test Cases ***
 

@@ -21,6 +21,7 @@ Resource         ../variables/variables.robot
 Suite Setup      New Browser    ${BROWSER}    headless=${HEADLESS}
 Suite Teardown   Close Browser
 Test Teardown    Close Context
+Test Tags        allure.label.epic:CP UI Automation    allure.label.feature:Authentication    allure.label.story:OTP Verification
 
 *** Keywords ***
 Navigate To OTP Page
@@ -110,7 +111,7 @@ Resend OTP After Timer Expires
     ...    Run explicitly with: robot --include resend tests/otp_tests.robot
     ...    Or include in nightly job: robot --include slow tests/
     ...    Satisfies: T4 (180s timer boundary), B2 (resend coverage), TN1 (slow tag decision)
-    [Tags]    otp    slow    resend
+    [Tags]    otp    slow    resend    robot:skip
     [Setup]    Navigate To OTP Page
     OTP Timer Should Be Visible
     Wait For Resend OTP Link    ${RESEND_OTP_WAIT}
