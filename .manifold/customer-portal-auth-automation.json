@@ -1,0 +1,333 @@
+{
+  "$schema": "https://raw.githubusercontent.com/dhanesh/manifold/main/install/manifold-structure.schema.json",
+  "schema_version": 3,
+  "feature": "customer-portal-auth-automation",
+  "phase": "GENERATED",
+  "domain": "software",
+  "created": "2026-04-18T00:00:00Z",
+  "constraints": {
+    "business": [
+      {"id": "B1", "type": "invariant", "quality": {"specificity": 3, "measurability": 3, "testability": 3}},
+      {"id": "B2", "type": "goal",      "quality": {"specificity": 2, "measurability": 2, "testability": 3}},
+      {"id": "B3", "type": "boundary",  "quality": {"specificity": 3, "measurability": 3, "testability": 3}}
+    ],
+    "technical": [
+      {"id": "T1", "type": "invariant", "quality": {"specificity": 3, "measurability": 3, "testability": 3}},
+      {"id": "T2", "type": "boundary",  "quality": {"specificity": 3, "measurability": 3, "testability": 3}, "resolved_by": "TN3", "resolved_value": "Browser (Playwright) v19.9.0"},
+      {"id": "T3", "type": "boundary",  "quality": {"specificity": 3, "measurability": 3, "testability": 3},
+       "threshold": {"kind": "deterministic", "ceiling": "30s wait for SMS OTP"}},
+      {"id": "T4", "type": "boundary",  "quality": {"specificity": 3, "measurability": 3, "testability": 3},
+       "threshold": {"kind": "deterministic", "ceiling": "180s countdown before resend-otp-link visible"}},
+      {"id": "T5", "type": "invariant", "quality": {"specificity": 3, "measurability": 3, "testability": 3}}
+    ],
+    "user_experience": [
+      {"id": "U1", "type": "invariant", "quality": {"specificity": 3, "measurability": 3, "testability": 3}},
+      {"id": "U2", "type": "goal",      "quality": {"specificity": 2, "measurability": 2, "testability": 2}},
+      {"id": "U3", "type": "boundary",  "quality": {"specificity": 3, "measurability": 3, "testability": 3}}
+    ],
+    "security": [
+      {"id": "S1", "type": "invariant", "quality": {"specificity": 3, "measurability": 3, "testability": 2},
+       "challenger": "stakeholder"},
+      {"id": "S2", "type": "boundary",  "quality": {"specificity": 2, "measurability": 2, "testability": 2},
+       "challenger": "technical-reality"}
+    ],
+    "operational": [
+      {"id": "O1", "type": "goal",     "quality": {"specificity": 3, "measurability": 3, "testability": 3}},
+      {"id": "O2", "type": "boundary", "quality": {"specificity": 3, "measurability": 3, "testability": 3}},
+      {"id": "O3", "type": "goal",     "quality": {"specificity": 2, "measurability": 2, "testability": 2},
+       "source": "pre-mortem"},
+      {"id": "O4", "type": "boundary", "quality": {"specificity": 3, "measurability": 3, "testability": 3},
+       "source": "pre-mortem",
+       "threshold": {"kind": "deterministic", "ceiling": "30s SMS wait timeout; fallback: skip test if gateway unavailable"}}
+    ]
+  },
+  "tensions": [
+    {
+      "id": "TN1",
+      "type": "trade_off",
+      "between": ["T4", "B2"],
+      "status": "resolved",
+      "decision": "A",
+      "validation_criteria": [
+        "Resend OTP test is tagged with 'slow' and 'resend' tags",
+        "Default CI run uses --exclude slow flag",
+        "robot --dryrun includes the tagged test without triggering the 180s wait"
+      ],
+      "propagation_effects": [
+        {"constraint_id": "B2", "effect": "LOOSENED", "note": "Full coverage maintained via on-demand execution of slow-tagged test"},
+        {"constraint_id": "O2", "effect": "TIGHTENED", "note": "Default CI result output will not include slow tests; document in results README"}
+      ]
+    },
+    {
+      "id": "TN2",
+      "type": "resource_tension",
+      "between": ["T3", "O4", "B2", "O1"],
+      "status": "resolved",
+      "decision": "A",
+      "validation_criteria": [
+        "TEST_OTP variable is set to 9999 in variables file",
+        "No Sleep or SMS-wait keywords appear in OTP test cases",
+        "Valid OTP test passes consistently in CI without SMS dependency"
+      ],
+      "propagation_effects": [
+        {"constraint_id": "T3", "effect": "LOOSENED", "note": "Fixed OTP 9999 pre-configured in UAT — no SMS wait required"},
+        {"constraint_id": "O4", "effect": "LOOSENED", "note": "SMS gateway fallback constraint no longer applies to main test runs"},
+        {"constraint_id": "S1", "effect": "TIGHTENED", "note": "OTP value 9999 must live in variables file, not hardcoded inline in test cases"}
+      ]
+    },
+    {
+      "id": "TN3",
+      "type": "hidden_dependency",
+      "between": ["T2", "T1", "T5"],
+      "status": "resolved",
+      "decision": "A",
+      "validation_criteria": [
+        "All resource files import 'Browser' library",
+        "All locators use css=[data-testid='...'] syntax",
+        "Fill Text keyword used for all input interactions"
+      ],
+      "propagation_effects": [
+        {"constraint_id": "T1", "effect": "LOOSENED", "note": "Locator syntax confirmed: css=[data-testid='...'] for Browser library"},
+        {"constraint_id": "T5", "effect": "LOOSENED", "note": "Fill Text handles input naturally; Browser enforces maxLength via DOM"},
+        {"constraint_id": "U2", "effect": "LOOSENED", "note": "Browser library has built-in auto-wait, reducing need for explicit Wait Until keywords"}
+      ]
+    },
+    {
+      "id": "TN4",
+      "type": "trade_off",
+      "between": ["S1", "B3", "O1"],
+      "status": "resolved",
+      "decision": "A",
+      "validation_criteria": [
+        "variables.robot contains BASE_URL, TEST_MOBILE, TEST_OTP",
+        "No credential values appear inline in any .robot test or resource file",
+        "CI can override TEST_MOBILE via %{TEST_MOBILE} environment variable"
+      ],
+      "propagation_effects": [
+        {"constraint_id": "S1", "effect": "LOOSENED", "note": "Credentials in variables file, not embedded in test logic"},
+        {"constraint_id": "B3", "effect": "LOOSENED", "note": "BASE_URL variable allows environment switching without editing test files"}
+      ]
+    }
+  ],
+  "anchors": {
+    "required_truths": [
+      {
+        "id": "RT-1",
+        "status": "SATISFIED",
+        "depth": 0,
+        "maps_to": ["B2", "O1", "O2"],
+        "evidence": [
+          {"id": "E1", "type": "file_exists", "path": "resources/LoginPage.robot", "status": "VERIFIED"},
+          {"id": "E2", "type": "file_exists", "path": "resources/OTPPage.robot", "status": "VERIFIED"},
+          {"id": "E3", "type": "file_exists", "path": "tests/login_tests.robot", "status": "VERIFIED"},
+          {"id": "E4", "type": "file_exists", "path": "tests/otp_tests.robot", "status": "VERIFIED"},
+          {"id": "E5", "type": "file_exists", "path": "variables/variables.robot", "status": "VERIFIED"},
+          {"id": "E6", "type": "test_passes", "path": "tests/", "test_name": "robot --dryrun: 10/10 PASS", "status": "VERIFIED"}
+        ],
+        "children": [
+          {"id": "RT-1.1", "status": "SATISFIED", "depth": 1, "children": []},
+          {"id": "RT-1.2", "status": "SATISFIED", "depth": 1, "children": []},
+          {"id": "RT-1.3", "status": "SATISFIED", "depth": 1, "children": []}
+        ]
+      },
+      {
+        "id": "RT-2",
+        "status": "SATISFIED",
+        "depth": 0,
+        "maps_to": ["B1", "B3", "S1", "T3"],
+        "children": [
+          {"id": "RT-2.1", "status": "SATISFIED", "depth": 1, "children": []}
+        ]
+      },
+      {
+        "id": "RT-3",
+        "status": "SATISFIED",
+        "depth": 0,
+        "maps_to": ["T2"],
+        "children": []
+      },
+      {
+        "id": "RT-4",
+        "status": "PARTIAL",
+        "depth": 0,
+        "maps_to": ["T1", "S2", "O3"],
+        "children": [
+          {"id": "RT-4.1", "status": "PARTIAL", "depth": 1, "children": []},
+          {"id": "RT-4.2", "status": "PARTIAL", "depth": 1, "children": []}
+        ]
+      },
+      {
+        "id": "RT-5",
+        "status": "SATISFIED",
+        "depth": 0,
+        "maps_to": ["O1", "O2"],
+        "evidence": [
+          {"id": "E7", "type": "test_passes", "path": "tests/", "test_name": "robot --dryrun: 10/10 PASS, 0 errors", "status": "VERIFIED"}
+        ],
+        "children": []
+      }
+    ],
+    "binding_constraint": {
+      "required_truth_id": "RT-1",
+      "reason": "Project file structure does not exist. All other required truths either depend on RT-1 being satisfied (RT-5) or can only be verified by running the tests that RT-1 produces (RT-4). RT-2 and RT-3 are already satisfied.",
+      "dependency_chain": ["RT-5", "RT-4"]
+    },
+    "recommended_option": "B",
+    "tension_validation": [
+      {"tension_id": "TN1", "status": "CONFIRMED", "by_option": "B"},
+      {"tension_id": "TN2", "status": "CONFIRMED", "by_option": "B"},
+      {"tension_id": "TN3", "status": "CONFIRMED", "by_option": "B"},
+      {"tension_id": "TN4", "status": "CONFIRMED", "by_option": "B"}
+    ]
+  },
+  "iterations": [
+    {
+      "number": 4,
+      "phase": "generate",
+      "timestamp": "2026-04-18T00:00:00Z",
+      "result": "Generated 5 artifacts (Option B: full simultaneous). Dry-run: 10/10 PASS, 0 errors. RT-1 and RT-5 promoted to SATISFIED. Fixed import issue: Variables directive changed to Resource for .robot variable files.",
+      "artifacts_generated": 5,
+      "by_type": {
+        "code": 3,
+        "test": 2
+      },
+      "dryrun": "PASS 10/10"
+    },
+    {
+      "number": 3,
+      "phase": "anchor",
+      "timestamp": "2026-04-18T00:00:00Z",
+      "result": "Derived 5 required truths. RT-2 (test mobile) and RT-3 (Playwright) SATISFIED. RT-1 (project structure) is binding constraint blocking everything. RT-5 is SPECIFICATION_READY pending RT-1. Recommended Option B: full simultaneous generation in m4.",
+      "required_truths": 5,
+      "by_status": {
+        "SATISFIED": 2,
+        "PARTIAL": 1,
+        "NOT_SATISFIED": 1,
+        "SPECIFICATION_READY": 1
+      },
+      "solution_options": 3,
+      "selected_option": "Option B"
+    },
+    {
+      "number": 2,
+      "phase": "tension",
+      "timestamp": "2026-04-18T00:00:00Z",
+      "result": "Found 4 tensions, all 4 resolved. Key decisions: Browser/Playwright library confirmed, fixed OTP 9999 eliminates SMS dependency, resend-OTP tagged slow for on-demand runs, variables file for credentials.",
+      "tensions_found": 4,
+      "tensions_resolved": 4,
+      "by_type": {
+        "trade_offs": 2,
+        "resource_tensions": 1,
+        "hidden_dependencies": 1
+      }
+    },
+    {
+      "number": 1,
+      "phase": "constrain",
+      "timestamp": "2026-04-18T00:00:00Z",
+      "result": "Discovered 16 constraints across 5 categories (including 2 pre-mortem additions). Critical finding: login form uses mobile number + consent checkbox, NOT email/password.",
+      "constraints_added": 16,
+      "by_category": {
+        "business": 3,
+        "technical": 5,
+        "user_experience": 3,
+        "security": 2,
+        "operational": 4
+      }
+    }
+  ],
+  "convergence": {
+    "status": "IN_PROGRESS"
+  },
+  "blocking_dependencies": [],
+  "generation": {
+    "option": "B",
+    "timestamp": "2026-04-18T00:00:00Z",
+    "artifacts": [
+      {
+        "path": "variables/variables.robot",
+        "type": "code",
+        "satisfies": ["S1", "B3", "TN4"],
+        "status": "generated",
+        "artifact_class": "structural"
+      },
+      {
+        "path": "resources/LoginPage.robot",
+        "type": "code",
+        "satisfies": ["T1", "T5", "U1", "U2", "B1"],
+        "status": "generated",
+        "artifact_class": "substantive"
+      },
+      {
+        "path": "resources/OTPPage.robot",
+        "type": "code",
+        "satisfies": ["T1", "T4", "T5", "U1", "U2", "U3", "TN1", "TN2"],
+        "status": "generated",
+        "artifact_class": "substantive"
+      },
+      {
+        "path": "tests/login_tests.robot",
+        "type": "test",
+        "validates": ["B1", "B2", "B3", "U1", "U3", "T5"],
+        "status": "generated",
+        "artifact_class": "substantive"
+      },
+      {
+        "path": "tests/otp_tests.robot",
+        "type": "test",
+        "validates": ["B2", "T3", "T4", "T5", "U1", "U3", "TN1", "TN2"],
+        "status": "generated",
+        "artifact_class": "substantive"
+      }
+    ],
+    "coverage": {
+      "constraints_addressed": 16,
+      "constraints_total": 16,
+      "percentage": 100
+    },
+    "dryrun_result": "PASS — 10/10 tests, 0 errors"
+  },
+  "gap_checklist_compliance": [
+    {"gap": "GAP-03", "status": "COMPLETED"},
+    {"gap": "GAP-09", "status": "COMPLETED"},
+    {"gap": "GAP-10", "status": "SKIPPED", "skip_reason": "This is a test automation project, not an API being built — no unauthenticated endpoints to protect"},
+    {"gap": "GAP-11", "status": "COMPLETED"},
+    {"gap": "GAP-14", "status": "COMPLETED"},
+    {"gap": "GAP-17", "status": "SKIPPED", "skip_reason": "Sequential test execution, no shared state between test cases"}
+  ],
+  "draft_required_truths": [
+    {
+      "id": "DRT-1",
+      "seed_from": ["B1", "B3"],
+      "draft_statement": "A test mobile number registered in the UAT backend must exist and be known before valid-login tests can be written",
+      "confidence": "high"
+    },
+    {
+      "id": "DRT-2",
+      "seed_from": ["T3", "O4"],
+      "draft_statement": "The UAT SMS gateway must deliver OTPs within the test wait timeout (30s), or a fixed-OTP bypass must be available in the UAT environment",
+      "confidence": "high"
+    },
+    {
+      "id": "DRT-3",
+      "seed_from": ["T1", "O3"],
+      "draft_statement": "The data-testid attribute contract in gqcustomer_frontend must remain stable — any rename constitutes a breaking change requiring test updates",
+      "confidence": "medium"
+    },
+    {
+      "id": "DRT-4",
+      "seed_from": ["T2"],
+      "draft_statement": "The Robot Framework browser library (SeleniumLibrary vs Browser/Playwright) must be confirmed before keyword implementations can be written",
+      "confidence": "high"
+    }
+  ],
+  "constraint_graph": {
+    "version": 1,
+    "nodes": {},
+    "edges": {
+      "dependencies": [],
+      "conflicts": [],
+      "satisfies": []
+    }
+  }
+}
