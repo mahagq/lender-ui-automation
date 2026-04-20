@@ -1,0 +1,193 @@
+import java.text.SimpleDateFormat
+import java.util.TimeZone
+
+properties([
+    disableConcurrentBuilds(),
+    parameters([
+        choice(
+            name: 'ENV',
+            choices: ['UAT'],
+            description: 'Select target environment'
+        ),
+        booleanParam(name: 'HEADLESS', defaultValue: true, description: 'Run browser in headless mode')
+    ])
+])
+
+node("GQ_QA_Automation_Node") {
+
+    // --- CONFIGURATION ---
+    def JOBNAME   = "customer_portal_ui_automation"
+    def WORKSPACE = "/home/ubuntu/workspace"
+    def APPDIR    = "customer_portal_ui_automation"
+    def S3_BUCKET = "gq-qa-reports"
+    def S3_REGION = "ap-south-1"
+    def S3_SLUG   = "cp_ui_automation"
+
+    // Time & S3 Pathing
+    def tz = TimeZone.getTimeZone("Asia/Kolkata")
+    def now = new Date()
+    def dateSdf = new SimpleDateFormat("yyyy-MM-dd"); dateSdf.setTimeZone(tz)
+    def timeSdf = new SimpleDateFormat("HH-mm-ss");  timeSdf.setTimeZone(tz)
+    def currentDate = dateSdf.format(now)
+    def currentTime = timeSdf.format(now)
+
+    def buildFolder = "automation-reports/${S3_SLUG}/${params.ENV}/${currentDate}/build-${env.BUILD_NUMBER}_${currentTime}"
+    def historyS3   = "allure-history/${S3_SLUG}/${params.ENV}"
+
+    try {
+        sendGoogleChatNotification('STARTED')
+
+        withCredentials([sshUserPrivateKey(credentialsId: 'uat-ssh-key', keyFileVariable: 'identity', usernameVariable: 'ubuntu')]) {
+
+            stage('Workspace Cleanup') {
+                sh """
+                    sudo chown -R ubuntu:ubuntu ${WORKSPACE}/${JOBNAME}/ || true
+                    sudo rm -rf ${WORKSPACE}/${JOBNAME}/${APPDIR}/results/ || true
+                    mkdir -p ${WORKSPACE}/${JOBNAME}/${APPDIR}/results/allure-results
+                    chmod -R 777 ${WORKSPACE}/${JOBNAME}/${APPDIR}/results/
+                """
+            }
+
+            stage('Checkout SCM') {
+                dir("${WORKSPACE}/${JOBNAME}/${APPDIR}") {
+                    checkout([$class: 'GitSCM',
+                        branches: [[name: "master"]],
+                        userRemoteConfigs: [[url: "https://github.com/grayquest-finance/customer_portal_ui_automation.git", credentialsId: "github"]]
+                    ])
+                }
+            }
+
+            stage('Restore Allure History') {
+                sh """
+                    mkdir -p ${WORKSPACE}/${JOBNAME}/${APPDIR}/results/allure-results/history
+                    for FILE in history.json categories-trend.json duration-trend.json history-trend.json retry-trend.json; do
+                        aws s3 cp s3://${S3_BUCKET}/${historyS3}/\${FILE} ${WORKSPACE}/${JOBNAME}/${APPDIR}/results/allure-results/history/\${FILE} --region ${S3_REGION} || true
+                    done
+                """
+            }
+
+            stage('Build Docker Image') {
+                dir("${WORKSPACE}/${JOBNAME}/${APPDIR}") {
+                    sh "docker build -t cp-ui-automation:playwright ."
+                }
+            }
+
+            stage("[CP UI] [${params.ENV}]") {
+                dir("${WORKSPACE}/${JOBNAME}/${APPDIR}") {
+
+                    sh """
+                        cat > results/allure-results/categories.json << 'EOF'
+[
+  {
+    "name": "Product Defects",
+    "matchedStatuses": ["failed"],
+    "messageRegex": ".*AssertionError.*|.*AssertionFailure.*|.*ElementNotFound.*|.*TimeoutError.*|.*TimeoutException.*|.*StrictModeViolation.*|.*Error.*expected.*|.*Should.*"
+  },
+  {
+    "name": "Test Infrastructure Defects",
+    "matchedStatuses": ["broken"],
+    "messageRegex": ".*"
+  },
+  {
+    "name": "Skipped Tests",
+    "matchedStatuses": ["skipped"],
+    "messageRegex": ".*"
+  },
+  {
+    "name": "Passed Tests",
+    "matchedStatuses": ["passed"],
+    "messageRegex": ".*"
+  }
+]
+EOF
+
+                        cat > results/allure-results/allure.properties << 'EOF'
+allure.results.plugins.enabled=behaviors,categories,timeline,suites,packages,graph
+allure.link.issue.pattern=https://github.com/grayquest-finance/customer_portal_ui_automation/issues/{}
+allure.link.tms.pattern=https://your-tms.com/testcase/{}
+EOF
+
+                        cat > results/allure-results/executor.json << EOF
+{
+  "name": "Jenkins",
+  "type": "jenkins",
+  "url": "${env.BUILD_URL}",
+  "buildOrder": ${env.BUILD_NUMBER},
+  "buildName": "CP UI Automation #${env.BUILD_NUMBER}",
+  "buildUrl": "${env.BUILD_URL}",
+  "reportUrl": "${env.BUILD_URL}allure"
+}
+EOF
+
+                        cat > results/allure-results/environment.properties << EOF
+Environment=UAT
+Application=GrayQuest Customer Portal
+Build.Number=${env.BUILD_NUMBER}
+Branch=${env.GIT_BRANCH ?: 'master'}
+Target.URL=https://customer.uat.graydev.in
+Test.Framework=Robot Framework
+Browser=Chromium (Playwright)
+Operating.System=Linux
+EOF
+                    """
+
+                    sh """
+                        docker run --rm \\
+                            -v ${WORKSPACE}/${JOBNAME}/${APPDIR}:/app \\
+                            -w /app \\
+                            --shm-size=2gb \\
+                            -e BUILD_NUMBER=${env.BUILD_NUMBER} \\
+                            -e GIT_BRANCH=${env.GIT_BRANCH ?: 'master'} \\
+                            cp-ui-automation:playwright \\
+                            bash -c '
+                                if ! command -v uv &> /dev/null; then
+                                    curl -LsSf https://astral.sh/uv/install.sh | sh
+                                fi
+                                export PATH="/root/.local/bin:\$PATH"
+
+                                echo "--- uv sync ---"
+                                uv sync --group dev
+
+                                echo "--- rfbrowser init ---"
+                                uv run rfbrowser init --with-deps || true
+
+                                echo "--- Running tests ---"
+                                uv run robot \\
+                                    --variable HEADLESS:${params.HEADLESS} \\
+                                    --name "CP UI Automation [UAT]" \\
+                                    --exclude slow \\
+                                    --listener "allure_robotframework:./results/allure-results" \\
+                                    --listener "resources/allure_env_listener.py" \\
+                                    -d results \\
+                                    tests/ || true
+
+                                echo "--- Generating Allure Report ---"
+                                allure generate results/allure-results --clean -o results/allure-report
+                            '
+                    """
+                }
+            }
+
+            stage('Upload & Save History') {
+                sh """
+                    aws s3 sync ${WORKSPACE}/${JOBNAME}/${APPDIR}/results/allure-report/ s3://${S3_BUCKET}/${buildFolder}/allure-report/ --region ${S3_REGION}
+                    aws s3 sync ${WORKSPACE}/${JOBNAME}/${APPDIR}/results/allure-report/history/ s3://${S3_BUCKET}/${historyS3}/ --region ${S3_REGION} --delete
+                """
+            }
+
+            currentBuild.result = 'SUCCESS'
+        }
+    } catch (e) {
+        currentBuild.result = 'FAILURE'
+        throw e
+    } finally {
+        sendGoogleChatNotification(currentBuild.result ?: 'SUCCESS')
+    }
+}
+
+def sendGoogleChatNotification(String buildStatus) {
+    withCredentials([string(credentialsId: 'webhook-qa-test-env', variable: 'WEBHOOK_URL')]) {
+        def details = "*${buildStatus}:* Job ${env.JOB_NAME} [${env.BUILD_NUMBER}]\nEnv: ${params.ENV} | Headless: ${params.HEADLESS}\nConsole: ${env.BUILD_URL}"
+        httpRequest url: WEBHOOK_URL, httpMode: 'POST', contentType: 'APPLICATION_JSON', requestBody: """{"text": "${details}"}"""
+    }
+}

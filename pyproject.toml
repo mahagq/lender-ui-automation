@@ -1,0 +1,15 @@
+[project]
+name = "cp-ui-automation"
+version = "0.1.0"
+description = "Robot Framework + Playwright UI Automation for GQ Customer Portal"
+requires-python = ">=3.9"
+dependencies = [
+    "robotframework-browser>=19.9.0",
+]
+
+[dependency-groups]
+dev = [
+  "robotframework>=7.0",
+  "robotframework-browser>=19.0.0",
+  "allure-robotframework>=2.13.0"
+]
