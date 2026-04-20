@@ -35,6 +35,10 @@ ${OTP_TIMER_CONTAINER}     css=[data-testid='send-otp-timer-container']
 ${OTP_TIMER}               css=[data-testid='send-otp-timer']
 ${RESEND_OTP_LINK}         css=[data-testid='resend-otp-link']
 ${MOBILE_NUMBER_INFO}      css=[data-testid='mobile-number-info']
+${BACK_BUTTON}             css=[data-testid='back-button']
+${OTP_PAGE_TITLE}          css=[data-testid='desktop-view-form-title']
+${OTP_TOAST_ERROR}         text=Incorrect OTP
+${DASHBOARD_TITLE}         css=[data-testid='dashboard-title']
 
 *** Keywords ***
 Wait For OTP Page
@@ -134,3 +138,96 @@ OTP Timer Should Reset After Resend
     ...    Satisfies: T4, B2 (resend OTP post-click assertion)
     Wait For Elements State    ${OTP_TIMER_CONTAINER}    visible    timeout=${TIMEOUT}
     Wait For Elements State    ${RESEND_OTP_LINK}    hidden    timeout=${TIMEOUT}
+
+Click Back Button
+    [Documentation]
+    ...    Clicks the back button on the OTP verification page to return to the login form.
+    ...    Satisfies: TC-3001, TC-3008
+    Click    ${BACK_BUTTON}
+
+Get OTP Page Title
+    [Documentation]    Returns the form title text on the OTP page ("Enter 4 Digit OTP").
+    Wait For Elements State    ${OTP_PAGE_TITLE}    visible    timeout=${LONG_TIMEOUT}
+    ${title}=    Get Text    ${OTP_PAGE_TITLE}
+    RETURN    ${title}
+
+OTP Input Should Be Visible And Editable
+    [Documentation]
+    ...    Asserts the OTP input field is visible and enabled (editable).
+    ...    Satisfies: TC-3002
+    Wait For Elements State    ${OTP_INPUT}    visible    timeout=${TIMEOUT}
+    Get Element States    ${OTP_INPUT}    contains    enabled
+
+Get OTP Timer Text
+    [Documentation]    Returns the full text of the OTP countdown timer container.
+    Wait For Elements State    ${OTP_TIMER_CONTAINER}    visible    timeout=${TIMEOUT}
+    ${text}=    Get Text    ${OTP_TIMER_CONTAINER}
+    RETURN    ${text}
+
+OTP Timer Should Show Countdown Text
+    [Documentation]
+    ...    Asserts the timer container is visible and contains resend countdown text.
+    ...    Checks for "Resend in" text rather than exact time to avoid timing flakiness.
+    ...    Satisfies: TC-3011
+    Wait For Elements State    ${OTP_TIMER_CONTAINER}    visible    timeout=${TIMEOUT}
+    ${text}=    Get Text    ${OTP_TIMER_CONTAINER}
+    Should Contain    ${text}    Did not receive OTP?
+    Should Contain    ${text}    Resend in
+
+Verify OTP Button Should Be Disabled
+    [Documentation]
+    ...    Asserts the Verify OTP button is disabled (no OTP entered).
+    ...    Satisfies: TC-3013
+    Get Element States    ${VERIFY_OTP_BUTTON}    contains    disabled
+
+Verify OTP Button Should Be Enabled
+    [Documentation]
+    ...    Asserts the Verify OTP button is enabled (OTP has been entered).
+    ...    Satisfies: TC-3014
+    Get Element States    ${VERIFY_OTP_BUTTON}    contains    enabled
+
+Incorrect OTP Toast Should Be Visible
+    [Documentation]
+    ...    Asserts the "Incorrect OTP" toast notification is visible after submitting a wrong OTP.
+    ...    The toast has no data-testid — Playwright text selector is used.
+    ...    Satisfies: TC-3005
+    Wait For Elements State    ${OTP_TOAST_ERROR}    visible    timeout=${TIMEOUT}
+
+Get Displayed Mobile Number
+    [Documentation]
+    ...    Returns the mobile number shown in the mobile-number-info element on the OTP page.
+    ...    The mobile number is inside a <span> child of the info container.
+    ...    Satisfies: TC-3007
+    Wait For Elements State    ${MOBILE_NUMBER_INFO}    visible    timeout=${TIMEOUT}
+    ${text}=    Get Text    ${MOBILE_NUMBER_INFO}
+    RETURN    ${text}
+
+Dashboard Greeting Should Be Visible
+    [Documentation]
+    ...    Waits for the dashboard to load and asserts the greeting "Hello," is visible.
+    ...    Satisfies: TC-3006
+    Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    Dashboard URL Should Be Visible
+    Wait For Elements State    ${DASHBOARD_TITLE}    visible    timeout=${TIMEOUT}
+    ${greeting}=    Get Text    ${DASHBOARD_TITLE}
+    Should Contain    ${greeting}    Hello,
+
+Navigate To OTP Page
+    [Documentation]
+    ...    Opens a fresh browser context, completes the login form, and waits for the OTP
+    ...    verification page to load. Shared keyword for use across all test suites that
+    ...    need to land on the OTP page.
+    ...    Handles UAT rate limiting: if the OTP form is not visible within LONG_TIMEOUT,
+    ...    waits RATE_LIMIT_WAIT seconds and retries once.
+    [Arguments]    ${mobile}=${TEST_MOBILE}
+    Open Login Page
+    Submit Login Form    ${mobile}
+    ${otp_loaded}=    Run Keyword And Return Status
+    ...    Wait For Elements State    ${OTP_FORM}    visible    timeout=${LONG_TIMEOUT}
+    IF    not ${otp_loaded}
+        Log    Rate limit detected — waiting ${RATE_LIMIT_WAIT} then retrying.    console=True
+        Close Context
+        Sleep    ${RATE_LIMIT_WAIT}
+        Open Login Page
+        Submit Login Form    ${mobile}
+        Wait For OTP Page
+    END

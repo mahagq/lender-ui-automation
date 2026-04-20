@@ -23,11 +23,14 @@ Library     Browser
 # Locators — derived from data-testid attributes in gqcustomer_frontend source
 # Satisfies: T1 (all locators use data-testid, no CSS classes or absolute XPath)
 ${LOGIN_FORM}            css=[data-testid='login-form']
+${LOGIN_FORM_TITLE}      css=[data-testid='desktop-view-form-title']
 ${MOBILE_INPUT}          css=[data-testid='mobile-number-input']
 ${MOBILE_ERROR}          css=[data-testid='mobile-number-input-error']
 ${CONSENT_CHECKBOX}      css=[data-testid='consent-checkbox']
 ${CONSENT_ERROR}         css=[data-testid='consent-checkbox-error']
 ${SEND_OTP_BUTTON}       css=[data-testid='send-otp-button']
+${TERMS_LINK_FORM}       css=a[data-testid='terms-link']
+${PRIVACY_LINK_FORM}     css=a[data-testid='privacy-policy-link']
 
 *** Keywords ***
 Open Login Page
@@ -90,6 +93,50 @@ Get Consent Error Message
     Wait For Elements State    ${CONSENT_ERROR}    visible    timeout=${TIMEOUT}
     ${error_text}=    Get Text    ${CONSENT_ERROR}
     RETURN    ${error_text}
+
+Get Login Form Title
+    [Documentation]
+    ...    Returns the form title text from data-testid='desktop-view-form-title'.
+    ...    On the login page this reads "What is your Mobile Number?".
+    Wait For Elements State    ${LOGIN_FORM_TITLE}    visible    timeout=${TIMEOUT}
+    ${title}=    Get Text    ${LOGIN_FORM_TITLE}
+    RETURN    ${title}
+
+Mobile Input Should Be Visible And Editable
+    [Documentation]
+    ...    Asserts the mobile number input is visible and enabled (editable).
+    ...    Satisfies: TC-207
+    Wait For Elements State    ${MOBILE_INPUT}    visible    timeout=${TIMEOUT}
+    Get Element States    ${MOBILE_INPUT}    contains    enabled
+
+Get Mobile Input Value
+    [Documentation]    Returns the current value of the mobile number input field.
+    ${value}=    Get Property    ${MOBILE_INPUT}    value
+    RETURN    ${value}
+
+Send OTP Button Should Be Disabled
+    [Documentation]
+    ...    Asserts the Send OTP button is in a disabled state.
+    ...    Satisfies: TC-219 (button disabled when consent not given)
+    Get Element States    ${SEND_OTP_BUTTON}    contains    disabled
+
+Send OTP Button Should Be Enabled
+    [Documentation]
+    ...    Asserts the Send OTP button is in an enabled state.
+    ...    Satisfies: TC-220 (button enabled when mobile + consent provided)
+    Get Element States    ${SEND_OTP_BUTTON}    contains    enabled
+
+Click Terms Link In Form
+    [Documentation]
+    ...    Clicks the Terms & Conditions link inside the consent area of the login form.
+    ...    data-testid='terms-link' on the <a> element. Satisfies: TC-217
+    Click    ${TERMS_LINK_FORM}
+
+Click Privacy Policy Link In Form
+    [Documentation]
+    ...    Clicks the Privacy Policy link inside the consent area of the login form.
+    ...    data-testid='privacy-policy-link' on the <a> element. Satisfies: TC-218
+    Click    ${PRIVACY_LINK_FORM}
 
 Login Should Redirect To OTP Page
     [Documentation]

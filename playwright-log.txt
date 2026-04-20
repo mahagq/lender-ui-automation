@@ -1,0 +1,696 @@
+{"level":30,"time":"2026-04-20T12:16:00.094Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Listening on 127.0.0.1:60262"}
+================= Original suppressed error =================
+Error: Browser has been closed.
+    at PlaywrightState.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:8777:13)
+    at PlaywrightServer.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:9689:52)
+    at PlaywrightServer.setTimeout (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:9887:56)
+    at Object.onReceiveHalfClose (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server.js:1464:25)
+    at BaseServerInterceptingCall.maybePushNextMessage (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server-interceptors.js:595:31)
+    at BaseServerInterceptingCall.handleEndEvent (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server-interceptors.js:635:14)
+    at ServerHttp2Stream.<anonymous> (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server-interceptors.js:394:18)
+    at ServerHttp2Stream.emit (node:events:521:24)
+    at endReadableNT (node:internal/streams/readable:1729:12)
+    at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
+=============================================================
+{"level":30,"time":"2026-04-20T12:16:01.152Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-20T12:16:01.152Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-20T12:16:01.154Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-20T12:16:01.154Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+================= Original suppressed error =================
+Error: Browser has been closed.
+    at PlaywrightState.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:8777:13)
+    at PlaywrightServer.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:9689:52)
+    at PlaywrightServer.setTimeout (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:9887:56)
+    at Object.onReceiveHalfClose (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server.js:1464:25)
+    at BaseServerInterceptingCall.maybePushNextMessage (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server-interceptors.js:595:31)
+    at BaseServerInterceptingCall.handleEndEvent (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server-interceptors.js:635:14)
+    at ServerHttp2Stream.<anonymous> (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server-interceptors.js:394:18)
+    at ServerHttp2Stream.emit (node:events:521:24)
+    at endReadableNT (node:internal/streams/readable:1729:12)
+    at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
+=============================================================
+{"level":30,"time":"2026-04-20T12:16:01.161Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-20T12:16:01.161Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-20T12:16:01.163Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-20T12:16:01.163Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+================= Original suppressed error =================
+Error: Browser has been closed.
+    at PlaywrightState.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:8777:13)
+    at PlaywrightServer.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:9689:52)
+    at PlaywrightServer.setTimeout (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:9887:56)
+    at Object.onReceiveHalfClose (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server.js:1464:25)
+    at BaseServerInterceptingCall.maybePushNextMessage (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server-interceptors.js:595:31)
+    at BaseServerInterceptingCall.handleEndEvent (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server-interceptors.js:635:14)
+    at ServerHttp2Stream.<anonymous> (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server-interceptors.js:394:18)
+    at ServerHttp2Stream.emit (node:events:521:24)
+    at endReadableNT (node:internal/streams/readable:1729:12)
+    at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
+=============================================================
+{"level":30,"time":"2026-04-20T12:16:01.168Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-20T12:16:01.168Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-20T12:16:01.169Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-20T12:16:01.169Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+================= Original suppressed error =================
+Error: Browser has been closed.
+    at PlaywrightState.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:8777:13)
+    at PlaywrightServer.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:9689:52)
+    at PlaywrightServer.setTimeout (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:9887:56)
+    at Object.onReceiveHalfClose (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server.js:1464:25)
+    at BaseServerInterceptingCall.maybePushNextMessage (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server-interceptors.js:595:31)
+    at BaseServerInterceptingCall.handleEndEvent (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server-interceptors.js:635:14)
+    at ServerHttp2Stream.<anonymous> (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server-interceptors.js:394:18)
+    at ServerHttp2Stream.emit (node:events:521:24)
+    at endReadableNT (node:internal/streams/readable:1729:12)
+    at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
+=============================================================
+{"level":30,"time":"2026-04-20T12:16:01.174Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-20T12:16:01.174Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-20T12:16:01.175Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-20T12:16:01.175Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+================= Original suppressed error =================
+Error: Browser has been closed.
+    at PlaywrightState.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:8777:13)
+    at PlaywrightServer.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:9689:52)
+    at PlaywrightServer.setTimeout (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:9887:56)
+    at Object.onReceiveHalfClose (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server.js:1464:25)
+    at BaseServerInterceptingCall.maybePushNextMessage (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server-interceptors.js:595:31)
+    at BaseServerInterceptingCall.handleEndEvent (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server-interceptors.js:635:14)
+    at ServerHttp2Stream.<anonymous> (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server-interceptors.js:394:18)
+    at ServerHttp2Stream.emit (node:events:521:24)
+    at endReadableNT (node:internal/streams/readable:1729:12)
+    at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
+=============================================================
+{"level":30,"time":"2026-04-20T12:16:01.179Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-20T12:16:01.179Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-20T12:16:01.180Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-20T12:16:01.180Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+================= Original suppressed error =================
+Error: Browser has been closed.
+    at PlaywrightState.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:8777:13)
+    at PlaywrightServer.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:9689:52)
+    at PlaywrightServer.setTimeout (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:9887:56)
+    at Object.onReceiveHalfClose (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server.js:1464:25)
+    at BaseServerInterceptingCall.maybePushNextMessage (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server-interceptors.js:595:31)
+    at BaseServerInterceptingCall.handleEndEvent (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server-interceptors.js:635:14)
+    at ServerHttp2Stream.<anonymous> (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server-interceptors.js:394:18)
+    at ServerHttp2Stream.emit (node:events:521:24)
+    at endReadableNT (node:internal/streams/readable:1729:12)
+    at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
+=============================================================
+{"level":30,"time":"2026-04-20T12:16:01.184Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-20T12:16:01.184Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-20T12:16:01.185Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-20T12:16:01.185Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+================= Original suppressed error =================
+Error: Browser has been closed.
+    at PlaywrightState.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:8777:13)
+    at PlaywrightServer.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:9689:52)
+    at PlaywrightServer.setTimeout (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:9887:56)
+    at Object.onReceiveHalfClose (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server.js:1464:25)
+    at BaseServerInterceptingCall.maybePushNextMessage (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server-interceptors.js:595:31)
+    at BaseServerInterceptingCall.handleEndEvent (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server-interceptors.js:635:14)
+    at ServerHttp2Stream.<anonymous> (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server-interceptors.js:394:18)
+    at ServerHttp2Stream.emit (node:events:521:24)
+    at endReadableNT (node:internal/streams/readable:1729:12)
+    at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
+=============================================================
+{"level":30,"time":"2026-04-20T12:16:01.188Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-20T12:16:01.188Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-20T12:16:01.189Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-20T12:16:01.189Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+================= Original suppressed error =================
+Error: Browser has been closed.
+    at PlaywrightState.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:8777:13)
+    at PlaywrightServer.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:9689:52)
+    at PlaywrightServer.setTimeout (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:9887:56)
+    at Object.onReceiveHalfClose (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server.js:1464:25)
+    at BaseServerInterceptingCall.maybePushNextMessage (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server-interceptors.js:595:31)
+    at BaseServerInterceptingCall.handleEndEvent (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server-interceptors.js:635:14)
+    at ServerHttp2Stream.<anonymous> (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server-interceptors.js:394:18)
+    at ServerHttp2Stream.emit (node:events:521:24)
+    at endReadableNT (node:internal/streams/readable:1729:12)
+    at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
+=============================================================
+{"level":30,"time":"2026-04-20T12:16:01.192Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-20T12:16:01.192Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-20T12:16:01.193Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-20T12:16:01.193Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+================= Original suppressed error =================
+Error: Browser has been closed.
+    at PlaywrightState.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:8777:13)
+    at PlaywrightServer.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:9689:52)
+    at PlaywrightServer.setTimeout (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:9887:56)
+    at Object.onReceiveHalfClose (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server.js:1464:25)
+    at BaseServerInterceptingCall.maybePushNextMessage (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server-interceptors.js:595:31)
+    at BaseServerInterceptingCall.handleEndEvent (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server-interceptors.js:635:14)
+    at ServerHttp2Stream.<anonymous> (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server-interceptors.js:394:18)
+    at ServerHttp2Stream.emit (node:events:521:24)
+    at endReadableNT (node:internal/streams/readable:1729:12)
+    at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
+=============================================================
+{"level":30,"time":"2026-04-20T12:16:01.196Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-20T12:16:01.196Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-20T12:16:01.197Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-20T12:16:01.197Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+================= Original suppressed error =================
+Error: Browser has been closed.
+    at PlaywrightState.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:8777:13)
+    at PlaywrightServer.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:9689:52)
+    at PlaywrightServer.setTimeout (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:9887:56)
+    at Object.onReceiveHalfClose (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server.js:1464:25)
+    at BaseServerInterceptingCall.maybePushNextMessage (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server-interceptors.js:595:31)
+    at BaseServerInterceptingCall.handleEndEvent (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server-interceptors.js:635:14)
+    at ServerHttp2Stream.<anonymous> (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server-interceptors.js:394:18)
+    at ServerHttp2Stream.emit (node:events:521:24)
+    at endReadableNT (node:internal/streams/readable:1729:12)
+    at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
+=============================================================
+{"level":30,"time":"2026-04-20T12:16:01.199Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-20T12:16:01.200Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-20T12:16:01.200Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-20T12:16:01.200Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+================= Original suppressed error =================
+Error: Browser has been closed.
+    at PlaywrightState.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:8777:13)
+    at PlaywrightServer.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:9689:52)
+    at PlaywrightServer.setTimeout (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:9887:56)
+    at Object.onReceiveHalfClose (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server.js:1464:25)
+    at BaseServerInterceptingCall.maybePushNextMessage (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server-interceptors.js:595:31)
+    at BaseServerInterceptingCall.handleEndEvent (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server-interceptors.js:635:14)
+    at ServerHttp2Stream.<anonymous> (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server-interceptors.js:394:18)
+    at ServerHttp2Stream.emit (node:events:521:24)
+    at endReadableNT (node:internal/streams/readable:1729:12)
+    at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
+=============================================================
+{"level":30,"time":"2026-04-20T12:16:01.202Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-20T12:16:01.202Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-20T12:16:01.203Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-20T12:16:01.203Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+================= Original suppressed error =================
+Error: Browser has been closed.
+    at PlaywrightState.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:8777:13)
+    at PlaywrightServer.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:9689:52)
+    at PlaywrightServer.setTimeout (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:9887:56)
+    at Object.onReceiveHalfClose (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server.js:1464:25)
+    at BaseServerInterceptingCall.maybePushNextMessage (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server-interceptors.js:595:31)
+    at BaseServerInterceptingCall.handleEndEvent (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server-interceptors.js:635:14)
+    at ServerHttp2Stream.<anonymous> (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server-interceptors.js:394:18)
+    at ServerHttp2Stream.emit (node:events:521:24)
+    at endReadableNT (node:internal/streams/readable:1729:12)
+    at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
+=============================================================
+{"level":30,"time":"2026-04-20T12:16:01.208Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-20T12:16:01.208Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-20T12:16:01.209Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-20T12:16:01.209Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+================= Original suppressed error =================
+Error: Browser has been closed.
+    at PlaywrightState.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:8777:13)
+    at PlaywrightServer.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:9689:52)
+    at PlaywrightServer.setTimeout (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:9887:56)
+    at Object.onReceiveHalfClose (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server.js:1464:25)
+    at BaseServerInterceptingCall.maybePushNextMessage (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server-interceptors.js:595:31)
+    at BaseServerInterceptingCall.handleEndEvent (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server-interceptors.js:635:14)
+    at ServerHttp2Stream.<anonymous> (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server-interceptors.js:394:18)
+    at ServerHttp2Stream.emit (node:events:521:24)
+    at endReadableNT (node:internal/streams/readable:1729:12)
+    at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
+=============================================================
+{"level":30,"time":"2026-04-20T12:16:01.211Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-20T12:16:01.211Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-20T12:16:01.212Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-20T12:16:01.212Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+================= Original suppressed error =================
+Error: Browser has been closed.
+    at PlaywrightState.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:8777:13)
+    at PlaywrightServer.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:9689:52)
+    at PlaywrightServer.setTimeout (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:9887:56)
+    at Object.onReceiveHalfClose (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server.js:1464:25)
+    at BaseServerInterceptingCall.maybePushNextMessage (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server-interceptors.js:595:31)
+    at BaseServerInterceptingCall.handleEndEvent (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server-interceptors.js:635:14)
+    at ServerHttp2Stream.<anonymous> (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server-interceptors.js:394:18)
+    at ServerHttp2Stream.emit (node:events:521:24)
+    at endReadableNT (node:internal/streams/readable:1729:12)
+    at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
+=============================================================
+{"level":30,"time":"2026-04-20T12:16:01.217Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-20T12:16:01.217Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-20T12:16:01.217Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-20T12:16:01.217Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+================= Original suppressed error =================
+Error: Browser has been closed.
+    at PlaywrightState.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:8777:13)
+    at PlaywrightServer.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:9689:52)
+    at PlaywrightServer.setTimeout (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:9887:56)
+    at Object.onReceiveHalfClose (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server.js:1464:25)
+    at BaseServerInterceptingCall.maybePushNextMessage (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server-interceptors.js:595:31)
+    at BaseServerInterceptingCall.handleEndEvent (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server-interceptors.js:635:14)
+    at ServerHttp2Stream.<anonymous> (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server-interceptors.js:394:18)
+    at ServerHttp2Stream.emit (node:events:521:24)
+    at endReadableNT (node:internal/streams/readable:1729:12)
+    at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
+=============================================================
+{"level":30,"time":"2026-04-20T12:16:01.219Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-20T12:16:01.219Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+================= Original suppressed error =================
+Error: Browser has been closed.
+    at PlaywrightState.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:8777:13)
+    at PlaywrightServer.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:9689:52)
+    at PlaywrightServer.setTimeout (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:9887:56)
+    at Object.onReceiveHalfClose (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server.js:1464:25)
+    at BaseServerInterceptingCall.maybePushNextMessage (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server-interceptors.js:595:31)
+    at BaseServerInterceptingCall.handleEndEvent (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server-interceptors.js:635:14)
+    at ServerHttp2Stream.<anonymous> (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server-interceptors.js:394:18)
+    at ServerHttp2Stream.emit (node:events:521:24)
+    at endReadableNT (node:internal/streams/readable:1729:12)
+    at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
+=============================================================
+{"level":30,"time":"2026-04-20T12:16:01.221Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-20T12:16:01.221Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-20T12:16:01.223Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-20T12:16:01.223Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-20T12:16:01.224Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-20T12:16:01.224Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+================= Original suppressed error =================
+Error: Browser has been closed.
+    at PlaywrightState.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:8777:13)
+    at PlaywrightServer.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:9689:52)
+    at PlaywrightServer.setTimeout (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:9887:56)
+    at Object.onReceiveHalfClose (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server.js:1464:25)
+    at BaseServerInterceptingCall.maybePushNextMessage (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server-interceptors.js:595:31)
+    at BaseServerInterceptingCall.handleEndEvent (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server-interceptors.js:635:14)
+    at ServerHttp2Stream.<anonymous> (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server-interceptors.js:394:18)
+    at ServerHttp2Stream.emit (node:events:521:24)
+    at endReadableNT (node:internal/streams/readable:1729:12)
+    at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
+=============================================================
+{"level":30,"time":"2026-04-20T12:16:01.228Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-20T12:16:01.228Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-20T12:16:01.229Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-20T12:16:01.229Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+================= Original suppressed error =================
+Error: Browser has been closed.
+    at PlaywrightState.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:8777:13)
+    at PlaywrightServer.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:9689:52)
+    at PlaywrightServer.setTimeout (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:9887:56)
+    at Object.onReceiveHalfClose (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server.js:1464:25)
+    at BaseServerInterceptingCall.maybePushNextMessage (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server-interceptors.js:595:31)
+    at BaseServerInterceptingCall.handleEndEvent (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server-interceptors.js:635:14)
+    at ServerHttp2Stream.<anonymous> (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server-interceptors.js:394:18)
+    at ServerHttp2Stream.emit (node:events:521:24)
+    at endReadableNT (node:internal/streams/readable:1729:12)
+    at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
+=============================================================
+{"level":30,"time":"2026-04-20T12:16:01.234Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-20T12:16:01.234Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-20T12:16:01.235Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-20T12:16:01.235Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+================= Original suppressed error =================
+Error: Browser has been closed.
+    at PlaywrightState.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:8777:13)
+    at PlaywrightServer.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:9689:52)
+    at PlaywrightServer.setTimeout (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:9887:56)
+    at Object.onReceiveHalfClose (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server.js:1464:25)
+    at BaseServerInterceptingCall.maybePushNextMessage (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server-interceptors.js:595:31)
+    at BaseServerInterceptingCall.handleEndEvent (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server-interceptors.js:635:14)
+    at ServerHttp2Stream.<anonymous> (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server-interceptors.js:394:18)
+    at ServerHttp2Stream.emit (node:events:521:24)
+    at endReadableNT (node:internal/streams/readable:1729:12)
+    at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
+=============================================================
+{"level":30,"time":"2026-04-20T12:16:01.240Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-20T12:16:01.240Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-20T12:16:01.240Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-20T12:16:01.240Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+================= Original suppressed error =================
+Error: Browser has been closed.
+    at PlaywrightState.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:8777:13)
+    at PlaywrightServer.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:9689:52)
+    at PlaywrightServer.setTimeout (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:9887:56)
+    at Object.onReceiveHalfClose (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server.js:1464:25)
+    at BaseServerInterceptingCall.maybePushNextMessage (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server-interceptors.js:595:31)
+    at BaseServerInterceptingCall.handleEndEvent (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server-interceptors.js:635:14)
+    at ServerHttp2Stream.<anonymous> (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server-interceptors.js:394:18)
+    at ServerHttp2Stream.emit (node:events:521:24)
+    at endReadableNT (node:internal/streams/readable:1729:12)
+    at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
+=============================================================
+{"level":30,"time":"2026-04-20T12:16:01.245Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-20T12:16:01.246Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-20T12:16:01.246Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-20T12:16:01.246Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+================= Original suppressed error =================
+Error: Browser has been closed.
+    at PlaywrightState.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:8777:13)
+    at PlaywrightServer.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:9689:52)
+    at PlaywrightServer.setTimeout (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:9887:56)
+    at Object.onReceiveHalfClose (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server.js:1464:25)
+    at BaseServerInterceptingCall.maybePushNextMessage (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server-interceptors.js:595:31)
+    at BaseServerInterceptingCall.handleEndEvent (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server-interceptors.js:635:14)
+    at ServerHttp2Stream.<anonymous> (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server-interceptors.js:394:18)
+    at ServerHttp2Stream.emit (node:events:521:24)
+    at endReadableNT (node:internal/streams/readable:1729:12)
+    at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
+=============================================================
+{"level":30,"time":"2026-04-20T12:16:01.251Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-20T12:16:01.251Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-20T12:16:01.252Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-20T12:16:01.252Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+================= Original suppressed error =================
+Error: Browser has been closed.
+    at PlaywrightState.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:8777:13)
+    at PlaywrightServer.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:9689:52)
+    at PlaywrightServer.setTimeout (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:9887:56)
+    at Object.onReceiveHalfClose (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server.js:1464:25)
+    at BaseServerInterceptingCall.maybePushNextMessage (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server-interceptors.js:595:31)
+    at BaseServerInterceptingCall.handleEndEvent (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server-interceptors.js:635:14)
+    at ServerHttp2Stream.<anonymous> (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server-interceptors.js:394:18)
+    at ServerHttp2Stream.emit (node:events:521:24)
+    at endReadableNT (node:internal/streams/readable:1729:12)
+    at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
+=============================================================
+{"level":30,"time":"2026-04-20T12:16:01.256Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-20T12:16:01.256Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-20T12:16:01.257Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-20T12:16:01.257Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+================= Original suppressed error =================
+Error: Browser has been closed.
+    at PlaywrightState.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:8777:13)
+    at PlaywrightServer.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:9689:52)
+    at PlaywrightServer.setTimeout (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:9887:56)
+    at Object.onReceiveHalfClose (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server.js:1464:25)
+    at BaseServerInterceptingCall.maybePushNextMessage (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server-interceptors.js:595:31)
+    at BaseServerInterceptingCall.handleEndEvent (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server-interceptors.js:635:14)
+    at ServerHttp2Stream.<anonymous> (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server-interceptors.js:394:18)
+    at ServerHttp2Stream.emit (node:events:521:24)
+    at endReadableNT (node:internal/streams/readable:1729:12)
+    at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
+=============================================================
+{"level":30,"time":"2026-04-20T12:16:01.261Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-20T12:16:01.261Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-20T12:16:01.261Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-20T12:16:01.262Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+================= Original suppressed error =================
+Error: Browser has been closed.
+    at PlaywrightState.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:8777:13)
+    at PlaywrightServer.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:9689:52)
+    at PlaywrightServer.setTimeout (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:9887:56)
+    at Object.onReceiveHalfClose (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server.js:1464:25)
+    at BaseServerInterceptingCall.maybePushNextMessage (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server-interceptors.js:595:31)
+    at BaseServerInterceptingCall.handleEndEvent (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server-interceptors.js:635:14)
+    at ServerHttp2Stream.<anonymous> (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server-interceptors.js:394:18)
+    at ServerHttp2Stream.emit (node:events:521:24)
+    at endReadableNT (node:internal/streams/readable:1729:12)
+    at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
+=============================================================
+{"level":30,"time":"2026-04-20T12:16:01.266Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-20T12:16:01.266Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-20T12:16:01.266Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-20T12:16:01.266Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+================= Original suppressed error =================
+Error: Browser has been closed.
+    at PlaywrightState.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:8777:13)
+    at PlaywrightServer.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:9689:52)
+    at PlaywrightServer.setTimeout (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:9887:56)
+    at Object.onReceiveHalfClose (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server.js:1464:25)
+    at BaseServerInterceptingCall.maybePushNextMessage (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server-interceptors.js:595:31)
+    at BaseServerInterceptingCall.handleEndEvent (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server-interceptors.js:635:14)
+    at ServerHttp2Stream.<anonymous> (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server-interceptors.js:394:18)
+    at ServerHttp2Stream.emit (node:events:521:24)
+    at endReadableNT (node:internal/streams/readable:1729:12)
+    at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
+=============================================================
+{"level":30,"time":"2026-04-20T12:16:01.270Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-20T12:16:01.270Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-20T12:16:01.271Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-20T12:16:01.271Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+================= Original suppressed error =================
+Error: Browser has been closed.
+    at PlaywrightState.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:8777:13)
+    at PlaywrightServer.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:9689:52)
+    at PlaywrightServer.setTimeout (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:9887:56)
+    at Object.onReceiveHalfClose (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server.js:1464:25)
+    at BaseServerInterceptingCall.maybePushNextMessage (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server-interceptors.js:595:31)
+    at BaseServerInterceptingCall.handleEndEvent (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server-interceptors.js:635:14)
+    at ServerHttp2Stream.<anonymous> (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server-interceptors.js:394:18)
+    at ServerHttp2Stream.emit (node:events:521:24)
+    at endReadableNT (node:internal/streams/readable:1729:12)
+    at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
+=============================================================
+{"level":30,"time":"2026-04-20T12:16:01.275Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-20T12:16:01.275Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-20T12:16:01.276Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-20T12:16:01.276Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+================= Original suppressed error =================
+Error: Browser has been closed.
+    at PlaywrightState.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:8777:13)
+    at PlaywrightServer.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:9689:52)
+    at PlaywrightServer.setTimeout (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:9887:56)
+    at Object.onReceiveHalfClose (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server.js:1464:25)
+    at BaseServerInterceptingCall.maybePushNextMessage (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server-interceptors.js:595:31)
+    at BaseServerInterceptingCall.handleEndEvent (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server-interceptors.js:635:14)
+    at ServerHttp2Stream.<anonymous> (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server-interceptors.js:394:18)
+    at ServerHttp2Stream.emit (node:events:521:24)
+    at endReadableNT (node:internal/streams/readable:1729:12)
+    at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
+=============================================================
+{"level":30,"time":"2026-04-20T12:16:01.276Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-20T12:16:01.276Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-20T12:16:01.277Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-20T12:16:01.277Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+================= Original suppressed error =================
+Error: Browser has been closed.
+    at PlaywrightState.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:8777:13)
+    at PlaywrightServer.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:9689:52)
+    at PlaywrightServer.setTimeout (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:9887:56)
+    at Object.onReceiveHalfClose (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server.js:1464:25)
+    at BaseServerInterceptingCall.maybePushNextMessage (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server-interceptors.js:595:31)
+    at BaseServerInterceptingCall.handleEndEvent (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server-interceptors.js:635:14)
+    at ServerHttp2Stream.<anonymous> (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server-interceptors.js:394:18)
+    at ServerHttp2Stream.emit (node:events:521:24)
+    at endReadableNT (node:internal/streams/readable:1729:12)
+    at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
+=============================================================
+{"level":30,"time":"2026-04-20T12:16:01.277Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-20T12:16:01.277Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-20T12:16:01.278Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-20T12:16:01.278Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+================= Original suppressed error =================
+Error: Browser has been closed.
+    at PlaywrightState.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:8777:13)
+    at PlaywrightServer.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:9689:52)
+    at PlaywrightServer.setTimeout (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:9887:56)
+    at Object.onReceiveHalfClose (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server.js:1464:25)
+    at BaseServerInterceptingCall.maybePushNextMessage (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server-interceptors.js:595:31)
+    at BaseServerInterceptingCall.handleEndEvent (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server-interceptors.js:635:14)
+    at ServerHttp2Stream.<anonymous> (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server-interceptors.js:394:18)
+    at ServerHttp2Stream.emit (node:events:521:24)
+    at endReadableNT (node:internal/streams/readable:1729:12)
+    at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
+=============================================================
+{"level":30,"time":"2026-04-20T12:16:01.278Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-20T12:16:01.278Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-20T12:16:01.279Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-20T12:16:01.279Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+================= Original suppressed error =================
+Error: Browser has been closed.
+    at PlaywrightState.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:8777:13)
+    at PlaywrightServer.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:9689:52)
+    at PlaywrightServer.setTimeout (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:9887:56)
+    at Object.onReceiveHalfClose (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server.js:1464:25)
+    at BaseServerInterceptingCall.maybePushNextMessage (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server-interceptors.js:595:31)
+    at BaseServerInterceptingCall.handleEndEvent (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server-interceptors.js:635:14)
+    at ServerHttp2Stream.<anonymous> (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server-interceptors.js:394:18)
+    at ServerHttp2Stream.emit (node:events:521:24)
+    at endReadableNT (node:internal/streams/readable:1729:12)
+    at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
+=============================================================
+{"level":30,"time":"2026-04-20T12:16:01.279Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-20T12:16:01.279Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+================= Original suppressed error =================
+Error: Browser has been closed.
+    at PlaywrightState.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:8777:13)
+    at PlaywrightServer.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:9689:52)
+    at PlaywrightServer.setTimeout (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:9887:56)
+    at Object.onReceiveHalfClose (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server.js:1464:25)
+    at BaseServerInterceptingCall.maybePushNextMessage (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server-interceptors.js:595:31)
+    at BaseServerInterceptingCall.handleEndEvent (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server-interceptors.js:635:14)
+    at ServerHttp2Stream.<anonymous> (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server-interceptors.js:394:18)
+    at ServerHttp2Stream.emit (node:events:521:24)
+    at endReadableNT (node:internal/streams/readable:1729:12)
+    at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
+=============================================================
+{"level":30,"time":"2026-04-20T12:16:01.280Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-20T12:16:01.280Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-20T12:16:01.286Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-20T12:16:01.286Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-20T12:16:01.287Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-20T12:16:01.287Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+================= Original suppressed error =================
+Error: Browser has been closed.
+    at PlaywrightState.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:8777:13)
+    at PlaywrightServer.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:9689:52)
+    at PlaywrightServer.setTimeout (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:9887:56)
+    at Object.onReceiveHalfClose (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server.js:1464:25)
+    at BaseServerInterceptingCall.maybePushNextMessage (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server-interceptors.js:595:31)
+    at BaseServerInterceptingCall.handleEndEvent (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server-interceptors.js:635:14)
+    at ServerHttp2Stream.<anonymous> (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server-interceptors.js:394:18)
+    at ServerHttp2Stream.emit (node:events:521:24)
+    at endReadableNT (node:internal/streams/readable:1729:12)
+    at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
+=============================================================
+{"level":30,"time":"2026-04-20T12:16:01.287Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-20T12:16:01.288Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-20T12:16:01.288Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-20T12:16:01.288Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+================= Original suppressed error =================
+Error: Browser has been closed.
+    at PlaywrightState.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:8777:13)
+    at PlaywrightServer.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:9689:52)
+    at PlaywrightServer.setTimeout (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:9887:56)
+    at Object.onReceiveHalfClose (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server.js:1464:25)
+    at BaseServerInterceptingCall.maybePushNextMessage (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server-interceptors.js:595:31)
+    at BaseServerInterceptingCall.handleEndEvent (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server-interceptors.js:635:14)
+    at ServerHttp2Stream.<anonymous> (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server-interceptors.js:394:18)
+    at ServerHttp2Stream.emit (node:events:521:24)
+    at endReadableNT (node:internal/streams/readable:1729:12)
+    at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
+=============================================================
+{"level":30,"time":"2026-04-20T12:16:01.289Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-20T12:16:01.289Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-20T12:16:01.290Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-20T12:16:01.290Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+================= Original suppressed error =================
+Error: Browser has been closed.
+    at PlaywrightState.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:8777:13)
+    at PlaywrightServer.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:9689:52)
+    at PlaywrightServer.setTimeout (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:9887:56)
+    at Object.onReceiveHalfClose (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server.js:1464:25)
+    at BaseServerInterceptingCall.maybePushNextMessage (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server-interceptors.js:595:31)
+    at BaseServerInterceptingCall.handleEndEvent (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server-interceptors.js:635:14)
+    at ServerHttp2Stream.<anonymous> (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server-interceptors.js:394:18)
+    at ServerHttp2Stream.emit (node:events:521:24)
+    at endReadableNT (node:internal/streams/readable:1729:12)
+    at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
+=============================================================
+{"level":30,"time":"2026-04-20T12:16:01.291Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-20T12:16:01.291Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-20T12:16:01.291Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-20T12:16:01.291Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+================= Original suppressed error =================
+Error: Browser has been closed.
+    at PlaywrightState.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:8777:13)
+    at PlaywrightServer.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:9689:52)
+    at PlaywrightServer.setTimeout (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:9887:56)
+    at Object.onReceiveHalfClose (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server.js:1464:25)
+    at BaseServerInterceptingCall.maybePushNextMessage (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server-interceptors.js:595:31)
+    at BaseServerInterceptingCall.handleEndEvent (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server-interceptors.js:635:14)
+    at ServerHttp2Stream.<anonymous> (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server-interceptors.js:394:18)
+    at ServerHttp2Stream.emit (node:events:521:24)
+    at endReadableNT (node:internal/streams/readable:1729:12)
+    at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
+=============================================================
+{"level":30,"time":"2026-04-20T12:16:01.292Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-20T12:16:01.292Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-20T12:16:01.293Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-20T12:16:01.293Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+================= Original suppressed error =================
+Error: Browser has been closed.
+    at PlaywrightState.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:8777:13)
+    at PlaywrightServer.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:9689:52)
+    at PlaywrightServer.setTimeout (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:9887:56)
+    at Object.onReceiveHalfClose (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server.js:1464:25)
+    at BaseServerInterceptingCall.maybePushNextMessage (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server-interceptors.js:595:31)
+    at BaseServerInterceptingCall.handleEndEvent (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server-interceptors.js:635:14)
+    at ServerHttp2Stream.<anonymous> (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server-interceptors.js:394:18)
+    at ServerHttp2Stream.emit (node:events:521:24)
+    at endReadableNT (node:internal/streams/readable:1729:12)
+    at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
+=============================================================
+{"level":30,"time":"2026-04-20T12:16:01.295Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-20T12:16:01.295Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-20T12:16:01.295Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-20T12:16:01.295Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+================= Original suppressed error =================
+Error: Browser has been closed.
+    at PlaywrightState.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:8777:13)
+    at PlaywrightServer.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:9689:52)
+    at PlaywrightServer.setTimeout (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:9887:56)
+    at Object.onReceiveHalfClose (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server.js:1464:25)
+    at BaseServerInterceptingCall.maybePushNextMessage (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server-interceptors.js:595:31)
+    at BaseServerInterceptingCall.handleEndEvent (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server-interceptors.js:635:14)
+    at ServerHttp2Stream.<anonymous> (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server-interceptors.js:394:18)
+    at ServerHttp2Stream.emit (node:events:521:24)
+    at endReadableNT (node:internal/streams/readable:1729:12)
+    at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
+=============================================================
+{"level":30,"time":"2026-04-20T12:16:01.297Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-20T12:16:01.297Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-20T12:16:01.298Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-20T12:16:01.298Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+================= Original suppressed error =================
+Error: Browser has been closed.
+    at PlaywrightState.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:8777:13)
+    at PlaywrightServer.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:9689:52)
+    at PlaywrightServer.setTimeout (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:9887:56)
+    at Object.onReceiveHalfClose (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server.js:1464:25)
+    at BaseServerInterceptingCall.maybePushNextMessage (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server-interceptors.js:595:31)
+    at BaseServerInterceptingCall.handleEndEvent (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server-interceptors.js:635:14)
+    at ServerHttp2Stream.<anonymous> (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server-interceptors.js:394:18)
+    at ServerHttp2Stream.emit (node:events:521:24)
+    at endReadableNT (node:internal/streams/readable:1729:12)
+    at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
+=============================================================
+{"level":30,"time":"2026-04-20T12:16:01.299Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-20T12:16:01.299Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-20T12:16:01.300Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-20T12:16:01.300Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+================= Original suppressed error =================
+Error: Browser has been closed.
+    at PlaywrightState.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:8777:13)
+    at PlaywrightServer.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:9689:52)
+    at PlaywrightServer.setTimeout (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:9887:56)
+    at Object.onReceiveHalfClose (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server.js:1464:25)
+    at BaseServerInterceptingCall.maybePushNextMessage (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server-interceptors.js:595:31)
+    at BaseServerInterceptingCall.handleEndEvent (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server-interceptors.js:635:14)
+    at ServerHttp2Stream.<anonymous> (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server-interceptors.js:394:18)
+    at ServerHttp2Stream.emit (node:events:521:24)
+    at endReadableNT (node:internal/streams/readable:1729:12)
+    at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
+=============================================================
+{"level":30,"time":"2026-04-20T12:16:01.302Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-20T12:16:01.302Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-20T12:16:01.302Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-20T12:16:01.302Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+================= Original suppressed error =================
+Error: Browser has been closed.
+    at PlaywrightState.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:8777:13)
+    at PlaywrightServer.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:9689:52)
+    at PlaywrightServer.setTimeout (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:9887:56)
+    at Object.onReceiveHalfClose (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server.js:1464:25)
+    at BaseServerInterceptingCall.maybePushNextMessage (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server-interceptors.js:595:31)
+    at BaseServerInterceptingCall.handleEndEvent (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server-interceptors.js:635:14)
+    at ServerHttp2Stream.<anonymous> (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server-interceptors.js:394:18)
+    at ServerHttp2Stream.emit (node:events:521:24)
+    at endReadableNT (node:internal/streams/readable:1729:12)
+    at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
+=============================================================
+{"level":30,"time":"2026-04-20T12:16:01.303Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-20T12:16:01.303Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+================= Original suppressed error =================
+Error: Browser has been closed.
+    at PlaywrightState.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:8777:13)
+    at PlaywrightServer.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:9689:52)
+    at PlaywrightServer.setTimeout (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:9887:56)
+    at Object.onReceiveHalfClose (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server.js:1464:25)
+    at BaseServerInterceptingCall.maybePushNextMessage (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server-interceptors.js:595:31)
+    at BaseServerInterceptingCall.handleEndEvent (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server-interceptors.js:635:14)
+    at ServerHttp2Stream.<anonymous> (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/node_modules/@grpc/grpc-js/build/src/server-interceptors.js:394:18)
+    at ServerHttp2Stream.emit (node:events:521:24)
+    at endReadableNT (node:internal/streams/readable:1729:12)
+    at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
+=============================================================
+{"level":30,"time":"2026-04-20T12:16:01.304Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-20T12:16:01.304Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-20T12:16:01.335Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method closeAllBrowsers"}
+{"level":30,"time":"2026-04-20T12:16:01.335Z","pid":39541,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method closeAllBrowsers"}

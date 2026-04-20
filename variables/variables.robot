@@ -36,3 +36,25 @@ ${INVALID_MOBILE}         12345
 ${WRONG_FORMAT_MOBILE}    123abc4567
 ${WRONG_OTP}              1234
 ${SHORT_OTP}              123
+
+# Extended login test data (TC-208 to TC-213)
+${SPACES_MOBILE}          ${SPACE}${SPACE}${SPACE}${SPACE}${SPACE}${SPACE}${SPACE}${SPACE}${SPACE}${SPACE}
+${ALPHA_MOBILE}           abcdefghij
+${ALPHANUMERIC_MOBILE}    abc1234567
+${SPECIAL_CHAR_MOBILE}    @#$%^&*()!
+${LONG_MOBILE}            12345678901234
+
+# Extended login test mobiles — for tests that navigate to OTP page
+${EXT_LOGIN_MOBILE_1}     9876543215
+${EXT_LOGIN_MOBILE_2}     9876543216
+
+# Extended OTP test mobiles — one per test to avoid rate limiting
+${EXT_OTP_MOBILE_1}       9876543217
+${EXT_OTP_MOBILE_2}       9876543218
+${EXT_OTP_MOBILE_3}       9876543219
+${EXT_OTP_MOBILE_4}       9876543220
+${EXT_OTP_MOBILE_5}       9876543221
+${EXT_OTP_MOBILE_6}       9876543222
+${EXT_OTP_MOBILE_7}       9876543223
+${EXT_OTP_MOBILE_8}       9876543224
+${EXT_OTP_MOBILE_9}       9876543225

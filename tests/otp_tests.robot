@@ -3,11 +3,27 @@ Documentation
 ...    OTP Verification test suite for the GQ Customer Portal.
 ...    Tests the 4-digit OTP form at ${BASE_URL}/verify.
 ...
-...    UAT fixed OTP: 9999 — applies to all valid mobile numbers (TN2 resolution).
+...    UAT fixed OTP: 9999 — applies to all mobile numbers (TN2 resolution).
 ...    No SMS dependency. Tests run reliably in CI without a gateway.
 ...    OTP timer: 180 seconds before the Resend OTP link becomes visible (T4 boundary).
 ...    Resend OTP test is tagged "slow" and "resend" — excluded from default CI runs (TN1 resolution).
 ...    Run with: robot --include resend tests/otp_tests.robot
+...
+...    Covers:
+...      - Field visibility and editability
+...      - Input validation (empty, short OTP)
+...      - Button enabled/disabled states
+...      - Wrong OTP toast notification
+...      - Valid OTP redirect with dashboard greeting
+...      - Back button navigation and mobile number clearing
+...      - Mobile number display on OTP page
+...      - OTP countdown timer text
+...      - Resend OTP flow (slow/manual tests skipped)
+...
+...    Ported from gq_customer_ui_automation (Java/Selenium).
+...    UAT rate limit: ~3 checkMobilePost calls per ~60s.
+...    Each test navigating to the OTP page uses a distinct mobile number.
+...    Navigate To OTP Page handles auto-retry on rate limit detection.
 ...
 ...    Satisfies: B2 (full OTP coverage), T3 (fixed OTP, no SMS), T4 (timer),
 ...               T5 (4-digit OTP), U1 (exact error messages), U3 (redirect assertions),
@@ -23,32 +39,15 @@ Suite Teardown   Close Browser
 Test Teardown    Close Context
 Test Tags        allure.label.epic:CP UI Automation    allure.label.feature:Authentication    allure.label.story:OTP Verification
 
-*** Keywords ***
-Navigate To OTP Page
-    [Documentation]
-    ...    Opens a fresh browser context, completes the login form, and waits for the
-    ...    OTP verification page to load.
-    ...
-    ...    UAT rate-limit behaviour: after ~3 checkMobilePost calls within ~60s from the
-    ...    same IP, the backend silently rejects further requests — the page stays on /
-    ...    with no visible error. When detected (OTP form not visible within LONG_TIMEOUT),
-    ...    this keyword closes the context, waits RATE_LIMIT_WAIT for the window to reset,
-    ...    then retries once. Tests should pass on the retry.
-    [Arguments]    ${mobile}=${TEST_MOBILE}
-    Open Login Page
-    Submit Login Form    ${mobile}
-    ${otp_loaded}=    Run Keyword And Return Status
-    ...    Wait For Elements State    ${OTP_FORM}    visible    timeout=${LONG_TIMEOUT}
-    IF    not ${otp_loaded}
-        Log    Rate limit detected — page stayed on /. Waiting ${RATE_LIMIT_WAIT} for reset then retrying.    console=True
-        Close Context
-        Sleep    ${RATE_LIMIT_WAIT}
-        Open Login Page
-        Submit Login Form    ${mobile}
-        Wait For OTP Page
-    END
-
 *** Test Cases ***
+
+OTP Input Field Is Visible And Editable
+    [Documentation]
+    ...    On the OTP verification page, the OTP input field should be visible and
+    ...    accept user input (editable/enabled state).
+    [Tags]    otp    ui    field
+    [Setup]    Navigate To OTP Page    ${EXT_OTP_MOBILE_2}
+    OTP Input Should Be Visible And Editable
 
 OTP Verification With Empty OTP
     [Documentation]
@@ -73,33 +72,110 @@ OTP Verification With Short OTP
     ${error}=    Get OTP Error Message
     Should Be Equal    ${error}    OTP number must contain 4 digits
 
-Valid OTP Redirects To Dashboard
+Verify OTP Button Is Enabled After OTP Entry
     [Documentation]
-    ...    Entering the correct 4-digit OTP (9999, fixed in UAT) and clicking Verify OTP
-    ...    should call verifyOtpPost, set access/refresh tokens, and redirect to /my-applications.
-    ...    Runs BEFORE Wrong OTP so that the correct verifyOtpPost call is always the first
-    ...    in the rate-limit window — avoids a UAT IP rate limit that blocks verifyOtpPost
-    ...    after a prior failed attempt.
-    ...    Satisfies: B2 (valid OTP coverage), U3 (redirect assertion), T3, TN2 (fixed OTP 9999)
-    [Tags]    otp    valid    smoke
-    [Setup]    Navigate To OTP Page    ${OTP_MOBILE_4}
-    Submit OTP Form    ${TEST_OTP}
-    Wait For Dashboard
+    ...    After entering a 4-digit OTP into the OTP input field, the Verify OTP
+    ...    button should transition to an enabled state.
+    [Tags]    otp    ui    button-state
+    [Setup]    Navigate To OTP Page    ${EXT_OTP_MOBILE_9}
+    Enter OTP    ${TEST_OTP}
+    Verify OTP Button Should Be Enabled
 
-OTP Verification With Wrong OTP
+Valid OTP Redirects To Dashboard With Greeting
     [Documentation]
-    ...    Entering an incorrect but structurally valid OTP (e.g. "1234") and clicking Verify
-    ...    should call verifyOtpPost, receive an API error, show a toast notification,
-    ...    and keep the user on /verify (no redirect).
-    ...    The error is a toast (not rendered in otp-input-error) so we assert URL unchanged.
-    ...    Runs AFTER Valid OTP — verifyOtpPost may be rate-limited here, but the test only
-    ...    asserts no-redirect which holds whether the call fails by wrong OTP or rate limit.
-    ...    Satisfies: B2 (wrong OTP coverage), U3 (no redirect on failure)
-    [Tags]    otp    negative
-    [Setup]    Navigate To OTP Page    ${OTP_MOBILE_3}
+    ...    Entering the correct UAT OTP (9999) should call verifyOtpPost, set auth tokens,
+    ...    redirect to /my-applications, and display the dashboard greeting "Hello,".
+    ...    Intentionally runs BEFORE Wrong OTP — a prior failed verifyOtpPost call can
+    ...    trigger IP rate limiting that blocks the valid OTP path.
+    ...    Handles UAT verifyOtpPost rate limiting: if redirect does not occur within
+    ...    LONG_TIMEOUT, waits RATE_LIMIT_WAIT then re-submits the OTP once.
+    ...    Satisfies: B2 (valid OTP coverage), U3 (redirect assertion), T3, TN2 (fixed OTP 9999)
+    [Tags]    otp    valid    smoke    dashboard
+    [Setup]    Navigate To OTP Page    ${EXT_OTP_MOBILE_4}
+    Submit OTP Form    ${TEST_OTP}
+    ${redirected}=    Run Keyword And Return Status    Dashboard URL Should Be Visible
+    IF    not ${redirected}
+        Log    verifyOtpPost rate limit detected — waiting ${RATE_LIMIT_WAIT} then retrying.    console=True
+        Sleep    ${RATE_LIMIT_WAIT}
+        Enter OTP    ${TEST_OTP}
+        Click Verify OTP Button
+    END
+    Dashboard Greeting Should Be Visible
+
+Wrong OTP Shows Incorrect OTP Toast
+    [Documentation]
+    ...    Submitting a structurally valid but incorrect OTP (e.g. "1234") calls
+    ...    verifyOtpPost, which returns an error. The UI shows an "Incorrect OTP"
+    ...    toast notification. The user remains on /verify.
+    [Tags]    otp    negative    toast
+    [Setup]    Navigate To OTP Page    ${EXT_OTP_MOBILE_3}
     Submit OTP Form    ${WRONG_OTP}
-    Wait For Elements State    ${OTP_FORM}    visible    timeout=${TIMEOUT}
+    Incorrect OTP Toast Should Be Visible
     OTP Page Should Still Be On OTP Page
+
+Back Button Returns To Login Page
+    [Documentation]
+    ...    After navigating to the OTP page, clicking the back button should return
+    ...    to the login page and display the title "What is your Mobile Number?".
+    [Tags]    otp    navigation    back-button
+    [Setup]    Navigate To OTP Page    ${EXT_OTP_MOBILE_1}
+    Click Back Button
+    Wait For Elements State    ${LOGIN_FORM}    visible    timeout=${TIMEOUT}
+    ${title}=    Get Login Form Title
+    Should Be Equal    ${title}    What is your Mobile Number?
+
+Back Button Clears Mobile Number Input
+    [Documentation]
+    ...    After navigating to the OTP page and clicking back, the login form is shown
+    ...    again with the mobile number input field cleared (empty value).
+    [Tags]    otp    navigation    back-button
+    [Setup]    Navigate To OTP Page    ${EXT_OTP_MOBILE_6}
+    Click Back Button
+    Wait For Elements State    ${LOGIN_FORM}    visible    timeout=${TIMEOUT}
+    ${value}=    Get Mobile Input Value
+    Should Be Equal    ${value}    ${EMPTY}
+
+Entered Mobile Number Is Displayed On OTP Page
+    [Documentation]
+    ...    The mobile number entered on the login form should be displayed on the
+    ...    OTP page inside data-testid='mobile-number-info'.
+    [Tags]    otp    ui    mobile-display
+    [Setup]    Navigate To OTP Page    ${EXT_OTP_MOBILE_5}
+    ${displayed}=    Get Displayed Mobile Number
+    Should Contain    ${displayed}    ${EXT_OTP_MOBILE_5}
+
+OTP Countdown Timer Shows Resend Text
+    [Documentation]
+    ...    Immediately after landing on the OTP page, the send-otp-timer-container should
+    ...    be visible and display "Did not receive OTP? Resend in <countdown>".
+    ...    Exact time value is not asserted to avoid timing flakiness.
+    [Tags]    otp    ui    timer
+    [Setup]    Navigate To OTP Page    ${EXT_OTP_MOBILE_7}
+    OTP Timer Should Show Countdown Text
+
+OTP Not Received
+    [Documentation]
+    ...    Manual test case: verify UX when OTP is not received (e.g. carrier issues).
+    ...    Cannot be automated — requires external SMS gateway dependency.
+    ...    Skipped in automated runs.
+    [Tags]    otp    manual    robot:skip
+    Navigate To OTP Page    ${EXT_OTP_MOBILE_1}
+
+OTP Timer Disabled State
+    [Documentation]
+    ...    Manual test case: verify the timer appearance before it starts counting.
+    ...    Cannot be reliably automated within normal timing constraints.
+    ...    Skipped in automated runs.
+    [Tags]    otp    manual    robot:skip
+    Navigate To OTP Page    ${EXT_OTP_MOBILE_1}
+
+Resend OTP Link Text After Timer Expires
+    [Documentation]
+    ...    Manual / slow test: the Resend OTP link text should appear after the 180-second
+    ...    countdown. Use the dedicated resend test below (tagged 'resend') for full coverage.
+    ...    Skipped here to avoid 3-minute wait in the suite.
+    [Tags]    otp    manual    robot:skip
+    Navigate To OTP Page    ${EXT_OTP_MOBILE_1}
 
 Resend OTP After Timer Expires
     [Documentation]

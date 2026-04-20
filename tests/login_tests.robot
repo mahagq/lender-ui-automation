@@ -7,6 +7,18 @@ Documentation
 ...    There is NO email or password field — all tests use mobile number.
 ...    On valid submission: calls checkMobilePost API → navigates to /verify.
 ...
+...    Covers:
+...      - Core login scenarios (valid, empty, invalid format, short, no consent)
+...      - URL and title verification
+...      - Field visibility and editability
+...      - Input validation (spaces, alphabets, alphanumeric, special chars, max length)
+...      - OTP redirect with valid mobile numbers
+...      - Consent form navigation links (T&C, Privacy Policy)
+...      - Send OTP button enabled/disabled states
+...
+...    Ported from gq_customer_ui_automation (Java/Selenium) — loginPageTest.java.
+...    Satisfies: TC-201, TC-207 to TC-220 (excluding TC-202 to TC-206 in left component suite)
+...
 ...    Satisfies: B1 (mobile form, not email/password), B2 (full login coverage),
 ...               B3 (UAT target), U1 (exact error messages), U3 (redirect assertions),
 ...               S1 (credentials in variables file), O1 (dry-run safe), O2 (results output)
@@ -23,6 +35,18 @@ Test Tags        allure.label.epic:CP UI Automation    allure.label.feature:Auth
 
 *** Test Cases ***
 
+Login Page URL And Title Match
+    [Documentation]
+    ...    Navigates to the base URL and verifies the page URL and browser tab title.
+    ...    Tab title: "Login GrayQuest Education Finance : Fastest Way to Get School Fee EMI | Full Institute Fee Funding"
+    [Tags]    login    smoke    url
+    Open Login Page
+    ${url}=    Get Url
+    Should Be Equal    ${url}    ${BASE_URL}/
+    ${title}=    Get Title
+    Should Be Equal    ${title}
+    ...    Login GrayQuest Education Finance : Fastest Way to Get School Fee EMI | Full Institute Fee Funding
+
 Valid Login With Correct Mobile Number
     [Documentation]
     ...    Entering a valid 10-digit mobile number with the consent checkbox checked
@@ -32,6 +56,13 @@ Valid Login With Correct Mobile Number
     Open Login Page
     Submit Login Form    ${TEST_MOBILE}
     Login Should Redirect To OTP Page
+
+Mobile Number Input Field Is Visible And Editable
+    [Documentation]
+    ...    Verifies the mobile number input field is visible and accepts user input.
+    [Tags]    login    ui    field
+    Open Login Page
+    Mobile Input Should Be Visible And Editable
 
 Login With Empty Mobile Number
     [Documentation]
@@ -45,6 +76,31 @@ Login With Empty Mobile Number
     ${error}=    Get Mobile Number Error Message
     Should Be Equal    ${error}    Please enter your mobile number
 
+Login With Spaces In Mobile Number
+    [Documentation]
+    ...    Entering only whitespace in the mobile field should be treated as empty
+    ...    by React Hook Form — the numeric input filters spaces, leaving the field
+    ...    empty and triggering: "Please enter your mobile number".
+    [Tags]    login    validation    negative
+    Open Login Page
+    Enter Mobile Number    ${SPACES_MOBILE}
+    Check Consent Checkbox
+    Click Send OTP Button
+    ${error}=    Get Mobile Number Error Message
+    Should Be Equal    ${error}    Please enter your mobile number
+
+Login With Alphabets In Mobile Number
+    [Documentation]
+    ...    Entering a purely alphabetic string triggers the mobile regex validation:
+    ...    "Please enter valid mobile number".
+    [Tags]    login    validation    negative
+    Open Login Page
+    Enter Mobile Number    ${ALPHA_MOBILE}
+    Check Consent Checkbox
+    Click Send OTP Button
+    ${error}=    Get Mobile Number Error Message
+    Should Be Equal    ${error}    Please enter valid mobile number
+
 Login With Invalid Mobile Number Format
     [Documentation]
     ...    Entering a mobile number containing letters (e.g. "123abc4567") should trigger
@@ -53,6 +109,30 @@ Login With Invalid Mobile Number Format
     [Tags]    login    validation    negative
     Open Login Page
     Enter Mobile Number    ${WRONG_FORMAT_MOBILE}
+    Check Consent Checkbox
+    Click Send OTP Button
+    ${error}=    Get Mobile Number Error Message
+    Should Be Equal    ${error}    Please enter valid mobile number
+
+Login With Alphanumeric Mobile Number
+    [Documentation]
+    ...    Entering a mix of letters and digits triggers the mobile regex validation:
+    ...    "Please enter valid mobile number".
+    [Tags]    login    validation    negative
+    Open Login Page
+    Enter Mobile Number    ${ALPHANUMERIC_MOBILE}
+    Check Consent Checkbox
+    Click Send OTP Button
+    ${error}=    Get Mobile Number Error Message
+    Should Be Equal    ${error}    Please enter valid mobile number
+
+Login With Special Characters In Mobile Number
+    [Documentation]
+    ...    Entering special characters triggers the mobile regex validation:
+    ...    "Please enter valid mobile number".
+    [Tags]    login    validation    negative
+    Open Login Page
+    Enter Mobile Number    ${SPECIAL_CHAR_MOBILE}
     Check Consent Checkbox
     Click Send OTP Button
     ${error}=    Get Mobile Number Error Message
@@ -72,6 +152,37 @@ Login With Short Mobile Number
     ${error}=    Get Mobile Number Error Message
     Should Be Equal    ${error}    Please enter valid mobile number
 
+Mobile Number Field Enforces 10 Digit Max Length
+    [Documentation]
+    ...    The mobile input has maxLength=10. Entering a 14-digit string should result
+    ...    in only the first 10 digits being accepted and stored in the field.
+    [Tags]    login    validation    field
+    Open Login Page
+    Enter Mobile Number    ${LONG_MOBILE}
+    ${value}=    Get Mobile Input Value
+    Should Be Equal    ${value}    1234567890
+
+Valid Mobile Starting With 6 To 9 Navigates To OTP Page
+    [Documentation]
+    ...    A valid 10-digit mobile number starting with 6, 7, 8, or 9 with consent
+    ...    checked should call checkMobilePost and redirect to /verify, showing
+    ...    the OTP page title "Enter 4 Digit OTP".
+    [Tags]    login    valid    otp-redirect
+    Open Login Page
+    Submit Login Form    ${EXT_LOGIN_MOBILE_1}
+    ${otp_loaded}=    Run Keyword And Return Status
+    ...    Wait For Elements State    ${OTP_FORM}    visible    timeout=${LONG_TIMEOUT}
+    IF    not ${otp_loaded}
+        Log    Rate limit detected — waiting ${RATE_LIMIT_WAIT} then retrying.    console=True
+        Close Context
+        Sleep    ${RATE_LIMIT_WAIT}
+        Open Login Page
+        Submit Login Form    ${EXT_LOGIN_MOBILE_1}
+        Wait For OTP Page
+    END
+    ${title}=    Get OTP Page Title
+    Should Be Equal    ${title}    Enter 4 Digit OTP
+
 Login Without Consent
     [Documentation]
     ...    Entering a valid mobile number but NOT checking the consent checkbox should trigger
@@ -84,3 +195,33 @@ Login Without Consent
     Click Send OTP Button
     ${error}=    Get Consent Error Message
     Should Be Equal    ${error}    Please accept Terms and Conditions
+
+Send OTP With Consent Checked Navigates To OTP Page
+    [Documentation]
+    ...    Entering a valid mobile number and explicitly checking the consent checkbox
+    ...    should navigate to /verify and show "Enter 4 Digit OTP".
+    [Tags]    login    valid    otp-redirect
+    Open Login Page
+    Submit Login Form    ${EXT_LOGIN_MOBILE_2}
+    ${otp_loaded}=    Run Keyword And Return Status
+    ...    Wait For Elements State    ${OTP_FORM}    visible    timeout=${LONG_TIMEOUT}
+    IF    not ${otp_loaded}
+        Log    Rate limit detected — waiting ${RATE_LIMIT_WAIT} then retrying.    console=True
+        Close Context
+        Sleep    ${RATE_LIMIT_WAIT}
+        Open Login Page
+        Submit Login Form    ${EXT_LOGIN_MOBILE_2}
+        Wait For OTP Page
+    END
+    ${title}=    Get OTP Page Title
+    Should Be Equal    ${title}    Enter 4 Digit OTP
+
+Send OTP Button Is Enabled With Mobile And Consent
+    [Documentation]
+    ...    Entering a valid mobile number AND checking the consent checkbox
+    ...    should enable the Send OTP button.
+    [Tags]    login    validation    button-state
+    Open Login Page
+    Enter Mobile Number    ${TEST_MOBILE}
+    Check Consent Checkbox
+    Send OTP Button Should Be Enabled
