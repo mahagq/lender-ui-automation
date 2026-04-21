@@ -68,3 +68,12 @@ ${DASHBOARD_MOBILE}       8108556708
 # Switch To Account is called in TC-4030 body (runs ~3 min after Suite Setup,
 # so rate limits are cleared before the second authentication attempt).
 ${PG_MOBILE}              7757855472
+
+# Extended login test mobiles (TC-221+)
+${EXT_LOGIN_MOBILE_3}     9876543227
+
+# Extended OTP test mobiles (TC-314+)
+${EXT_OTP_MOBILE_10}      9876543226
+
+# Negative test data (TC-314)
+${NON_NUMERIC_OTP}        abcd

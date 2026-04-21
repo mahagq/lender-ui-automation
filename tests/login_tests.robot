@@ -38,14 +38,13 @@ Test Tags        allure.label.epic:CP UI Automation    allure.label.feature:Auth
 Login Page URL And Title Match
     [Documentation]
     ...    Navigates to the base URL and verifies the page URL and browser tab title.
-    ...    Tab title confirmed from live UAT 2026-04-21.
+    ...    Tab title: 'Customer Portal: GrayQuest Education Finance' (updated 2026-04-21).
     [Tags]    login    smoke    url
     Open Login Page
     ${url}=    Get Url
     Should Be Equal    ${url}    ${BASE_URL}/
     ${title}=    Get Title
-    Should Be Equal    ${title}
-    ...    Login GrayQuest Education Finance : Fastest Way to Get School Fee EMI | Full Institute Fee Funding
+    Should Contain    ${title}    GrayQuest Education Finance
 
 Valid Login With Correct Mobile Number
     [Documentation]
@@ -225,3 +224,69 @@ Send OTP Button Is Enabled With Mobile And Consent
     Enter Mobile Number    ${TEST_MOBILE}
     Check Consent Checkbox
     Send OTP Button Should Be Enabled
+
+Login Form Title Is Visible
+    [Documentation]
+    ...    The login form should display the title "What is your Mobile Number?"
+    ...    via data-testid='desktop-view-form-title'. Satisfies: TC-221
+    [Tags]    login    ui    title
+    Open Login Page
+    ${title}=    Get Login Form Title
+    Should Be Equal    ${title}    What is your Mobile Number?
+
+Mobile Input Note Text Is Visible
+    [Documentation]
+    ...    When there is no validation error, a note should appear below the mobile input:
+    ...    "Please enter the mobile number which you generally use for your banking purposes."
+    ...    data-testid='mobile-number-input-note'. Satisfies: TC-222
+    [Tags]    login    ui    note
+    Open Login Page
+    Mobile Note Should Be Visible
+    ${text}=    Get Text    ${MOBILE_NOTE}
+    Should Contain    ${text}    Please enter the mobile number which you generally use for your banking purposes
+
+Terms Of Service Link In Consent Opens New Tab
+    [Documentation]
+    ...    The "Terms of Services" link inside the consent label (data-testid='terms-link')
+    ...    should open the T&C page in a new tab. Satisfies: TC-223
+    [Tags]    login    ui    consent    navigation
+    Open Login Page
+    ${title}=    Terms Link In Form Opens New Tab
+    Should Contain    ${title}    Terms
+
+Privacy Policy Link In Consent Opens New Tab
+    [Documentation]
+    ...    The "Privacy Policy" link inside the consent label (data-testid='privacy-policy-link')
+    ...    should open the Privacy Policy page in a new tab. Satisfies: TC-224
+    [Tags]    login    ui    consent    navigation
+    Open Login Page
+    ${title}=    Privacy Link In Form Opens New Tab
+    Should Contain    ${title}    Privacy
+
+Mobile Number Prefill Via Query Param Navigates To OTP Page
+    [Documentation]
+    ...    Navigating to /?m=<mobile> pre-fills the mobile field, auto-checks consent,
+    ...    and auto-submits (useEffect in Login.jsx). The result should be a redirect to /verify.
+    ...    Satisfies: TC-225
+    [Tags]    login    valid    query-param
+    Open Login Page With Prefill    ${EXT_LOGIN_MOBILE_3}
+    ${otp_loaded}=    Run Keyword And Return Status
+    ...    Wait For Elements State    ${OTP_FORM}    visible    timeout=${LONG_TIMEOUT}
+    IF    not ${otp_loaded}
+        Log    Rate limit detected during query param prefill test — waiting ${RATE_LIMIT_WAIT} then retrying.    console=True
+        Close Context
+        Sleep    ${RATE_LIMIT_WAIT}
+        Open Login Page With Prefill    ${EXT_LOGIN_MOBILE_3}
+        Wait For OTP Page
+    END
+    ${url}=    Get Url
+    Should Contain    ${url}    /verify
+
+Mobile Footer Is Present On Login Page
+    [Documentation]
+    ...    The MobileFooter component (data-testid='mobile-footer-container') should be
+    ...    present in the DOM on the login page. It is rendered for mobile viewports and
+    ...    contains the same links/logo as the left panel. Satisfies: TC-226
+    [Tags]    login    ui    mobile-footer
+    Open Login Page
+    Mobile Footer Should Be Present

@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Overview
 
-Robot Framework UI automation suite for the GQ Customer Portal. Covers the login left component, login form, OTP verification flow, and dashboard — targeting UAT: `https://customer.uat.graydev.in/`. Uses the **Browser library (Playwright)** — not SeleniumLibrary.
+Robot Framework UI automation suite for the GQ Customer Portal. Covers the login left component, login form, OTP verification flow, bypass authentication, and dashboard — targeting UAT: `https://customer.uat.graydev.in/`. Uses the **Browser library (Playwright)** — not SeleniumLibrary.
 
 ## Commands
 
@@ -18,16 +18,18 @@ Robot Framework UI automation suite for the GQ Customer Portal. Covers the login
 ./venv/bin/robot --outputdir results/ tests/login_left_component_tests.robot
 ./venv/bin/robot --outputdir results/ tests/login_tests.robot
 ./venv/bin/robot --outputdir results/ tests/otp_tests.robot
+./venv/bin/robot --outputdir results/ tests/bypass_auth_tests.robot
 ./venv/bin/robot --outputdir results/ tests/dashboard_tests.robot
 ```
 
 ### Run tests by tag
 ```bash
-./venv/bin/robot --outputdir results/ --include smoke tests/          # smoke tests only
-./venv/bin/robot --outputdir results/ --include login tests/          # login tests only
-./venv/bin/robot --outputdir results/ --include otp tests/            # OTP tests only
-./venv/bin/robot --outputdir results/ --include dashboard tests/      # dashboard tests only
-./venv/bin/robot --outputdir results/ --include resend tests/otp_tests.robot  # ~3min resend test
+./venv/bin/robot --outputdir results/ --include smoke tests/                    # smoke tests only
+./venv/bin/robot --outputdir results/ --include login tests/                    # login tests only
+./venv/bin/robot --outputdir results/ --include otp tests/                      # OTP tests only
+./venv/bin/robot --outputdir results/ --include bypass-auth tests/              # bypass auth tests only
+./venv/bin/robot --outputdir results/ --include dashboard tests/                # dashboard tests only
+./venv/bin/robot --outputdir results/ --include resend tests/otp_tests.robot    # ~3min resend test
 ```
 
 ### Dry run (syntax check, no browser)
@@ -46,14 +48,16 @@ TEST_MOBILE=9999999999 ./venv/bin/robot --outputdir results/ tests/
 ```
 tests/                     — Test suites (import resources and variables)
   login_left_component_tests.robot  — 9 left panel component tests
-  login_tests.robot                 — 15 login form tests
-  otp_tests.robot                   — 13 OTP tests (3 skipped)
-  dashboard_tests.robot             — 31 dashboard tests (6 skipped)
+  login_tests.robot                 — 21 login form tests
+  otp_tests.robot                   — 14 OTP tests (3 skipped)
+  bypass_auth_tests.robot           — 4 bypass auth tests (2 skipped)
+  dashboard_tests.robot             — 33 dashboard tests (2 skipped)
 
 resources/                 — Page Object keyword libraries (no variable imports)
   LoginLeftComponent.robot  — Keywords + locators for left panel component
   LoginPage.robot           — Keywords + locators for / (login form)
   OTPPage.robot             — Keywords + locators for /verify (OTP form)
+  BypassAuthPage.robot      — Keywords + locators for /instant-eligibility (bypass auth)
   DashboardPage.robot       — Keywords + locators for /my-applications (dashboard)
 
 variables/
@@ -74,7 +78,7 @@ results/                   — robot output (output.xml, log.html, report.html)
 
 ## Dashboard Session Model
 
-The dashboard suite uses a **single shared browser session** across all 31 tests:
+The dashboard suite uses a **single shared browser session** across all 33 tests (31 active, 2 skipped — TC-4004 and TC-4005):
 - `Suite Setup` — `Login And Navigate To Dashboard`: opens browser, logs in with `${DASHBOARD_MOBILE}` (8108556708), reaches /my-applications.
 - `Test Setup` — `Navigate To Dashboard`: hard-navigates to /my-applications (resets tab/filter/dropdown state). No new login.
 - `Test Teardown` — NONE (shared session preserved — no `Close Context`).
@@ -114,6 +118,7 @@ Tests assert these exact strings — do not paraphrase:
 | No consent | `consent-checkbox-error` | `Please accept Terms and Conditions` |
 | Empty OTP | `otp-input-error` | `Please enter 4 digit OTP` |
 | Short OTP (< 4 digits) | `otp-input-error` | `OTP number must contain 4 digits` |
+| Non-numeric OTP | `otp-input-error` | `Only numeric values allowed` |
 | Wrong OTP | URL stays on `/verify` (primary); toast `text=Incorrect OTP` (secondary — non-blocking, may be absent if verifyOtpPost rate-limited) |
 
 ## Routes
@@ -124,3 +129,4 @@ Tests assert these exact strings — do not paraphrase:
 | OTP verification | `/verify` |
 | Dashboard | `/my-applications` |
 | FAQ | `/faq` |
+| Bypass Auth | `/instant-eligibility` (with `?m=<mobile>` for tokenised ERP access) |

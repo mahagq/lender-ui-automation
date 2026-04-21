@@ -39,10 +39,11 @@ EMI Applications Are Visible On Dashboard
 
 Auto Debit Applications On Dashboard
     [Documentation]
-    ...    TC-4002: Dashboard should display Auto Debit applications.
-    ...    Skipped — disabled in Java suite (Auto Debit feature not active in UAT environment).
-    [Tags]    dashboard    auto-debit    robot:skip
-    Log    Skipped — TC-4002 disabled in Java suite (Auto Debit not active in UAT)
+    ...    TC-4002: The Auto Payments (AD) tab navigation button should be visible on the dashboard.
+    ...    Auto Debit is an active feature on UAT — the tab button and URL hash are assertable.
+    ...    Satisfies: TC-4002, B1
+    [Tags]    dashboard    auto-debit    tab-navigation
+    Wait For Elements State    ${AD_TAB}    visible    timeout=${TIMEOUT}
 
 Payment Gateway Applications Are Visible
     [Documentation]
@@ -118,10 +119,11 @@ EMI Tab Click Shows EMI Content
 
 Auto Payments Tab Click
     [Documentation]
-    ...    TC-4012: Clicking the Auto Payments tab should display Auto Debit content.
-    ...    Skipped — disabled in Java suite (Auto Payments not active in UAT environment).
-    [Tags]    dashboard    auto-payments    robot:skip
-    Log    Skipped — TC-4012 disabled in Java suite (Auto Payments not active in UAT)
+    ...    TC-4012: Clicking the Auto Payments tab button should update the URL hash to #ad
+    ...    and load the Auto Payments content area.
+    ...    Satisfies: TC-4012, U2, B1
+    [Tags]    dashboard    auto-payments    tab-navigation
+    Click AD Tab And Verify
 
 Transaction History Tab Click
     [Documentation]
@@ -246,17 +248,23 @@ Filter By All Months For Offline Payments
 
 Filter By This Month For Offline Payments
     [Documentation]
-    ...    TC-4025: "This Month" time filter for Offline sub-tab.
-    ...    Skipped — disabled in Java suite.
-    [Tags]    dashboard    pg    filter    offline    time-filter    robot:skip
-    Log    Skipped — TC-4025 disabled in Java suite
+    ...    TC-4025: The "This Month" time filter option should be selectable on the Offline sub-tab.
+    ...    Satisfies: TC-4025, T5, B1
+    [Tags]    dashboard    pg    filter    offline    time-filter
+    Click Transaction History Tab And Verify
+    Click Offline Sub-tab
+    Open Filter Panel
+    Select Time Filter    This Month
 
 Filter By This Year For Offline Payments
     [Documentation]
-    ...    TC-4026: "This Year" time filter for Offline sub-tab.
-    ...    Skipped — disabled in Java suite.
-    [Tags]    dashboard    pg    filter    offline    time-filter    robot:skip
-    Log    Skipped — TC-4026 disabled in Java suite
+    ...    TC-4026: The "This Year" time filter option should be selectable on the Offline sub-tab.
+    ...    Satisfies: TC-4026, T5, B1
+    [Tags]    dashboard    pg    filter    offline    time-filter
+    Click Transaction History Tab And Verify
+    Click Offline Sub-tab
+    Open Filter Panel
+    Select Time Filter    This Year
 
 Filter By Last Year For Offline Payments
     [Documentation]
@@ -317,6 +325,23 @@ Download Icon Is Visible For Online Payment
     Click Transaction History Tab And Verify
     Click Online Sub-tab
     Download Button Should Be Visible For First Row
+
+Insurance Tab Button Is Visible On Dashboard
+    [Documentation]
+    ...    TC-4032: The Insurance tab navigation button (data-testid='ins-tab-navigation-button')
+    ...    should be visible on the dashboard. Insurance is the second tab added in the UAT branch.
+    ...    Satisfies: TC-4032
+    [Tags]    dashboard    insurance    tab-navigation
+    Wait For Elements State    ${INS_TAB}    visible    timeout=${TIMEOUT}
+
+Insurance Tab Click Updates URL Hash
+    [Documentation]
+    ...    TC-4033: Clicking the Insurance tab should update the URL hash to #ins and load
+    ...    the Insurance content area. InsuranceTab has no data-testid attributes — hash
+    ...    update is the primary assertion (same pattern as EMI and PG tabs).
+    ...    Satisfies: TC-4033
+    [Tags]    dashboard    insurance    tab-navigation
+    Click Insurance Tab And Verify
 
 Logout Returns To Login Page
     [Documentation]

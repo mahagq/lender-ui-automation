@@ -1,7 +1,7 @@
 # Customer Portal UI Automation
 
 Robot Framework end-to-end test suite for the GQ Customer Portal.
-Covers the login left component, mobile number login form, OTP verification flow, and dashboard — all targeting the UAT environment (`https://customer.uat.graydev.in`).
+Covers the login left component, mobile number login form, OTP verification flow, bypass authentication, and dashboard — all targeting the UAT environment (`https://customer.uat.graydev.in`).
 
 ---
 
@@ -11,12 +11,14 @@ Covers the login left component, mobile number login form, OTP verification flow
 customer_portal_ui_automation/
 ├── tests/
 │   ├── login_left_component_tests.robot   # Left panel component tests (9 tests)
-│   ├── login_tests.robot                  # Login form tests (15 tests)
-│   ├── otp_tests.robot                    # OTP verification tests (13 tests, 3 skipped)
-│   └── dashboard_tests.robot              # Dashboard tests (31 tests, 6 skipped)
+│   ├── login_tests.robot                  # Login form tests (21 tests)
+│   ├── otp_tests.robot                    # OTP verification tests (14 tests, 3 skipped)
+│   ├── bypass_auth_tests.robot            # Bypass auth tests (4 tests, 2 skipped)
+│   └── dashboard_tests.robot              # Dashboard tests (33 tests, 6 skipped)
 ├── resources/
 │   ├── LoginPage.robot                    # Page object keywords for / (login page)
 │   ├── OTPPage.robot                      # Page object keywords for /verify (OTP page)
+│   ├── BypassAuthPage.robot               # Page object keywords for /instant-eligibility
 │   └── DashboardPage.robot                # Page object keywords for /my-applications
 ├── variables/
 │   └── variables.robot                    # All test configuration and test data
@@ -50,6 +52,7 @@ All dependencies live in the project virtualenv at `./venv/`.
 ./venv/bin/robot --outputdir results/ tests/login_left_component_tests.robot
 ./venv/bin/robot --outputdir results/ tests/login_tests.robot
 ./venv/bin/robot --outputdir results/ tests/otp_tests.robot
+./venv/bin/robot --outputdir results/ tests/bypass_auth_tests.robot
 ./venv/bin/robot --outputdir results/ tests/dashboard_tests.robot
 ```
 
@@ -62,11 +65,12 @@ All dependencies live in the project virtualenv at `./venv/`.
 ### Run by tag
 
 ```bash
-./venv/bin/robot --include smoke --outputdir results/ tests/          # smoke tests only
-./venv/bin/robot --include login --outputdir results/ tests/          # login tests only
-./venv/bin/robot --include otp --outputdir results/ tests/            # OTP tests only
-./venv/bin/robot --include dashboard --outputdir results/ tests/      # dashboard tests only
-./venv/bin/robot --include resend --outputdir results/ tests/otp_tests.robot  # slow resend test (~3 min)
+./venv/bin/robot --include smoke --outputdir results/ tests/                      # smoke tests only
+./venv/bin/robot --include login --outputdir results/ tests/                      # login tests only
+./venv/bin/robot --include otp --outputdir results/ tests/                        # OTP tests only
+./venv/bin/robot --include bypass-auth --outputdir results/ tests/                # bypass auth tests only
+./venv/bin/robot --include dashboard --outputdir results/ tests/                  # dashboard tests only
+./venv/bin/robot --include resend --outputdir results/ tests/otp_tests.robot      # slow resend test (~3 min)
 ```
 
 ### Dry run (syntax check, no browser)
@@ -100,11 +104,11 @@ TEST_MOBILE=9999900000 ./venv/bin/robot --outputdir results/ tests/
 | Contact Us Link Opens Contact Us Page | ui, navigation | Contact Us link navigates correctly |
 | Copyright Footer Text Is Correct | ui, content | Copyright notice text assertion |
 
-### Login Tests (`tests/login_tests.robot`) — 15 tests
+### Login Tests (`tests/login_tests.robot`) — 21 tests
 
 | Test | Tags | Description |
 |------|------|-------------|
-| Login Page URL And Title Match | login, smoke, url | URL = `${BASE_URL}/` and tab title verified |
+| Login Page URL And Title Match | login, smoke, url | URL = `${BASE_URL}/` and tab title contains "GrayQuest Education Finance" |
 | Valid Login With Correct Mobile Number | login, valid, smoke | Valid 10-digit mobile + consent → redirects to /verify |
 | Mobile Number Input Field Is Visible And Editable | login, ui, field | Input is visible and accepts input |
 | Login With Empty Mobile Number | login, validation, negative | No mobile → "Please enter your mobile number" |
@@ -119,8 +123,14 @@ TEST_MOBILE=9999900000 ./venv/bin/robot --outputdir results/ tests/
 | Login Without Consent | login, validation, negative | No consent checkbox → "Please accept Terms and Conditions" |
 | Send OTP With Consent Checked Navigates To OTP Page | login, valid, otp-redirect | Mobile + consent → OTP page |
 | Send OTP Button Is Enabled With Mobile And Consent | login, validation, button-state | Button enabled only with valid mobile + consent |
+| Login Form Title Is Visible | login, ui, title | Form title = "What is your Mobile Number?" |
+| Mobile Input Note Text Is Visible | login, ui, note | Note below mobile input contains banking guidance text |
+| Terms Of Service Link In Consent Opens New Tab | login, ui, consent, navigation | T&C link opens T&C page in new tab |
+| Privacy Policy Link In Consent Opens New Tab | login, ui, consent, navigation | Privacy Policy link opens in new tab |
+| Mobile Number Prefill Via Query Param Navigates To OTP Page | login, valid, query-param | `/?m=<mobile>` auto-submits and redirects to /verify |
+| Mobile Footer Is Present On Login Page | login, ui, mobile-footer | `mobile-footer-container` present in DOM (attached state) |
 
-### OTP Tests (`tests/otp_tests.robot`) — 13 tests (3 skipped)
+### OTP Tests (`tests/otp_tests.robot`) — 14 tests (3 skipped)
 
 | Test | Tags | Description |
 |------|------|-------------|
@@ -134,16 +144,28 @@ TEST_MOBILE=9999900000 ./venv/bin/robot --outputdir results/ tests/
 | Back Button Clears Mobile Number Input | otp, navigation, back-button | Back → mobile input field is empty |
 | Entered Mobile Number Is Displayed On OTP Page | otp, ui, mobile-display | Submitted mobile shown on OTP page |
 | OTP Countdown Timer Shows Resend Text | otp, ui, timer | Timer container shows "Resend in..." text |
+| OTP With Non-Numeric Characters Shows Error | otp, validation, negative | Non-numeric OTP → "Only numeric values allowed" |
 | OTP Not Received *(skipped)* | otp, manual | Requires SMS gateway — not automatable |
 | OTP Timer Disabled State *(skipped)* | otp, manual | Timing-sensitive — not reliably automatable |
 | Resend OTP After Timer Expires *(skipped)* | otp, slow, resend | ~3 min wait; run with `--include resend` |
 
-### Dashboard Tests (`tests/dashboard_tests.robot`) — 31 tests (6 skipped)
+### Bypass Authentication Tests (`tests/bypass_auth_tests.robot`) — 4 tests (2 skipped)
+
+Tests the `/instant-eligibility` page used for tokenised ERP access without OTP. The page authenticates via `bypassAuthPost` using a mobile number in the `?m=` query parameter.
+
+| Test | Tags | Description |
+|------|------|-------------|
+| Bypass Auth With Valid Mobile Redirects Away From Instant Eligibility | bypass-auth, smoke, redirect | `?m=<valid_mobile>` → bypassAuthPost → redirect away from /instant-eligibility |
+| Bypass Auth Without Query Param Redirects To Login Page | bypass-auth, redirect, negative | No `?m=` → useEffect redirects to / (login form visible) |
+| Bypass Auth No Account Error State Is Visible *(skipped)* | bypass-auth, negative | bypassAuthPost failure → no-account error state (needs specific UAT mobile) |
+| Sign In Button On No Account State Navigates To Login *(skipped)* | bypass-auth, negative, navigation | Sign In on no-account state → / (depends on TC-403 precondition) |
+
+### Dashboard Tests (`tests/dashboard_tests.robot`) — 33 tests (2 skipped)
 
 | TC | Test | Tags | Description |
 |----|------|------|-------------|
 | TC-4001 | EMI Applications Are Visible On Dashboard | dashboard, emi, smoke | At least one EMI card visible after login |
-| TC-4002 | Auto Debit Applications On Dashboard *(skipped)* | auto-debit | Auto Debit not active in UAT |
+| TC-4002 | Auto Debit Applications On Dashboard | dashboard, auto-debit, tab-navigation | Auto Payments (AD) tab button visible |
 | TC-4003 | Payment Gateway Applications Are Visible | dashboard, pg, smoke | Transaction History tab + Online/Offline sub-tabs visible |
 | TC-4004 | Stages And CTA Of Stages *(skipped)* | stages | No data-testid for stage elements |
 | TC-4005 | Back Button Is Not Present On Dashboard *(skipped)* | navigation | No back button on dashboard |
@@ -152,7 +174,7 @@ TEST_MOBILE=9999900000 ./venv/bin/robot --outputdir results/ tests/
 | TC-4008 | FAQ Link Navigates To FAQ Page | dashboard, profile, navigation | FAQ click → URL contains /faq |
 | TC-4010 | Create New Application Button Has Visible Effect | dashboard, application, smoke | Button click → modal or URL change |
 | TC-4011 | EMI Tab Click Shows EMI Content | dashboard, emi, tab-navigation | EMI tab click → URL hash #emi + EMI cards visible |
-| TC-4012 | Auto Payments Tab Click *(skipped)* | auto-payments | Auto Payments not active in UAT |
+| TC-4012 | Auto Payments Tab Click | dashboard, auto-payments, tab-navigation | Auto Payments tab click → URL hash `#ad` |
 | TC-4013 | Transaction History Tab Click | dashboard, pg, tab-navigation, smoke | PG tab click → URL hash #direct + sub-tabs visible |
 | TC-4014 | Offline Payments Sub-tab Is Accessible | dashboard, pg, sub-tab | Offline sub-tab visible and clickable |
 | TC-4015 | Online Payments Sub-tab Is Accessible | dashboard, pg, sub-tab | Online sub-tab visible and clickable |
@@ -165,13 +187,15 @@ TEST_MOBILE=9999900000 ./venv/bin/robot --outputdir results/ tests/
 | TC-4022 | Filter By Status Failed For Online Payments | dashboard, pg, filter, online, status-filter | "Failed" status filter selectable |
 | TC-4023 | Filter Panel Is Visible For Offline Payments | dashboard, pg, filter, offline | Filter button → time filters visible (no status filters) |
 | TC-4024 | Filter By All Months For Offline Payments | dashboard, pg, filter, offline, time-filter | "All Months" filter selectable on Offline tab |
-| TC-4025 | Filter By This Month For Offline Payments *(skipped)* | offline, time-filter | Disabled in Java suite |
-| TC-4026 | Filter By This Year For Offline Payments *(skipped)* | offline, time-filter | Disabled in Java suite |
+| TC-4025 | Filter By This Month For Offline Payments | dashboard, pg, filter, offline, time-filter | "This Month" filter selectable on Offline tab |
+| TC-4026 | Filter By This Year For Offline Payments | dashboard, pg, filter, offline, time-filter | "This Year" filter selectable on Offline tab |
 | TC-4027 | Filter By Last Year For Offline Payments | dashboard, pg, filter, offline, time-filter | "Last Year" filter selectable on Offline tab |
 | TC-4028 | Clear Filter Button Works | dashboard, pg, filter, clear-filter | Clear button resets filter selection |
 | TC-4029 | Apply Filter Button Works | dashboard, pg, filter, apply-filter | Apply button applies selected filter |
 | TC-4030 | Download Icon Is Visible For Offline Payment | dashboard, pg, download, offline | Download button visible on first Offline row (switches to PG account) |
 | TC-4031 | Download Icon Is Visible For Online Payment | dashboard, pg, download, online | Download button visible on first Online row |
+| TC-4032 | Insurance Tab Button Is Visible On Dashboard | dashboard, insurance, tab-navigation | Insurance tab button (`ins-tab-navigation-button`) visible |
+| TC-4033 | Insurance Tab Click Updates URL Hash | dashboard, insurance, tab-navigation | Insurance tab click → URL hash `#ins` |
 | TC-4009 | Logout Returns To Login Page | dashboard, profile, logout, session | Logout → redirects to login page *(runs last)* |
 
 ---
@@ -186,7 +210,9 @@ All configuration is in `variables/variables.robot`.
 | `TEST_MOBILE` | `%{TEST_MOBILE=9876543210}` | Default login mobile (overridable via env var) |
 | `OTP_MOBILE_1..4` | `9876543211..14` | Distinct mobiles for core OTP tests |
 | `EXT_LOGIN_MOBILE_1..2` | `9876543215..16` | Mobiles for login OTP-redirect tests |
-| `EXT_OTP_MOBILE_1..9` | `9876543217..25` | Distinct mobiles for extended OTP tests |
+| `EXT_OTP_MOBILE_1..10` | `9876543217..26` | Distinct mobiles for extended OTP tests |
+| `EXT_LOGIN_MOBILE_3` | `9876543227` | Mobile for query-param prefill login test (TC-225) |
+| `NON_NUMERIC_OTP` | `abcd` | Non-numeric OTP string for validation test (TC-314) |
 | `DASHBOARD_MOBILE` | `8108556708` | Dashboard suite login — account has active EMI applications |
 | `PG_MOBILE` | `7757855472` | PG account — used for TC-4030/TC-4031 (has transaction records) |
 | `TEST_OTP` | `9999` | Fixed OTP configured in UAT for all mobile numbers |

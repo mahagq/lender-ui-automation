@@ -291,7 +291,7 @@
       "number": 5,
       "phase": "verify",
       "timestamp": "2026-04-21T00:00:00Z",
-      "result": "PARTIAL — 13/14 constraints SATISFIED, 1 PARTIAL (T1: css=.modal-dialog documented exception per TN5 resolution). 2 gaps identified: G1 is non-blocking documented exception; G2 is environment dependency (live UAT run pending). Dry-run: 25 pass, 6 skip, 0 fail. All 9 required truths satisfied. All enhancement checks PASS.",
+      "result": "PARTIAL — 13/14 constraints SATISFIED, 1 PARTIAL (T1: css=.modal-dialog documented exception per TN5 resolution). 2 gaps identified: G1 is non-blocking documented exception; G2 is environment dependency (live UAT run pending). Dry-run: 25 pass (from 31 total), 6 skip, 0 fail. All 9 required truths satisfied. All enhancement checks PASS.",
       "constraints_satisfied": 13,
       "constraints_partial": 1,
       "constraints_missing": 0,
@@ -308,6 +308,15 @@
       "live_run": {"total": 31, "passed": 25, "skipped": 6, "failed": 0, "environment": "UAT"},
       "evidence_promoted": 6,
       "fixes_applied": ["Switch To Account three-state rate limit handler", "EMI Cards Should Be Visible async polling"]
+    },
+    {
+      "number": 7,
+      "phase": "post-verify-expansion",
+      "timestamp": "2026-04-21T22:00:00Z",
+      "result": "Gap analysis against gqcustomer_frontend uat branch identified 2 missing dashboard tests: TC-4032 (Insurance Tab Button Visible) and TC-4033 (Insurance Tab Click Updates URL Hash). Insurance tab uses data-testid='ins-tab-navigation-button'; tab content has no testids — URL hash (#ins) is primary assertion. Click Insurance Tab And Verify keyword already existed in DashboardPage.robot. Dry-run post-expansion: 33 total (27 pass, 6 skip), 0 errors.",
+      "new_tests": 2,
+      "new_tcs": ["TC-4032", "TC-4033"],
+      "dryrun": "PASS 33 total (27 pass, 6 skip)"
     }
   ],
   "generation": {

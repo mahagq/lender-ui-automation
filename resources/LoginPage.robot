@@ -26,11 +26,13 @@ ${LOGIN_FORM}            css=[data-testid='login-form']
 ${LOGIN_FORM_TITLE}      css=[data-testid='desktop-view-form-title']
 ${MOBILE_INPUT}          css=[data-testid='mobile-number-input']
 ${MOBILE_ERROR}          css=[data-testid='mobile-number-input-error']
+${MOBILE_NOTE}           css=[data-testid='mobile-number-input-note']
 ${CONSENT_CHECKBOX}      css=[data-testid='consent-checkbox']
 ${CONSENT_ERROR}         css=[data-testid='consent-checkbox-error']
 ${SEND_OTP_BUTTON}       css=[data-testid='send-otp-button']
 ${TERMS_LINK_FORM}       css=a[data-testid='terms-link']
 ${PRIVACY_LINK_FORM}     css=a[data-testid='privacy-policy-link']
+${MOBILE_FOOTER}         css=[data-testid='mobile-footer-container']
 
 *** Keywords ***
 Open Login Page
@@ -137,6 +139,57 @@ Click Privacy Policy Link In Form
     ...    Clicks the Privacy Policy link inside the consent area of the login form.
     ...    data-testid='privacy-policy-link' on the <a> element. Satisfies: TC-218
     Click    ${PRIVACY_LINK_FORM}
+
+Mobile Note Should Be Visible
+    [Documentation]
+    ...    Asserts the note text below the mobile input is visible.
+    ...    data-testid='mobile-number-input-note'. Note renders only when there is no validation error.
+    ...    Satisfies: TC-222
+    Wait For Elements State    ${MOBILE_NOTE}    visible    timeout=${TIMEOUT}
+
+Mobile Footer Should Be Present
+    [Documentation]
+    ...    Asserts the MobileFooter component (data-testid='mobile-footer-container') exists
+    ...    in the DOM. The element is CSS-hidden on desktop viewports but always rendered.
+    ...    Uses 'attached' state rather than 'visible' to avoid viewport-dependent failures.
+    ...    Satisfies: TC-226
+    Get Element States    ${MOBILE_FOOTER}    contains    attached
+
+Terms Link In Form Opens New Tab
+    [Documentation]
+    ...    Clicks the Terms of Services link in the consent area, switches to the new tab,
+    ...    returns the page title, then closes the tab.
+    ...    data-testid='terms-link'. Satisfies: TC-223
+    Wait For Elements State    ${TERMS_LINK_FORM}    visible    timeout=${TIMEOUT}
+    Click    ${TERMS_LINK_FORM}
+    Switch Page    NEW
+    Wait For Load State    domcontentloaded
+    ${title}=    Get Title
+    Close Page
+    RETURN    ${title}
+
+Privacy Link In Form Opens New Tab
+    [Documentation]
+    ...    Clicks the Privacy Policy link in the consent area, switches to the new tab,
+    ...    returns the page title, then closes the tab.
+    ...    data-testid='privacy-policy-link'. Satisfies: TC-224
+    Wait For Elements State    ${PRIVACY_LINK_FORM}    visible    timeout=${TIMEOUT}
+    Click    ${PRIVACY_LINK_FORM}
+    Switch Page    NEW
+    Wait For Load State    domcontentloaded
+    ${title}=    Get Title
+    Close Page
+    RETURN    ${title}
+
+Open Login Page With Prefill
+    [Documentation]
+    ...    Opens a fresh browser context and navigates to the login page with ?m=<mobile>
+    ...    query param. The React app pre-fills the mobile field and auto-checks consent.
+    ...    Satisfies: TC-225
+    [Arguments]    ${mobile}
+    New Context
+    New Page    ${BASE_URL}/?m=${mobile}
+    Wait For Elements State    ${LOGIN_FORM}    visible    timeout=${TIMEOUT}
 
 Login Should Redirect To OTP Page
     [Documentation]

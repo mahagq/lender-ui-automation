@@ -1,10 +1,11 @@
 """
 create_test_sheet_xlsx.py
-Generates CP_UI_Automation_Test_Cases.xlsx with 4 sheets:
-  Sheet 1: Login Left Component (9 TCs)
-  Sheet 2: Login               (15 TCs)
-  Sheet 3: OTP Verification    (13 TCs, 3 skipped)
-  Sheet 4: Dashboard           (31 TCs, 6 skipped)
+Generates CP_UI_Automation_Test_Cases.xlsx with 5 sheets:
+  Sheet 1: Login Left Component   (9 TCs)
+  Sheet 2: Login                  (21 TCs)
+  Sheet 3: OTP Verification       (14 TCs, 3 skipped)
+  Sheet 4: Bypass Authentication  (4 TCs, 2 skipped)
+  Sheet 5: Dashboard              (33 TCs, 2 skipped)
 
 Requirements:
     pip install openpyxl
@@ -42,10 +43,11 @@ FILL_WHITE    = hex_fill("FFFFFF")
 
 # Tab colors (hex for sheet tab — openpyxl uses ThemeColor or RGB)
 TAB_COLORS = {
-    "Login Left Component": "AED6E6",   # blue
-    "Login":                "BFB9E6",   # purple
-    "OTP Verification":     "FFD699",   # orange
-    "Dashboard":            "B6E6CC",   # green
+    "Login Left Component":  "AED6E6",  # blue
+    "Login":                 "BFB9E6",  # purple
+    "OTP Verification":      "FFD699",  # orange
+    "Bypass Authentication": "F4B8D1",  # pink
+    "Dashboard":             "B6E6CC",  # green
 }
 
 STATUS_FILL = {"PASS": FILL_PASS, "SKIP": FILL_SKIP, "FAIL": FILL_FAIL}
@@ -113,8 +115,8 @@ LOGIN = [
     ["TC-201", "Login Page URL And Title Match",
      "Login", "login, smoke, url",
      "Smoke", "Navigate to base URL and verify page URL and browser tab title.",
-     "URL = BASE_URL/ and title matches UAT title", "", "PASS",
-     "Tab title confirmed from live UAT 2026-04-21"],
+     "URL = BASE_URL/ and title contains 'GrayQuest Education Finance'", "", "PASS",
+     "Asserts title contains 'GrayQuest Education Finance' (Should Contain — resilient to title prefix changes)"],
     ["TC-207", "Mobile Number Input Field Is Visible And Editable",
      "Login", "login, ui, field",
      "UI", "Mobile number input field should be visible and accept user input.",
@@ -171,6 +173,31 @@ LOGIN = [
      "Login", "login, validation, button-state",
      "UI State", "Valid mobile + consent checkbox checked → Send OTP button is enabled.",
      "Send OTP button state = enabled", "9876543210", "PASS", ""],
+    ["TC-221", "Login Form Title Is Visible",
+     "Login", "login, ui, title",
+     "UI", "Login form should display the title 'What is your Mobile Number?' via data-testid='desktop-view-form-title'.",
+     "Title = 'What is your Mobile Number?'", "", "PASS", ""],
+    ["TC-222", "Mobile Input Note Text Is Visible",
+     "Login", "login, ui, note",
+     "UI", "When no validation error, note below mobile input: 'Please enter the mobile number which you generally use for your banking purposes.'",
+     "data-testid='mobile-number-input-note' visible and contains note text", "", "PASS", ""],
+    ["TC-223", "Terms Of Service Link In Consent Opens New Tab",
+     "Login", "login, ui, consent, navigation",
+     "Navigation", "The 'Terms of Services' link inside the consent label should open the T&C page in a new tab.",
+     "New tab title contains 'Terms'", "", "PASS", ""],
+    ["TC-224", "Privacy Policy Link In Consent Opens New Tab",
+     "Login", "login, ui, consent, navigation",
+     "Navigation", "The 'Privacy Policy' link inside the consent label should open the Privacy Policy page in a new tab.",
+     "New tab title contains 'Privacy'", "", "PASS", ""],
+    ["TC-225", "Mobile Number Prefill Via Query Param Navigates To OTP Page",
+     "Login", "login, valid, query-param",
+     "Positive", "Navigating to /?m=<mobile> pre-fills the mobile field, auto-checks consent, auto-submits, and redirects to /verify.",
+     "URL contains /verify", "9876543227", "PASS", ""],
+    ["TC-226", "Mobile Footer Is Present On Login Page",
+     "Login", "login, ui, mobile-footer",
+     "UI", "MobileFooter component (data-testid='mobile-footer-container') should be present in the DOM on the login page.",
+     "data-testid='mobile-footer-container' attached in DOM", "", "PASS",
+     "Asserts 'attached' state — element is CSS-hidden on desktop viewport"],
 ]
 
 OTP = [
@@ -217,6 +244,11 @@ OTP = [
      "OTP Verification", "otp, ui, timer",
      "UI", "Immediately after OTP page loads, timer container visible with countdown text.",
      "Timer contains 'Did not receive OTP? Resend in'", "9876543223", "PASS", ""],
+    ["TC-314", "OTP With Non-Numeric Characters Shows Error",
+     "OTP Verification", "otp, validation, negative",
+     "Validation", "Entering non-numeric characters (e.g. 'abcd') into the OTP field triggers Yup .matches(Regex.otp) validation.",
+     "'Only numeric values allowed'", "9876543226 / OTP: abcd", "PASS",
+     "Input has inputMode='numeric' but type='text' — desktop keyboards can type letters"],
     ["TC-311", "OTP Not Received",
      "OTP Verification", "otp, manual, robot:skip",
      "Manual", "Manual test — verify UX when OTP is not received (carrier issues).",
@@ -234,6 +266,27 @@ OTP = [
      "~3 min wait. Run with: robot --include resend tests/otp_tests.robot"],
 ]
 
+BYPASS_AUTH = [
+    ["TC-401", "Bypass Auth With Valid Mobile Redirects Away From Instant Eligibility",
+     "Bypass Authentication", "bypass-auth, smoke, redirect",
+     "Smoke", "Navigating to /instant-eligibility?m=<valid_mobile> authenticates via bypassAuthPost and redirects away from /instant-eligibility.",
+     "URL no longer contains /instant-eligibility", "9876543210", "PASS", ""],
+    ["TC-402", "Bypass Auth Without Query Param Redirects To Login Page",
+     "Bypass Authentication", "bypass-auth, redirect, negative",
+     "Negative", "Navigating to /instant-eligibility without ?m= redirects to / (login page) with login form visible.",
+     "Login form visible; URL does not contain /instant-eligibility", "", "PASS", ""],
+    ["TC-403", "Bypass Auth No Account Error State Is Visible",
+     "Bypass Authentication", "bypass-auth, negative, robot:skip",
+     "Skipped", "When bypassAuthPost fails (mobile has no ERP account), no-account error state should show image and message.",
+     "No-account image and message visible", "", "SKIP",
+     "Requires UAT mobile that fails bypassAuthPost — not yet identified"],
+    ["TC-404", "Sign In Button On No Account State Navigates To Login",
+     "Bypass Authentication", "bypass-auth, negative, navigation, robot:skip",
+     "Skipped", "On no-account error state, clicking Sign In should navigate to / (login page).",
+     "Login form visible after Sign In click", "", "SKIP",
+     "Depends on TC-403 precondition — bypassAuthPost failure state"],
+]
+
 DASHBOARD = [
     ["TC-4001", "EMI Applications Are Visible On Dashboard",
      "Dashboard", "dashboard, emi, smoke",
@@ -241,10 +294,9 @@ DASHBOARD = [
      "At least one EMI card visible", "8108556708", "PASS",
      "PRECONDITION: account must have active EMI applications"],
     ["TC-4002", "Auto Debit Applications On Dashboard",
-     "Dashboard", "dashboard, auto-debit, robot:skip",
-     "Skipped", "Dashboard should display Auto Debit applications.",
-     "N/A", "", "SKIP",
-     "Disabled — Auto Debit feature not active in UAT"],
+     "Dashboard", "dashboard, auto-debit, tab-navigation",
+     "Navigation", "The Auto Payments (AD) tab navigation button should be visible on the dashboard.",
+     "data-testid='ad-tab-navigation-button' visible", "8108556708", "PASS", ""],
     ["TC-4003", "Payment Gateway Applications Are Visible",
      "Dashboard", "dashboard, pg, smoke",
      "Smoke", "Transaction History tab should display Online and Offline sub-tab navigation.",
@@ -272,6 +324,15 @@ DASHBOARD = [
      "Navigation", "Clicking FAQ in profile dropdown navigates to FAQ page.",
      "URL contains /faq", "8108556708", "PASS",
      "Asserted via URL only — FAQ h1 has no data-testid (TN3 resolution)"],
+    ["TC-4032", "Insurance Tab Button Is Visible On Dashboard",
+     "Dashboard", "dashboard, insurance, tab-navigation",
+     "Navigation", "The Insurance tab navigation button (data-testid='ins-tab-navigation-button') should be visible on the dashboard.",
+     "Insurance tab button visible", "8108556708", "PASS", ""],
+    ["TC-4033", "Insurance Tab Click Updates URL Hash",
+     "Dashboard", "dashboard, insurance, tab-navigation",
+     "Navigation", "Clicking the Insurance tab should update the URL hash to #ins and load the Insurance content area.",
+     "URL contains #ins", "8108556708", "PASS",
+     "InsuranceTab has no data-testid attributes — URL hash is the primary assertion"],
     ["TC-4009", "Logout Returns To Login Page",
      "Dashboard", "dashboard, profile, logout, session",
      "Session", "Logout clears auth session and redirects to login page. MUST run last.",
@@ -288,10 +349,9 @@ DASHBOARD = [
      "URL contains #emi; EMI card visible", "8108556708", "PASS",
      "PRECONDITION: account must have active EMI applications"],
     ["TC-4012", "Auto Payments Tab Click",
-     "Dashboard", "dashboard, auto-payments, robot:skip",
-     "Skipped", "Clicking Auto Payments tab should display Auto Debit content.",
-     "N/A", "", "SKIP",
-     "Disabled — Auto Payments not active in UAT"],
+     "Dashboard", "dashboard, auto-payments, tab-navigation",
+     "Navigation", "Clicking the Auto Payments tab button should update the URL hash to #ad and load the Auto Payments content area.",
+     "URL contains #ad", "8108556708", "PASS", ""],
     ["TC-4013", "Transaction History Tab Click",
      "Dashboard", "dashboard, pg, tab-navigation, smoke",
      "Smoke", "Clicking Transaction History tab updates URL hash to #direct and shows sub-tabs.",
@@ -341,15 +401,13 @@ DASHBOARD = [
      "Filter", "'All Months' time filter is selectable on Offline sub-tab.",
      "'All Months' filter selectable", "8108556708", "PASS", ""],
     ["TC-4025", "Filter By This Month For Offline Payments",
-     "Dashboard", "dashboard, pg, filter, offline, time-filter, robot:skip",
-     "Skipped", "'This Month' filter for Offline sub-tab.",
-     "N/A", "", "SKIP",
-     "Disabled in Java suite"],
+     "Dashboard", "dashboard, pg, filter, offline, time-filter",
+     "Filter", "'This Month' time filter option should be selectable on the Offline sub-tab.",
+     "'This Month' filter selectable", "8108556708", "PASS", ""],
     ["TC-4026", "Filter By This Year For Offline Payments",
-     "Dashboard", "dashboard, pg, filter, offline, time-filter, robot:skip",
-     "Skipped", "'This Year' filter for Offline sub-tab.",
-     "N/A", "", "SKIP",
-     "Disabled in Java suite"],
+     "Dashboard", "dashboard, pg, filter, offline, time-filter",
+     "Filter", "'This Year' time filter option should be selectable on the Offline sub-tab.",
+     "'This Year' filter selectable", "8108556708", "PASS", ""],
     ["TC-4027", "Filter By Last Year For Offline Payments",
      "Dashboard", "dashboard, pg, filter, offline, time-filter",
      "Filter", "'Last Year' time filter is selectable on Offline sub-tab.",
@@ -375,10 +433,11 @@ DASHBOARD = [
 ]
 
 SHEETS = [
-    {"name": "Login Left Component", "data": LEFT_COMPONENT},
-    {"name": "Login",                "data": LOGIN},
-    {"name": "OTP Verification",     "data": OTP},
-    {"name": "Dashboard",            "data": DASHBOARD},
+    {"name": "Login Left Component",  "data": LEFT_COMPONENT},
+    {"name": "Login",                 "data": LOGIN},
+    {"name": "OTP Verification",      "data": OTP},
+    {"name": "Bypass Authentication", "data": BYPASS_AUTH},
+    {"name": "Dashboard",             "data": DASHBOARD},
 ]
 
 

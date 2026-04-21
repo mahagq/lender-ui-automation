@@ -176,6 +176,20 @@ OTP Countdown Timer Shows Resend Text
     [Setup]    Navigate To OTP Page    ${EXT_OTP_MOBILE_7}
     OTP Timer Should Show Countdown Text
 
+OTP With Non-Numeric Characters Shows Error
+    [Documentation]
+    ...    Entering non-numeric characters (e.g. "abcd") into the OTP field and clicking
+    ...    Verify OTP should trigger the Yup .matches(Regex.otp) validation and render:
+    ...    "Only numeric values allowed".
+    ...    The input has inputMode='numeric' but type='text', so desktop keyboards can type letters.
+    ...    Satisfies: TC-314
+    [Tags]    otp    validation    negative
+    [Setup]    Navigate To OTP Page    ${EXT_OTP_MOBILE_10}
+    Enter OTP    ${NON_NUMERIC_OTP}
+    Click Verify OTP Button
+    ${error}=    Get OTP Error Message
+    Should Be Equal    ${error}    Only numeric values allowed
+
 OTP Not Received
     [Documentation]
     ...    Manual test case: verify UX when OTP is not received (e.g. carrier issues).

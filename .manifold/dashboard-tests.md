@@ -43,10 +43,10 @@ Sources: `gqcustomer_frontend` UAT branch + `gq_customer_ui_automation` Java tes
 | Apply filter button | `css=[data-testid='apply-filter-button']` |
 | Download button (row N) | `css=[data-testid='table-row-N-download-button']` |
 
-**Java test scope (31 test cases — TC-4001 to TC-4031):**
+**Test scope (33 test cases — TC-4001 to TC-4033):**
 
-| TC | Description | Java Status |
-|----|-------------|-------------|
+| TC | Description | Status |
+|----|-------------|--------|
 | TC-4001 | EMI applications visible on dashboard | enabled |
 | TC-4002 | Auto Debit applications on Dashboard | **disabled** |
 | TC-4003 | Payment Gateway applications visible | enabled |
@@ -78,6 +78,8 @@ Sources: `gqcustomer_frontend` UAT branch + `gq_customer_ui_automation` Java tes
 | TC-4029 | Apply filter button | enabled |
 | TC-4030 | Download icon — offline payment | enabled |
 | TC-4031 | Download icon — online payment | enabled (Class3) / **disabled** (Class4 duplicate) |
+| TC-4032 | Insurance tab button visible | enabled — UAT branch addition |
+| TC-4033 | Insurance tab click updates URL hash to #ins | enabled — UAT branch addition |
 
 ---
 

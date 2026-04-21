@@ -255,6 +255,13 @@ Click EMI Tab And Verify
     Click    ${EMI_TAB}
     Wait Until Keyword Succeeds    ${TIMEOUT}    200ms    URL Should Contain Hash    ${HASH_EMI}
 
+Click AD Tab And Verify
+    [Documentation]
+    ...    Clicks the Auto Payments (AD) tab button and asserts the URL hash updates to #ad.
+    ...    Satisfies: TC-4012, U2
+    Click    ${AD_TAB}
+    Wait Until Keyword Succeeds    ${TIMEOUT}    200ms    URL Should Contain Hash    ${HASH_AD}
+
 Click Insurance Tab And Verify
     [Documentation]
     ...    Clicks the Insurance tab button and asserts the URL hash updates to #ins.

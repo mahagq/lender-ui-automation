@@ -46,7 +46,7 @@ All test cases for the login flow must use the mobile number input field. There 
 
 #### B2: Full Revised Test Coverage
 
-The test suite must cover all revised auth test cases. Current coverage: **15 login test cases** (valid login, 8 validation error scenarios, field behaviour, OTP-redirect flows, button state) and **13 OTP test cases** (10 active: field visibility, empty/short/valid/wrong OTP, back-button navigation ×2, mobile display, timer; 3 skipped: SMS-dependent, timing-sensitive, resend slow test tagged `robot:skip`).
+The test suite must cover all revised auth test cases. Current coverage: **21 login test cases** (valid login, 8 validation error scenarios, field behaviour, OTP-redirect flows, button state, UI elements, consent navigation links, query param prefill, mobile footer), **14 OTP test cases** (11 active: field visibility, empty/short/non-numeric/valid/wrong OTP, back-button navigation ×2, mobile display, timer; 3 skipped: SMS-dependent, timing-sensitive, resend slow test tagged `robot:skip`), and **4 bypass auth test cases** (2 active: valid mobile redirect, no-param redirect; 2 skipped: no-account error state requires specific UAT test data).
 
 > **Rationale:** These are the meaningful coverage points derivable from the Yup validation schema and OTP flow. Skipped tests are preserved in the suite with explanatory tags — they are not deleted.
 
