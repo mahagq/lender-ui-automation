@@ -48,7 +48,7 @@ Sources: `gqcustomer_frontend` UAT branch + `gq_customer_ui_automation` Java tes
 | TC | Description | Status |
 |----|-------------|--------|
 | TC-4001 | EMI applications visible on dashboard | enabled |
-| TC-4002 | Auto Debit applications on Dashboard | **disabled** |
+| TC-4002 | Auto Debit applications on Dashboard | enabled — AD tab button visible on UAT |
 | TC-4003 | Payment Gateway applications visible | enabled |
 | TC-4004 | Stages and CTA of stages | enabled (empty body) |
 | TC-4005 | Back button | enabled (empty body — no back button on dashboard) |
@@ -58,7 +58,7 @@ Sources: `gqcustomer_frontend` UAT branch + `gq_customer_ui_automation` Java tes
 | TC-4009 | Logout returns to login page | enabled |
 | TC-4010 | Create new application button — modal or redirect | enabled |
 | TC-4011 | EMI tab click and content | enabled |
-| TC-4012 | Auto Payments tab click | **disabled** |
+| TC-4012 | Auto Payments tab click | enabled — AD tab click → URL hash #ad |
 | TC-4013 | Transaction History tab click | enabled |
 | TC-4014 | Offline Payments sub-tab | enabled |
 | TC-4015 | Online Payments sub-tab | enabled |
@@ -71,8 +71,8 @@ Sources: `gqcustomer_frontend` UAT branch + `gq_customer_ui_automation` Java tes
 | TC-4022 | Filter by Status — Failed | enabled |
 | TC-4023 | Filter for Offline Payments visible | enabled |
 | TC-4024 | Filter by Time — All Months (Offline) | enabled |
-| TC-4025 | Filter by Time — This Month (Offline) | **disabled** |
-| TC-4026 | Filter by Time — This Year (Offline) | **disabled** |
+| TC-4025 | Filter by Time — This Month (Offline) | enabled — same filter UI as Online |
+| TC-4026 | Filter by Time — This Year (Offline) | enabled — same filter UI as Online |
 | TC-4027 | Filter by Time — Last Year (Offline) | enabled |
 | TC-4028 | Clear filter button | enabled |
 | TC-4029 | Apply filter button | enabled |
@@ -95,9 +95,9 @@ All dashboard test cases that are `enabled=true` AND have implemented test bodie
 
 #### B2: Disabled Java Tests Must Be Skipped, Not Deleted
 
-Tests with `enabled=false` in Java (TC-4002, TC-4012, TC-4025, TC-4026) must still exist in the RF suite as `robot:skip` test cases. TC-4004 and TC-4005 (empty bodies) also skipped.
+Tests that were `enabled=false` in Java but confirmed active on UAT have been promoted to active tests: TC-4002 (AD tab visible), TC-4012 (AD tab click → #ad), TC-4025 (Offline This Month filter), TC-4026 (Offline This Year filter). Tests with genuinely absent content (TC-4004, TC-4005 — empty bodies, no data-testid) remain `robot:skip`.
 
-> **Rationale:** Preserves traceability. Skipped tests document known gaps rather than silently omitting them.
+> **Rationale:** Preserves traceability. Truly untestable scenarios remain skipped with explanation; UAT-confirmed features are promoted to active.
 
 #### B3: TC-4031 Duplicate Resolution
 

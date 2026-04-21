@@ -1,4 +1,4 @@
-{"level":30,"time":"2026-04-21T17:08:14.585Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Listening on 127.0.0.1:58457"}
+{"level":30,"time":"2026-04-21T17:16:58.035Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Listening on 127.0.0.1:58526"}
 ================= Original suppressed error =================
 Error: Browser has been closed.
     at PlaywrightState.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:8777:13)
@@ -12,10 +12,10 @@ Error: Browser has been closed.
     at endReadableNT (node:internal/streams/readable:1729:12)
     at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
 =============================================================
-{"level":30,"time":"2026-04-21T17:08:15.635Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.635Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.638Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.638Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.092Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.092Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.095Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.095Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
 ================= Original suppressed error =================
 Error: Browser has been closed.
     at PlaywrightState.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:8777:13)
@@ -29,10 +29,10 @@ Error: Browser has been closed.
     at endReadableNT (node:internal/streams/readable:1729:12)
     at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
 =============================================================
-{"level":30,"time":"2026-04-21T17:08:15.643Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.644Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.646Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.646Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.100Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.100Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.101Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.101Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
 ================= Original suppressed error =================
 Error: Browser has been closed.
     at PlaywrightState.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:8777:13)
@@ -46,10 +46,10 @@ Error: Browser has been closed.
     at endReadableNT (node:internal/streams/readable:1729:12)
     at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
 =============================================================
-{"level":30,"time":"2026-04-21T17:08:15.649Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.649Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.651Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.651Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.103Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.103Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.105Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.105Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
 ================= Original suppressed error =================
 Error: Browser has been closed.
     at PlaywrightState.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:8777:13)
@@ -63,8 +63,8 @@ Error: Browser has been closed.
     at endReadableNT (node:internal/streams/readable:1729:12)
     at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
 =============================================================
-{"level":30,"time":"2026-04-21T17:08:15.653Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.653Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.108Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.108Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
 ================= Original suppressed error =================
 Error: Browser has been closed.
     at PlaywrightState.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:8777:13)
@@ -78,12 +78,12 @@ Error: Browser has been closed.
     at endReadableNT (node:internal/streams/readable:1729:12)
     at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
 =============================================================
-{"level":30,"time":"2026-04-21T17:08:15.655Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.655Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.670Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.671Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.679Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.679Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.111Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.111Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.125Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.125Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.134Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.134Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
 ================= Original suppressed error =================
 Error: Browser has been closed.
     at PlaywrightState.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:8777:13)
@@ -97,10 +97,10 @@ Error: Browser has been closed.
     at endReadableNT (node:internal/streams/readable:1729:12)
     at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
 =============================================================
-{"level":30,"time":"2026-04-21T17:08:15.681Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.681Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.682Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.682Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.137Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.137Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.137Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.137Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
 ================= Original suppressed error =================
 Error: Browser has been closed.
     at PlaywrightState.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:8777:13)
@@ -114,10 +114,10 @@ Error: Browser has been closed.
     at endReadableNT (node:internal/streams/readable:1729:12)
     at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
 =============================================================
-{"level":30,"time":"2026-04-21T17:08:15.684Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.684Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.684Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.684Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.139Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.139Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.140Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.140Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
 ================= Original suppressed error =================
 Error: Browser has been closed.
     at PlaywrightState.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:8777:13)
@@ -131,10 +131,10 @@ Error: Browser has been closed.
     at endReadableNT (node:internal/streams/readable:1729:12)
     at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
 =============================================================
-{"level":30,"time":"2026-04-21T17:08:15.687Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.687Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.687Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.687Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.142Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.142Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.143Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.143Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
 ================= Original suppressed error =================
 Error: Browser has been closed.
     at PlaywrightState.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:8777:13)
@@ -148,10 +148,10 @@ Error: Browser has been closed.
     at endReadableNT (node:internal/streams/readable:1729:12)
     at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
 =============================================================
-{"level":30,"time":"2026-04-21T17:08:15.688Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.688Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.689Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.689Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.144Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.144Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.144Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.144Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
 ================= Original suppressed error =================
 Error: Browser has been closed.
     at PlaywrightState.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:8777:13)
@@ -165,10 +165,10 @@ Error: Browser has been closed.
     at endReadableNT (node:internal/streams/readable:1729:12)
     at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
 =============================================================
-{"level":30,"time":"2026-04-21T17:08:15.690Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.690Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.690Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.690Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.145Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.145Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.146Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.146Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
 ================= Original suppressed error =================
 Error: Browser has been closed.
     at PlaywrightState.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:8777:13)
@@ -182,10 +182,10 @@ Error: Browser has been closed.
     at endReadableNT (node:internal/streams/readable:1729:12)
     at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
 =============================================================
-{"level":30,"time":"2026-04-21T17:08:15.693Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.693Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.693Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.693Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.148Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.148Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.149Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.149Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
 ================= Original suppressed error =================
 Error: Browser has been closed.
     at PlaywrightState.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:8777:13)
@@ -199,10 +199,10 @@ Error: Browser has been closed.
     at endReadableNT (node:internal/streams/readable:1729:12)
     at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
 =============================================================
-{"level":30,"time":"2026-04-21T17:08:15.695Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.695Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.696Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.696Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.151Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.151Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.152Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.152Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
 ================= Original suppressed error =================
 Error: Browser has been closed.
     at PlaywrightState.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:8777:13)
@@ -216,10 +216,10 @@ Error: Browser has been closed.
     at endReadableNT (node:internal/streams/readable:1729:12)
     at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
 =============================================================
-{"level":30,"time":"2026-04-21T17:08:15.698Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.698Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.699Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.699Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.154Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.154Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.154Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.154Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
 ================= Original suppressed error =================
 Error: Browser has been closed.
     at PlaywrightState.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:8777:13)
@@ -233,10 +233,10 @@ Error: Browser has been closed.
     at endReadableNT (node:internal/streams/readable:1729:12)
     at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
 =============================================================
-{"level":30,"time":"2026-04-21T17:08:15.701Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.701Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.701Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.701Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.156Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.157Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.157Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.157Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
 ================= Original suppressed error =================
 Error: Browser has been closed.
     at PlaywrightState.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:8777:13)
@@ -250,10 +250,10 @@ Error: Browser has been closed.
     at endReadableNT (node:internal/streams/readable:1729:12)
     at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
 =============================================================
-{"level":30,"time":"2026-04-21T17:08:15.704Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.704Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.705Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.705Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.160Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.160Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.161Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.161Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
 ================= Original suppressed error =================
 Error: Browser has been closed.
     at PlaywrightState.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:8777:13)
@@ -267,10 +267,10 @@ Error: Browser has been closed.
     at endReadableNT (node:internal/streams/readable:1729:12)
     at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
 =============================================================
-{"level":30,"time":"2026-04-21T17:08:15.707Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.707Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.707Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.707Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.162Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.162Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.163Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.163Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
 ================= Original suppressed error =================
 Error: Browser has been closed.
     at PlaywrightState.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:8777:13)
@@ -284,10 +284,10 @@ Error: Browser has been closed.
     at endReadableNT (node:internal/streams/readable:1729:12)
     at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
 =============================================================
-{"level":30,"time":"2026-04-21T17:08:15.709Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.709Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.710Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.710Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.165Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.165Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.166Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.166Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
 ================= Original suppressed error =================
 Error: Browser has been closed.
     at PlaywrightState.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:8777:13)
@@ -301,10 +301,10 @@ Error: Browser has been closed.
     at endReadableNT (node:internal/streams/readable:1729:12)
     at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
 =============================================================
-{"level":30,"time":"2026-04-21T17:08:15.712Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.712Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.712Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.712Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.168Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.168Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.168Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.168Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
 ================= Original suppressed error =================
 Error: Browser has been closed.
     at PlaywrightState.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:8777:13)
@@ -318,10 +318,10 @@ Error: Browser has been closed.
     at endReadableNT (node:internal/streams/readable:1729:12)
     at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
 =============================================================
-{"level":30,"time":"2026-04-21T17:08:15.714Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.714Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.714Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.714Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.170Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.170Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.170Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.170Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
 ================= Original suppressed error =================
 Error: Browser has been closed.
     at PlaywrightState.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:8777:13)
@@ -335,10 +335,10 @@ Error: Browser has been closed.
     at endReadableNT (node:internal/streams/readable:1729:12)
     at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
 =============================================================
-{"level":30,"time":"2026-04-21T17:08:15.717Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.717Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.718Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.718Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.174Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.174Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.174Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.174Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
 ================= Original suppressed error =================
 Error: Browser has been closed.
     at PlaywrightState.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:8777:13)
@@ -352,10 +352,10 @@ Error: Browser has been closed.
     at endReadableNT (node:internal/streams/readable:1729:12)
     at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
 =============================================================
-{"level":30,"time":"2026-04-21T17:08:15.721Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.721Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.721Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.721Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.177Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.177Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.177Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.177Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
 ================= Original suppressed error =================
 Error: Browser has been closed.
     at PlaywrightState.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:8777:13)
@@ -369,10 +369,10 @@ Error: Browser has been closed.
     at endReadableNT (node:internal/streams/readable:1729:12)
     at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
 =============================================================
-{"level":30,"time":"2026-04-21T17:08:15.724Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.724Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.724Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.724Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.180Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.180Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.180Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.180Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
 ================= Original suppressed error =================
 Error: Browser has been closed.
     at PlaywrightState.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:8777:13)
@@ -386,10 +386,10 @@ Error: Browser has been closed.
     at endReadableNT (node:internal/streams/readable:1729:12)
     at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
 =============================================================
-{"level":30,"time":"2026-04-21T17:08:15.727Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.727Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.727Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.727Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.183Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.183Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.184Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.184Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
 ================= Original suppressed error =================
 Error: Browser has been closed.
     at PlaywrightState.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:8777:13)
@@ -403,10 +403,10 @@ Error: Browser has been closed.
     at endReadableNT (node:internal/streams/readable:1729:12)
     at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
 =============================================================
-{"level":30,"time":"2026-04-21T17:08:15.730Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.730Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.730Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.730Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.186Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.186Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.187Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.187Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
 ================= Original suppressed error =================
 Error: Browser has been closed.
     at PlaywrightState.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:8777:13)
@@ -420,10 +420,10 @@ Error: Browser has been closed.
     at endReadableNT (node:internal/streams/readable:1729:12)
     at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
 =============================================================
-{"level":30,"time":"2026-04-21T17:08:15.733Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.733Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.733Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.733Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.189Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.189Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.189Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.189Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
 ================= Original suppressed error =================
 Error: Browser has been closed.
     at PlaywrightState.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:8777:13)
@@ -437,10 +437,10 @@ Error: Browser has been closed.
     at endReadableNT (node:internal/streams/readable:1729:12)
     at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
 =============================================================
-{"level":30,"time":"2026-04-21T17:08:15.736Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.736Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.736Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.736Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.192Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.192Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.192Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.192Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
 ================= Original suppressed error =================
 Error: Browser has been closed.
     at PlaywrightState.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:8777:13)
@@ -454,10 +454,10 @@ Error: Browser has been closed.
     at endReadableNT (node:internal/streams/readable:1729:12)
     at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
 =============================================================
-{"level":30,"time":"2026-04-21T17:08:15.739Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.739Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.739Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.739Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.195Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.195Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.195Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.195Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
 ================= Original suppressed error =================
 Error: Browser has been closed.
     at PlaywrightState.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:8777:13)
@@ -471,10 +471,10 @@ Error: Browser has been closed.
     at endReadableNT (node:internal/streams/readable:1729:12)
     at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
 =============================================================
-{"level":30,"time":"2026-04-21T17:08:15.742Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.742Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.742Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.742Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.198Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.198Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.198Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.198Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
 ================= Original suppressed error =================
 Error: Browser has been closed.
     at PlaywrightState.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:8777:13)
@@ -488,10 +488,10 @@ Error: Browser has been closed.
     at endReadableNT (node:internal/streams/readable:1729:12)
     at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
 =============================================================
-{"level":30,"time":"2026-04-21T17:08:15.745Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.745Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.745Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.745Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.201Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.201Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.201Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.201Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
 ================= Original suppressed error =================
 Error: Browser has been closed.
     at PlaywrightState.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:8777:13)
@@ -505,10 +505,10 @@ Error: Browser has been closed.
     at endReadableNT (node:internal/streams/readable:1729:12)
     at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
 =============================================================
-{"level":30,"time":"2026-04-21T17:08:15.748Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.748Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.748Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.748Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.204Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.204Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.204Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.204Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
 ================= Original suppressed error =================
 Error: Browser has been closed.
     at PlaywrightState.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:8777:13)
@@ -522,10 +522,10 @@ Error: Browser has been closed.
     at endReadableNT (node:internal/streams/readable:1729:12)
     at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
 =============================================================
-{"level":30,"time":"2026-04-21T17:08:15.751Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.751Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.751Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.751Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.207Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.207Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.208Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.208Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
 ================= Original suppressed error =================
 Error: Browser has been closed.
     at PlaywrightState.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:8777:13)
@@ -539,10 +539,10 @@ Error: Browser has been closed.
     at endReadableNT (node:internal/streams/readable:1729:12)
     at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
 =============================================================
-{"level":30,"time":"2026-04-21T17:08:15.754Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.754Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.754Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.754Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.210Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.210Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.211Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.211Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
 ================= Original suppressed error =================
 Error: Browser has been closed.
     at PlaywrightState.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:8777:13)
@@ -556,10 +556,10 @@ Error: Browser has been closed.
     at endReadableNT (node:internal/streams/readable:1729:12)
     at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
 =============================================================
-{"level":30,"time":"2026-04-21T17:08:15.757Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.757Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.758Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.758Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.213Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.213Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.214Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.214Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
 ================= Original suppressed error =================
 Error: Browser has been closed.
     at PlaywrightState.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:8777:13)
@@ -573,10 +573,10 @@ Error: Browser has been closed.
     at endReadableNT (node:internal/streams/readable:1729:12)
     at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
 =============================================================
-{"level":30,"time":"2026-04-21T17:08:15.767Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.767Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.767Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.767Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.223Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.223Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.224Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.224Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
 ================= Original suppressed error =================
 Error: Browser has been closed.
     at PlaywrightState.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:8777:13)
@@ -590,10 +590,10 @@ Error: Browser has been closed.
     at endReadableNT (node:internal/streams/readable:1729:12)
     at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
 =============================================================
-{"level":30,"time":"2026-04-21T17:08:15.770Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.770Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.770Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.770Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.226Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.226Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.226Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.226Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
 ================= Original suppressed error =================
 Error: Browser has been closed.
     at PlaywrightState.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:8777:13)
@@ -607,10 +607,10 @@ Error: Browser has been closed.
     at endReadableNT (node:internal/streams/readable:1729:12)
     at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
 =============================================================
-{"level":30,"time":"2026-04-21T17:08:15.771Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.771Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.772Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.772Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.227Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.227Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.228Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.228Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
 ================= Original suppressed error =================
 Error: Browser has been closed.
     at PlaywrightState.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:8777:13)
@@ -624,10 +624,10 @@ Error: Browser has been closed.
     at endReadableNT (node:internal/streams/readable:1729:12)
     at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
 =============================================================
-{"level":30,"time":"2026-04-21T17:08:15.773Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.773Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.774Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.774Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.229Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.229Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.230Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.230Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
 ================= Original suppressed error =================
 Error: Browser has been closed.
     at PlaywrightState.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:8777:13)
@@ -641,8 +641,8 @@ Error: Browser has been closed.
     at endReadableNT (node:internal/streams/readable:1729:12)
     at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
 =============================================================
-{"level":30,"time":"2026-04-21T17:08:15.775Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.775Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.231Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.231Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
 ================= Original suppressed error =================
 Error: Browser has been closed.
     at PlaywrightState.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:8777:13)
@@ -656,12 +656,12 @@ Error: Browser has been closed.
     at endReadableNT (node:internal/streams/readable:1729:12)
     at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
 =============================================================
-{"level":30,"time":"2026-04-21T17:08:15.776Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.776Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.782Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.782Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.783Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.783Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.232Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.232Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.238Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.238Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.239Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.239Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
 ================= Original suppressed error =================
 Error: Browser has been closed.
     at PlaywrightState.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:8777:13)
@@ -675,10 +675,10 @@ Error: Browser has been closed.
     at endReadableNT (node:internal/streams/readable:1729:12)
     at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
 =============================================================
-{"level":30,"time":"2026-04-21T17:08:15.783Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.783Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.784Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.784Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.240Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.240Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.241Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.241Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
 ================= Original suppressed error =================
 Error: Browser has been closed.
     at PlaywrightState.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:8777:13)
@@ -692,10 +692,10 @@ Error: Browser has been closed.
     at endReadableNT (node:internal/streams/readable:1729:12)
     at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
 =============================================================
-{"level":30,"time":"2026-04-21T17:08:15.785Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.785Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.786Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.786Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.242Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.242Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.242Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.242Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
 ================= Original suppressed error =================
 Error: Browser has been closed.
     at PlaywrightState.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:8777:13)
@@ -709,10 +709,10 @@ Error: Browser has been closed.
     at endReadableNT (node:internal/streams/readable:1729:12)
     at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
 =============================================================
-{"level":30,"time":"2026-04-21T17:08:15.787Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.787Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.787Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.787Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.244Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.244Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.244Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.244Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
 ================= Original suppressed error =================
 Error: Browser has been closed.
     at PlaywrightState.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:8777:13)
@@ -726,10 +726,10 @@ Error: Browser has been closed.
     at endReadableNT (node:internal/streams/readable:1729:12)
     at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
 =============================================================
-{"level":30,"time":"2026-04-21T17:08:15.788Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.788Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.789Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.789Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.245Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.245Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.245Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.245Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
 ================= Original suppressed error =================
 Error: Browser has been closed.
     at PlaywrightState.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:8777:13)
@@ -743,10 +743,10 @@ Error: Browser has been closed.
     at endReadableNT (node:internal/streams/readable:1729:12)
     at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
 =============================================================
-{"level":30,"time":"2026-04-21T17:08:15.791Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.791Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.791Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.791Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.247Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.247Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.248Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.248Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
 ================= Original suppressed error =================
 Error: Browser has been closed.
     at PlaywrightState.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:8777:13)
@@ -760,10 +760,10 @@ Error: Browser has been closed.
     at endReadableNT (node:internal/streams/readable:1729:12)
     at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
 =============================================================
-{"level":30,"time":"2026-04-21T17:08:15.793Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.793Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.793Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.793Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.250Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.250Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.250Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.250Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
 ================= Original suppressed error =================
 Error: Browser has been closed.
     at PlaywrightState.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:8777:13)
@@ -777,10 +777,10 @@ Error: Browser has been closed.
     at endReadableNT (node:internal/streams/readable:1729:12)
     at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
 =============================================================
-{"level":30,"time":"2026-04-21T17:08:15.795Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.795Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.796Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.796Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.252Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.252Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.252Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.252Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
 ================= Original suppressed error =================
 Error: Browser has been closed.
     at PlaywrightState.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:8777:13)
@@ -794,10 +794,10 @@ Error: Browser has been closed.
     at endReadableNT (node:internal/streams/readable:1729:12)
     at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
 =============================================================
-{"level":30,"time":"2026-04-21T17:08:15.798Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.798Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.798Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.798Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.254Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.254Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.255Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.255Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
 ================= Original suppressed error =================
 Error: Browser has been closed.
     at PlaywrightState.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:8777:13)
@@ -811,8 +811,8 @@ Error: Browser has been closed.
     at endReadableNT (node:internal/streams/readable:1729:12)
     at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
 =============================================================
-{"level":30,"time":"2026-04-21T17:08:15.800Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.800Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.256Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.256Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
 ================= Original suppressed error =================
 Error: Browser has been closed.
     at PlaywrightState.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:8777:13)
@@ -826,12 +826,12 @@ Error: Browser has been closed.
     at endReadableNT (node:internal/streams/readable:1729:12)
     at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
 =============================================================
-{"level":30,"time":"2026-04-21T17:08:15.800Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.800Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.802Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.802Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.803Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.803Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.257Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.257Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.259Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.259Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.259Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.259Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
 ================= Original suppressed error =================
 Error: Browser has been closed.
     at PlaywrightState.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:8777:13)
@@ -845,10 +845,10 @@ Error: Browser has been closed.
     at endReadableNT (node:internal/streams/readable:1729:12)
     at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
 =============================================================
-{"level":30,"time":"2026-04-21T17:08:15.804Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.804Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.805Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.805Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.261Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.261Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.261Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.261Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
 ================= Original suppressed error =================
 Error: Browser has been closed.
     at PlaywrightState.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:8777:13)
@@ -862,10 +862,10 @@ Error: Browser has been closed.
     at endReadableNT (node:internal/streams/readable:1729:12)
     at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
 =============================================================
-{"level":30,"time":"2026-04-21T17:08:15.807Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.807Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.807Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.807Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.263Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.263Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.263Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.263Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
 ================= Original suppressed error =================
 Error: Browser has been closed.
     at PlaywrightState.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:8777:13)
@@ -879,10 +879,10 @@ Error: Browser has been closed.
     at endReadableNT (node:internal/streams/readable:1729:12)
     at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
 =============================================================
-{"level":30,"time":"2026-04-21T17:08:15.809Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.809Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.809Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.809Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.265Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.265Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.265Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.265Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
 ================= Original suppressed error =================
 Error: Browser has been closed.
     at PlaywrightState.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:8777:13)
@@ -896,10 +896,10 @@ Error: Browser has been closed.
     at endReadableNT (node:internal/streams/readable:1729:12)
     at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
 =============================================================
-{"level":30,"time":"2026-04-21T17:08:15.811Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.811Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.811Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.811Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.267Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.267Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.268Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.268Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
 ================= Original suppressed error =================
 Error: Browser has been closed.
     at PlaywrightState.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:8777:13)
@@ -913,10 +913,10 @@ Error: Browser has been closed.
     at endReadableNT (node:internal/streams/readable:1729:12)
     at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
 =============================================================
-{"level":30,"time":"2026-04-21T17:08:15.814Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.814Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.814Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.814Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.270Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.270Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.271Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.271Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
 ================= Original suppressed error =================
 Error: Browser has been closed.
     at PlaywrightState.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:8777:13)
@@ -930,10 +930,10 @@ Error: Browser has been closed.
     at endReadableNT (node:internal/streams/readable:1729:12)
     at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
 =============================================================
-{"level":30,"time":"2026-04-21T17:08:15.816Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.816Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.817Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.817Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.273Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.273Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.273Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.273Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
 ================= Original suppressed error =================
 Error: Browser has been closed.
     at PlaywrightState.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:8777:13)
@@ -947,10 +947,10 @@ Error: Browser has been closed.
     at endReadableNT (node:internal/streams/readable:1729:12)
     at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
 =============================================================
-{"level":30,"time":"2026-04-21T17:08:15.819Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.819Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.819Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.819Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.275Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.275Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.276Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.276Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
 ================= Original suppressed error =================
 Error: Browser has been closed.
     at PlaywrightState.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:8777:13)
@@ -964,10 +964,10 @@ Error: Browser has been closed.
     at endReadableNT (node:internal/streams/readable:1729:12)
     at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
 =============================================================
-{"level":30,"time":"2026-04-21T17:08:15.821Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.821Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.822Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.822Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.278Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.278Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.278Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.278Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
 ================= Original suppressed error =================
 Error: Browser has been closed.
     at PlaywrightState.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:8777:13)
@@ -981,10 +981,10 @@ Error: Browser has been closed.
     at endReadableNT (node:internal/streams/readable:1729:12)
     at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
 =============================================================
-{"level":30,"time":"2026-04-21T17:08:15.824Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.824Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.824Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.824Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.280Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.280Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.281Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.281Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
 ================= Original suppressed error =================
 Error: Browser has been closed.
     at PlaywrightState.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:8777:13)
@@ -998,10 +998,10 @@ Error: Browser has been closed.
     at endReadableNT (node:internal/streams/readable:1729:12)
     at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
 =============================================================
-{"level":30,"time":"2026-04-21T17:08:15.826Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.826Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.827Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.827Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.283Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.283Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.283Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.283Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
 ================= Original suppressed error =================
 Error: Browser has been closed.
     at PlaywrightState.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:8777:13)
@@ -1015,10 +1015,10 @@ Error: Browser has been closed.
     at endReadableNT (node:internal/streams/readable:1729:12)
     at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
 =============================================================
-{"level":30,"time":"2026-04-21T17:08:15.829Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.829Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.829Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.829Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.285Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.285Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.286Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.286Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
 ================= Original suppressed error =================
 Error: Browser has been closed.
     at PlaywrightState.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:8777:13)
@@ -1032,10 +1032,10 @@ Error: Browser has been closed.
     at endReadableNT (node:internal/streams/readable:1729:12)
     at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
 =============================================================
-{"level":30,"time":"2026-04-21T17:08:15.833Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.833Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.833Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.833Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.290Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.290Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.290Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.290Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
 ================= Original suppressed error =================
 Error: Browser has been closed.
     at PlaywrightState.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:8777:13)
@@ -1049,10 +1049,10 @@ Error: Browser has been closed.
     at endReadableNT (node:internal/streams/readable:1729:12)
     at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
 =============================================================
-{"level":30,"time":"2026-04-21T17:08:15.835Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.835Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.836Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.836Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.292Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.292Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.293Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.293Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
 ================= Original suppressed error =================
 Error: Browser has been closed.
     at PlaywrightState.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:8777:13)
@@ -1066,10 +1066,10 @@ Error: Browser has been closed.
     at endReadableNT (node:internal/streams/readable:1729:12)
     at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
 =============================================================
-{"level":30,"time":"2026-04-21T17:08:15.840Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.840Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.841Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.841Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.297Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.297Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.297Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.297Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
 ================= Original suppressed error =================
 Error: Browser has been closed.
     at PlaywrightState.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:8777:13)
@@ -1083,10 +1083,10 @@ Error: Browser has been closed.
     at endReadableNT (node:internal/streams/readable:1729:12)
     at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
 =============================================================
-{"level":30,"time":"2026-04-21T17:08:15.842Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.842Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.843Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.843Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.299Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.299Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.299Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.299Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
 ================= Original suppressed error =================
 Error: Browser has been closed.
     at PlaywrightState.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:8777:13)
@@ -1100,10 +1100,10 @@ Error: Browser has been closed.
     at endReadableNT (node:internal/streams/readable:1729:12)
     at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
 =============================================================
-{"level":30,"time":"2026-04-21T17:08:15.844Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.844Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.845Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.845Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.301Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.301Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.301Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.301Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
 ================= Original suppressed error =================
 Error: Browser has been closed.
     at PlaywrightState.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:8777:13)
@@ -1117,10 +1117,10 @@ Error: Browser has been closed.
     at endReadableNT (node:internal/streams/readable:1729:12)
     at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
 =============================================================
-{"level":30,"time":"2026-04-21T17:08:15.846Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.846Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.847Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.847Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.303Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.303Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.303Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.303Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
 ================= Original suppressed error =================
 Error: Browser has been closed.
     at PlaywrightState.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:8777:13)
@@ -1134,10 +1134,10 @@ Error: Browser has been closed.
     at endReadableNT (node:internal/streams/readable:1729:12)
     at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
 =============================================================
-{"level":30,"time":"2026-04-21T17:08:15.848Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.849Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.849Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.849Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.305Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.305Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.306Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.306Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
 ================= Original suppressed error =================
 Error: Browser has been closed.
     at PlaywrightState.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:8777:13)
@@ -1151,10 +1151,10 @@ Error: Browser has been closed.
     at endReadableNT (node:internal/streams/readable:1729:12)
     at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
 =============================================================
-{"level":30,"time":"2026-04-21T17:08:15.851Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.851Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.851Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.851Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.308Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.308Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.308Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.308Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
 ================= Original suppressed error =================
 Error: Browser has been closed.
     at PlaywrightState.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:8777:13)
@@ -1168,10 +1168,10 @@ Error: Browser has been closed.
     at endReadableNT (node:internal/streams/readable:1729:12)
     at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
 =============================================================
-{"level":30,"time":"2026-04-21T17:08:15.854Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.854Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.854Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.854Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.311Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.311Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.311Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.311Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
 ================= Original suppressed error =================
 Error: Browser has been closed.
     at PlaywrightState.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:8777:13)
@@ -1185,8 +1185,8 @@ Error: Browser has been closed.
     at endReadableNT (node:internal/streams/readable:1729:12)
     at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
 =============================================================
-{"level":30,"time":"2026-04-21T17:08:15.856Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.856Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.312Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.312Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
 ================= Original suppressed error =================
 Error: Browser has been closed.
     at PlaywrightState.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:8777:13)
@@ -1200,12 +1200,12 @@ Error: Browser has been closed.
     at endReadableNT (node:internal/streams/readable:1729:12)
     at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
 =============================================================
-{"level":30,"time":"2026-04-21T17:08:15.857Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.857Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.859Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.859Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.860Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.860Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.313Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.313Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.316Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.316Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.316Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.316Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
 ================= Original suppressed error =================
 Error: Browser has been closed.
     at PlaywrightState.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:8777:13)
@@ -1219,10 +1219,10 @@ Error: Browser has been closed.
     at endReadableNT (node:internal/streams/readable:1729:12)
     at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
 =============================================================
-{"level":30,"time":"2026-04-21T17:08:15.864Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.864Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.864Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.864Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.320Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.320Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.321Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.321Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
 ================= Original suppressed error =================
 Error: Browser has been closed.
     at PlaywrightState.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:8777:13)
@@ -1236,10 +1236,10 @@ Error: Browser has been closed.
     at endReadableNT (node:internal/streams/readable:1729:12)
     at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
 =============================================================
-{"level":30,"time":"2026-04-21T17:08:15.869Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.869Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.869Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.869Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.325Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.325Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.326Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.326Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
 ================= Original suppressed error =================
 Error: Browser has been closed.
     at PlaywrightState.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:8777:13)
@@ -1253,10 +1253,10 @@ Error: Browser has been closed.
     at endReadableNT (node:internal/streams/readable:1729:12)
     at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
 =============================================================
-{"level":30,"time":"2026-04-21T17:08:15.874Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.874Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.874Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.874Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.330Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.330Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.331Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.331Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
 ================= Original suppressed error =================
 Error: Browser has been closed.
     at PlaywrightState.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:8777:13)
@@ -1270,10 +1270,10 @@ Error: Browser has been closed.
     at endReadableNT (node:internal/streams/readable:1729:12)
     at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
 =============================================================
-{"level":30,"time":"2026-04-21T17:08:15.881Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.881Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.882Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.882Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.338Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.338Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.339Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.339Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
 ================= Original suppressed error =================
 Error: Browser has been closed.
     at PlaywrightState.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:8777:13)
@@ -1287,10 +1287,10 @@ Error: Browser has been closed.
     at endReadableNT (node:internal/streams/readable:1729:12)
     at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
 =============================================================
-{"level":30,"time":"2026-04-21T17:08:15.890Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.890Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.891Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.891Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.347Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.347Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.348Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.348Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
 ================= Original suppressed error =================
 Error: Browser has been closed.
     at PlaywrightState.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:8777:13)
@@ -1304,10 +1304,10 @@ Error: Browser has been closed.
     at endReadableNT (node:internal/streams/readable:1729:12)
     at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
 =============================================================
-{"level":30,"time":"2026-04-21T17:08:15.896Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.896Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.896Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.896Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.352Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.352Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.353Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.353Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
 ================= Original suppressed error =================
 Error: Browser has been closed.
     at PlaywrightState.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:8777:13)
@@ -1321,10 +1321,10 @@ Error: Browser has been closed.
     at endReadableNT (node:internal/streams/readable:1729:12)
     at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
 =============================================================
-{"level":30,"time":"2026-04-21T17:08:15.901Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.901Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.901Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.901Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.357Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.357Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.357Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.357Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
 ================= Original suppressed error =================
 Error: Browser has been closed.
     at PlaywrightState.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:8777:13)
@@ -1338,10 +1338,10 @@ Error: Browser has been closed.
     at endReadableNT (node:internal/streams/readable:1729:12)
     at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
 =============================================================
-{"level":30,"time":"2026-04-21T17:08:15.906Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.906Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.906Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.906Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.362Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.362Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.362Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.362Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
 ================= Original suppressed error =================
 Error: Browser has been closed.
     at PlaywrightState.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:8777:13)
@@ -1355,10 +1355,10 @@ Error: Browser has been closed.
     at endReadableNT (node:internal/streams/readable:1729:12)
     at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
 =============================================================
-{"level":30,"time":"2026-04-21T17:08:15.910Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.910Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.911Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.911Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.367Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.367Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.367Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.367Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
 ================= Original suppressed error =================
 Error: Browser has been closed.
     at PlaywrightState.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:8777:13)
@@ -1372,10 +1372,10 @@ Error: Browser has been closed.
     at endReadableNT (node:internal/streams/readable:1729:12)
     at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
 =============================================================
-{"level":30,"time":"2026-04-21T17:08:15.915Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.915Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.915Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.915Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.371Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.371Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.371Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.371Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
 ================= Original suppressed error =================
 Error: Browser has been closed.
     at PlaywrightState.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:8777:13)
@@ -1389,10 +1389,10 @@ Error: Browser has been closed.
     at endReadableNT (node:internal/streams/readable:1729:12)
     at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
 =============================================================
-{"level":30,"time":"2026-04-21T17:08:15.920Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.920Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.920Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.920Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.376Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.376Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.376Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.376Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
 ================= Original suppressed error =================
 Error: Browser has been closed.
     at PlaywrightState.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:8777:13)
@@ -1406,10 +1406,10 @@ Error: Browser has been closed.
     at endReadableNT (node:internal/streams/readable:1729:12)
     at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
 =============================================================
-{"level":30,"time":"2026-04-21T17:08:15.921Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.921Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.921Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.921Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.377Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.377Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.377Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.377Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
 ================= Original suppressed error =================
 Error: Browser has been closed.
     at PlaywrightState.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:8777:13)
@@ -1423,10 +1423,10 @@ Error: Browser has been closed.
     at endReadableNT (node:internal/streams/readable:1729:12)
     at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
 =============================================================
-{"level":30,"time":"2026-04-21T17:08:15.922Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.922Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.922Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.922Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.378Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.378Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.378Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.378Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
 ================= Original suppressed error =================
 Error: Browser has been closed.
     at PlaywrightState.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:8777:13)
@@ -1440,8 +1440,8 @@ Error: Browser has been closed.
     at endReadableNT (node:internal/streams/readable:1729:12)
     at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
 =============================================================
-{"level":30,"time":"2026-04-21T17:08:15.923Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.923Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.379Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.379Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
 ================= Original suppressed error =================
 Error: Browser has been closed.
     at PlaywrightState.getActiveBrowser (/Users/masira/repositories/customer_portal_ui_automation/venv/lib/python3.14/site-packages/Browser/wrapper/index.js:8777:13)
@@ -1455,7 +1455,7 @@ Error: Browser has been closed.
     at endReadableNT (node:internal/streams/readable:1729:12)
     at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
 =============================================================
-{"level":30,"time":"2026-04-21T17:08:15.924Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.924Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
-{"level":30,"time":"2026-04-21T17:08:15.975Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method closeAllBrowsers"}
-{"level":30,"time":"2026-04-21T17:08:15.975Z","pid":6809,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method closeAllBrowsers"}
+{"level":30,"time":"2026-04-21T17:16:59.380Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.380Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method getBrowserCatalog"}
+{"level":30,"time":"2026-04-21T17:16:59.431Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"Start of node method closeAllBrowsers"}
+{"level":30,"time":"2026-04-21T17:16:59.431Z","pid":8021,"hostname":"Masira-Darvesh-Quality-Assurance-Engineer-L1.local","msg":"End of node method closeAllBrowsers"}

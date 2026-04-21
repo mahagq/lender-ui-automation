@@ -304,8 +304,8 @@
       "number": 6,
       "phase": "post-verify-fixes",
       "timestamp": "2026-04-21T18:00:00Z",
-      "result": "Live UAT run: 25 pass, 6 skip, 0 fail. All 6 PENDING test_passes evidence items promoted to VERIFIED. Convergence promoted to CONVERGED. Two runtime bug fixes applied: (1) Switch To Account — added three-state verifyOtpPost rate limit handler (dashboard/OTP/login page check after 45s sleep); (2) EMI Cards Should Be Visible — fixed async card loading race (Wait Until Keyword Succeeds polling Get Elements). TC-4010 WARN expected per TN5. TC-4030 hit verifyOtpPost rate limit and auto-recovered via new three-state handler.",
-      "live_run": {"total": 31, "passed": 25, "skipped": 6, "failed": 0, "environment": "UAT"},
+      "result": "Live UAT run: 25 pass, 6 skip, 0 fail (pre-expansion, 31 tests). All 6 PENDING test_passes evidence items promoted to VERIFIED. Convergence promoted to CONVERGED. Two runtime bug fixes applied: (1) Switch To Account — added three-state verifyOtpPost rate limit handler; (2) EMI Cards Should Be Visible — fixed async card loading race. TC-4010 WARN expected per TN5. TC-4030 hit verifyOtpPost rate limit and auto-recovered.",
+      "live_run": {"total": 31, "passed": 25, "skipped": 6, "failed": 0, "environment": "UAT", "note": "Pre-expansion baseline — 33 test suite pending live re-run"},
       "evidence_promoted": 6,
       "fixes_applied": ["Switch To Account three-state rate limit handler", "EMI Cards Should Be Visible async polling"]
     },
@@ -317,6 +317,15 @@
       "new_tests": 2,
       "new_tcs": ["TC-4032", "TC-4033"],
       "dryrun": "PASS 33 total (27 pass, 6 skip)"
+    },
+    {
+      "number": 8,
+      "phase": "post-verify-correction",
+      "timestamp": "2026-04-21T22:30:00Z",
+      "result": "User confirmed TC-4002/4012/4025/4026 are active on UAT — Java 'disabled' label was incorrect. TC-4002: AD tab button (ad-tab-navigation-button) asserted visible. TC-4012: Click AD Tab And Verify keyword added to DashboardPage.robot — asserts URL hash #ad. TC-4025: Select Time Filter 'This Month' on Offline sub-tab (same filter UI as Online). TC-4026: Select Time Filter 'This Year' on Offline sub-tab. robot:skip removed from all four. Dry-run post-correction: 33 total (31 pass, 2 skip), 0 errors. Only TC-4004 and TC-4005 remain skipped.",
+      "promoted_from_skip": ["TC-4002", "TC-4012", "TC-4025", "TC-4026"],
+      "new_keywords": ["Click AD Tab And Verify"],
+      "dryrun": "PASS 33 total (31 pass, 2 skip)"
     }
   ],
   "generation": {

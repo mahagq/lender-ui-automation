@@ -176,8 +176,8 @@ gq-qa-reports/
 | Tab | Content |
 |-----|---------|
 | **Overview** | Summary stats, trend graph, suite pass/fail blocks |
-| **Behaviors** | Epic: CP UI Automation → Feature: Authentication → Story: Login / OTP Verification; Feature: Dashboard → Story: Dashboard |
-| **Suites** | CP UI Automation [UAT] → Login Left Component Tests / Login Tests / Otp Tests / Dashboard Tests |
+| **Behaviors** | Epic: CP UI Automation → Feature: Authentication → Story: Login / OTP Verification / Bypass Authentication; Feature: Dashboard → Story: Dashboard |
+| **Suites** | CP UI Automation [UAT] → Login Left Component Tests / Login Tests / Otp Tests / Bypass Auth Tests / Dashboard Tests |
 | **Categories** | Product Defects / Test Infrastructure Defects / Skipped Tests |
 | **Timeline** | Tests plotted by execution time |
 

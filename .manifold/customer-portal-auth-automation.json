@@ -127,7 +127,7 @@
           {"id": "E6c", "type": "test_passes", "path": "tests/otp_tests.robot", "test_name": "Live UAT 2026-04-21: 10 pass, 0 fail, 3 skip", "status": "STALE"},
           {"id": "E6d", "type": "file_exists", "path": "resources/BypassAuthPage.robot", "status": "VERIFIED"},
           {"id": "E6e", "type": "file_exists", "path": "tests/bypass_auth_tests.robot", "status": "VERIFIED"},
-          {"id": "E6f", "type": "test_passes", "path": "tests/", "test_name": "robot --dryrun 2026-04-21: 81 total (70 pass, 11 skip), 0 errors", "status": "VERIFIED"}
+          {"id": "E6f", "type": "test_passes", "path": "tests/", "test_name": "robot --dryrun 2026-04-21: 81 total (74 pass, 7 skip), 0 errors", "status": "VERIFIED"}
         ],
         "children": [
           {"id": "RT-1.1", "status": "SATISFIED", "depth": 1, "children": []},
@@ -202,7 +202,7 @@
       "number": 6,
       "phase": "post-generate-expansion",
       "timestamp": "2026-04-21T22:00:00Z",
-      "result": "Gap analysis against gqcustomer_frontend uat branch identified 13 missing cases. Added TC-221 to TC-226 (login UI/nav), TC-314 (otp non-numeric), TC-401 to TC-404 (bypass auth — new suite), TC-4032 to TC-4033 (insurance tab). New resource: BypassAuthPage.robot. Variables added: EXT_LOGIN_MOBILE_3, EXT_OTP_MOBILE_10, NON_NUMERIC_OTP. Dry-run: 81 total (70 pass, 11 skip), 0 errors.",
+      "result": "Gap analysis against gqcustomer_frontend uat branch identified 13 missing cases. Added TC-221 to TC-226 (login UI/nav), TC-314 (otp non-numeric), TC-401 to TC-404 (bypass auth — new suite), TC-4032 to TC-4033 (insurance tab). New resource: BypassAuthPage.robot. Variables added: EXT_LOGIN_MOBILE_3, EXT_OTP_MOBILE_10, NON_NUMERIC_OTP. Also corrected: TC-4002/4012/4025/4026 promoted from skip to active (Auto Debit IS live on UAT; Offline This Month/Year filters work). Click AD Tab And Verify keyword added. Final dry-run: 81 total (74 pass, 7 skip), 0 errors.",
       "new_tests": 13,
       "new_files": ["resources/BypassAuthPage.robot", "tests/bypass_auth_tests.robot"],
       "dryrun": "PASS 81 total (70 pass, 11 skip)"
@@ -314,7 +314,7 @@
       "constraints_total": 16,
       "percentage": 100
     },
-    "dryrun_result": "PASS — 81 total (9 left-component + 21 login + 14 otp + 4 bypass-auth + 33 dashboard: 70 pass, 11 skip), 0 errors."
+    "dryrun_result": "PASS — 81 total (9 left-component + 21 login + 14 otp + 4 bypass-auth + 33 dashboard: 74 pass, 7 skip), 0 errors."
   },
   "gap_checklist_compliance": [
     {"gap": "GAP-03", "status": "COMPLETED"},

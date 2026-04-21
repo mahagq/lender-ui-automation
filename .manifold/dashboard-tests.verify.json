@@ -4,12 +4,13 @@
   "verification": {
     "timestamp": "2026-04-21T00:00:00Z",
     "result": "PARTIAL",
-    "result_note": "14/14 constraints addressed. T1 carries one documented exception (css=.modal-dialog in TC-4010 dual-branch per TN5 resolution). All required truths satisfied. Live UAT run 2026-04-21: 25 pass, 6 skip, 0 fail.",
+    "result_note": "14/14 constraints addressed. T1 carries one documented exception (css=.modal-dialog in TC-4010 dual-branch per TN5 resolution). All required truths satisfied. Post-expansion dry-run 2026-04-21: 33 total, 31 pass, 2 skip, 0 fail. TC-4002/4012/4025/4026 promoted from skip to active after UAT confirmation.",
     "dry_run_result": {
-      "total": 31,
-      "passed": 25,
-      "skipped": 6,
-      "failed": 0
+      "total": 33,
+      "passed": 31,
+      "skipped": 2,
+      "failed": 0,
+      "note": "Post-expansion: TC-4002, TC-4012, TC-4025, TC-4026 unscipped; TC-4032, TC-4033 added. Only TC-4004 and TC-4005 remain skipped."
     },
     "live_run_result": {
       "total": 31,
@@ -18,7 +19,8 @@
       "failed": 0,
       "executed_on": "2026-04-21",
       "environment": "UAT",
-      "notable": "TC-4010 WARN (no modal — inline form, TN5 expected). TC-4030 verifyOtpPost rate limit hit and auto-recovered."
+      "notable": "TC-4010 WARN (no modal — inline form, TN5 expected). TC-4030 verifyOtpPost rate limit hit and auto-recovered.",
+      "superseded_by": "Post-expansion dry-run; live re-run pending"
     },
     "matrix": [
       {
@@ -30,7 +32,7 @@
         "docs": true,
         "ops": false,
         "status": "SATISFIED",
-        "evidence": "25 enabled TCs present in dashboard_tests.robot; all PASS in dry-run. 6 disabled TCs present with robot:skip (B2).",
+        "evidence": "31 enabled TCs present in dashboard_tests.robot; all PASS in dry-run. 2 genuinely untestable TCs remain robot:skip (TC-4004, TC-4005). TC-4002/4012/4025/4026 promoted to active after UAT confirmation. TC-4032/4033 added for insurance tab.",
         "satisfaction_level": "TESTED"
       },
       {
@@ -42,7 +44,7 @@
         "docs": true,
         "ops": false,
         "status": "SATISFIED",
-        "evidence": "TC-4002, TC-4004, TC-4005, TC-4012, TC-4025, TC-4026 all present with robot:skip tag and Log message explaining reason.",
+        "evidence": "TC-4004 and TC-4005 present with robot:skip (empty body in Java, no data-testid). TC-4002/4012/4025/4026 promoted from skip to active — UAT confirmed these features are live.",
         "satisfaction_level": "TESTED"
       },
       {
