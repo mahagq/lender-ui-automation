@@ -4,12 +4,21 @@
   "verification": {
     "timestamp": "2026-04-21T00:00:00Z",
     "result": "PARTIAL",
-    "result_note": "14/14 constraints addressed. T1 carries one documented exception (css=.modal-dialog in TC-4010 dual-branch per TN5 resolution). All required truths satisfied. Dry-run: 25 pass, 6 skip, 0 fail.",
+    "result_note": "14/14 constraints addressed. T1 carries one documented exception (css=.modal-dialog in TC-4010 dual-branch per TN5 resolution). All required truths satisfied. Live UAT run 2026-04-21: 25 pass, 6 skip, 0 fail.",
     "dry_run_result": {
       "total": 31,
       "passed": 25,
       "skipped": 6,
       "failed": 0
+    },
+    "live_run_result": {
+      "total": 31,
+      "passed": 25,
+      "skipped": 6,
+      "failed": 0,
+      "executed_on": "2026-04-21",
+      "environment": "UAT",
+      "notable": "TC-4010 WARN (no modal — inline form, TN5 expected). TC-4030 verifyOtpPost rate limit hit and auto-recovered."
     },
     "matrix": [
       {
@@ -22,7 +31,7 @@
         "ops": false,
         "status": "SATISFIED",
         "evidence": "25 enabled TCs present in dashboard_tests.robot; all PASS in dry-run. 6 disabled TCs present with robot:skip (B2).",
-        "satisfaction_level": "IMPLEMENTED"
+        "satisfaction_level": "TESTED"
       },
       {
         "constraint": "B2",
@@ -34,7 +43,7 @@
         "ops": false,
         "status": "SATISFIED",
         "evidence": "TC-4002, TC-4004, TC-4005, TC-4012, TC-4025, TC-4026 all present with robot:skip tag and Log message explaining reason.",
-        "satisfaction_level": "IMPLEMENTED"
+        "satisfaction_level": "TESTED"
       },
       {
         "constraint": "B3",
@@ -46,7 +55,7 @@
         "ops": false,
         "status": "SATISFIED",
         "evidence": "TC-4031 appears exactly once in dashboard_tests.robot as an enabled test (no robot:skip). Documentation references Class3 canonical source.",
-        "satisfaction_level": "IMPLEMENTED"
+        "satisfaction_level": "TESTED"
       },
       {
         "constraint": "T1",
@@ -59,7 +68,7 @@
         "status": "PARTIAL",
         "evidence": "36 data-testid usages. One CSS class selector: css=.modal-dialog in Click Create New Application And Verify Response. This is a documented exception per TN5 resolution — modal has no data-testid, T1 loosened for O2's dual-branch. The selector is wrapped in Run Keyword And Return Status (failure-safe). No other class selectors or XPath found.",
         "gap": "css=.modal-dialog class selector in TC-4010 dual-branch (pre-approved exception per TN5 resolution, not a defect)",
-        "satisfaction_level": "IMPLEMENTED"
+        "satisfaction_level": "TESTED"
       },
       {
         "constraint": "T2",
@@ -71,7 +80,7 @@
         "ops": false,
         "status": "SATISFIED",
         "evidence": "Suite Setup calls Login And Navigate To Dashboard — authenticates once with DASHBOARD_MOBILE + TEST_OTP, verifies /my-applications URL before any test runs.",
-        "satisfaction_level": "IMPLEMENTED"
+        "satisfaction_level": "TESTED"
       },
       {
         "constraint": "T3",
@@ -83,7 +92,7 @@
         "ops": false,
         "status": "SATISFIED",
         "evidence": "Login And Navigate To Dashboard handles both checkMobilePost rate limit (Close Context + Sleep RATE_LIMIT_WAIT + retry) and verifyOtpPost rate limit (Sleep + re-enter OTP).",
-        "satisfaction_level": "IMPLEMENTED"
+        "satisfaction_level": "TESTED"
       },
       {
         "constraint": "T4",
@@ -95,7 +104,7 @@
         "ops": false,
         "status": "SATISFIED",
         "evidence": "EMI Cards Should Be Visible uses Should Be True len($cards) > 0 with clear precondition message. PRECONDITION comments in both DashboardPage.robot and dashboard_tests.robot for TC-4001 and TC-4011.",
-        "satisfaction_level": "IMPLEMENTED"
+        "satisfaction_level": "TESTED"
       },
       {
         "constraint": "T5",
@@ -107,7 +116,7 @@
         "ops": false,
         "status": "SATISFIED",
         "evidence": "Filter UI assertions are unconditional (filter options visible). Download button assertion uses Wait For Elements State. PRECONDITION notes on TC-4030 and TC-4031 document data dependency. TN2 resolution B implemented.",
-        "satisfaction_level": "IMPLEMENTED"
+        "satisfaction_level": "TESTED"
       },
       {
         "constraint": "U1",
@@ -119,7 +128,7 @@
         "ops": false,
         "status": "SATISFIED",
         "evidence": "Dashboard Title Should Say Hello: Should Contain ${text}    Hello, (TN6: exact substring for identity string). Dashboard Subtitle Should Contain Product Names: Should Contain ${text}    Autopay subscriptions (TN6: stable product term, not full copy).",
-        "satisfaction_level": "IMPLEMENTED"
+        "satisfaction_level": "TESTED"
       },
       {
         "constraint": "U2",
@@ -131,7 +140,7 @@
         "ops": false,
         "status": "SATISFIED",
         "evidence": "HASH_EMI (\\#emi), HASH_INS (\\#ins), HASH_PG (\\#direct) variables defined. Click EMI/Insurance/Transaction History Tab And Verify keywords each call Wait Until Keyword Succeeds on URL Should Contain Hash with appropriate variable. Hash literal escaping fix applied (\\# prefix).",
-        "satisfaction_level": "IMPLEMENTED"
+        "satisfaction_level": "TESTED"
       },
       {
         "constraint": "U3",
@@ -143,7 +152,7 @@
         "ops": false,
         "status": "SATISFIED",
         "evidence": "Open Profile Menu: Click profile-button + Wait For Elements State profile-options-container visible BEFORE any child assertions. Profile Menu Should Show FAQ And Logout asserts FAQ and Logout only after container confirmed. Used in TC-4007, TC-4008, TC-4009.",
-        "satisfaction_level": "IMPLEMENTED"
+        "satisfaction_level": "TESTED"
       },
       {
         "constraint": "S1",
@@ -155,7 +164,7 @@
         "ops": false,
         "status": "SATISFIED",
         "evidence": "Login And Navigate To Dashboard calls Dashboard URL Should Be Visible via Wait Until Keyword Succeeds — Suite Setup will fail and abort the suite if /my-applications is not reached after OTP verification.",
-        "satisfaction_level": "IMPLEMENTED"
+        "satisfaction_level": "TESTED"
       },
       {
         "constraint": "O1",
@@ -167,7 +176,7 @@
         "ops": false,
         "status": "SATISFIED",
         "evidence": "No Test Teardown in dashboard_tests.robot (Close Context absent). Suite Teardown: Close Browser. Test Setup: Navigate To Dashboard (Go To + wait — no context open/close). TC-4009 (Logout) is last test (#31 of 31). NONE keyword not used for any test's teardown.",
-        "satisfaction_level": "IMPLEMENTED"
+        "satisfaction_level": "TESTED"
       },
       {
         "constraint": "O2",
@@ -179,7 +188,7 @@
         "ops": false,
         "status": "SATISFIED",
         "evidence": "Click Create New Application And Verify Response: captures initial_url, clicks button, checks modal via Run Keyword And Return Status (failure-safe), falls back to URL-change assertion if no modal. Both account states handled without hardcoded destination.",
-        "satisfaction_level": "IMPLEMENTED"
+        "satisfaction_level": "TESTED"
       }
     ],
     "coverage": {

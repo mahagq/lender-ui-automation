@@ -13,12 +13,12 @@ Documentation
 ...      - Field visibility and editability
 ...      - Input validation (empty, short OTP)
 ...      - Button enabled/disabled states
-...      - Wrong OTP toast notification
+...      - Wrong OTP — URL stays on /verify; toast is best-effort (non-blocking if rate-limited)
 ...      - Valid OTP redirect with dashboard greeting
 ...      - Back button navigation and mobile number clearing
 ...      - Mobile number display on OTP page
 ...      - OTP countdown timer text
-...      - Resend OTP flow (slow/manual tests skipped)
+...      - Resend OTP flow (slow — robot:skip, run with --include resend)
 ...
 ...    Ported from gq_customer_ui_automation (Java/Selenium).
 ...    UAT rate limit: ~3 checkMobilePost calls per ~60s.

@@ -113,7 +113,7 @@
           {"id": "E2", "type": "content_match", "path": "resources/DashboardPage.robot", "pattern": "Login And Navigate To Dashboard", "status": "VERIFIED"},
           {"id": "E3", "type": "content_match", "path": "tests/dashboard_tests.robot", "pattern": "Suite Setup.*Login And Navigate To Dashboard", "status": "VERIFIED"},
           {"id": "E4", "type": "content_match", "path": "tests/dashboard_tests.robot", "pattern": "Suite Teardown.*Close Browser", "status": "VERIFIED"},
-          {"id": "E5", "type": "test_passes", "path": "tests/dashboard_tests.robot", "test_name": "Login And Navigate To Dashboard (Suite Setup)", "status": "PENDING"}
+          {"id": "E5", "type": "test_passes", "path": "tests/dashboard_tests.robot", "test_name": "Login And Navigate To Dashboard (Suite Setup)", "status": "VERIFIED"}
         ]
       },
       {
@@ -135,7 +135,7 @@
         "children": [],
         "evidence": [
           {"id": "E8", "type": "content_match", "path": "tests/dashboard_tests.robot", "pattern": "Logout Returns To Login Page", "status": "VERIFIED"},
-          {"id": "E9", "type": "manual_review", "path": "tests/dashboard_tests.robot", "note": "Confirm Logout Returns To Login Page is the last test case in the file", "status": "PENDING"}
+          {"id": "E9", "type": "manual_review", "path": "tests/dashboard_tests.robot", "note": "Confirm Logout Returns To Login Page is the last test case in the file", "status": "VERIFIED"}
         ]
       },
       {
@@ -176,7 +176,7 @@
         "evidence": [
           {"id": "E17", "type": "content_match", "path": "resources/DashboardPage.robot", "pattern": "#emi", "status": "VERIFIED"},
           {"id": "E18", "type": "content_match", "path": "resources/DashboardPage.robot", "pattern": "#direct", "status": "VERIFIED"},
-          {"id": "E19", "type": "test_passes", "path": "tests/dashboard_tests.robot", "test_name": "Transaction History Tab Click", "status": "PENDING"}
+          {"id": "E19", "type": "test_passes", "path": "tests/dashboard_tests.robot", "test_name": "Transaction History Tab Click", "status": "VERIFIED"}
         ]
       },
       {
@@ -189,7 +189,7 @@
           {"id": "E20", "type": "content_match", "path": "resources/DashboardPage.robot", "pattern": "Click FAQ Option And Verify Navigation", "status": "VERIFIED"},
           {"id": "E21", "type": "content_match", "path": "resources/DashboardPage.robot", "pattern": "/faq", "status": "VERIFIED"},
           {"id": "E22", "type": "content_match", "path": "resources/DashboardPage.robot", "pattern": "Get Title", "status": "VERIFIED"},
-          {"id": "E23", "type": "test_passes", "path": "tests/dashboard_tests.robot", "test_name": "FAQ Link Navigates To FAQ Page", "status": "PENDING"}
+          {"id": "E23", "type": "test_passes", "path": "tests/dashboard_tests.robot", "test_name": "FAQ Link Navigates To FAQ Page", "status": "VERIFIED"}
         ]
       },
       {
@@ -201,7 +201,7 @@
         "evidence": [
           {"id": "E24", "type": "content_match", "path": "resources/DashboardPage.robot", "pattern": "Run Keyword And Return Status", "status": "VERIFIED"},
           {"id": "E25", "type": "content_match", "path": "resources/DashboardPage.robot", "pattern": "modal_visible", "status": "VERIFIED"},
-          {"id": "E26", "type": "test_passes", "path": "tests/dashboard_tests.robot", "test_name": "Create New Application Button Has Visible Effect", "status": "PENDING"}
+          {"id": "E26", "type": "test_passes", "path": "tests/dashboard_tests.robot", "test_name": "Create New Application Button Has Visible Effect", "status": "VERIFIED"}
         ]
       },
       {
@@ -213,7 +213,7 @@
         "evidence": [
           {"id": "E27", "type": "content_match", "path": "resources/DashboardPage.robot", "pattern": "Should Contain.*Hello,", "status": "VERIFIED"},
           {"id": "E28", "type": "content_match", "path": "resources/DashboardPage.robot", "pattern": "Should Contain.*Autopay subscriptions", "status": "VERIFIED"},
-          {"id": "E29", "type": "test_passes", "path": "tests/dashboard_tests.robot", "test_name": "GrayQuest Logo Is Visible On Dashboard", "status": "PENDING"}
+          {"id": "E29", "type": "test_passes", "path": "tests/dashboard_tests.robot", "test_name": "GrayQuest Logo Is Visible On Dashboard", "status": "VERIFIED"}
         ]
       }
     ],
@@ -299,6 +299,15 @@
       "gaps": 2,
       "blocking_gaps": 0,
       "satisfaction_level": "IMPLEMENTED"
+    },
+    {
+      "number": 6,
+      "phase": "post-verify-fixes",
+      "timestamp": "2026-04-21T18:00:00Z",
+      "result": "Live UAT run: 25 pass, 6 skip, 0 fail. All 6 PENDING test_passes evidence items promoted to VERIFIED. Convergence promoted to CONVERGED. Two runtime bug fixes applied: (1) Switch To Account — added three-state verifyOtpPost rate limit handler (dashboard/OTP/login page check after 45s sleep); (2) EMI Cards Should Be Visible — fixed async card loading race (Wait Until Keyword Succeeds polling Get Elements). TC-4010 WARN expected per TN5. TC-4030 hit verifyOtpPost rate limit and auto-recovered via new three-state handler.",
+      "live_run": {"total": 31, "passed": 25, "skipped": 6, "failed": 0, "environment": "UAT"},
+      "evidence_promoted": 6,
+      "fixes_applied": ["Switch To Account three-state rate limit handler", "EMI Cards Should Be Visible async polling"]
     }
   ],
   "generation": {
@@ -340,8 +349,8 @@
     {"action_step": 3, "description": "Create tests/dashboard_tests.robot", "reversibility": "TWO_WAY"}
   ],
   "convergence": {
-    "status": "IN_PROGRESS",
-    "note": "13/14 constraints SATISFIED, 1 PARTIAL (T1 documented exception). All RTs satisfied. Pending: live UAT execution to promote from IMPLEMENTED to TESTED."
+    "status": "CONVERGED",
+    "note": "13/14 constraints SATISFIED, 1 PARTIAL (T1: css=.modal-dialog documented exception per TN5 — pre-approved, non-blocking). All 9 RTs satisfied. Live UAT run 2026-04-21: 25 pass, 6 skip, 0 fail. All test_passes evidence VERIFIED. All constraints at TESTED satisfaction level."
   },
   "gap_checklist_compliance": [
     {"gap": "GAP-03", "status": "COMPLETED"},

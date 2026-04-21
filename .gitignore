@@ -1,6 +1,12 @@
 # Robot Framework results
 results/
 
+# Stray result files (produced by runs without --outputdir)
+output.xml
+log.html
+report.html
+playwright-log.txt
+
 # Python
 __pycache__/
 *.py[cod]
