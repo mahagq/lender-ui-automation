@@ -24,7 +24,7 @@ ${TEST_OTP}               9999
 
 # Browser settings
 ${BROWSER}                chromium
-${HEADLESS}               True
+${HEADLESS}               False
 
 # Timeouts
 ${TIMEOUT}                10s
@@ -58,3 +58,13 @@ ${EXT_OTP_MOBILE_6}       9876543222
 ${EXT_OTP_MOBILE_7}       9876543223
 ${EXT_OTP_MOBILE_8}       9876543224
 ${EXT_OTP_MOBILE_9}       9876543225
+
+# Dashboard suite mobile — used for Suite Setup login (TC-4001/TC-4011 EMI data).
+# 8108556708 has active EMI applications so TC-4001 and TC-4011 pass without account switching.
+# Distinct from all OTP_MOBILE_* and EXT_* numbers.
+${DASHBOARD_MOBILE}       8108556708
+
+# PG account mobile — for TC-4030/TC-4031 which need transaction records.
+# Switch To Account is called in TC-4030 body (runs ~3 min after Suite Setup,
+# so rate limits are cleared before the second authentication attempt).
+${PG_MOBILE}              7757855472

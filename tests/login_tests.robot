@@ -38,7 +38,7 @@ Test Tags        allure.label.epic:CP UI Automation    allure.label.feature:Auth
 Login Page URL And Title Match
     [Documentation]
     ...    Navigates to the base URL and verifies the page URL and browser tab title.
-    ...    Tab title: "Login GrayQuest Education Finance : Fastest Way to Get School Fee EMI | Full Institute Fee Funding"
+    ...    Tab title confirmed from live UAT 2026-04-21.
     [Tags]    login    smoke    url
     Open Login Page
     ${url}=    Get Url
