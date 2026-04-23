@@ -343,6 +343,31 @@ Insurance Tab Click Updates URL Hash
     [Tags]    dashboard    insurance    tab-navigation
     Click Insurance Tab And Verify
 
+TC-4034 Create New Application Button Is Visible And Clickable In Header For Existing User
+    [Documentation]
+    ...    TC-4034: For a user with existing applications (${EXISTING_USER_MOBILE} = 8108556701),
+    ...    the Create New Application button renders in the top navigation header
+    ...    (data-testid='create-new-application-button'). Verifies the button is visible and
+    ...    that clicking it produces a UI response — either a "Before you proceed" dialog
+    ...    (role='dialog') or a URL change away from /my-applications.
+    ...    Switches account from previous session via Switch To Account.
+    ...    Satisfies: TC-4034, B1, T1
+    [Tags]    dashboard    application    create-application    smoke
+    Switch To Account    ${EXISTING_USER_MOBILE}
+    Create New Application Button Should Be Visible And Clickable In Header
+
+TC-4035 Create New Application Button Is Visible And Clickable In Empty State For New User
+    [Documentation]
+    ...    TC-4035: For a user with no existing applications (${NEW_USER_MOBILE} = 9938383856),
+    ...    the Create New Application button renders inside the emi-not-data-found empty-state
+    ...    container as a yellow "+ CREATE NEW APPLICATION" button. Verifies the button is
+    ...    visible and that clicking it navigates away from /my-applications.
+    ...    Switches account from the TC-4034 session via Switch To Account.
+    ...    Satisfies: TC-4035, B1, T1
+    [Tags]    dashboard    application    create-application    smoke
+    Switch To Account    ${NEW_USER_MOBILE}
+    Create New Application Button Should Be Visible And Clickable In Empty State
+
 Logout Returns To Login Page
     [Documentation]
     ...    TC-4009: Clicking Logout in the profile dropdown should clear the authenticated

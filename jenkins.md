@@ -176,8 +176,8 @@ gq-qa-reports/
 | Tab | Content |
 |-----|---------|
 | **Overview** | Summary stats, trend graph, suite pass/fail blocks |
-| **Behaviors** | Epic: CP UI Automation → Feature: Authentication → Story: Login / OTP Verification / Bypass Authentication; Feature: Dashboard → Story: Dashboard |
-| **Suites** | CP UI Automation [UAT] → Login Left Component Tests / Login Tests / Otp Tests / Bypass Auth Tests / Dashboard Tests |
+| **Behaviors** | Epic: CP UI Automation → Feature: Authentication → Story: Login / OTP Verification / Bypass Authentication; Feature: Dashboard → Story: Dashboard; Feature: Application Creation Flow → Story: Student Details / Choose Plan / Select Applicant / Applicant Journey / Employment / Confirm Application |
+| **Suites** | CP UI Automation [UAT] → Login Left Component Tests / Login Tests / Otp Tests / Bypass Auth Tests / Dashboard Tests / Student Details Tests / Choose Plan Tests / Select Applicant Tests / Applicant Journey Tests / Employment Tests / Confirm Application Tests |
 | **Categories** | Product Defects / Test Infrastructure Defects / Skipped Tests |
 | **Timeline** | Tests plotted by execution time |
 
@@ -229,3 +229,4 @@ allure open results/allure-report
 | AWS CLI | Installed on node with S3 write access to `gq-qa-reports` |
 | Docker | Installed on node, ubuntu user in docker group |
 | Allure CLI | Inside Docker image `cp-ui-automation:playwright` |
+| Env Var | `BYPASS_AUTH_MOBILE` — UAT mobile registered for ERP bypass auth (bypassAuthPost). TC-401 (`Bypass Auth With Valid Mobile Redirects Away From Instant Eligibility`) is currently tagged `robot:skip` — confirmed that general OTP test accounts (incl. `9876543210`, `8108556708`) are not ERP-whitelisted and do not redirect. To enable TC-401: identify a UAT ERP-whitelisted mobile, set `BYPASS_AUTH_MOBILE` as a Jenkins env var or pipeline parameter, and remove `robot:skip` from the test. |

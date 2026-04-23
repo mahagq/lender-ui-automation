@@ -8,6 +8,15 @@ ${BASE_URL}               https://customer.uat.graydev.in
 # Any valid 10-digit number works in UAT (fixed OTP 9999 applies to all)
 ${TEST_MOBILE}            %{TEST_MOBILE=9876543210}
 
+# Bypass auth mobile — must be registered for ERP bypass auth on UAT (bypassAuthPost).
+# This is different from TEST_MOBILE: /instant-eligibility?m=<mobile> only redirects away
+# if the mobile has been whitelisted for ERP tokenised access. Set BYPASS_AUTH_MOBILE env
+# var in CI to the correct UAT ERP-registered mobile.
+# PRECONDITION (TC-401): ${BYPASS_AUTH_MOBILE} must be a mobile registered for bypass auth
+# on UAT. Using a general OTP test mobile will cause bypassAuthPost to fail and the page to
+# stay on /instant-eligibility (no redirect) — making TC-401 fail.
+${BYPASS_AUTH_MOBILE}     %{BYPASS_AUTH_MOBILE=9876543210}
+
 # Per-test mobile numbers for OTP tests — each test uses a distinct number
 ${OTP_MOBILE_1}           9876543211
 ${OTP_MOBILE_2}           9876543212
@@ -69,6 +78,12 @@ ${DASHBOARD_MOBILE}       8108556708
 # so rate limits are cleared before the second authentication attempt).
 ${PG_MOBILE}              7757855472
 
+# Create-application button scenario mobiles (TC-4034/TC-4035)
+# TC-4034: existing user — has applications, so button renders in the top nav header.
+# TC-4035: new user — no applications, so button renders inside emi-not-data-found empty state.
+${EXISTING_USER_MOBILE}   8108556701
+${NEW_USER_MOBILE}        9938383856
+
 # Extended login test mobiles (TC-221+)
 ${EXT_LOGIN_MOBILE_3}     9876543227
 
@@ -77,3 +92,37 @@ ${EXT_OTP_MOBILE_10}      9876543226
 
 # Negative test data (TC-314)
 ${NON_NUMERIC_OTP}        abcd
+
+# Application Creation Flow test data (RT-8, TN4 resolution)
+# APP_CREATION_MOBILE is a dedicated number — distinct from all OTP/dashboard/PG numbers to
+# prevent checkMobilePost rate-limit collisions across suites. Use a fresh UAT number here.
+${APP_CREATION_MOBILE}        9876540001
+
+# Student details stub data (used by traversal helpers in Suite Setups)
+${APP_STUDENT_FIRST_NAME}     Test
+${APP_STUDENT_LAST_NAME}      Student
+${APP_LOAN_AMOUNT}            100000
+# Institute search term for async GILE institute dropdown (types this to trigger API search).
+# Use a term that returns at least one result on UAT. Override via APP_INSTITUTE_SEARCH env var.
+${APP_INSTITUTE_SEARCH}       %{APP_INSTITUTE_SEARCH=Sch}
+
+# Applicant (parent/guardian) details
+${APP_FIRST_NAME}             Test
+${APP_LAST_NAME}              Parent
+${APP_PAN_NUMBER}             ABCDE1234F
+${APP_EMAIL}                  testparent@example.com
+
+# Residential details
+${APP_ADDRESS_LINE1}          123 Test Street
+${APP_ADDRESS_LINE2}          Test Area
+${APP_PINCODE}                400001
+
+# Salaried employment details
+${APP_EMPLOYER_NAME}          Test Company Pvt Ltd
+${APP_MONTHLY_SALARY}         50000
+
+# Self-employed details
+${APP_BUSINESS_NAME}          Test Business
+${APP_BUSINESS_INCOME}        600000
+${APP_BUSINESS_YEARS}         05
+${APP_BUSINESS_DESC}          Software consulting and services

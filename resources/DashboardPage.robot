@@ -27,7 +27,12 @@ Resource    OTPPage.robot
 # Dashboard header — data-testid confirmed from gqcustomer_frontend UAT branch
 ${DASHBOARD_SUBTITLE}           css=[data-testid='dashboard-subtitle']
 ${GQ_LOGO_DASHBOARD}            css=[data-testid='desktop-view-gq-logo']
+# 'create-new-application-button' testid exists in header when account has applications.
+# When account is fresh (no applications), the button is inside the emi-not-data-found
+# empty-state container (no testid). Click Create Application Button And Wait For Student
+# Details handles both states automatically.
 ${CREATE_APP_BUTTON}            css=[data-testid='create-new-application-button']
+${CREATE_APP_BUTTON_EMPTY}      css=[data-testid='emi-not-data-found'] button
 
 # Profile menu — U3: container must be visible before asserting child options
 ${PROFILE_BUTTON}               css=[data-testid='profile-button']
@@ -247,6 +252,54 @@ Click Create New Application And Verify Response
             Log    TC-4010: Neither modal nor URL change observed after Create New Application click — inline form or unknown UAT response. Button was responsive (TN5 dual-branch, continuing).    WARN
         END
     END
+
+Create New Application Button Should Be Visible And Clickable In Header
+    [Documentation]
+    ...    Asserts the create-new-application-button is visible in the top navigation header
+    ...    and that clicking it produces a visible UI response (TC-4034 / existing-user scenario).
+    ...    The button renders in the header nav when the account already has prior applications.
+    ...    Clicks the EMI tab first and waits 1 s before clicking the button — this settles
+    ...    the page and activates the button's click handler (same pattern used in the working
+    ...    traversal keyword Click Create Application Button And Wait For Student Details).
+    ...    After clicking, accepts either:
+    ...      (a) Radix UI dialog (role='dialog') — "Before you proceed" modal for in-progress apps
+    ...      (b) URL change away from /my-applications — direct wizard navigation
+    ...    Precondition: logged in as an account with at least one prior application.
+    ...    Satisfies: TC-4034, B1, T1
+    Click    ${EMI_TAB}
+    Sleep    1s
+    Wait For Elements State    ${CREATE_APP_BUTTON}    visible    timeout=${TIMEOUT}
+    ${initial_url}=    Get Url
+    Click    ${CREATE_APP_BUTTON}
+    ${dialog_visible}=    Run Keyword And Return Status
+    ...    Wait For Elements State    css=[role='dialog']    visible    timeout=${TIMEOUT}
+    IF    not ${dialog_visible}
+        ${current_url}=    Get Url
+        Should Not Be Equal    ${current_url}    ${initial_url}
+        ...    Create New Application button click produced no response — dialog not shown and URL did not change.
+    END
+
+Create New Application Button Should Be Visible And Clickable In Empty State
+    [Documentation]
+    ...    Asserts the create-new-application button is visible in the emi-not-data-found
+    ...    empty-state container and that clicking it navigates away from /my-applications
+    ...    (TC-4035 / new-user scenario).
+    ...    The yellow "+ CREATE NEW APPLICATION" button renders only when the account has NO
+    ...    existing applications. Clicking it goes directly to /student-details (no dialog).
+    ...    Precondition: logged in as a fresh account with no prior applications.
+    ...    Satisfies: TC-4035, B1, T1
+    Click    ${EMI_TAB}
+    Wait For Elements State    ${CREATE_APP_BUTTON_EMPTY}    visible    timeout=${TIMEOUT}
+    ${initial_url}=    Get Url
+    Click    ${CREATE_APP_BUTTON_EMPTY}
+    Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    New Application URL Should Have Changed    ${initial_url}
+
+New Application URL Should Have Changed
+    [Documentation]    Helper — asserts the current URL is no longer the initial dashboard URL.
+    [Arguments]    ${initial_url}
+    ${current_url}=    Get Url
+    Should Not Be Equal    ${current_url}    ${initial_url}
+    ...    URL did not change after clicking Create New Application in empty state.
 
 Click EMI Tab And Verify
     [Documentation]

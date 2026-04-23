@@ -1,7 +1,7 @@
 # Customer Portal UI Automation
 
 Robot Framework end-to-end test suite for the GQ Customer Portal.
-Covers the login left component, mobile number login form, OTP verification flow, bypass authentication, and dashboard — all targeting the UAT environment (`https://customer.uat.graydev.in`).
+Covers the login left component, mobile number login form, OTP verification flow, bypass authentication, dashboard, and the full Application Creation Flow wizard (10 pages, TC-5001–TC-13025) — all targeting the UAT environment (`https://customer.uat.graydev.in`).
 
 ---
 
@@ -10,19 +10,37 @@ Covers the login left component, mobile number login form, OTP verification flow
 ```
 customer_portal_ui_automation/
 ├── tests/
-│   ├── login_left_component_tests.robot   # Left panel component tests (9 tests)
-│   ├── login_tests.robot                  # Login form tests (21 tests)
-│   ├── otp_tests.robot                    # OTP verification tests (14 tests, 3 skipped)
-│   ├── bypass_auth_tests.robot            # Bypass auth tests (4 tests, 2 skipped)
-│   └── dashboard_tests.robot              # Dashboard tests (33 tests, 6 skipped)
+│   ├── login_left_component_tests.robot      # Left panel component tests (9 tests)
+│   ├── login_tests.robot                     # Login form tests (21 tests)
+│   ├── otp_tests.robot                       # OTP verification tests (14 tests, 3 skipped)
+│   ├── bypass_auth_tests.robot               # Bypass auth tests (4 tests, 3 skipped)
+│   ├── dashboard_tests.robot                 # Dashboard tests (33 tests, 2 skipped)
+│   ├── student_details_tests.robot           # /student-details tests (14 tests, TC-5001–5014)
+│   ├── choose_plan_tests.robot               # /choose-plan tests (10 tests, TC-6001–6011)
+│   ├── select_applicant_tests.robot          # /select-applicant tests (10 tests, TC-7001–7011)
+│   ├── applicant_journey_tests.robot         # Basic+Onboarding+Personal+Residential (27 tests, TC-8001–11007)
+│   ├── employment_tests.robot                # /select-employment + /applicant-employment-details (30 tests, TC-12001–12094)
+│   └── confirm_application_tests.robot       # /confirm-application tests (12 tests, TC-13001–13025)
 ├── resources/
-│   ├── LoginPage.robot                    # Page object keywords for / (login page)
-│   ├── OTPPage.robot                      # Page object keywords for /verify (OTP page)
-│   ├── BypassAuthPage.robot               # Page object keywords for /instant-eligibility
-│   └── DashboardPage.robot                # Page object keywords for /my-applications
+│   ├── LoginLeftComponent.robot              # Page object keywords for left panel
+│   ├── LoginPage.robot                       # Page object keywords for / (login page)
+│   ├── OTPPage.robot                         # Page object keywords for /verify (OTP page)
+│   ├── BypassAuthPage.robot                  # Page object keywords for /instant-eligibility
+│   ├── DashboardPage.robot                   # Page object keywords for /my-applications
+│   ├── ApplicationCreationFlowPage.robot     # Wizard navigation infrastructure + traversal helpers
+│   ├── StudentDetailsPage.robot              # Page object keywords for /student-details
+│   ├── ChoosePlanPage.robot                  # Page object keywords for /choose-plan
+│   ├── SelectApplicantPage.robot             # Page object keywords for /select-applicant
+│   ├── ApplicantBasicDetailsPage.robot       # Page object keywords for /applicant-basic-details
+│   ├── OnboardingPage.robot                  # Page object keywords for /onboarding
+│   ├── ApplicantPersonalDetailsPage.robot    # Page object keywords for /applicant-personal-details
+│   ├── ApplicantResidentialDetailsPage.robot # Page object keywords for /applicant-residential-details
+│   ├── EmploymentTypePage.robot              # Page object keywords for /select-employment
+│   ├── ApplicantEmploymentPage.robot         # Page object keywords for /applicant-employment-details
+│   └── ConfirmApplicationPage.robot          # Page object keywords for /confirm-application
 ├── variables/
-│   └── variables.robot                    # All test configuration and test data
-└── results/                               # Robot Framework output (output.xml, log.html, report.html)
+│   └── variables.robot                       # All test configuration, test data, and APP_* wizard variables
+└── results/                                  # Robot Framework output (output.xml, log.html, report.html)
 ```
 
 ---
@@ -54,6 +72,12 @@ All dependencies live in the project virtualenv at `./venv/`.
 ./venv/bin/robot --outputdir results/ tests/otp_tests.robot
 ./venv/bin/robot --outputdir results/ tests/bypass_auth_tests.robot
 ./venv/bin/robot --outputdir results/ tests/dashboard_tests.robot
+./venv/bin/robot --outputdir results/ tests/student_details_tests.robot
+./venv/bin/robot --outputdir results/ tests/choose_plan_tests.robot
+./venv/bin/robot --outputdir results/ tests/select_applicant_tests.robot
+./venv/bin/robot --outputdir results/ tests/applicant_journey_tests.robot
+./venv/bin/robot --outputdir results/ tests/employment_tests.robot
+./venv/bin/robot --outputdir results/ tests/confirm_application_tests.robot
 ```
 
 ### Run with visible browser
@@ -65,12 +89,15 @@ All dependencies live in the project virtualenv at `./venv/`.
 ### Run by tag
 
 ```bash
-./venv/bin/robot --include smoke --outputdir results/ tests/                      # smoke tests only
-./venv/bin/robot --include login --outputdir results/ tests/                      # login tests only
-./venv/bin/robot --include otp --outputdir results/ tests/                        # OTP tests only
-./venv/bin/robot --include bypass-auth --outputdir results/ tests/                # bypass auth tests only
-./venv/bin/robot --include dashboard --outputdir results/ tests/                  # dashboard tests only
-./venv/bin/robot --include resend --outputdir results/ tests/otp_tests.robot      # slow resend test (~3 min)
+./venv/bin/robot --include smoke --outputdir results/ tests/                                   # smoke tests only
+./venv/bin/robot --include login --outputdir results/ tests/                                   # login tests only
+./venv/bin/robot --include otp --outputdir results/ tests/                                     # OTP tests only
+./venv/bin/robot --include bypass-auth --outputdir results/ tests/                             # bypass auth tests only
+./venv/bin/robot --include dashboard --outputdir results/ tests/                               # dashboard tests only
+./venv/bin/robot --include resend --outputdir results/ tests/otp_tests.robot                   # slow resend test (~3 min)
+./venv/bin/robot --include application-creation-flow --outputdir results/ tests/              # all wizard tests
+./venv/bin/robot --include salaried --outputdir results/ tests/employment_tests.robot         # salaried only
+./venv/bin/robot --include self-employed --outputdir results/ tests/employment_tests.robot    # self-employed only
 ```
 
 ### Dry run (syntax check, no browser)
@@ -84,6 +111,8 @@ All dependencies live in the project virtualenv at `./venv/`.
 ```bash
 ./venv/bin/robot --variable BASE_URL:https://other-env.example.com --outputdir results/ tests/
 TEST_MOBILE=9999900000 ./venv/bin/robot --outputdir results/ tests/
+# TC-401 requires an ERP-registered mobile for bypass auth redirect:
+BYPASS_AUTH_MOBILE=<erp_mobile> ./venv/bin/robot --outputdir results/ tests/bypass_auth_tests.robot
 ```
 
 ---
@@ -155,7 +184,7 @@ Tests the `/instant-eligibility` page used for tokenised ERP access without OTP.
 
 | Test | Tags | Description |
 |------|------|-------------|
-| Bypass Auth With Valid Mobile Redirects Away From Instant Eligibility | bypass-auth, smoke, redirect | `?m=<valid_mobile>` → bypassAuthPost → redirect away from /instant-eligibility |
+| Bypass Auth With Valid Mobile Redirects Away From Instant Eligibility *(skipped)* | bypass-auth, smoke, redirect | `?m=${BYPASS_AUTH_MOBILE}` → bypassAuthPost → redirect away from /instant-eligibility. Skipped — requires an ERP-whitelisted UAT mobile. Set `BYPASS_AUTH_MOBILE` env var and remove `robot:skip` to enable. |
 | Bypass Auth Without Query Param Redirects To Login Page | bypass-auth, redirect, negative | No `?m=` → useEffect redirects to / (login form visible) |
 | Bypass Auth No Account Error State Is Visible *(skipped)* | bypass-auth, negative | bypassAuthPost failure → no-account error state (needs specific UAT mobile) |
 | Sign In Button On No Account State Navigates To Login *(skipped)* | bypass-auth, negative, navigation | Sign In on no-account state → / (depends on TC-403 precondition) |
@@ -200,6 +229,93 @@ Tests the `/instant-eligibility` page used for tokenised ERP access without OTP.
 
 ---
 
+### Student Details Tests (`tests/student_details_tests.robot`) — 14 tests
+
+Tests the `/student-details` wizard step. TC-5014 (Show Plans button) runs last — it advances the wizard to `/choose-plan`.
+
+| TC | Description | Tags |
+|----|-------------|------|
+| TC-5001 | Page title visible | smoke |
+| TC-5002–5005 | GILE dropdowns visible (institute/location/board/academic year) | |
+| TC-5006–5007 | Admission type and annual fee titles visible | |
+| TC-5008 | URL contains /student-details | |
+| TC-5009–5013 | Name inputs, student type radio, student ID, loan amount visible/accept input | |
+| TC-5014 | Show Plans button visible + advances to /choose-plan *(runs last)* | slow |
+
+### Choose Plan Tests (`tests/choose_plan_tests.robot`) — 10 tests
+
+Tests the `/choose-plan` wizard step. TC-6008 (select plan + proceed) runs last — advances to `/select-applicant`.
+
+| TC | Description | Tags |
+|----|-------------|------|
+| TC-6001 | Title + plans count visible | smoke |
+| TC-6002–6004 | Plans available, count matches list, title text | smoke |
+| TC-6005–6006 | Plan selection, switching plans | |
+| TC-6007 | Submit disabled before selection | |
+| TC-6009 | URL contains /choose-plan | |
+| TC-6011 | Page accessible after navigation | |
+| TC-6008 | Select plan → submit enabled → advances to /select-applicant *(runs last)* | |
+
+### Select Applicant Tests (`tests/select_applicant_tests.robot`) — 10 tests
+
+Tests the `/select-applicant` wizard step. TC-7008 (select Parent/Guardian + proceed) runs last — advances to `/applicant-basic-details`.
+
+| TC | Description | Tags |
+|----|-------------|------|
+| TC-7001 | Title + note visible | smoke |
+| TC-7002 | Both applicant options visible | smoke |
+| TC-7003–7004 | Parent/Guardian and Student options selectable | |
+| TC-7005–7006 | Age + salary consent checkboxes appear after Student selection | |
+| TC-7007 | Submit disabled before selection | |
+| TC-7009 | URL contains /select-applicant | |
+| TC-7011 | Page loads after navigation | |
+| TC-7008 | Select Parent/Guardian → submit enabled → advances to /applicant-basic-details *(runs last)* | |
+
+### Applicant Journey Tests (`tests/applicant_journey_tests.robot`) — 27 tests (sequential)
+
+Covers 4 pages sequentially in wizard order. Runs with `[Setup] NONE` after the first page's wizard-advancing test — strict test ordering required.
+
+| Page | TCs | Description |
+|------|-----|-------------|
+| /applicant-basic-details | TC-8001–8008 | Title, form elements, URL, name inputs, submit state, proceeds to /onboarding |
+| /onboarding | TC-9001–9003 | Info sections, proceed button, proceeds to /applicant-personal-details |
+| /applicant-personal-details | TC-10001–10008 | Title, PAN/gender/DOB/marital/email fields, URL, proceeds to /applicant-residential-details |
+| /applicant-residential-details | TC-11001–11007 | Title, address fields, residence type radio, URL, proceeds to /select-employment |
+
+### Employment Tests (`tests/employment_tests.robot`) — 30 tests
+
+Covers `/select-employment` (7 tests) and `/applicant-employment-details` in two variants: Salaried (13 tests, TC-12014–12045) and Self-Employed (10 tests, TC-12047–12092).
+
+| Section | Tags | Notable TCs |
+|---------|------|-------------|
+| Select Employment Type | employment | TC-12001–12013: title, URL, cards visible/selectable, switching |
+| Salaried Employment Details | employment, salaried | TC-12014–12045: employer name, salary, consent, proceed (last: advances to /confirm-application) |
+| Self-Employed Employment Details | employment, self-employed | TC-12047–12092: business name, income, years, description, proceed (last: advances to /confirm-application) |
+
+### Confirm Application Tests (`tests/confirm_application_tests.robot`) — 12 tests
+
+Tests the `/confirm-application` wizard step. TC-13023 (consent + proceed = submit application) runs last.
+
+| TC | Description | Tags |
+|----|-------------|------|
+| TC-13001 | Title + form visible | smoke |
+| TC-13002 | All 6 section edit buttons visible | smoke |
+| TC-13003 | Student Details edit navigates to /student-details | |
+| TC-13004 | EMI Plan edit button visible | |
+| TC-13007 | Who Is Applying edit button visible | |
+| TC-13010 | General Details edit button visible | |
+| TC-13011 | Proceed button visible | |
+| TC-13013 | Residential Details edit button visible | |
+| TC-13016 | Employment Details edit button visible | |
+| TC-13019 | Consent checkbox visible | |
+| TC-13020 | Consent checkbox can be checked | |
+| TC-13021 | URL contains /confirm-application | |
+| TC-13022 | Proceed disabled without consent | |
+| TC-13024 | Back navigation via Student Details edit | |
+| TC-13023 | Consent + proceed submits application + navigates past /confirm-application *(runs last)* | |
+
+---
+
 ## Configuration
 
 All configuration is in `variables/variables.robot`.
@@ -208,6 +324,7 @@ All configuration is in `variables/variables.robot`.
 |----------|---------|-------------|
 | `BASE_URL` | `https://customer.uat.graydev.in` | Target environment URL |
 | `TEST_MOBILE` | `%{TEST_MOBILE=9876543210}` | Default login mobile (overridable via env var) |
+| `BYPASS_AUTH_MOBILE` | `%{BYPASS_AUTH_MOBILE=9876543210}` | Mobile for TC-401 bypass auth redirect test — **must be an ERP-registered mobile** on UAT (bypassAuthPost must succeed). Set via `BYPASS_AUTH_MOBILE` env var. A general OTP test mobile will fail this test. |
 | `OTP_MOBILE_1..4` | `9876543211..14` | Distinct mobiles for core OTP tests |
 | `EXT_LOGIN_MOBILE_1..2` | `9876543215..16` | Mobiles for login OTP-redirect tests |
 | `EXT_OTP_MOBILE_1..10` | `9876543217..26` | Distinct mobiles for extended OTP tests |
@@ -222,6 +339,23 @@ All configuration is in `variables/variables.robot`.
 | `LONG_TIMEOUT` | `30s` | Extended wait (page navigation, OTP form load) |
 | `RATE_LIMIT_WAIT` | `45s` | Recovery sleep when UAT rate limit is hit |
 | `RESEND_OTP_WAIT` | `185s` | Wait for resend OTP link (180s timer + 5s buffer) |
+| `APP_CREATION_MOBILE` | `9876540001` | Dedicated mobile for Application Creation Flow suites |
+| `APP_STUDENT_FIRST_NAME` | `Test` | Stub first name for student details traversal |
+| `APP_STUDENT_LAST_NAME` | `Student` | Stub last name for student details traversal |
+| `APP_LOAN_AMOUNT` | `100000` | Stub loan amount for student details traversal |
+| `APP_FIRST_NAME` | `Test` | Applicant (parent/guardian) first name |
+| `APP_LAST_NAME` | `Parent` | Applicant last name |
+| `APP_PAN_NUMBER` | `ABCDE1234F` | Stub PAN number for personal details traversal |
+| `APP_EMAIL` | `testparent@example.com` | Stub email for personal details traversal |
+| `APP_ADDRESS_LINE1` | `123 Test Street` | Stub address line 1 |
+| `APP_ADDRESS_LINE2` | `Test Area` | Stub address line 2 |
+| `APP_PINCODE` | `400001` | Stub pincode (triggers city/state auto-populate) |
+| `APP_EMPLOYER_NAME` | `Test Company Pvt Ltd` | Stub employer name (salaried) |
+| `APP_MONTHLY_SALARY` | `50000` | Stub monthly salary (salaried) |
+| `APP_BUSINESS_NAME` | `Test Business` | Stub business name (self-employed) |
+| `APP_BUSINESS_INCOME` | `600000` | Stub annual business income (self-employed) |
+| `APP_BUSINESS_YEARS` | `05` | Stub years in business (self-employed) |
+| `APP_BUSINESS_DESC` | `Software consulting and services` | Stub business description (self-employed) |
 
 ---
 

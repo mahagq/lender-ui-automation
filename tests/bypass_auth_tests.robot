@@ -8,8 +8,10 @@ Documentation
 ...    Without ?m= → redirects immediately to / (login page).
 ...    On bypassAuthPost failure → shows no-account error state with Sign In button.
 ...
-...    TC-403 and TC-404 require a mobile number that fails bypassAuthPost (no ERP account).
-...    These are tagged robot:skip pending identification of a suitable UAT test mobile.
+...    TC-401 requires a mobile that is ERP-whitelisted on UAT (bypassAuthPost must succeed).
+...    TC-403 and TC-404 require a mobile that fails bypassAuthPost (no ERP account).
+...    All three are tagged robot:skip — bypassAuthPost does not work for general OTP test
+...    accounts. Set BYPASS_AUTH_MOBILE env var to a UAT ERP-whitelisted mobile to enable TC-401.
 ...
 ...    Satisfies: TC-401 to TC-404
 
@@ -29,9 +31,12 @@ Bypass Auth With Valid Mobile Redirects Away From Instant Eligibility
     ...    Navigating to /instant-eligibility?m=<valid_mobile> should authenticate via
     ...    bypassAuthPost and redirect the user away from /instant-eligibility to either
     ...    /my-applications or /student-details depending on application state.
+    ...    Skipped — bypassAuthPost requires a mobile connected to the ERP system on UAT
+    ...    (not a general OTP test account). Set BYPASS_AUTH_MOBILE env var to a UAT mobile
+    ...    that is ERP-whitelisted and remove robot:skip to enable.
     ...    Satisfies: TC-401
-    [Tags]    bypass-auth    smoke    redirect
-    Navigate To Bypass Auth Page With Mobile    ${TEST_MOBILE}
+    [Tags]    bypass-auth    smoke    redirect    robot:skip
+    Navigate To Bypass Auth Page With Mobile    ${BYPASS_AUTH_MOBILE}
     Bypass Auth Should Redirect Away From Instant Eligibility
 
 Bypass Auth Without Query Param Redirects To Login Page
@@ -50,10 +55,11 @@ Bypass Auth No Account Error State Is Visible
     ...    When bypassAuthPost fails (mobile has no ERP account), the no-account error state
     ...    should display the error image and message:
     ...    "Its Looks like you don't have an account with us."
-    ...    Skipped — requires a UAT mobile that fails bypassAuthPost.
+    ...    Skipped — requires a UAT mobile that fails bypassAuthPost (no ERP account).
+    ...    Set BYPASS_AUTH_NO_ACCOUNT_MOBILE env var to a mobile with no bypass auth access.
     ...    Satisfies: TC-403
     [Tags]    bypass-auth    negative    robot:skip
-    Navigate To Bypass Auth Page With Mobile    ${TEST_MOBILE}
+    Navigate To Bypass Auth Page With Mobile    ${BYPASS_AUTH_MOBILE}
     No Account Error State Should Be Visible
 
 Sign In Button On No Account State Navigates To Login
@@ -63,6 +69,6 @@ Sign In Button On No Account State Navigates To Login
     ...    Skipped — depends on bypassAuthPost failure state (TC-403 precondition).
     ...    Satisfies: TC-404
     [Tags]    bypass-auth    negative    navigation    robot:skip
-    Navigate To Bypass Auth Page With Mobile    ${TEST_MOBILE}
+    Navigate To Bypass Auth Page With Mobile    ${BYPASS_AUTH_MOBILE}
     No Account Error State Should Be Visible
     Click Sign In Button On No Account State
