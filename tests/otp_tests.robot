@@ -41,7 +41,7 @@ Test Tags        allure.label.epic:CP UI Automation    allure.label.feature:Auth
 
 *** Test Cases ***
 
-OTP Input Field Is Visible And Editable
+TC-301 OTP Input Field Is Visible And Editable
     [Documentation]
     ...    On the OTP verification page, the OTP input field should be visible and
     ...    accept user input (editable/enabled state).
@@ -49,7 +49,7 @@ OTP Input Field Is Visible And Editable
     [Setup]    Navigate To OTP Page    ${EXT_OTP_MOBILE_2}
     OTP Input Should Be Visible And Editable
 
-OTP Verification With Empty OTP
+TC-302 OTP Verification With Empty OTP
     [Documentation]
     ...    Clicking Verify OTP without entering any value should trigger React Hook Form
     ...    validation and render the error: "Please enter 4 digit OTP".
@@ -60,7 +60,7 @@ OTP Verification With Empty OTP
     ${error}=    Get OTP Error Message
     Should Be Equal    ${error}    Please enter 4 digit OTP
 
-OTP Verification With Short OTP
+TC-303 OTP Verification With Short OTP
     [Documentation]
     ...    Entering fewer than 4 digits (e.g. "123") should trigger the Yup .length(4)
     ...    validation and render: "OTP number must contain 4 digits".
@@ -72,7 +72,7 @@ OTP Verification With Short OTP
     ${error}=    Get OTP Error Message
     Should Be Equal    ${error}    OTP number must contain 4 digits
 
-Verify OTP Button Is Enabled After OTP Entry
+TC-304 Verify OTP Button Is Enabled After OTP Entry
     [Documentation]
     ...    After entering a 4-digit OTP into the OTP input field, the Verify OTP
     ...    button should transition to an enabled state.
@@ -81,7 +81,7 @@ Verify OTP Button Is Enabled After OTP Entry
     Enter OTP    ${TEST_OTP}
     Verify OTP Button Should Be Enabled
 
-Valid OTP Redirects To Dashboard With Greeting
+TC-305 Valid OTP Redirects To Dashboard With Greeting
     [Documentation]
     ...    Entering the correct UAT OTP (9999) should call verifyOtpPost, set auth tokens,
     ...    redirect to /my-applications, and display the dashboard greeting "Hello,".
@@ -118,7 +118,7 @@ Valid OTP Redirects To Dashboard With Greeting
     END
     Dashboard Greeting Should Be Visible
 
-Wrong OTP Shows Incorrect OTP Toast
+TC-306 Wrong OTP Shows Incorrect OTP Toast
     [Documentation]
     ...    Submitting a structurally valid but incorrect OTP (e.g. "1234") calls
     ...    verifyOtpPost, which returns an error. The user remains on /verify.
@@ -136,7 +136,7 @@ Wrong OTP Shows Incorrect OTP Toast
         Log    Incorrect OTP toast not visible — verifyOtpPost may be rate-limited in UAT (429 instead of wrong-OTP error). URL confirmed on /verify.    WARN
     END
 
-Back Button Returns To Login Page
+TC-307 Back Button Returns To Login Page
     [Documentation]
     ...    After navigating to the OTP page, clicking the back button should return
     ...    to the login page and display the title "What is your Mobile Number?".
@@ -147,7 +147,7 @@ Back Button Returns To Login Page
     ${title}=    Get Login Form Title
     Should Be Equal    ${title}    What is your Mobile Number?
 
-Back Button Clears Mobile Number Input
+TC-308 Back Button Clears Mobile Number Input
     [Documentation]
     ...    After navigating to the OTP page and clicking back, the login form is shown
     ...    again with the mobile number input field cleared (empty value).
@@ -158,7 +158,7 @@ Back Button Clears Mobile Number Input
     ${value}=    Get Mobile Input Value
     Should Be Equal    ${value}    ${EMPTY}
 
-Entered Mobile Number Is Displayed On OTP Page
+TC-309 Entered Mobile Number Is Displayed On OTP Page
     [Documentation]
     ...    The mobile number entered on the login form should be displayed on the
     ...    OTP page inside data-testid='mobile-number-info'.
@@ -167,7 +167,7 @@ Entered Mobile Number Is Displayed On OTP Page
     ${displayed}=    Get Displayed Mobile Number
     Should Contain    ${displayed}    ${EXT_OTP_MOBILE_5}
 
-OTP Countdown Timer Shows Resend Text
+TC-310 OTP Countdown Timer Shows Resend Text
     [Documentation]
     ...    Immediately after landing on the OTP page, the send-otp-timer-container should
     ...    be visible and display "Did not receive OTP? Resend in <countdown>".
@@ -176,7 +176,7 @@ OTP Countdown Timer Shows Resend Text
     [Setup]    Navigate To OTP Page    ${EXT_OTP_MOBILE_7}
     OTP Timer Should Show Countdown Text
 
-OTP With Non-Numeric Characters Shows Error
+TC-314 OTP With Non-Numeric Characters Shows Error
     [Documentation]
     ...    Entering non-numeric characters (e.g. "abcd") into the OTP field and clicking
     ...    Verify OTP should trigger the Yup .matches(Regex.otp) validation and render:
@@ -190,7 +190,7 @@ OTP With Non-Numeric Characters Shows Error
     ${error}=    Get OTP Error Message
     Should Be Equal    ${error}    Only numeric values allowed
 
-Existing Customer OTP Verification Lands On Dashboard With Applications
+TC-317 Existing Customer OTP Verification Lands On Dashboard With Applications
     [Documentation]
     ...    An existing customer (mobile with active EMI applications) who completes OTP
     ...    verification should be redirected to /my-applications where the EMI tab and
@@ -203,7 +203,7 @@ Existing Customer OTP Verification Lands On Dashboard With Applications
     Wait For Dashboard
     Existing User Dashboard Should Show Applications
 
-New Customer OTP Verification Lands On Dashboard With Create Application Prompt
+TC-318 New Customer OTP Verification Lands On Dashboard With Create Application Prompt
     [Documentation]
     ...    A new customer (mobile with no applications) who completes OTP verification
     ...    should be redirected to /my-applications where the emi-not-data-found empty
@@ -215,7 +215,7 @@ New Customer OTP Verification Lands On Dashboard With Create Application Prompt
     Wait For Dashboard
     New User Dashboard Should Show Empty State
 
-OTP Page Heading Is Enter 4 Digit OTP
+TC-315 OTP Page Heading Is Enter 4 Digit OTP
     [Documentation]
     ...    The OTP verification page should display the heading "Enter 4 Digit OTP"
     ...    via data-testid='desktop-view-form-title'. Recorded in login_20260424_112212.js.
@@ -225,7 +225,7 @@ OTP Page Heading Is Enter 4 Digit OTP
     ${title}=    Get OTP Page Title
     Should Be Equal    ${title}    Enter 4 Digit OTP
 
-Back Button Then Re-Login Navigates To OTP Page
+TC-316 Back Button Then Re-Login Navigates To OTP Page
     [Documentation]
     ...    After landing on the OTP page and clicking the back button, re-submitting
     ...    the login form with the same mobile should navigate back to /verify.
@@ -238,7 +238,7 @@ Back Button Then Re-Login Navigates To OTP Page
     Submit Login Form    ${DASHBOARD_MOBILE}
     Wait For OTP Page
 
-OTP Not Received
+TC-311 OTP Not Received
     [Documentation]
     ...    Manual test case: verify UX when OTP is not received (e.g. carrier issues).
     ...    Cannot be automated — requires external SMS gateway dependency.
@@ -246,7 +246,7 @@ OTP Not Received
     [Tags]    otp    manual    robot:skip
     Navigate To OTP Page    ${EXT_OTP_MOBILE_1}
 
-OTP Timer Disabled State
+TC-312 OTP Timer Disabled State
     [Documentation]
     ...    Manual test case: verify the timer appearance before it starts counting.
     ...    Cannot be reliably automated within normal timing constraints.
@@ -255,7 +255,7 @@ OTP Timer Disabled State
     Navigate To OTP Page    ${EXT_OTP_MOBILE_1}
 
 
-Resend OTP After Timer Expires
+TC-313 Resend OTP After Timer Expires
     [Documentation]
     ...    After the 180-second countdown, the Resend OTP link (data-testid='resend-otp-link')
     ...    should become visible. Clicking it should trigger resendOtpPost API, reset the

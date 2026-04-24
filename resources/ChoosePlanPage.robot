@@ -24,6 +24,16 @@ ${CP_NO_PLANS_FOUND}            css=[data-testid='no-plans-found']
 ${CP_PLAN_LIST}                 css=[data-testid='plan-list-container']
 ${CP_SUBMIT_BUTTON}             css=[data-testid='submit-plan-details-button']
 
+# Plan card detail elements (confirmed by recording login_20260424_145708.js)
+${CP_EMI_CARD_ACTION_BUTTON}    css=[data-testid='emi-card-action-button'] >> nth=0
+${CP_FEE_PAYING_TO}             text=Fee paying to
+${CP_SELECT_EMI_PLAN}           text=Select EMI Plan
+${CP_MOST_POPULAR}              text=Most Popular
+${CP_INTEREST_PER_MONTH}        text=Interest per month
+${CP_PAYABLE_TODAY}             text=Payable Today
+${CP_PLEASE_SELECT_PLAN}        text=Please select plan
+${CP_BACK_BUTTON}               css=[data-testid='back-button']
+
 *** Keywords ***
 Choose Plan Title Should Be Visible
     [Documentation]
@@ -108,6 +118,56 @@ Click Submit Plan Button
     ...    Satisfies: TC-6008, RT-3 (proceed)
     Wait For Elements State    ${CP_SUBMIT_BUTTON}    visible    timeout=${TIMEOUT}
     Click    ${CP_SUBMIT_BUTTON}
+
+Fee Paying To Text Should Be Visible
+    [Documentation]
+    ...    Asserts the "Fee paying to" text is visible on the choose-plan page.
+    ...    Satisfies: TC-6010, U1
+    Wait For Elements State    ${CP_FEE_PAYING_TO}    visible    timeout=${LONG_TIMEOUT}
+
+EMI Card Action Button Should Be Visible
+    [Documentation]
+    ...    Asserts the emi-card-action-button is visible on the first plan card.
+    ...    PRECONDITION: At least one plan must be available for ${APP_CREATION_MOBILE}.
+    ...    Satisfies: TC-6013, U1
+    Wait For Elements State    ${CP_EMI_CARD_ACTION_BUTTON}    visible    timeout=${LONG_TIMEOUT}
+
+Click EMI Card Action Button
+    [Documentation]
+    ...    Clicks the emi-card-action-button on the first plan card to open the plan detail view.
+    ...    Satisfies: TC-6014, TC-6015
+    Wait For Elements State    ${CP_EMI_CARD_ACTION_BUTTON}    visible    timeout=${LONG_TIMEOUT}
+    Click    ${CP_EMI_CARD_ACTION_BUTTON}
+
+Most Popular Badge Should Be Visible
+    [Documentation]
+    ...    Asserts the "Most Popular" badge is visible in the plan detail view.
+    ...    Must be called after Click EMI Card Action Button.
+    ...    Satisfies: TC-6012, U1
+    Wait For Elements State    ${CP_MOST_POPULAR}    visible    timeout=${TIMEOUT}
+
+Plan Detail Shows Interest And Payable Today
+    [Documentation]
+    ...    Clicks the emi-card-action-button on the first plan card and asserts both
+    ...    "Interest per month" and "Payable Today" texts are visible in the detail view.
+    ...    Satisfies: TC-6014, U1
+    Click EMI Card Action Button
+    Wait For Elements State    ${CP_INTEREST_PER_MONTH}    visible    timeout=${TIMEOUT}
+    Wait For Elements State    ${CP_PAYABLE_TODAY}    visible    timeout=${TIMEOUT}
+
+Please Select Plan Error Should Be Visible
+    [Documentation]
+    ...    Asserts the "Please select plan" validation message is visible when the submit
+    ...    button is clicked without a plan selected.
+    ...    Satisfies: TC-6015, U1
+    Wait For Elements State    ${CP_PLEASE_SELECT_PLAN}    visible    timeout=${TIMEOUT}
+
+Click Back Button
+    [Documentation]
+    ...    Clicks the back-button on the choose-plan page to navigate back to /student-details.
+    ...    Satisfies: TC-6016
+    Wait For Elements State    ${CP_BACK_BUTTON}    visible    timeout=${TIMEOUT}
+    Click    ${CP_BACK_BUTTON}
 
 Choose Plan URL Should Be Active
     [Documentation]    Helper — asserts the current URL contains /choose-plan.

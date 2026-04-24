@@ -1,16 +1,18 @@
 *** Settings ***
 Documentation
 ...    Dashboard test suite for the GQ Customer Portal (/my-applications).
-...    Covers TC-4001 to TC-4043: header, tab navigation, profile menu, EMI content,
+...    Covers TC-4001 to TC-4051: header, tab navigation, profile menu, EMI content,
 ...    Transaction History filters, download functionality, Auto Payments (AD) content,
-...    AD detail modal, and Insurance/AD tab navigation.
+...    AD detail modal, Insurance/AD tab navigation, and new-user empty states.
 ...    Ported from gq_customer_ui_automation (Java/Selenium) DashboardTestClass1-4.
+...    Recorded in login_20260424_121929.js (new user) and login_20260424_122458.js (existing user).
 ...
 ...    PRECONDITION (TN2 resolution B): UAT test accounts must have pre-existing data:
-...      - ${DASHBOARD_MOBILE} (8108556708): active EMI applications (TC-4001, TC-4011).
+...      - ${DASHBOARD_MOBILE} (8108556708): active EMI applications (TC-4001, TC-4011,
+...        TC-4044 to TC-4046), enough to trigger load-more pagination.
 ...      - ${PG_MOBILE} (7757855472): transaction records (TC-4030, TC-4031).
-...      - ${AD_MOBILE} (8763694182): active AD applications with active/pending repayment
-...        statuses and schedule data (TC-4036 to TC-4043).
+...      - ${AD_MOBILE} (8763694182): active AD applications (TC-4036 to TC-4043).
+...      - ${DASHBOARD_NEW_MOBILE} (dynamic): fresh mobile with no history (TC-4047 to TC-4051).
 ...    A failure indicating "no data found" signals an account seeding need, not a test defect.
 ...
 ...    Session model (O1 + TN4 + TN1 resolutions):
@@ -24,6 +26,7 @@ Documentation
 Library          Browser
 Resource         ../resources/DashboardPage.robot
 Resource         ../variables/variables.robot
+Variables        ../variables/dynamic_variables.py
 
 Suite Setup      Login And Navigate To Dashboard
 Suite Teardown   Close Browser
@@ -119,6 +122,36 @@ EMI Tab Click Shows EMI Content
     [Tags]    dashboard    emi    tab-navigation
     Click EMI Tab And Verify
     EMI Cards Should Be Visible
+
+EMI Card Shows Application ID Label
+    [Documentation]
+    ...    TC-4044: The "Application ID:" label should be visible on the EMI card surface
+    ...    without entering the card detail view.
+    ...    PRECONDITION: ${DASHBOARD_MOBILE} must have at least one active EMI application.
+    ...    Satisfies: TC-4044, T1
+    [Tags]    dashboard    emi    ui
+    Click EMI Tab And Verify
+    EMI App ID Label Should Be Visible
+
+EMI Card App Copy Button Is Visible
+    [Documentation]
+    ...    TC-4045: The app-id-copy-button should be visible on the first EMI card.
+    ...    PRECONDITION: ${DASHBOARD_MOBILE} must have at least one active EMI application.
+    ...    Satisfies: TC-4045, T1
+    [Tags]    dashboard    emi    ui
+    Click EMI Tab And Verify
+    EMI App Copy Button Should Be Visible
+
+EMI Load More Button Is Visible
+    [Documentation]
+    ...    TC-4046: The load-more-button should be visible on the EMI tab when the account
+    ...    has more applications than the initial render threshold.
+    ...    PRECONDITION: ${DASHBOARD_MOBILE} must have enough EMI applications to trigger
+    ...    the load-more pagination button.
+    ...    Satisfies: TC-4046, T1
+    [Tags]    dashboard    emi    ui    pagination
+    Click EMI Tab And Verify
+    Load More Button Should Be Visible
 
 Auto Payments Tab Click
     [Documentation]
@@ -411,6 +444,66 @@ AD Schedule Section Is Visible
     [Tags]    dashboard    auto-payments    ui
     Click AD Tab And Verify
     AD Schedule Section Should Be Visible
+
+EMI Tab Shows No Applications For New User
+    [Documentation]
+    ...    TC-4047: Switches to ${DASHBOARD_NEW_MOBILE} (dynamic fresh mobile) which has no
+    ...    existing applications. The EMI tab should display the "No Data Found" image and
+    ...    "You have No Applications for" empty-state text.
+    ...    Subsequent new-user tests (TC-4048 to TC-4051) inherit this session.
+    ...    Recorded in login_20260424_121929.js.
+    ...    Satisfies: TC-4047
+    [Tags]    dashboard    emi    empty-state    smoke
+    Switch To Account    ${DASHBOARD_NEW_MOBILE}
+    Click EMI Tab And Verify
+    EMI Empty State Should Be Visible
+
+AD Tab Shows No Data Alert For New User
+    [Documentation]
+    ...    TC-4048: The Auto Payments tab should display an ARIA alert element when the
+    ...    logged-in user has no active AD subscriptions.
+    ...    PRECONDITION: Logged in as ${DASHBOARD_NEW_MOBILE} (no AD applications).
+    ...    Satisfies: TC-4048
+    [Tags]    dashboard    auto-payments    empty-state
+    Click AD Tab And Verify
+    AD Empty Alert Should Be Visible
+
+PG Online Sub-tab Shows No Transactions For New User
+    [Documentation]
+    ...    TC-4049: The Online sub-tab in Transaction History should display
+    ...    "Online transactions not found" text for a new user with no payment history.
+    ...    PRECONDITION: Logged in as ${DASHBOARD_NEW_MOBILE} (no PG records).
+    ...    Satisfies: TC-4049
+    [Tags]    dashboard    pg    empty-state
+    Click Transaction History Tab And Verify
+    Click Online Sub-tab
+    PG Online Empty State Should Be Visible
+
+PG Offline Sub-tab Shows No Data For New User
+    [Documentation]
+    ...    TC-4050: The Offline sub-tab in Transaction History should display the
+    ...    "No Data Found" image and "You have not done any" text for a new user.
+    ...    PRECONDITION: Logged in as ${DASHBOARD_NEW_MOBILE} (no offline transactions).
+    ...    Satisfies: TC-4050
+    [Tags]    dashboard    pg    empty-state
+    Click Transaction History Tab And Verify
+    Click Offline Sub-tab
+    PG Offline Empty State Should Be Visible
+
+PG Filter Applied Shows Inline Clear
+    [Documentation]
+    ...    TC-4051: After applying a filter on the Offline sub-tab, the filter-container
+    ...    should display an inline "Clear" chip. Clicking it removes the applied filter.
+    ...    Distinct from the clear-filter-button inside the filter panel (TC-4028).
+    ...    Recorded in login_20260424_121929.js — filter interactions visible for any user.
+    ...    Satisfies: TC-4051
+    [Tags]    dashboard    pg    filter    inline-clear
+    Click Transaction History Tab And Verify
+    Click Offline Sub-tab
+    Open Filter Panel
+    Select Time Filter    All Months
+    Click Apply Filter
+    Click Filter Container Clear
 
 Insurance Tab Button Is Visible On Dashboard
     [Documentation]

@@ -1,27 +1,33 @@
 *** Settings ***
 Documentation
 ...    Insurance tab test suite for the GQ Customer Portal Dashboard (/my-applications#ins).
-...    Tests the Insurance tab UI, education banner, policy cards, and calculator CTA.
-...    Recorded in login_20260424_124334.js — mobile 8668768645.
+...    Tests the Insurance tab UI for both existing-policy users and new users.
+...    Recorded in login_20260424_124334.js (existing user: 8668768645) and
+...    login_20260424_121929.js (new user: 9373938938 / dynamic ${DASHBOARD_NEW_MOBILE}).
 ...
-...    PRECONDITION: ${INS_MOBILE} (8668768645) must have active insurance policies on UAT:
-...      - At least one policy with Status: Issued
-...      - At least one policy with Status: Applied
-...    A policy-card assertion failure signals an account seeding need, not a test defect.
+...    PRECONDITION:
+...      - TC-4101 to TC-4111: ${INS_MOBILE} (8668768645) must have active insurance policies:
+...          at least one Status: Issued and one Status: Applied.
+...      - TC-4112 to TC-4115: ${DASHBOARD_NEW_MOBILE} (dynamic fresh mobile) must have no
+...          insurance policies — this is guaranteed for any newly generated number.
+...    A policy-card assertion failure on TC-4101–TC-4111 signals an account seeding need.
 ...
 ...    Session model:
 ...      Suite Setup   → Login And Navigate To Insurance Tab (login once with ${INS_MOBILE})
 ...      Test Setup    → Navigate To Insurance Tab (hard-nav to /my-applications + click INS tab)
 ...      Test Teardown → NONE (shared session preserved — no Close Context)
 ...      Suite Teardown → Close Browser
+...      TC-4112 [Setup] → Navigate To Insurance Tab New User (Switch To Account DASHBOARD_NEW_MOBILE)
+...      TC-4113–TC-4115 → inherit DASHBOARD_NEW_MOBILE session via suite-level Test Setup
 ...
-...    Covers: TC-4101 to TC-4111
+...    Covers: TC-4101 to TC-4115
 ...    Satisfies: B2 (insurance tab coverage), T1 (data-testid locators), U1 (exact assertions),
 ...               U2 (explicit waits), U3 (redirect and URL hash assertions), O1 (shared session)
 
 Library          Browser
 Resource         ../resources/InsuranceDashboardPage.robot
 Resource         ../variables/variables.robot
+Variables        ../variables/dynamic_variables.py
 
 Suite Setup      Login And Navigate To Insurance Tab
 Suite Teardown   Close Browser
@@ -111,3 +117,46 @@ Calculate Now Button Opens New Tab
     ...    Satisfies: TC-4111
     [Tags]    dashboard    insurance    navigation    calculator
     Calculate Now Button Opens New Tab
+
+Insurance Plan Heading Is Visible For New User
+    [Documentation]
+    ...    TC-4112: For a new user with no insurance policies, the Insurance tab should display
+    ...    the "Choose your Insurance Plan" plan selection heading instead of existing policy cards.
+    ...    Switches to ${DASHBOARD_NEW_MOBILE} (dynamic fresh mobile) via Navigate To Insurance
+    ...    Tab New User. TC-4113 to TC-4115 inherit this session.
+    ...    Recorded in login_20260424_121929.js — mobile 9373938938 (fresh, no policies).
+    ...    Satisfies: TC-4112
+    [Setup]    Navigate To Insurance Tab New User
+    [Tags]    dashboard    insurance    ui    new-user    smoke
+    Insurance Plan Heading Should Be Visible
+
+Education Coverage Plan Is Visible For New User
+    [Documentation]
+    ...    TC-4113: The "Education Coverage" insurance plan card should be visible on the
+    ...    plan selection screen for a new user.
+    ...    PRECONDITION: ${DASHBOARD_NEW_MOBILE} session (established by TC-4112 setup).
+    ...    Satisfies: TC-4113
+    [Tags]    dashboard    insurance    ui    new-user
+    Insurance Plan Heading Should Be Visible
+    Education Coverage Plan Should Be Visible
+
+Recommended Plan Badge Is Visible For New User
+    [Documentation]
+    ...    TC-4114: A "Recommended" badge should be visible on one of the insurance plan cards
+    ...    on the plan selection screen. Corresponds to the "⭐ Recommended" Complete Life plan
+    ...    in the recording.
+    ...    PRECONDITION: ${DASHBOARD_NEW_MOBILE} session (established by TC-4112 setup).
+    ...    Satisfies: TC-4114
+    [Tags]    dashboard    insurance    ui    new-user
+    Insurance Plan Heading Should Be Visible
+    Recommended Plan Badge Should Be Visible
+
+Complete Life Plan Is Visible For New User
+    [Documentation]
+    ...    TC-4115: The "Complete Life" insurance plan card should be visible on the plan
+    ...    selection screen for a new user.
+    ...    PRECONDITION: ${DASHBOARD_NEW_MOBILE} session (established by TC-4112 setup).
+    ...    Satisfies: TC-4115
+    [Tags]    dashboard    insurance    ui    new-user
+    Insurance Plan Heading Should Be Visible
+    Complete Life Plan Should Be Visible

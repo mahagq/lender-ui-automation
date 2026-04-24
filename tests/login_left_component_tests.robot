@@ -42,14 +42,14 @@ Refresh Login Page
 
 *** Test Cases ***
 
-GQ Logo Is Displayed In Left Section
+TC-101 GQ Logo Is Displayed In Left Section
     [Documentation]
     ...    The GrayQuest SVG logo should be present and visible at the top of
     ...    the left panel. Logo has no data-testid — first SVG element is used.
     [Tags]    left-component    logo    ui
     GQ Logo Should Be Visible
 
-Register For EMI Plans Heading Text Is Correct
+TC-102 Register For EMI Plans Heading Text Is Correct
     [Documentation]
     ...    The left panel main heading is split across two elements:
     ...    data-testid='register-for-title' → "Register for"
@@ -60,7 +60,7 @@ Register For EMI Plans Heading Text Is Correct
     ${emi_text}=    Get EMI Plans Title Text
     Should Be Equal    ${emi_text}    EMI Plans
 
-Subheading Paragraph Text Is Correct
+TC-103 Subheading Paragraph Text Is Correct
     [Documentation]
     ...    data-testid='info-paragraph' should display:
     ...    "Share a few details, and we\u2019ll create the perfect EMI plan tailored to your needs"
@@ -69,14 +69,14 @@ Subheading Paragraph Text Is Correct
     Should Be Equal    ${text}
     ...    Share a few details, and we\u2019ll create the perfect EMI plan tailored to your needs
 
-Trusted By Image Is Visible
+TC-104 Trusted By Image Is Visible
     [Documentation]
     ...    The "Trusted by 5M+ Parents" image section should be visible in the left panel.
     ...    Uses partial CSS class selector (no data-testid on this image element).
     [Tags]    left-component    ui    image
     Trusted By Image Should Be Visible
 
-About Us Link Opens About Us Page
+TC-105 About Us Link Opens About Us Page
     [Documentation]
     ...    The About Us link (data-testid='about-us-link') in the left panel footer should
     ...    be clickable and open the About Us page in a new browser tab.
@@ -86,7 +86,7 @@ About Us Link Opens About Us Page
     Should Contain    ${title}    About Us
     Refresh Login Page
 
-Privacy Policy Link Opens Privacy Policy Page
+TC-106 Privacy Policy Link Opens Privacy Policy Page
     [Documentation]
     ...    The Privacy Policy link (li[data-testid='privacy-policy-link']) in the left panel
     ...    footer should open the Privacy Policy page in a new tab.
@@ -96,7 +96,7 @@ Privacy Policy Link Opens Privacy Policy Page
     Should Contain    ${title}    Privacy Policy
     Refresh Login Page
 
-Terms And Conditions Link Opens Terms And Conditions Page
+TC-107 Terms And Conditions Link Opens Terms And Conditions Page
     [Documentation]
     ...    The Terms & Conditions link (data-testid='terms-&-conditions-link') in the left
     ...    panel footer should open the T&C page in a new tab.
@@ -106,7 +106,7 @@ Terms And Conditions Link Opens Terms And Conditions Page
     Should Contain    ${title}    Terms & Conditions
     Refresh Login Page
 
-Contact Us Link Opens Contact Us Page
+TC-108 Contact Us Link Opens Contact Us Page
     [Documentation]
     ...    The Contact Us link (data-testid='contact-us-link') in the left panel footer
     ...    should open the Contact Us page in a new tab.
@@ -116,7 +116,7 @@ Contact Us Link Opens Contact Us Page
     Should Contain    ${title}    Contact Us
     Refresh Login Page
 
-Copyright Footer Text Is Correct
+TC-109 Copyright Footer Text Is Correct
     [Documentation]
     ...    The copyright notice at the bottom of the left panel (p[data-testid='footer'])
     ...    should display: "© <current year> GrayQuest Education Finance Pvt. Ltd."

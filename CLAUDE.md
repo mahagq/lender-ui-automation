@@ -59,13 +59,14 @@ BYPASS_AUTH_MOBILE=<erp_mobile> ./venv/bin/robot --outputdir results/ tests/bypa
 
 ```
 tests/                     — Test suites (import resources and variables)
-  login_left_component_tests.robot  — 9 left panel component tests
-  login_tests.robot                 — 21 login form tests
-  otp_tests.robot                   — 14 OTP tests (3 skipped)
+  login_left_component_tests.robot  — 9 left panel component tests (TC-101–TC-109)
+  login_tests.robot                 — 23 login form tests (TC-201, TC-207–TC-228)
+  otp_tests.robot                   — 18 OTP tests: 15 active, 3 skipped (TC-301–TC-318)
   bypass_auth_tests.robot           — 4 bypass auth tests (2 skipped)
-  dashboard_tests.robot             — 33 dashboard tests (2 skipped)
-  student_details_tests.robot       — 14 student details tests (TC-5001–TC-5014)
-  choose_plan_tests.robot           — 10 choose plan tests (TC-6001–TC-6011)
+  dashboard_tests.robot             — 33 dashboard tests (2 skipped — TC-4004, TC-4005)
+  dashboard_ins_tests.robot         — 15 insurance tab tests (TC-4101–TC-4115; ${INS_MOBILE} 8668768645 for existing-policy tests, ${DASHBOARD_NEW_MOBILE} for new-user tests)
+  student_details_tests.robot       — 21 student details tests (TC-5001–TC-5021)
+  choose_plan_tests.robot           — 16 choose plan tests (TC-6001–TC-6016)
   select_applicant_tests.robot      — 10 select applicant tests (TC-7001–TC-7011)
   applicant_journey_tests.robot     — 27 sequential wizard tests (TC-8001–TC-11007)
   employment_tests.robot            — 30 employment tests: 7 type + 13 salaried + 10 SE (TC-12001–TC-12094)
@@ -77,6 +78,7 @@ resources/                 — Page Object keyword libraries (no variable import
   OTPPage.robot                      — Keywords + locators for /verify (OTP form)
   BypassAuthPage.robot               — Keywords + locators for /instant-eligibility (bypass auth)
   DashboardPage.robot                — Keywords + locators for /my-applications (dashboard)
+  InsuranceDashboardPage.robot       — Keywords + locators for /my-applications#ins (Insurance tab)
   ApplicationCreationFlowPage.robot  — Wizard navigation infrastructure + traversal helpers (imports all wizard pages)
   StudentDetailsPage.robot           — Keywords + locators for /student-details
   ChoosePlanPage.robot               — Keywords + locators for /choose-plan
@@ -118,6 +120,15 @@ The dashboard suite uses a **single shared browser session** across all 33 tests
 - **TC-4009 (Logout) MUST remain the last test** — it destroys the shared session.
 - **TC-4030** calls `Switch To Account    ${PG_MOBILE}` (~3 min into the suite, rate limits cleared). TC-4031 inherits that session.
 
+## Insurance Dashboard Session Model
+
+`dashboard_ins_tests.robot` uses a **single shared browser session** with `${INS_MOBILE}` (8668768645):
+- `Suite Setup` — `Login And Navigate To Insurance Tab`: logs in once, clicks Insurance tab, lands on `/my-applications#ins`.
+- `Test Setup` — `Navigate To Insurance Tab`: hard-navigates to `/my-applications` then clicks the Insurance tab.
+- `Test Teardown` — NONE (shared session preserved).
+- `Suite Teardown` — `Close Browser`.
+- **TC-4112** uses `[Setup] Navigate To Insurance Tab New User` which calls `Switch To Account ${DASHBOARD_NEW_MOBILE}`. TC-4113–TC-4115 inherit that session via the suite-level Test Setup.
+
 ## Application Creation Flow Session Model
 
 Each wizard test suite uses a **single shared browser session** using `${APP_CREATION_MOBILE}` (9876540001):
@@ -155,6 +166,7 @@ All locators use `data-testid` CSS selectors exclusively — CSS class names use
 | EMI tab | `css=[data-testid='emi-tab-navigation-button']` |
 | PG tab | `css=[data-testid='pg-tab-navigation-button']` |
 | Filter button | `css=[data-testid='filter-button']` |
+| Insurance tab | `css=[data-testid='ins-tab-navigation-button']` |
 
 ## Exact Validation Error Strings
 
@@ -170,6 +182,64 @@ Tests assert these exact strings — do not paraphrase:
 | Short OTP (< 4 digits) | `otp-input-error` | `OTP number must contain 4 digits` |
 | Non-numeric OTP | `otp-input-error` | `Only numeric values allowed` |
 | Wrong OTP | URL stays on `/verify` (primary); toast `text=Incorrect OTP` (secondary — non-blocking, may be absent if verifyOtpPost rate-limited) |
+
+## Claude Working Rules (VERY IMPORTANT)
+
+Follow these rules strictly to minimize token usage and maintain framework consistency:
+
+### Repository Reading Rules
+
+* Do NOT scan the full repository unless explicitly asked
+* Do NOT re-read files already explained in this CLAUDE.md
+* Only inspect files directly relevant to the current task
+* Always prefer using existing project patterns over generating new structures
+* Avoid unnecessary re-analysis of stable files
+* Never rewrite existing working keywords unless required
+
+### Framework Rules
+
+* This project uses Robot Framework + Browser Library (Playwright), NOT SeleniumLibrary
+* Follow the existing Page Object Model structure strictly
+* Test files must NOT contain custom keywords
+* All reusable logic must stay inside resource files only
+* Do NOT create duplicate keywords
+* Reuse existing locators, variables, and utilities first
+* Maintain existing naming conventions exactly
+
+### Locator Rules
+
+Priority order for locators:
+
+1. data-testid (highest priority)
+2. role-based selectors
+3. labels/placeholders
+4. visible text hierarchy
+5. XPath only as last resort
+
+* Never use unstable CSS classes
+* Never use absolute XPath
+* Avoid strict mode violations in Playwright
+* Prefer exact and unique locators only
+
+### Automation Generation Rules
+
+Whenever a new feature is given:
+
+1. Understand the functional flow
+2. Prepare QA test cases first
+3. Identify automation scope
+4. Check if existing keywords already support the flow
+5. Fetch accurate locators using Playwright Inspector logic
+6. Generate Robot Framework code only after analysis
+7. Suggest reusable keywords only if truly needed
+
+### Output Rules
+
+* Keep responses concise
+* Avoid unnecessary explanations
+* Prefer production-ready code directly
+* Do not generate theoretical examples
+* Focus on executable automation code only
 
 ## Routes
 

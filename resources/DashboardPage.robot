@@ -49,12 +49,36 @@ ${PG_TAB}                       css=[data-testid='pg-tab-navigation-button']
 # EMI tab content — partial match covers dynamic emi-card-{id} naming (T1)
 ${EMI_CARDS}                    css=[data-testid*='emi-card']
 
+# EMI tab — empty state for new user (no existing applications)
+${EMI_EMPTY_IMAGE}              css=img[alt='No Data Found']
+${EMI_EMPTY_TEXT}               text=You have No Applications for
+
+# EMI tab — existing user card surface elements (visible without entering detail view)
+${EMI_APP_ID_LABEL}             text=Application ID:
+${EMI_APP_COPY_BUTTON}          css=[data-testid='app-id-copy-button'] >> nth=0
+${LOAD_MORE_BUTTON}             css=[data-testid='load-more-button']
+
+# Create new application modal — "Before you proceed" dialog for existing users
+${CREATE_APP_MODAL_TEXT}        text=Still want to create a new
+${CLOSE_BUTTON}                 css=[data-testid='close-button']
+
 # Transaction History (PG tab) — Online sub-tab uses exact value; Offline has leading space in data-testid
 ${ONLINE_SUBTAB}                css=li[data-testid='Online']
 ${OFFLINE_SUBTAB}               css=li[data-testid=' Offline']
 ${FILTER_BUTTON}                css=[data-testid='filter-button']
 ${CLEAR_FILTER_BUTTON}          css=[data-testid='clear-filter-button']
 ${APPLY_FILTER_BUTTON}          css=[data-testid='apply-filter-button']
+
+# PG tab — empty states for new user (no transaction data)
+${PG_ONLINE_EMPTY_TEXT}         text=Online transactions not found
+${PG_OFFLINE_EMPTY_IMAGE}       css=img[alt='No Data Found']
+${PG_OFFLINE_EMPTY_TEXT}        text=You have not done any
+
+# PG tab — filter-container inline clear chip (appears after a filter is applied)
+${FILTER_CONTAINER_CLEAR}       css=[data-testid='filter-container'] >> text=Clear
+
+# AD tab — empty state for new user (alert rendered instead of application cards)
+${AD_EMPTY_ALERT}               role=alert
 
 # Time filter options — data-testid values contain spaces; CSS attribute selector with quotes handles this
 ${FILTER_ALL_MONTHS}            css=[data-testid='All Months']
@@ -279,8 +303,9 @@ Create New Application Button Should Be Visible And Clickable In Header
     ...    the page and activates the button's click handler (same pattern used in the working
     ...    traversal keyword Click Create Application Button And Wait For Student Details).
     ...    After clicking, accepts either:
-    ...      (a) Radix UI dialog (role='dialog') — "Before you proceed" modal for in-progress apps
-    ...      (b) URL change away from /my-applications — direct wizard navigation
+    ...      (a) Radix UI dialog (role='dialog') — "Before you proceed" / "Still want to create"
+    ...          modal; asserts modal text and closes via close-button testid.
+    ...      (b) URL change away from /my-applications — direct wizard navigation.
     ...    Precondition: logged in as an account with at least one prior application.
     ...    Satisfies: TC-4034, B1, T1
     Click    ${EMI_TAB}
@@ -290,11 +315,80 @@ Create New Application Button Should Be Visible And Clickable In Header
     Click    ${CREATE_APP_BUTTON}
     ${dialog_visible}=    Run Keyword And Return Status
     ...    Wait For Elements State    css=[role='dialog']    visible    timeout=${TIMEOUT}
-    IF    not ${dialog_visible}
+    IF    ${dialog_visible}
+        Wait For Elements State    ${CREATE_APP_MODAL_TEXT}    visible    timeout=${TIMEOUT}
+        Click    ${CLOSE_BUTTON}
+        Wait For Elements State    css=[role='dialog']    hidden    timeout=${TIMEOUT}
+    ELSE
         ${current_url}=    Get Url
         Should Not Be Equal    ${current_url}    ${initial_url}
         ...    Create New Application button click produced no response — dialog not shown and URL did not change.
     END
+
+EMI Empty State Should Be Visible
+    [Documentation]
+    ...    Asserts the "No Data Found" image and "You have No Applications for" text are
+    ...    visible on the EMI tab for a new user with no existing applications.
+    ...    PRECONDITION: Logged in as a fresh mobile with no application history.
+    ...    Satisfies: TC-4047
+    Wait For Elements State    ${EMI_EMPTY_IMAGE}    visible    timeout=${TIMEOUT}
+    Wait For Elements State    ${EMI_EMPTY_TEXT}    visible    timeout=${TIMEOUT}
+
+EMI App ID Label Should Be Visible
+    [Documentation]
+    ...    Asserts the "Application ID:" label is visible on the first EMI card surface.
+    ...    PRECONDITION: ${DASHBOARD_MOBILE} must have at least one active EMI application.
+    ...    Satisfies: TC-4044
+    Wait For Elements State    ${EMI_APP_ID_LABEL}    visible    timeout=${TIMEOUT}
+
+EMI App Copy Button Should Be Visible
+    [Documentation]
+    ...    Asserts the app-id-copy-button is visible on the first EMI card.
+    ...    PRECONDITION: ${DASHBOARD_MOBILE} must have at least one active EMI application.
+    ...    Satisfies: TC-4045
+    Wait For Elements State    ${EMI_APP_COPY_BUTTON}    visible    timeout=${TIMEOUT}
+
+Load More Button Should Be Visible
+    [Documentation]
+    ...    Asserts the load-more-button is visible on the EMI tab when the account
+    ...    has more applications than the initial page renders.
+    ...    PRECONDITION: ${DASHBOARD_MOBILE} must have enough applications to trigger pagination.
+    ...    Satisfies: TC-4046
+    Wait For Elements State    ${LOAD_MORE_BUTTON}    visible    timeout=${TIMEOUT}
+
+AD Empty Alert Should Be Visible
+    [Documentation]
+    ...    Asserts the ARIA alert role element is visible on the Auto Payments tab
+    ...    when the logged-in user has no active AD subscriptions.
+    ...    PRECONDITION: Logged in as a fresh mobile with no AD applications.
+    ...    Satisfies: TC-4048
+    Wait For Elements State    ${AD_EMPTY_ALERT}    visible    timeout=${TIMEOUT}
+
+PG Online Empty State Should Be Visible
+    [Documentation]
+    ...    Asserts "Online transactions not found" text is visible on the Online sub-tab
+    ...    for a new user with no transaction history.
+    ...    PRECONDITION: Logged in as a fresh mobile with no PG transaction records.
+    ...    Satisfies: TC-4049
+    Wait For Elements State    ${PG_ONLINE_EMPTY_TEXT}    visible    timeout=${TIMEOUT}
+
+PG Offline Empty State Should Be Visible
+    [Documentation]
+    ...    Asserts the "No Data Found" image and "You have not done any" text are visible
+    ...    on the Offline sub-tab for a new user with no offline transactions.
+    ...    PRECONDITION: Logged in as a fresh mobile with no PG transaction records.
+    ...    Satisfies: TC-4050
+    Wait For Elements State    ${PG_OFFLINE_EMPTY_IMAGE}    visible    timeout=${TIMEOUT}
+    Wait For Elements State    ${PG_OFFLINE_EMPTY_TEXT}    visible    timeout=${TIMEOUT}
+
+Click Filter Container Clear
+    [Documentation]
+    ...    Clicks the inline "Clear" chip inside the filter-container that appears
+    ...    after a filter has been applied via the Apply button.
+    ...    Distinct from the clear-filter-button inside the filter panel (TC-4028).
+    ...    Satisfies: TC-4051
+    Wait For Elements State    ${FILTER_CONTAINER_CLEAR}    visible    timeout=${TIMEOUT}
+    Click    ${FILTER_CONTAINER_CLEAR}
 
 Create New Application Button Should Be Visible And Clickable In Empty State
     [Documentation]

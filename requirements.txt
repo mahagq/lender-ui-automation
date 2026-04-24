@@ -1,2 +1,4 @@
 robotframework
 robotframework-browser
+allure-robotframework
+openpyxl

@@ -83,6 +83,52 @@ TC-6011 Choose Plan Page Is Accessible After Navigation
     ...    Ported from: GQCP-TC-6011 (close button — session persistence check).
     Choose Plan Title Should Be Visible
 
+TC-6010 Fee Paying To Text Is Visible
+    [Documentation]
+    ...    Verifies the "Fee paying to" text is visible on the choose-plan page.
+    ...    Satisfies: TC-6010
+    Fee Paying To Text Should Be Visible
+
+TC-6013 EMI Card Action Button Is Visible
+    [Documentation]
+    ...    Verifies the emi-card-action-button is visible on the first plan card.
+    ...    PRECONDITION: ${APP_CREATION_MOBILE} must have at least one eligible plan.
+    ...    Satisfies: TC-6013
+    EMI Card Action Button Should Be Visible
+
+TC-6012 Most Popular Badge Is Visible
+    [Documentation]
+    ...    Verifies the "Most Popular" badge is visible in the plan detail view
+    ...    after clicking the emi-card-action-button.
+    ...    Satisfies: TC-6012
+    Click EMI Card Action Button
+    Most Popular Badge Should Be Visible
+
+TC-6014 Plan Detail Shows Interest Per Month And Payable Today
+    [Documentation]
+    ...    Verifies the plan detail view (opened via emi-card-action-button) shows
+    ...    "Interest per month" and "Payable Today" texts on plan cards.
+    ...    Satisfies: TC-6014
+    Plan Detail Shows Interest And Payable Today
+
+TC-6015 Submit Without Plan Selection Shows Please Select Plan Error
+    [Documentation]
+    ...    Verifies clicking the submit-plan-details-button without selecting a plan
+    ...    shows the "Please select plan" validation message.
+    ...    Recording login_20260424_145708.js (line 109) confirms the button is clickable
+    ...    and triggers the validation message when no plan is selected.
+    ...    Satisfies: TC-6015
+    Wait For Elements State    ${CP_SUBMIT_BUTTON}    visible    timeout=${TIMEOUT}
+    Click    ${CP_SUBMIT_BUTTON}
+    Please Select Plan Error Should Be Visible
+
+TC-6016 Back Button Returns To Student Details URL
+    [Documentation]
+    ...    Verifies the back-button on the choose-plan page navigates back to /student-details.
+    ...    Satisfies: TC-6016
+    ChoosePlanPage.Click Back Button
+    Wait Until Keyword Succeeds    ${TIMEOUT}    200ms    Student Details URL Should Be Active
+
 TC-6008 Plan Selection Enables Submit Button And Proceed
     [Documentation]
     ...    Verifies: (a) submit button is enabled after plan selection, (b) clicking proceed

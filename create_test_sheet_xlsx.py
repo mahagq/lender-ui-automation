@@ -1,11 +1,14 @@
 """
 create_test_sheet_xlsx.py
-Generates CP_UI_Automation_Test_Cases.xlsx with 5 sheets:
+Generates CP_UI_Automation_Test_Cases.xlsx with 8 sheets:
   Sheet 1: Login Left Component   (9 TCs)
-  Sheet 2: Login                  (21 TCs)
-  Sheet 3: OTP Verification       (14 TCs, 3 skipped)
+  Sheet 2: Login                  (23 TCs)
+  Sheet 3: OTP Verification       (18 TCs, 3 skipped)
   Sheet 4: Bypass Authentication  (4 TCs, 2 skipped)
-  Sheet 5: Dashboard              (33 TCs, 2 skipped)
+  Sheet 5: Dashboard              (51 TCs, 2 skipped)
+  Sheet 6: Insurance Dashboard    (15 TCs)
+  Sheet 7: Student Details        (21 TCs)
+  Sheet 8: Choose Plan            (16 TCs)
 
 Requirements:
     pip install openpyxl
@@ -16,7 +19,7 @@ Run:
 
 from openpyxl import Workbook
 from openpyxl.styles import (
-    PatternFill, Font, Alignment, Border, Side, GradientFill
+    PatternFill, Font, Alignment, Border, Side
 )
 from openpyxl.utils import get_column_letter
 
@@ -28,26 +31,27 @@ HEADERS = [
     "Test Mobile / Data", "Status", "Notes"
 ]
 
-# Column widths (approximate characters)
-COL_WIDTHS = [10, 36, 20, 28, 12, 45, 36, 20, 9, 30]
+COL_WIDTHS = [10, 36, 22, 28, 12, 45, 36, 20, 9, 30]
 
 # ── FILL COLORS ───────────────────────────────────────────────────────────────
 def hex_fill(hex_color):
     return PatternFill(fill_type="solid", fgColor=hex_color)
 
-FILL_HEADER   = hex_fill("D9D9D9")   # grey
-FILL_PASS     = hex_fill("B6D7A8")   # green
-FILL_SKIP     = hex_fill("FFE599")   # yellow
-FILL_FAIL     = hex_fill("EA9999")   # red
-FILL_WHITE    = hex_fill("FFFFFF")
+FILL_HEADER = hex_fill("D9D9D9")
+FILL_PASS   = hex_fill("B6D7A8")
+FILL_SKIP   = hex_fill("FFE599")
+FILL_FAIL   = hex_fill("EA9999")
+FILL_WHITE  = hex_fill("FFFFFF")
 
-# Tab colors (hex for sheet tab — openpyxl uses ThemeColor or RGB)
 TAB_COLORS = {
-    "Login Left Component":  "AED6E6",  # blue
-    "Login":                 "BFB9E6",  # purple
-    "OTP Verification":      "FFD699",  # orange
-    "Bypass Authentication": "F4B8D1",  # pink
-    "Dashboard":             "B6E6CC",  # green
+    "Login Left Component":  "AED6E6",
+    "Login":                 "BFB9E6",
+    "OTP Verification":      "FFD699",
+    "Bypass Authentication": "F4B8D1",
+    "Dashboard":             "B6E6CC",
+    "Insurance Dashboard":   "D5E8D4",
+    "Student Details":       "DAE8FC",
+    "Choose Plan":           "FFE6CC",
 }
 
 STATUS_FILL = {"PASS": FILL_PASS, "SKIP": FILL_SKIP, "FAIL": FILL_FAIL}
@@ -55,7 +59,7 @@ STATUS_FILL = {"PASS": FILL_PASS, "SKIP": FILL_SKIP, "FAIL": FILL_FAIL}
 # ── BORDERS ───────────────────────────────────────────────────────────────────
 thin  = Side(style="thin",  color="999999")
 light = Side(style="thin",  color="CCCCCC")
-outer_border = Border(left=thin, right=thin, top=thin, bottom=thin)
+outer_border = Border(left=thin,  right=thin,  top=thin,  bottom=thin)
 inner_border = Border(left=light, right=light, top=light, bottom=light)
 
 # ── FONTS ─────────────────────────────────────────────────────────────────────
@@ -65,10 +69,10 @@ font_status = Font(name="Calibri", bold=True, size=9)
 font_data   = Font(name="Calibri", size=9)
 
 # ── ALIGNMENT ─────────────────────────────────────────────────────────────────
-align_center  = Alignment(horizontal="center", vertical="center", wrap_text=True)
-align_top     = Alignment(horizontal="left",   vertical="top",    wrap_text=True)
-align_tc_id   = Alignment(horizontal="center", vertical="top",    wrap_text=False)
-align_status  = Alignment(horizontal="center", vertical="top",    wrap_text=False)
+align_center = Alignment(horizontal="center", vertical="center", wrap_text=True)
+align_top    = Alignment(horizontal="left",   vertical="top",    wrap_text=True)
+align_tc_id  = Alignment(horizontal="center", vertical="top",    wrap_text=False)
+align_status = Alignment(horizontal="center", vertical="top",    wrap_text=False)
 
 # ── TEST DATA ─────────────────────────────────────────────────────────────────
 
@@ -79,7 +83,7 @@ LEFT_COMPONENT = [
      "SVG logo is visible", "", "PASS", ""],
     ["TC-102", "Register For EMI Plans Heading Text Is Correct",
      "Login Left Component", "left-component, ui, heading",
-     "Content", "Left panel main heading split across two elements: 'Register for' + 'EMI Plans'.",
+     "Content", "Left panel heading split across two elements: 'Register for' + 'EMI Plans'.",
      "'Register for' and 'EMI Plans' text verified", "", "PASS", ""],
     ["TC-103", "Subheading Paragraph Text Is Correct",
      "Login Left Component", "left-component, ui, text",
@@ -116,47 +120,47 @@ LOGIN = [
      "Login", "login, smoke, url",
      "Smoke", "Navigate to base URL and verify page URL and browser tab title.",
      "URL = BASE_URL/ and title contains 'GrayQuest Education Finance'", "", "PASS",
-     "Asserts title contains 'GrayQuest Education Finance' (Should Contain — resilient to title prefix changes)"],
-    ["TC-207", "Mobile Number Input Field Is Visible And Editable",
-     "Login", "login, ui, field",
-     "UI", "Mobile number input field should be visible and accept user input.",
-     "Input is visible and enabled", "", "PASS", ""],
-    ["TC-208", "Login With Empty Mobile Number",
-     "Login", "login, validation, negative",
-     "Validation", "Clicking Send OTP without entering a mobile number triggers validation error.",
-     "'Please enter your mobile number'", "", "PASS", ""],
-    ["TC-209", "Login With Spaces In Mobile Number",
-     "Login", "login, validation, negative",
-     "Validation", "Entering only whitespace is treated as empty — numeric input filters spaces.",
-     "'Please enter your mobile number'", "10 spaces", "PASS", ""],
-    ["TC-210", "Login With Alphabets In Mobile Number",
-     "Login", "login, validation, negative",
-     "Validation", "Purely alphabetic string triggers mobile regex validation.",
-     "'Please enter valid mobile number'", "abcdefghij", "PASS", ""],
-    ["TC-211", "Login With Invalid Mobile Number Format",
-     "Login", "login, validation, negative",
-     "Validation", "Mobile number containing letters triggers Yup Regex.mobille_number validation.",
-     "'Please enter valid mobile number'", "123abc4567", "PASS", ""],
-    ["TC-212", "Login With Alphanumeric Mobile Number",
-     "Login", "login, validation, negative",
-     "Validation", "Mix of letters and digits triggers mobile regex validation.",
-     "'Please enter valid mobile number'", "abc1234567", "PASS", ""],
-    ["TC-213", "Login With Special Characters In Mobile Number",
-     "Login", "login, validation, negative",
-     "Validation", "Special characters trigger mobile regex validation.",
-     "'Please enter valid mobile number'", "@#$%^&*()!", "PASS", ""],
-    ["TC-214", "Login With Short Mobile Number",
-     "Login", "login, validation, negative",
-     "Validation", "Fewer than 10 digits — Yup evaluates regex before length, regex fires first.",
-     "'Please enter valid mobile number'", "12345", "PASS", ""],
-    ["TC-215", "Mobile Number Field Enforces 10 Digit Max Length",
-     "Login", "login, validation, field",
-     "Validation", "Mobile input has maxLength=10. Entering 14 digits results in only 10 stored.",
-     "Field value = first 10 digits", "12345678901234", "PASS", ""],
-    ["TC-216", "Valid Login With Correct Mobile Number",
+     "Should Contain — resilient to title prefix changes"],
+    ["TC-207", "Valid Login With Correct Mobile Number",
      "Login", "login, valid, smoke",
      "Smoke", "Valid 10-digit mobile + consent checkbox + Send OTP → redirect to /verify.",
      "Browser navigates to /verify, OTP form visible", "9876543210", "PASS", ""],
+    ["TC-208", "Mobile Number Input Field Is Visible And Editable",
+     "Login", "login, ui, field",
+     "UI", "Mobile number input field should be visible and accept user input.",
+     "Input is visible and enabled", "", "PASS", ""],
+    ["TC-209", "Login With Empty Mobile Number",
+     "Login", "login, validation, negative",
+     "Validation", "Clicking Send OTP without entering a mobile number triggers validation error.",
+     "'Please enter your mobile number'", "", "PASS", ""],
+    ["TC-210", "Login With Spaces In Mobile Number",
+     "Login", "login, validation, negative",
+     "Validation", "Entering only whitespace is treated as empty — numeric input filters spaces.",
+     "'Please enter your mobile number'", "10 spaces", "PASS", ""],
+    ["TC-211", "Login With Alphabets In Mobile Number",
+     "Login", "login, validation, negative",
+     "Validation", "Purely alphabetic string triggers mobile regex validation.",
+     "'Please enter valid mobile number'", "abcdefghij", "PASS", ""],
+    ["TC-212", "Login With Invalid Mobile Number Format",
+     "Login", "login, validation, negative",
+     "Validation", "Mobile number containing letters triggers Yup Regex.mobille_number validation.",
+     "'Please enter valid mobile number'", "123abc4567", "PASS", ""],
+    ["TC-213", "Login With Alphanumeric Mobile Number",
+     "Login", "login, validation, negative",
+     "Validation", "Mix of letters and digits triggers mobile regex validation.",
+     "'Please enter valid mobile number'", "abc1234567", "PASS", ""],
+    ["TC-214", "Login With Special Characters In Mobile Number",
+     "Login", "login, validation, negative",
+     "Validation", "Special characters trigger mobile regex validation.",
+     "'Please enter valid mobile number'", "@#$%^&*()!", "PASS", ""],
+    ["TC-215", "Login With Short Mobile Number",
+     "Login", "login, validation, negative",
+     "Validation", "Fewer than 10 digits — Yup evaluates regex before length, regex fires first.",
+     "'Please enter valid mobile number'", "12345", "PASS", ""],
+    ["TC-216", "Mobile Number Field Enforces 10 Digit Max Length",
+     "Login", "login, validation, field",
+     "Validation", "Mobile input has maxLength=10. Entering 14 digits results in only 10 stored.",
+     "Field value = first 10 digits", "12345678901234", "PASS", ""],
     ["TC-217", "Valid Mobile Starting With 6 To 9 Navigates To OTP Page",
      "Login", "login, valid, otp-redirect",
      "Positive", "Valid 10-digit mobile starting 6–9 with consent → OTP page title 'Enter 4 Digit OTP'.",
@@ -179,7 +183,7 @@ LOGIN = [
      "Title = 'What is your Mobile Number?'", "", "PASS", ""],
     ["TC-222", "Mobile Input Note Text Is Visible",
      "Login", "login, ui, note",
-     "UI", "When no validation error, note below mobile input: 'Please enter the mobile number which you generally use for your banking purposes.'",
+     "UI", "Note below mobile input contains banking guidance text.",
      "data-testid='mobile-number-input-note' visible and contains note text", "", "PASS", ""],
     ["TC-223", "Terms Of Service Link In Consent Opens New Tab",
      "Login", "login, ui, consent, navigation",
@@ -191,13 +195,21 @@ LOGIN = [
      "New tab title contains 'Privacy'", "", "PASS", ""],
     ["TC-225", "Mobile Number Prefill Via Query Param Navigates To OTP Page",
      "Login", "login, valid, query-param",
-     "Positive", "Navigating to /?m=<mobile> pre-fills the mobile field, auto-checks consent, auto-submits, and redirects to /verify.",
+     "Positive", "Navigating to /?m=<mobile> pre-fills mobile field, auto-checks consent, auto-submits, redirects to /verify.",
      "URL contains /verify", "9876543227", "PASS", ""],
     ["TC-226", "Mobile Footer Is Present On Login Page",
      "Login", "login, ui, mobile-footer",
      "UI", "MobileFooter component (data-testid='mobile-footer-container') should be present in the DOM on the login page.",
      "data-testid='mobile-footer-container' attached in DOM", "", "PASS",
-     "Asserts 'attached' state — element is CSS-hidden on desktop viewport"],
+     "Asserts 'attached' state — CSS-hidden on desktop viewport"],
+    ["TC-227", "Consent Label Text Contains Sign In Agreement",
+     "Login", "login, ui, consent",
+     "UI", "The consent label (data-testid='consent-checkbox-label') should be visible and contain 'By signing in, I agree to the'.",
+     "Consent label visible and contains expected text", "", "PASS", ""],
+    ["TC-228", "Consent Checkbox Label Click Checks Consent Checkbox",
+     "Login", "login, ui, consent",
+     "UI", "Clicking the consent label element should check the underlying consent-checkbox input via htmlFor/id wiring.",
+     "Consent checkbox state = checked after label click", "", "PASS", ""],
 ]
 
 OTP = [
@@ -244,11 +256,6 @@ OTP = [
      "OTP Verification", "otp, ui, timer",
      "UI", "Immediately after OTP page loads, timer container visible with countdown text.",
      "Timer contains 'Did not receive OTP? Resend in'", "9876543223", "PASS", ""],
-    ["TC-314", "OTP With Non-Numeric Characters Shows Error",
-     "OTP Verification", "otp, validation, negative",
-     "Validation", "Entering non-numeric characters (e.g. 'abcd') into the OTP field triggers Yup .matches(Regex.otp) validation.",
-     "'Only numeric values allowed'", "9876543226 / OTP: abcd", "PASS",
-     "Input has inputMode='numeric' but type='text' — desktop keyboards can type letters"],
     ["TC-311", "OTP Not Received",
      "OTP Verification", "otp, manual, robot:skip",
      "Manual", "Manual test — verify UX when OTP is not received (carrier issues).",
@@ -264,20 +271,44 @@ OTP = [
      "Slow / Manual", "After 180s countdown, Resend OTP link becomes visible. Clicking resets timer.",
      "Resend link visible after 180s; timer resets after click", "", "SKIP",
      "~3 min wait. Run with: robot --include resend tests/otp_tests.robot"],
+    ["TC-314", "OTP With Non-Numeric Characters Shows Error",
+     "OTP Verification", "otp, validation, negative",
+     "Validation", "Entering non-numeric characters (e.g. 'abcd') into the OTP field triggers Yup .matches(Regex.otp) validation.",
+     "'Only numeric values allowed'", "9876543226 / OTP: abcd", "PASS",
+     "Input has inputMode='numeric' but type='text' — desktop keyboards can type letters"],
+    ["TC-315", "OTP Page Heading Is Enter 4 Digit OTP",
+     "OTP Verification", "otp, ui, heading",
+     "UI", "The OTP verification page should display the heading 'Enter 4 Digit OTP' via data-testid='desktop-view-form-title'.",
+     "Heading = 'Enter 4 Digit OTP'", "", "PASS", ""],
+    ["TC-316", "Back Button Then Re-Login Navigates To OTP Page",
+     "OTP Verification", "otp, navigation, back-button",
+     "Navigation", "After OTP page → back → re-submitting login with same mobile → navigates back to /verify.",
+     "URL contains /verify after round-trip", "8108556708", "PASS", ""],
+    ["TC-317", "Existing Customer OTP Verification Lands On Dashboard With Applications",
+     "OTP Verification", "otp, valid, existing-customer, dashboard",
+     "Positive", "Existing customer OTP → /my-applications with EMI tab and at least one application card visible.",
+     "EMI tab visible; at least one application card visible", "8108556708 / OTP: 9999", "PASS",
+     "PRECONDITION: 8108556708 must have active EMI applications"],
+    ["TC-318", "New Customer OTP Verification Lands On Dashboard With Create Application Prompt",
+     "OTP Verification", "otp, valid, new-customer, dashboard",
+     "Positive", "New customer OTP → /my-applications with emi-not-data-found empty state container visible.",
+     "Empty state container visible", "${NEW_USER_MOBILE} / OTP: 9999", "PASS",
+     "PRECONDITION: mobile must have no applications"],
 ]
 
 BYPASS_AUTH = [
     ["TC-401", "Bypass Auth With Valid Mobile Redirects Away From Instant Eligibility",
-     "Bypass Authentication", "bypass-auth, smoke, redirect",
-     "Smoke", "Navigating to /instant-eligibility?m=<valid_mobile> authenticates via bypassAuthPost and redirects away from /instant-eligibility.",
-     "URL no longer contains /instant-eligibility", "9876543210", "PASS", ""],
+     "Bypass Authentication", "bypass-auth, smoke, redirect, robot:skip",
+     "Skipped", "Navigating to /instant-eligibility?m=<valid_mobile> authenticates via bypassAuthPost and redirects away.",
+     "URL no longer contains /instant-eligibility", "${BYPASS_AUTH_MOBILE}", "SKIP",
+     "Requires ERP-whitelisted UAT mobile. Set BYPASS_AUTH_MOBILE env var and remove robot:skip to enable."],
     ["TC-402", "Bypass Auth Without Query Param Redirects To Login Page",
      "Bypass Authentication", "bypass-auth, redirect, negative",
      "Negative", "Navigating to /instant-eligibility without ?m= redirects to / (login page) with login form visible.",
      "Login form visible; URL does not contain /instant-eligibility", "", "PASS", ""],
     ["TC-403", "Bypass Auth No Account Error State Is Visible",
      "Bypass Authentication", "bypass-auth, negative, robot:skip",
-     "Skipped", "When bypassAuthPost fails (mobile has no ERP account), no-account error state should show image and message.",
+     "Skipped", "When bypassAuthPost fails, no-account error state should show image and message.",
      "No-account image and message visible", "", "SKIP",
      "Requires UAT mobile that fails bypassAuthPost — not yet identified"],
     ["TC-404", "Sign In Button On No Account State Navigates To Login",
@@ -296,7 +327,7 @@ DASHBOARD = [
     ["TC-4002", "Auto Debit Applications On Dashboard",
      "Dashboard", "dashboard, auto-debit, tab-navigation",
      "Navigation", "The Auto Payments (AD) tab navigation button should be visible on the dashboard.",
-     "data-testid='ad-tab-navigation-button' visible", "8108556708", "PASS", ""],
+     "ad-tab-navigation-button visible", "8108556708", "PASS", ""],
     ["TC-4003", "Payment Gateway Applications Are Visible",
      "Dashboard", "dashboard, pg, smoke",
      "Smoke", "Transaction History tab should display Online and Offline sub-tab navigation.",
@@ -304,16 +335,14 @@ DASHBOARD = [
     ["TC-4004", "Stages And CTA Of Stages",
      "Dashboard", "dashboard, stages, robot:skip",
      "Skipped", "Validates stages and call-to-action elements on the dashboard.",
-     "N/A", "", "SKIP",
-     "Empty body in Java suite — no data-testid for stage elements"],
+     "N/A", "", "SKIP", "Empty body in Java suite — no data-testid for stage elements"],
     ["TC-4005", "Back Button Is Not Present On Dashboard",
      "Dashboard", "dashboard, navigation, robot:skip",
      "Skipped", "Verifies back button behaviour on the dashboard.",
-     "N/A", "", "SKIP",
-     "Empty body in Java suite — no back button on dashboard"],
+     "N/A", "", "SKIP", "Empty body in Java suite — no back button on dashboard"],
     ["TC-4006", "GrayQuest Logo Is Visible On Dashboard",
      "Dashboard", "dashboard, logo, ui, smoke",
-     "Smoke", "GQ desktop logo visible. Also asserts title contains 'Hello,' and subtitle contains 'Autopay subscriptions'.",
+     "Smoke", "GQ desktop logo visible. Asserts title contains 'Hello,' and subtitle contains 'Autopay subscriptions'.",
      "Logo visible; title = 'Hello,'; subtitle contains 'Autopay subscriptions'", "8108556708", "PASS", ""],
     ["TC-4007", "Profile Icon Shows FAQ And Logout Options",
      "Dashboard", "dashboard, profile, ui",
@@ -324,33 +353,32 @@ DASHBOARD = [
      "Navigation", "Clicking FAQ in profile dropdown navigates to FAQ page.",
      "URL contains /faq", "8108556708", "PASS",
      "Asserted via URL only — FAQ h1 has no data-testid (TN3 resolution)"],
-    ["TC-4032", "Insurance Tab Button Is Visible On Dashboard",
-     "Dashboard", "dashboard, insurance, tab-navigation",
-     "Navigation", "The Insurance tab navigation button (data-testid='ins-tab-navigation-button') should be visible on the dashboard.",
-     "Insurance tab button visible", "8108556708", "PASS", ""],
-    ["TC-4033", "Insurance Tab Click Updates URL Hash",
-     "Dashboard", "dashboard, insurance, tab-navigation",
-     "Navigation", "Clicking the Insurance tab should update the URL hash to #ins and load the Insurance content area.",
-     "URL contains #ins", "8108556708", "PASS",
-     "InsuranceTab has no data-testid attributes — URL hash is the primary assertion"],
-    ["TC-4009", "Logout Returns To Login Page",
-     "Dashboard", "dashboard, profile, logout, session",
-     "Session", "Logout clears auth session and redirects to login page. MUST run last.",
-     "Login form visible after logout", "8108556708", "PASS",
-     "TC-4009 MUST be last test — destroys shared session (TN1 resolution)"],
     ["TC-4010", "Create New Application Button Has Visible Effect",
      "Dashboard", "dashboard, application, smoke",
      "Smoke", "Button click produces visible response: modal OR URL change from /my-applications.",
-     "Modal visible OR URL changed", "8108556708", "PASS",
-     "WARN expected in UAT (no modal — inline form). TN5 dual-branch per O2."],
+     "Modal visible OR URL changed", "8108556708", "PASS", ""],
     ["TC-4011", "EMI Tab Click Shows EMI Content",
      "Dashboard", "dashboard, emi, tab-navigation",
      "Navigation", "Clicking EMI tab updates URL hash to #emi and shows at least one EMI card.",
      "URL contains #emi; EMI card visible", "8108556708", "PASS",
      "PRECONDITION: account must have active EMI applications"],
+    ["TC-4044", "EMI Card Shows Application ID Label",
+     "Dashboard", "dashboard, emi, ui",
+     "UI", "The 'Application ID:' label should be visible on the EMI card surface.",
+     "'Application ID:' label visible on first EMI card", "8108556708", "PASS",
+     "PRECONDITION: 8108556708 must have at least one active EMI application"],
+    ["TC-4045", "EMI Card App Copy Button Is Visible",
+     "Dashboard", "dashboard, emi, ui",
+     "UI", "The app-id-copy-button should be visible on the first EMI card.",
+     "app-id-copy-button visible", "8108556708", "PASS", ""],
+    ["TC-4046", "EMI Load More Button Is Visible",
+     "Dashboard", "dashboard, emi, ui, pagination",
+     "UI", "The load-more-button should be visible when the account has more applications than the initial render threshold.",
+     "load-more-button visible", "8108556708", "PASS",
+     "PRECONDITION: account must have enough EMI applications to trigger load-more"],
     ["TC-4012", "Auto Payments Tab Click",
      "Dashboard", "dashboard, auto-payments, tab-navigation",
-     "Navigation", "Clicking the Auto Payments tab button should update the URL hash to #ad and load the Auto Payments content area.",
+     "Navigation", "Clicking the Auto Payments tab button should update the URL hash to #ad.",
      "URL contains #ad", "8108556708", "PASS", ""],
     ["TC-4013", "Transaction History Tab Click",
      "Dashboard", "dashboard, pg, tab-navigation, smoke",
@@ -394,19 +422,19 @@ DASHBOARD = [
      "'Failed' filter selectable", "8108556708", "PASS", ""],
     ["TC-4023", "Filter Panel Is Visible For Offline Payments",
      "Dashboard", "dashboard, pg, filter, offline",
-     "UI", "Filter button on Offline sub-tab opens filter panel with time filter options only.",
-     "Time filter options visible (no status filters on Offline)", "8108556708", "PASS", ""],
+     "UI", "Filter button on Offline sub-tab opens filter panel with time filter options only (no status filters).",
+     "Time filter options visible", "8108556708", "PASS", ""],
     ["TC-4024", "Filter By All Months For Offline Payments",
      "Dashboard", "dashboard, pg, filter, offline, time-filter",
      "Filter", "'All Months' time filter is selectable on Offline sub-tab.",
      "'All Months' filter selectable", "8108556708", "PASS", ""],
     ["TC-4025", "Filter By This Month For Offline Payments",
      "Dashboard", "dashboard, pg, filter, offline, time-filter",
-     "Filter", "'This Month' time filter option should be selectable on the Offline sub-tab.",
+     "Filter", "'This Month' time filter option is selectable on Offline sub-tab.",
      "'This Month' filter selectable", "8108556708", "PASS", ""],
     ["TC-4026", "Filter By This Year For Offline Payments",
      "Dashboard", "dashboard, pg, filter, offline, time-filter",
-     "Filter", "'This Year' time filter option should be selectable on the Offline sub-tab.",
+     "Filter", "'This Year' time filter option is selectable on Offline sub-tab.",
      "'This Year' filter selectable", "8108556708", "PASS", ""],
     ["TC-4027", "Filter By Last Year For Offline Payments",
      "Dashboard", "dashboard, pg, filter, offline, time-filter",
@@ -429,7 +457,320 @@ DASHBOARD = [
      "Dashboard", "dashboard, pg, download, online",
      "Download", "Download button for first transaction row on Online sub-tab should be visible.",
      "Download button visible on first Online row", "7757855472 (PG_MOBILE)", "PASS",
-     "Inherits PG_MOBILE session from TC-4030. Canonical from DashboardTestClass3."],
+     "Inherits PG_MOBILE session from TC-4030."],
+    ["TC-4036", "AD Tab App Code Label Is Visible",
+     "Dashboard", "dashboard, auto-payments, session, smoke",
+     "Smoke", "Switches to AD_MOBILE (8763694182). AD tab 'App. Code:' label is visible.",
+     "'App. Code:' label visible on first AD card", "8763694182 (AD_MOBILE)", "PASS",
+     "PRECONDITION: AD_MOBILE must have active AD applications. TC-4037–4043 inherit session."],
+    ["TC-4037", "AD Tab Copy Button Is Visible",
+     "Dashboard", "dashboard, auto-payments, ui",
+     "UI", "The copy button on the first AD application card should be visible.",
+     "Copy button visible", "8763694182 (AD_MOBILE)", "PASS", ""],
+    ["TC-4038", "AD Tab Repayment Active Status Is Visible",
+     "Dashboard", "dashboard, auto-payments, ui, status",
+     "UI", "At least one AD application card should display 'Your repayment is active'.",
+     "'Your repayment is active' visible", "8763694182 (AD_MOBILE)", "PASS", ""],
+    ["TC-4039", "AD Tab Repayment Pending Status Is Visible",
+     "Dashboard", "dashboard, auto-payments, ui, status",
+     "UI", "At least one AD application card should display 'Your repayment is pending'.",
+     "'Your repayment is pending' visible", "8763694182 (AD_MOBILE)", "PASS", ""],
+    ["TC-4040", "AD Tab Action Button Is Visible",
+     "Dashboard", "dashboard, auto-payments, ui",
+     "UI", "The auto-debit-action-button should be visible on the first AD card.",
+     "auto-debit-action-button visible", "8763694182 (AD_MOBILE)", "PASS", ""],
+    ["TC-4041", "AD Action Button Opens Detail Modal",
+     "Dashboard", "dashboard, auto-payments, modal",
+     "UI", "Clicking the first auto-debit-action-button opens a detail modal with structural content.",
+     "Modal with 'See your active auto payment', 'Summary', 'Repayment Complete', 'Student Details' visible",
+     "8763694182 (AD_MOBILE)", "PASS", ""],
+    ["TC-4042", "AD Detail Modal Close Button Dismisses Modal",
+     "Dashboard", "dashboard, auto-payments, modal",
+     "UI", "After opening the AD detail modal, clicking Close should dismiss it.",
+     "Modal content hidden after close", "8763694182 (AD_MOBILE)", "PASS", ""],
+    ["TC-4043", "AD Schedule Section Is Visible",
+     "Dashboard", "dashboard, auto-payments, ui",
+     "UI", "The 'Auto payments schedule' section heading should be visible on the AD tab.",
+     "'Auto payments schedule' heading visible", "8763694182 (AD_MOBILE)", "PASS", ""],
+    ["TC-4047", "EMI Tab Shows No Applications For New User",
+     "Dashboard", "dashboard, emi, empty-state, smoke",
+     "Smoke", "Switches to DASHBOARD_NEW_MOBILE. EMI tab shows 'No Data Found' empty state.",
+     "'No Data Found' image and 'You have No Applications for' text visible",
+     "${DASHBOARD_NEW_MOBILE}", "PASS",
+     "DASHBOARD_NEW_MOBILE is a dynamically generated fresh mobile. TC-4048–4051 inherit session."],
+    ["TC-4048", "AD Tab Shows No Data Alert For New User",
+     "Dashboard", "dashboard, auto-payments, empty-state",
+     "UI", "The Auto Payments tab should display an ARIA alert element when user has no AD subscriptions.",
+     "ARIA alert visible on AD tab", "${DASHBOARD_NEW_MOBILE}", "PASS", ""],
+    ["TC-4049", "PG Online Sub-tab Shows No Transactions For New User",
+     "Dashboard", "dashboard, pg, empty-state",
+     "UI", "Online sub-tab in Transaction History should display 'Online transactions not found' for a new user.",
+     "'Online transactions not found' visible", "${DASHBOARD_NEW_MOBILE}", "PASS", ""],
+    ["TC-4050", "PG Offline Sub-tab Shows No Data For New User",
+     "Dashboard", "dashboard, pg, empty-state",
+     "UI", "Offline sub-tab in Transaction History shows 'No Data Found' image and 'You have not done any' text.",
+     "Empty state visible on Offline sub-tab", "${DASHBOARD_NEW_MOBILE}", "PASS", ""],
+    ["TC-4051", "PG Filter Applied Shows Inline Clear",
+     "Dashboard", "dashboard, pg, filter, inline-clear",
+     "Filter", "After applying a filter on Offline sub-tab, filter-container shows an inline 'Clear' chip.",
+     "Inline Clear chip visible; clicking it removes the filter", "${DASHBOARD_NEW_MOBILE}", "PASS", ""],
+    ["TC-4032", "Insurance Tab Button Is Visible On Dashboard",
+     "Dashboard", "dashboard, insurance, tab-navigation",
+     "Navigation", "The Insurance tab navigation button (data-testid='ins-tab-navigation-button') should be visible.",
+     "Insurance tab button visible", "8108556708", "PASS", ""],
+    ["TC-4033", "Insurance Tab Click Updates URL Hash",
+     "Dashboard", "dashboard, insurance, tab-navigation",
+     "Navigation", "Clicking the Insurance tab should update the URL hash to #ins.",
+     "URL contains #ins", "8108556708", "PASS",
+     "InsuranceTab has no data-testid attributes — URL hash is the primary assertion"],
+    ["TC-4034", "Create New Application Button Is Visible And Clickable In Header For Existing User",
+     "Dashboard", "dashboard, application, create-application, smoke",
+     "Smoke", "For existing user, Create New Application button in header is visible and click produces UI response.",
+     "Button visible; dialog visible OR URL changed", "8108556708 (EXISTING_USER_MOBILE)", "PASS",
+     "Switches to EXISTING_USER_MOBILE via Switch To Account"],
+    ["TC-4035", "Create New Application Button Is Visible And Clickable In Empty State For New User",
+     "Dashboard", "dashboard, application, create-application, smoke",
+     "Smoke", "For new user, Create New Application button in empty-state container is visible and click navigates away.",
+     "Button visible; URL changed from /my-applications", "${NEW_USER_MOBILE}", "PASS",
+     "Switches to NEW_USER_MOBILE via Switch To Account"],
+    ["TC-4009", "Logout Returns To Login Page",
+     "Dashboard", "dashboard, profile, logout, session",
+     "Session", "Logout clears auth session and redirects to login page. MUST run last.",
+     "Login form visible after logout", "8108556708", "PASS",
+     "TC-4009 MUST be last test — destroys shared session (TN1 resolution)"],
+]
+
+INSURANCE_DASHBOARD = [
+    ["TC-4101", "Insurance Tab Click Updates URL Hash",
+     "Insurance Dashboard", "dashboard, insurance, navigation, smoke",
+     "Smoke", "Clicking the Insurance tab navigation button should update the URL hash to #ins.",
+     "URL contains #ins", "8668768645 (INS_MOBILE)", "PASS", ""],
+    ["TC-4102", "Education Banner Image Is Visible",
+     "Insurance Dashboard", "dashboard, insurance, ui, banner",
+     "UI", "The 'Education costs illustration' image should be visible in the Insurance tab banner.",
+     "Banner image visible", "8668768645 (INS_MOBILE)", "PASS",
+     "No data-testid — uses css=img[alt='Education costs illustration']"],
+    ["TC-4103", "Education Banner Heading Is Correct",
+     "Insurance Dashboard", "dashboard, insurance, ui, banner",
+     "UI", "The insurance banner heading 'Education costs are rising' should be visible.",
+     "Heading 'Education costs are rising' visible", "8668768645 (INS_MOBILE)", "PASS", ""],
+    ["TC-4104", "Education Banner Subtext Is Visible",
+     "Insurance Dashboard", "dashboard, insurance, ui, banner",
+     "UI", "The banner subtext 'Education inflation is real.' should be visible below the heading.",
+     "Subtext 'Education inflation is real.' visible", "8668768645 (INS_MOBILE)", "PASS", ""],
+    ["TC-4105", "Guardian One Logo Is Visible",
+     "Insurance Dashboard", "dashboard, insurance, ui, banner",
+     "UI", "The Guardian One insurance provider logo should be visible in the banner area.",
+     "Guardian One logo visible", "8668768645 (INS_MOBILE)", "PASS",
+     "No data-testid — uses css=img[alt='Guardian One logo']"],
+    ["TC-4106", "Your Policies Heading Is Visible",
+     "Insurance Dashboard", "dashboard, insurance, ui, policies",
+     "UI", "The 'Your Policies' section heading should be visible on the Insurance tab.",
+     "'Your Policies' heading visible", "8668768645 (INS_MOBILE)", "PASS",
+     "PRECONDITION: INS_MOBILE must have at least one active policy"],
+    ["TC-4107", "Policy App ID Copy Button Is Visible",
+     "Insurance Dashboard", "dashboard, insurance, ui, policies",
+     "UI", "The app-id-copy-button should be visible on the first policy card.",
+     "app-id-copy-button visible on first policy card", "8668768645 (INS_MOBILE)", "PASS", ""],
+    ["TC-4108", "Policy Status Issued Badge Is Visible",
+     "Insurance Dashboard", "dashboard, insurance, ui, policies",
+     "UI", "At least one policy card should display 'Status: Issued'.",
+     "'Status: Issued' badge visible", "8668768645 (INS_MOBILE)", "PASS",
+     "PRECONDITION: INS_MOBILE must have at least one issued policy"],
+    ["TC-4109", "Policy Status Applied Badge Is Visible",
+     "Insurance Dashboard", "dashboard, insurance, ui, policies",
+     "UI", "At least one policy card should display 'Status: Applied'.",
+     "'Status: Applied' badge visible", "8668768645 (INS_MOBILE)", "PASS",
+     "PRECONDITION: INS_MOBILE must have at least one applied policy"],
+    ["TC-4110", "Policy Download Button Is Visible And Enabled",
+     "Insurance Dashboard", "dashboard, insurance, ui, policies",
+     "UI", "The download button on the first policy card should be visible and enabled.",
+     "Download button visible and enabled", "8668768645 (INS_MOBILE)", "PASS",
+     "PRECONDITION: at least one policy with a downloadable document"],
+    ["TC-4111", "Calculate Now Button Opens New Tab",
+     "Insurance Dashboard", "dashboard, insurance, navigation, calculator",
+     "Navigation", "Clicking the 'CALCULATE NOW' CTA button should open the insurance calculator in a new tab.",
+     "New tab opened; new tab closed after verification", "8668768645 (INS_MOBILE)", "PASS", ""],
+    ["TC-4112", "Insurance Plan Heading Is Visible For New User",
+     "Insurance Dashboard", "dashboard, insurance, ui, new-user, smoke",
+     "Smoke", "New user with no policies should see 'Choose your Insurance Plan' heading instead of policy cards.",
+     "'Choose your Insurance Plan' heading visible", "${DASHBOARD_NEW_MOBILE}", "PASS",
+     "Switches to DASHBOARD_NEW_MOBILE via Navigate To Insurance Tab New User. TC-4113–4115 inherit session."],
+    ["TC-4113", "Education Coverage Plan Is Visible For New User",
+     "Insurance Dashboard", "dashboard, insurance, ui, new-user",
+     "UI", "The 'Education Coverage' insurance plan card should be visible on the plan selection screen.",
+     "'Education Coverage' plan card visible", "${DASHBOARD_NEW_MOBILE}", "PASS", ""],
+    ["TC-4114", "Recommended Plan Badge Is Visible For New User",
+     "Insurance Dashboard", "dashboard, insurance, ui, new-user",
+     "UI", "A 'Recommended' badge should be visible on one of the insurance plan cards.",
+     "'Recommended' badge visible", "${DASHBOARD_NEW_MOBILE}", "PASS",
+     "Corresponds to the Complete Life plan in the recording"],
+    ["TC-4115", "Complete Life Plan Is Visible For New User",
+     "Insurance Dashboard", "dashboard, insurance, ui, new-user",
+     "UI", "The 'Complete Life' insurance plan card should be visible on the plan selection screen.",
+     "'Complete Life' plan card visible", "${DASHBOARD_NEW_MOBILE}", "PASS", ""],
+]
+
+STUDENT_DETAILS = [
+    ["TC-5001", "Student Details Page Title Is Visible",
+     "Student Details", "student-details, smoke",
+     "Smoke", "The GILE section title (data-testid='gile-form-title') should be visible on the student details page.",
+     "Page title visible", "9876540001 (APP_CREATION_MOBILE)", "PASS", ""],
+    ["TC-5002", "Institute Name Dropdown Is Visible",
+     "Student Details", "student-details, ui",
+     "UI", "The institute name react-select dropdown should be visible on the student details page.",
+     "Institute name dropdown visible", "9876540001", "PASS", ""],
+    ["TC-5003", "Institute Location Dropdown Is Visible",
+     "Student Details", "student-details, ui",
+     "UI", "The institute location react-select dropdown should be visible.",
+     "Institute location dropdown visible", "9876540001", "PASS", ""],
+    ["TC-5004", "Board Dropdown Is Visible",
+     "Student Details", "student-details, ui",
+     "UI", "The board/class react-select dropdown should be visible.",
+     "Board dropdown visible", "9876540001", "PASS", ""],
+    ["TC-5005", "Academic Year Dropdown Is Visible",
+     "Student Details", "student-details, ui",
+     "UI", "The academic year react-select dropdown should be visible.",
+     "Academic year dropdown visible", "9876540001", "PASS", ""],
+    ["TC-5006", "Admission Type Title Is Visible",
+     "Student Details", "student-details, ui",
+     "UI", "The admission type section title (data-testid='admission-type-title') should be visible.",
+     "Admission type title visible", "9876540001", "PASS",
+     "Previously believed removed — recording login_20260424_145708.js confirms testid exists"],
+    ["TC-5007", "Annual Fee Title Is Visible",
+     "Student Details", "student-details, ui",
+     "UI", "The annual fee section title (data-testid='annual-fee-title') should be visible.",
+     "Annual fee title visible", "9876540001", "PASS",
+     "Previously believed removed — recording login_20260424_145708.js confirms testid exists"],
+    ["TC-5008", "Student Details URL Contains /student-details",
+     "Student Details", "student-details, ui",
+     "UI", "The browser URL should contain /student-details while on this page.",
+     "URL contains /student-details", "9876540001", "PASS", ""],
+    ["TC-5009", "Student First Name Input Is Visible",
+     "Student Details", "student-details, ui",
+     "UI", "The student first name input (data-testid='first-name-input') should be visible.",
+     "First name input visible", "9876540001", "PASS", ""],
+    ["TC-5010", "Student Last Name Input Is Visible",
+     "Student Details", "student-details, ui",
+     "UI", "The student last name input (data-testid='last-name-input') should be visible.",
+     "Last name input visible", "9876540001", "PASS", ""],
+    ["TC-5011", "Student Type Radio Is Visible",
+     "Student Details", "student-details, ui",
+     "UI", "The student type radio group (existing/new) should be visible.",
+     "Student type radio visible", "9876540001", "PASS", ""],
+    ["TC-5012", "Student ID Input Is Visible",
+     "Student Details", "student-details, ui",
+     "UI", "The student ID input (data-testid='student-id-input') should be visible.",
+     "Student ID input visible", "9876540001", "PASS", ""],
+    ["TC-5013", "Loan Amount Input Is Visible",
+     "Student Details", "student-details, ui",
+     "UI", "The loan amount input (data-testid='loan-amount-input') should be visible.",
+     "Loan amount input visible", "9876540001", "PASS", ""],
+    ["TC-5014", "Show Plans Button Visible And Advances To Choose Plan",
+     "Student Details", "student-details, application-creation-flow, slow",
+     "Positive", "The Show Plans button should be visible. Clicking with filled form advances wizard to /choose-plan.",
+     "Button visible; URL changes to /choose-plan after submit", "9876540001", "PASS",
+     "RUNS LAST in suite — advances the wizard. Uses stub data from APP_* variables."],
+    ["TC-5015", "Page Subtitle Is Visible",
+     "Student Details", "student-details, ui",
+     "UI", "The page subtitle 'Enter the Student Details to...' should be visible on the student details page.",
+     "Page subtitle visible", "9876540001", "PASS", ""],
+    ["TC-5016", "Student Details Section Title Is Visible",
+     "Student Details", "student-details, ui",
+     "UI", "The student details section title (data-testid='student-details-title') should be visible.",
+     "Section title visible", "9876540001", "PASS",
+     "Distinct from gile-form-title — visible only after GILE section is filled"],
+    ["TC-5017", "Facing Issue Link Opens Support Modal",
+     "Student Details", "student-details, ui",
+     "UI", "Clicking the 'Facing any issues?' link (data-testid='facing-issue-text') should open a support modal.",
+     "Support modal visible after click", "9876540001", "PASS", ""],
+    ["TC-5018", "Support Modal Shows Contact And Email",
+     "Student Details", "student-details, ui",
+     "UI", "The support modal should display 'Contact Number:' and 'Support Email:' sections.",
+     "Contact Number and Support Email visible in modal", "9876540001", "PASS", ""],
+    ["TC-5019", "Existing Student Option Is Visible",
+     "Student Details", "student-details, ui",
+     "UI", "The 'Existing Student' radio option should be visible in the student type section.",
+     "'Existing Student' radio option visible", "9876540001", "PASS", ""],
+    ["TC-5020", "New Admission Option Is Visible",
+     "Student Details", "student-details, ui",
+     "UI", "The 'New Admission' radio option should be visible in the student type section.",
+     "'New Admission' radio option visible", "9876540001", "PASS", ""],
+    ["TC-5021", "Show Plans Validation Errors Are Visible When Form Incomplete",
+     "Student Details", "student-details, validation, negative",
+     "Validation", "Clicking Show Plans without filling required fields should display validation error messages.",
+     "Validation errors visible for required fields", "9876540001", "PASS", ""],
+]
+
+CHOOSE_PLAN = [
+    ["TC-6001", "Choose Plan Page Title And GILE Info Are Visible",
+     "Choose Plan", "choose-plan, application-creation-flow, smoke",
+     "Smoke", "The choose-plan-title and plans-count elements should be visible.",
+     "Title and plans count visible", "9876540001 (APP_CREATION_MOBILE)", "PASS", ""],
+    ["TC-6002", "Plans Are Displayed",
+     "Choose Plan", "choose-plan, smoke",
+     "Smoke", "The plan-list-container should be visible with at least one plan card.",
+     "plan-list-container visible with at least one plan", "9876540001", "PASS",
+     "PRECONDITION: APP_CREATION_MOBILE must have eligible plans on UAT"],
+    ["TC-6003", "Plans Count Matches List Length",
+     "Choose Plan", "choose-plan",
+     "UI", "The plans-count number should be consistent with the number of plan cards shown.",
+     "plans-count text matches count of plan cards", "9876540001", "PASS", ""],
+    ["TC-6004", "Choose Plan Title Text Contains EMI Plan",
+     "Choose Plan", "choose-plan",
+     "Content", "The choose-plan-title text should contain 'EMI Plan'.",
+     "Title contains 'EMI Plan'", "9876540001", "PASS", ""],
+    ["TC-6005", "A Plan Can Be Selected",
+     "Choose Plan", "choose-plan",
+     "UI", "Clicking the first plan card should update the selection.",
+     "First plan card clickable and selectable", "9876540001", "PASS", ""],
+    ["TC-6006", "Selecting A Different Plan Updates Selection",
+     "Choose Plan", "choose-plan",
+     "UI", "Clicking a second plan should replace the previous selection. Requires ≥2 plans.",
+     "Second plan selected after click", "9876540001", "PASS",
+     "PRECONDITION: at least 2 plans must be available"],
+    ["TC-6007", "Submit Button Is Disabled Before Plan Selection",
+     "Choose Plan", "choose-plan",
+     "UI State", "The submit-plan-details-button should be disabled when no plan is selected.",
+     "Submit button disabled", "9876540001", "PASS", ""],
+    ["TC-6009", "Page URL Contains /choose-plan",
+     "Choose Plan", "choose-plan",
+     "UI", "The browser URL should contain /choose-plan while on this page.",
+     "URL contains /choose-plan", "9876540001", "PASS", ""],
+    ["TC-6010", "Fee Paying To Text Is Visible",
+     "Choose Plan", "choose-plan",
+     "UI", "The 'Fee paying to' text should be visible on the choose-plan page.",
+     "'Fee paying to' text visible", "9876540001", "PASS", ""],
+    ["TC-6011", "Choose Plan Page Is Accessible After Navigation",
+     "Choose Plan", "choose-plan",
+     "UI", "The choose-plan page loads correctly via direct navigation within the shared session.",
+     "Choose plan title visible after navigation", "9876540001", "PASS", ""],
+    ["TC-6012", "Most Popular Badge Is Visible",
+     "Choose Plan", "choose-plan",
+     "UI", "The 'Most Popular' badge should be visible in the plan detail view after clicking emi-card-action-button.",
+     "'Most Popular' badge visible", "9876540001", "PASS", ""],
+    ["TC-6013", "EMI Card Action Button Is Visible",
+     "Choose Plan", "choose-plan",
+     "UI", "The emi-card-action-button should be visible on the first plan card.",
+     "emi-card-action-button visible", "9876540001", "PASS",
+     "PRECONDITION: APP_CREATION_MOBILE must have at least one eligible plan"],
+    ["TC-6014", "Plan Detail Shows Interest Per Month And Payable Today",
+     "Choose Plan", "choose-plan",
+     "UI", "The plan detail view (opened via emi-card-action-button) shows 'Interest per month' and 'Payable Today' texts.",
+     "'Interest per month' and 'Payable Today' visible in plan detail", "9876540001", "PASS", ""],
+    ["TC-6015", "Submit Without Plan Selection Shows Please Select Plan Error",
+     "Choose Plan", "choose-plan, validation, negative",
+     "Validation", "Clicking submit-plan-details-button without selecting a plan shows 'Please select plan' message.",
+     "'Please select plan' validation message visible", "9876540001", "PASS", ""],
+    ["TC-6016", "Back Button Returns To Student Details URL",
+     "Choose Plan", "choose-plan, navigation",
+     "Navigation", "The back-button on the choose-plan page should navigate back to /student-details.",
+     "URL contains /student-details after back button click", "9876540001", "PASS", ""],
+    ["TC-6008", "Plan Selection Enables Submit Button And Proceed",
+     "Choose Plan", "choose-plan, application-creation-flow",
+     "Positive", "After selecting a plan, submit button is enabled. Clicking it advances the wizard to /select-applicant.",
+     "Submit enabled after plan selection; URL changes to /select-applicant", "9876540001", "PASS",
+     "RUNS LAST in suite — advances the wizard to /select-applicant"],
 ]
 
 SHEETS = [
@@ -438,6 +779,9 @@ SHEETS = [
     {"name": "OTP Verification",      "data": OTP},
     {"name": "Bypass Authentication", "data": BYPASS_AUTH},
     {"name": "Dashboard",             "data": DASHBOARD},
+    {"name": "Insurance Dashboard",   "data": INSURANCE_DASHBOARD},
+    {"name": "Student Details",       "data": STUDENT_DETAILS},
+    {"name": "Choose Plan",           "data": CHOOSE_PLAN},
 ]
 
 
@@ -448,25 +792,22 @@ def write_sheet(wb, sheet_def):
     ws = wb.create_sheet(title=name)
     ws.sheet_properties.tabColor = TAB_COLORS[name]
 
-    # ── Header row ────────────────────────────────────────────────────────────
     ws.row_dimensions[1].height = 28
     for col_idx, header in enumerate(HEADERS, start=1):
         cell = ws.cell(row=1, column=col_idx, value=header)
-        cell.fill   = FILL_HEADER
-        cell.font   = font_header
+        cell.fill      = FILL_HEADER
+        cell.font      = font_header
         cell.alignment = align_center
-        cell.border = outer_border
+        cell.border    = outer_border
 
     ws.freeze_panes = "A2"
 
-    # ── Column widths ─────────────────────────────────────────────────────────
     for col_idx, width in enumerate(COL_WIDTHS, start=1):
         ws.column_dimensions[get_column_letter(col_idx)].width = width
 
-    # ── Data rows ─────────────────────────────────────────────────────────────
     for row_idx, row in enumerate(rows, start=2):
         ws.row_dimensions[row_idx].height = 55
-        status = row[8]
+        status   = row[8]
         row_fill = STATUS_FILL.get(status, FILL_WHITE)
 
         for col_idx, value in enumerate(row, start=1):
@@ -474,10 +815,10 @@ def write_sheet(wb, sheet_def):
             cell.fill   = row_fill
             cell.border = inner_border
 
-            if col_idx == 1:   # TC ID
+            if col_idx == 1:
                 cell.font      = font_id
                 cell.alignment = align_tc_id
-            elif col_idx == 9:  # Status
+            elif col_idx == 9:
                 cell.font      = font_status
                 cell.alignment = align_status
             else:
@@ -489,17 +830,16 @@ def write_sheet(wb, sheet_def):
 
 def main():
     wb = Workbook()
-    wb.remove(wb.active)  # remove default blank sheet
+    wb.remove(wb.active)
 
     for sheet_def in SHEETS:
         write_sheet(wb, sheet_def)
 
     wb.save(OUTPUT_FILE)
 
-    # ── Summary ───────────────────────────────────────────────────────────────
     print(f"\nSaved: {OUTPUT_FILE}\n")
     print(f"{'Sheet':<25}  {'TCs':>4}  PASS  SKIP  FAIL")
-    print("─" * 50)
+    print("─" * 55)
     total = 0
     for s in SHEETS:
         d = s["data"]
@@ -508,7 +848,7 @@ def main():
         f = sum(1 for r in d if r[8] == "FAIL")
         print(f"  {s['name']:<23}  {len(d):>4}  {p:>4}  {k:>4}  {f:>4}")
         total += len(d)
-    print("─" * 50)
+    print("─" * 55)
     print(f"  {'TOTAL':<23}  {total:>4}")
 
 

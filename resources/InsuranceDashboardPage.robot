@@ -30,11 +30,18 @@ ${GUARDIAN_ONE_LOGO}            css=img[alt='Guardian One logo']
 ${POLICIES_HEADING}             text=Your Policies
 ${POLICY_COPY_BUTTON}           css=[data-testid='app-id-copy-button'] >> nth=0
 ${POLICY_DOWNLOAD_BUTTON}       css=[data-testid='download-button'] >> nth=0
-${STATUS_ISSUED}                text=Status: Issued
-${STATUS_APPLIED}               text=Status: Applied
+${STATUS_ISSUED}                text=Status: Issued >>nth=0
+${STATUS_APPLIED}               text=Status: Applied >> nth=0
 
 # Insurance tab — calculator CTA (no data-testid; button text selector used)
 ${CALCULATE_NOW_BUTTON}         css=button:has-text("CALCULATE NOW")
+
+# Insurance tab — new user plan selection screen (no existing policies)
+# Recorded in login_20260424_121929.js — mobile 9373938938 (fresh, no policies)
+${INS_PLAN_HEADING}             text=Choose your Insurance Plan
+${INS_EDUCATION_PLAN}           text=Education Coverage
+${INS_RECOMMENDED_BADGE}        text=Recommended
+${INS_COMPLETE_LIFE_PLAN}       text=Complete Life
 
 *** Keywords ***
 Login And Navigate To Insurance Tab
@@ -90,7 +97,7 @@ Education Banner Image Should Be Visible
     [Documentation]
     ...    Asserts the "Education costs illustration" banner image is visible on the Insurance tab.
     ...    Satisfies: TC-4102
-    Wait For Elements State    ${INS_BANNER_IMAGE}    visible    timeout=${TIMEOUT}
+    Wait For Elements State    ${INS_BANNER_IMAGE}    visible    timeout=20s
 
 Education Banner Heading Should Be Correct
     [Documentation]
@@ -157,3 +164,45 @@ Calculate Now Button Opens New Tab
     ${url}=    Get Url
     Close Page
     Should Not Be Empty    ${url}
+
+Navigate To Insurance Tab New User
+    [Documentation]
+    ...    Used as [Setup] for TC-4112. Switches to ${DASHBOARD_NEW_MOBILE} (a dynamically
+    ...    generated fresh mobile with no insurance policies) and navigates to the Insurance tab.
+    ...    A fresh mobile shows the plan selection screen ("Choose your Insurance Plan") instead
+    ...    of existing policy cards.
+    ...    TC-4113 to TC-4115 inherit this session via the suite-level Test Setup
+    ...    (Navigate To Insurance Tab hard-navigates to /my-applications and clicks INS tab,
+    ...    keeping the DASHBOARD_NEW_MOBILE session).
+    ...    Satisfies: TC-4112 to TC-4115
+    Switch To Account    ${DASHBOARD_NEW_MOBILE}
+    Click    ${INS_TAB}
+    Wait Until Keyword Succeeds    ${TIMEOUT}    200ms    URL Should Contain Hash    ${HASH_INS}
+
+Insurance Plan Heading Should Be Visible
+    [Documentation]
+    ...    Asserts the "Choose your Insurance Plan" heading is visible on the Insurance tab
+    ...    for a new user with no existing policies.
+    ...    Satisfies: TC-4112
+    Wait For Elements State    ${INS_PLAN_HEADING}    visible    timeout=${TIMEOUT}
+
+Education Coverage Plan Should Be Visible
+    [Documentation]
+    ...    Asserts the "Education Coverage" plan card is visible in the Insurance tab
+    ...    plan selection screen.
+    ...    Satisfies: TC-4113
+    Wait For Elements State    ${INS_EDUCATION_PLAN}    visible    timeout=${TIMEOUT}
+
+Recommended Plan Badge Should Be Visible
+    [Documentation]
+    ...    Asserts the "Recommended" badge is visible on one of the Insurance plan cards.
+    ...    Corresponds to the "⭐ Recommended Complete Life" plan in the recording.
+    ...    Satisfies: TC-4114
+    Wait For Elements State    ${INS_RECOMMENDED_BADGE}    visible    timeout=${TIMEOUT}
+
+Complete Life Plan Should Be Visible
+    [Documentation]
+    ...    Asserts the "Complete Life" plan card is visible in the Insurance tab
+    ...    plan selection screen.
+    ...    Satisfies: TC-4115
+    Wait For Elements State    ${INS_COMPLETE_LIFE_PLAN}    visible    timeout=${TIMEOUT}

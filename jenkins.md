@@ -176,8 +176,8 @@ gq-qa-reports/
 | Tab | Content |
 |-----|---------|
 | **Overview** | Summary stats, trend graph, suite pass/fail blocks |
-| **Behaviors** | Epic: CP UI Automation → Feature: Authentication → Story: Login / OTP Verification / Bypass Authentication; Feature: Dashboard → Story: Dashboard; Feature: Application Creation Flow → Story: Student Details / Choose Plan / Select Applicant / Applicant Journey / Employment / Confirm Application |
-| **Suites** | CP UI Automation [UAT] → Login Left Component Tests / Login Tests / Otp Tests / Bypass Auth Tests / Dashboard Tests / Student Details Tests / Choose Plan Tests / Select Applicant Tests / Applicant Journey Tests / Employment Tests / Confirm Application Tests |
+| **Behaviors** | Epic: CP UI Automation → Feature: Authentication → Story: Login Left Component / Login / OTP Verification / Bypass Authentication; Feature: Dashboard → Story: Dashboard / Insurance Tab; Feature: Application Creation Flow → Story: Student Details / Choose Plan / Select Applicant / Applicant Journey / Employment / Confirm Application |
+| **Suites** | CP UI Automation [UAT] → Login Left Component Tests / Login Tests / Otp Tests / Bypass Auth Tests / Dashboard Tests / Dashboard Ins Tests / Student Details Tests / Choose Plan Tests / Select Applicant Tests / Applicant Journey Tests / Employment Tests / Confirm Application Tests |
 | **Categories** | Product Defects / Test Infrastructure Defects / Skipped Tests |
 | **Timeline** | Tests plotted by execution time |
 

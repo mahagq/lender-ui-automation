@@ -10,13 +10,14 @@ Covers the login left component, mobile number login form, OTP verification flow
 ```
 customer_portal_ui_automation/
 ├── tests/
-│   ├── login_left_component_tests.robot      # Left panel component tests (9 tests)
-│   ├── login_tests.robot                     # Login form tests (21 tests)
-│   ├── otp_tests.robot                       # OTP verification tests (14 tests, 3 skipped)
+│   ├── login_left_component_tests.robot      # Left panel component tests (9 tests, TC-101–109)
+│   ├── login_tests.robot                     # Login form tests (23 tests, TC-201, TC-207–228)
+│   ├── otp_tests.robot                       # OTP verification tests (18 tests, 3 skipped, TC-301–318)
 │   ├── bypass_auth_tests.robot               # Bypass auth tests (4 tests, 3 skipped)
-│   ├── dashboard_tests.robot                 # Dashboard tests (33 tests, 2 skipped)
-│   ├── student_details_tests.robot           # /student-details tests (14 tests, TC-5001–5014)
-│   ├── choose_plan_tests.robot               # /choose-plan tests (10 tests, TC-6001–6011)
+│   ├── dashboard_tests.robot                 # Dashboard tests (33 tests, 2 skipped, TC-4001–4051)
+│   ├── dashboard_ins_tests.robot             # Insurance tab tests (15 tests, TC-4101–4115)
+│   ├── student_details_tests.robot           # /student-details tests (21 tests, TC-5001–5021)
+│   ├── choose_plan_tests.robot               # /choose-plan tests (16 tests, TC-6001–6016)
 │   ├── select_applicant_tests.robot          # /select-applicant tests (10 tests, TC-7001–7011)
 │   ├── applicant_journey_tests.robot         # Basic+Onboarding+Personal+Residential (27 tests, TC-8001–11007)
 │   ├── employment_tests.robot                # /select-employment + /applicant-employment-details (30 tests, TC-12001–12094)
@@ -27,6 +28,7 @@ customer_portal_ui_automation/
 │   ├── OTPPage.robot                         # Page object keywords for /verify (OTP page)
 │   ├── BypassAuthPage.robot                  # Page object keywords for /instant-eligibility
 │   ├── DashboardPage.robot                   # Page object keywords for /my-applications
+│   ├── InsuranceDashboardPage.robot          # Page object keywords for /my-applications#ins (Insurance tab)
 │   ├── ApplicationCreationFlowPage.robot     # Wizard navigation infrastructure + traversal helpers
 │   ├── StudentDetailsPage.robot              # Page object keywords for /student-details
 │   ├── ChoosePlanPage.robot                  # Page object keywords for /choose-plan
@@ -72,6 +74,7 @@ All dependencies live in the project virtualenv at `./venv/`.
 ./venv/bin/robot --outputdir results/ tests/otp_tests.robot
 ./venv/bin/robot --outputdir results/ tests/bypass_auth_tests.robot
 ./venv/bin/robot --outputdir results/ tests/dashboard_tests.robot
+./venv/bin/robot --outputdir results/ tests/dashboard_ins_tests.robot
 ./venv/bin/robot --outputdir results/ tests/student_details_tests.robot
 ./venv/bin/robot --outputdir results/ tests/choose_plan_tests.robot
 ./venv/bin/robot --outputdir results/ tests/select_applicant_tests.robot
@@ -94,6 +97,7 @@ All dependencies live in the project virtualenv at `./venv/`.
 ./venv/bin/robot --include otp --outputdir results/ tests/                                     # OTP tests only
 ./venv/bin/robot --include bypass-auth --outputdir results/ tests/                             # bypass auth tests only
 ./venv/bin/robot --include dashboard --outputdir results/ tests/                               # dashboard tests only
+./venv/bin/robot --include insurance --outputdir results/ tests/dashboard_ins_tests.robot    # insurance tab tests only
 ./venv/bin/robot --include resend --outputdir results/ tests/otp_tests.robot                   # slow resend test (~3 min)
 ./venv/bin/robot --include application-creation-flow --outputdir results/ tests/              # all wizard tests
 ./venv/bin/robot --include salaried --outputdir results/ tests/employment_tests.robot         # salaried only
@@ -119,64 +123,70 @@ BYPASS_AUTH_MOBILE=<erp_mobile> ./venv/bin/robot --outputdir results/ tests/bypa
 
 ## Test Suites
 
-### Login Left Component Tests (`tests/login_left_component_tests.robot`) — 9 tests
+### Login Left Component Tests (`tests/login_left_component_tests.robot`) — 9 tests (TC-101–TC-109)
 
-| Test | Tags | Description |
-|------|------|-------------|
-| GQ Logo Is Displayed In Left Section | ui, smoke | SVG logo visible in left panel |
-| Register For EMI Plans Heading Text Is Correct | ui, content | Main heading text assertion |
-| Subheading Paragraph Text Is Correct | ui, content | Info paragraph text assertion |
-| Trusted By Image Is Visible | ui, smoke | "Trusted by 5M+ Parents" image visible |
-| About Us Link Opens About Us Page | ui, navigation | About Us link navigates correctly |
-| Privacy Policy Link Opens Privacy Policy Page | ui, navigation | Privacy Policy link navigates correctly |
-| Terms And Conditions Link Opens Terms And Conditions Page | ui, navigation | T&C link navigates correctly |
-| Contact Us Link Opens Contact Us Page | ui, navigation | Contact Us link navigates correctly |
-| Copyright Footer Text Is Correct | ui, content | Copyright notice text assertion |
+| TC | Test | Tags | Description |
+|----|------|------|-------------|
+| TC-101 | GQ Logo Is Displayed In Left Section | ui, smoke | SVG logo visible in left panel |
+| TC-102 | Register For EMI Plans Heading Text Is Correct | ui, content | Main heading text assertion |
+| TC-103 | Subheading Paragraph Text Is Correct | ui, content | Info paragraph text assertion |
+| TC-104 | Trusted By Image Is Visible | ui, smoke | "Trusted by 5M+ Parents" image visible |
+| TC-105 | About Us Link Opens About Us Page | ui, navigation | About Us link navigates correctly |
+| TC-106 | Privacy Policy Link Opens Privacy Policy Page | ui, navigation | Privacy Policy link navigates correctly |
+| TC-107 | Terms And Conditions Link Opens Terms And Conditions Page | ui, navigation | T&C link navigates correctly |
+| TC-108 | Contact Us Link Opens Contact Us Page | ui, navigation | Contact Us link navigates correctly |
+| TC-109 | Copyright Footer Text Is Correct | ui, content | Copyright notice text assertion |
 
-### Login Tests (`tests/login_tests.robot`) — 21 tests
+### Login Tests (`tests/login_tests.robot`) — 23 tests (TC-201, TC-207–TC-228)
 
-| Test | Tags | Description |
-|------|------|-------------|
-| Login Page URL And Title Match | login, smoke, url | URL = `${BASE_URL}/` and tab title contains "GrayQuest Education Finance" |
-| Valid Login With Correct Mobile Number | login, valid, smoke | Valid 10-digit mobile + consent → redirects to /verify |
-| Mobile Number Input Field Is Visible And Editable | login, ui, field | Input is visible and accepts input |
-| Login With Empty Mobile Number | login, validation, negative | No mobile → "Please enter your mobile number" |
-| Login With Spaces In Mobile Number | login, validation, negative | Spaces only → "Please enter your mobile number" |
-| Login With Alphabets In Mobile Number | login, validation, negative | Letters only → "Please enter valid mobile number" |
-| Login With Invalid Mobile Number Format | login, validation, negative | Letters mixed in → "Please enter valid mobile number" |
-| Login With Alphanumeric Mobile Number | login, validation, negative | Alphanumeric → "Please enter valid mobile number" |
-| Login With Special Characters In Mobile Number | login, validation, negative | Special chars → "Please enter valid mobile number" |
-| Login With Short Mobile Number | login, validation, negative | < 10 digits → "Please enter valid mobile number" |
-| Mobile Number Field Enforces 10 Digit Max Length | login, validation, field | 14-digit input truncated to 10 digits |
-| Valid Mobile Starting With 6 To 9 Navigates To OTP Page | login, valid, otp-redirect | Valid mobile → OTP page title "Enter 4 Digit OTP" |
-| Login Without Consent | login, validation, negative | No consent checkbox → "Please accept Terms and Conditions" |
-| Send OTP With Consent Checked Navigates To OTP Page | login, valid, otp-redirect | Mobile + consent → OTP page |
-| Send OTP Button Is Enabled With Mobile And Consent | login, validation, button-state | Button enabled only with valid mobile + consent |
-| Login Form Title Is Visible | login, ui, title | Form title = "What is your Mobile Number?" |
-| Mobile Input Note Text Is Visible | login, ui, note | Note below mobile input contains banking guidance text |
-| Terms Of Service Link In Consent Opens New Tab | login, ui, consent, navigation | T&C link opens T&C page in new tab |
-| Privacy Policy Link In Consent Opens New Tab | login, ui, consent, navigation | Privacy Policy link opens in new tab |
-| Mobile Number Prefill Via Query Param Navigates To OTP Page | login, valid, query-param | `/?m=<mobile>` auto-submits and redirects to /verify |
-| Mobile Footer Is Present On Login Page | login, ui, mobile-footer | `mobile-footer-container` present in DOM (attached state) |
+| TC | Test | Tags | Description |
+|----|------|------|-------------|
+| TC-201 | Login Page URL And Title Match | login, smoke, url | URL = `${BASE_URL}/` and tab title contains "GrayQuest Education Finance" |
+| TC-207 | Valid Login With Correct Mobile Number | login, valid, smoke | Valid 10-digit mobile + consent → redirects to /verify |
+| TC-208 | Mobile Number Input Field Is Visible And Editable | login, ui, field | Input is visible and accepts input |
+| TC-209 | Login With Empty Mobile Number | login, validation, negative | No mobile → "Please enter your mobile number" |
+| TC-210 | Login With Spaces In Mobile Number | login, validation, negative | Spaces only → "Please enter your mobile number" |
+| TC-211 | Login With Alphabets In Mobile Number | login, validation, negative | Letters only → "Please enter valid mobile number" |
+| TC-212 | Login With Invalid Mobile Number Format | login, validation, negative | Letters mixed in → "Please enter valid mobile number" |
+| TC-213 | Login With Alphanumeric Mobile Number | login, validation, negative | Alphanumeric → "Please enter valid mobile number" |
+| TC-214 | Login With Special Characters In Mobile Number | login, validation, negative | Special chars → "Please enter valid mobile number" |
+| TC-215 | Login With Short Mobile Number | login, validation, negative | < 10 digits → "Please enter valid mobile number" |
+| TC-216 | Mobile Number Field Enforces 10 Digit Max Length | login, validation, field | 14-digit input truncated to 10 digits |
+| TC-217 | Valid Mobile Starting With 6 To 9 Navigates To OTP Page | login, valid, otp-redirect | Valid mobile → OTP page title "Enter 4 Digit OTP" |
+| TC-218 | Login Without Consent | login, validation, negative | No consent checkbox → "Please accept Terms and Conditions" |
+| TC-219 | Send OTP With Consent Checked Navigates To OTP Page | login, valid, otp-redirect | Mobile + consent → OTP page |
+| TC-220 | Send OTP Button Is Enabled With Mobile And Consent | login, validation, button-state | Button enabled only with valid mobile + consent |
+| TC-221 | Login Form Title Is Visible | login, ui, title | Form title = "What is your Mobile Number?" |
+| TC-222 | Mobile Input Note Text Is Visible | login, ui, note | Note below mobile input contains banking guidance text |
+| TC-223 | Terms Of Service Link In Consent Opens New Tab | login, ui, consent, navigation | T&C link opens T&C page in new tab |
+| TC-224 | Privacy Policy Link In Consent Opens New Tab | login, ui, consent, navigation | Privacy Policy link opens in new tab |
+| TC-225 | Mobile Number Prefill Via Query Param Navigates To OTP Page | login, valid, query-param | `/?m=<mobile>` auto-submits and redirects to /verify |
+| TC-226 | Mobile Footer Is Present On Login Page | login, ui, mobile-footer | `mobile-footer-container` present in DOM (attached state) |
+| TC-227 | Consent Label Text Contains Sign In Agreement | login, ui, consent | Consent label contains "By signing in, I agree to the" |
+| TC-228 | Consent Checkbox Label Click Checks Consent Checkbox | login, ui, consent | Clicking consent label checks the checkbox input |
 
-### OTP Tests (`tests/otp_tests.robot`) — 14 tests (3 skipped)
+### OTP Tests (`tests/otp_tests.robot`) — 18 tests (15 active, 3 skipped, TC-301–TC-318)
 
-| Test | Tags | Description |
-|------|------|-------------|
-| OTP Input Field Is Visible And Editable | otp, ui, field | OTP input is visible and enabled |
-| OTP Verification With Empty OTP | otp, validation, negative | No OTP → "Please enter 4 digit OTP" |
-| OTP Verification With Short OTP | otp, validation, negative | 3-digit OTP → "OTP number must contain 4 digits" |
-| Verify OTP Button Is Enabled After OTP Entry | otp, ui, button-state | Button enabled after entering OTP |
-| Valid OTP Redirects To Dashboard With Greeting | otp, valid, smoke, dashboard | OTP 9999 → /my-applications with "Hello," greeting |
-| Wrong OTP Shows Incorrect OTP Toast | otp, negative, toast | Wrong OTP → stays on /verify; toast shown (best-effort) |
-| Back Button Returns To Login Page | otp, navigation, back-button | Back → login form with "What is your Mobile Number?" |
-| Back Button Clears Mobile Number Input | otp, navigation, back-button | Back → mobile input field is empty |
-| Entered Mobile Number Is Displayed On OTP Page | otp, ui, mobile-display | Submitted mobile shown on OTP page |
-| OTP Countdown Timer Shows Resend Text | otp, ui, timer | Timer container shows "Resend in..." text |
-| OTP With Non-Numeric Characters Shows Error | otp, validation, negative | Non-numeric OTP → "Only numeric values allowed" |
-| OTP Not Received *(skipped)* | otp, manual | Requires SMS gateway — not automatable |
-| OTP Timer Disabled State *(skipped)* | otp, manual | Timing-sensitive — not reliably automatable |
-| Resend OTP After Timer Expires *(skipped)* | otp, slow, resend | ~3 min wait; run with `--include resend` |
+| TC | Test | Tags | Description |
+|----|------|------|-------------|
+| TC-301 | OTP Input Field Is Visible And Editable | otp, ui, field | OTP input is visible and enabled |
+| TC-302 | OTP Verification With Empty OTP | otp, validation, negative | No OTP → "Please enter 4 digit OTP" |
+| TC-303 | OTP Verification With Short OTP | otp, validation, negative | 3-digit OTP → "OTP number must contain 4 digits" |
+| TC-304 | Verify OTP Button Is Enabled After OTP Entry | otp, ui, button-state | Button enabled after entering OTP |
+| TC-305 | Valid OTP Redirects To Dashboard With Greeting | otp, valid, smoke, dashboard | OTP 9999 → /my-applications with "Hello," greeting |
+| TC-306 | Wrong OTP Shows Incorrect OTP Toast | otp, negative, toast | Wrong OTP → stays on /verify; toast shown (best-effort) |
+| TC-307 | Back Button Returns To Login Page | otp, navigation, back-button | Back → login form with "What is your Mobile Number?" |
+| TC-308 | Back Button Clears Mobile Number Input | otp, navigation, back-button | Back → mobile input field is empty |
+| TC-309 | Entered Mobile Number Is Displayed On OTP Page | otp, ui, mobile-display | Submitted mobile shown on OTP page |
+| TC-310 | OTP Countdown Timer Shows Resend Text | otp, ui, timer | Timer container shows "Resend in..." text |
+| TC-311 | OTP Not Received *(skipped)* | otp, manual | Requires SMS gateway — not automatable |
+| TC-312 | OTP Timer Disabled State *(skipped)* | otp, manual | Timing-sensitive — not reliably automatable |
+| TC-313 | Resend OTP After Timer Expires *(skipped)* | otp, slow, resend | ~3 min wait; run with `--include resend` |
+| TC-314 | OTP With Non-Numeric Characters Shows Error | otp, validation, negative | Non-numeric OTP → "Only numeric values allowed" |
+| TC-315 | OTP Page Heading Is Enter 4 Digit OTP | otp, ui, heading | Page heading = "Enter 4 Digit OTP" |
+| TC-316 | Back Button Then Re-Login Navigates To OTP Page | otp, navigation, back-button | OTP page → back → re-login → /verify |
+| TC-317 | Existing Customer OTP Verification Lands On Dashboard With Applications | otp, valid, existing-customer, dashboard | Existing user OTP → /my-applications with EMI tab + app cards |
+| TC-318 | New Customer OTP Verification Lands On Dashboard With Create Application Prompt | otp, valid, new-customer, dashboard | New user OTP → /my-applications with empty state |
 
 ### Bypass Authentication Tests (`tests/bypass_auth_tests.robot`) — 4 tests (2 skipped)
 
@@ -189,7 +199,7 @@ Tests the `/instant-eligibility` page used for tokenised ERP access without OTP.
 | Bypass Auth No Account Error State Is Visible *(skipped)* | bypass-auth, negative | bypassAuthPost failure → no-account error state (needs specific UAT mobile) |
 | Sign In Button On No Account State Navigates To Login *(skipped)* | bypass-auth, negative, navigation | Sign In on no-account state → / (depends on TC-403 precondition) |
 
-### Dashboard Tests (`tests/dashboard_tests.robot`) — 33 tests (2 skipped)
+### Dashboard Tests (`tests/dashboard_tests.robot`) — 33 tests (2 skipped, TC-4001–TC-4051)
 
 | TC | Test | Tags | Description |
 |----|------|------|-------------|
@@ -221,15 +231,55 @@ Tests the `/instant-eligibility` page used for tokenised ERP access without OTP.
 | TC-4027 | Filter By Last Year For Offline Payments | dashboard, pg, filter, offline, time-filter | "Last Year" filter selectable on Offline tab |
 | TC-4028 | Clear Filter Button Works | dashboard, pg, filter, clear-filter | Clear button resets filter selection |
 | TC-4029 | Apply Filter Button Works | dashboard, pg, filter, apply-filter | Apply button applies selected filter |
-| TC-4030 | Download Icon Is Visible For Offline Payment | dashboard, pg, download, offline | Download button visible on first Offline row (switches to PG account) |
+| TC-4030 | Download Icon Is Visible For Offline Payment | dashboard, pg, download, offline | Download button visible on first Offline row (switches to PG_MOBILE) |
 | TC-4031 | Download Icon Is Visible For Online Payment | dashboard, pg, download, online | Download button visible on first Online row |
 | TC-4032 | Insurance Tab Button Is Visible On Dashboard | dashboard, insurance, tab-navigation | Insurance tab button (`ins-tab-navigation-button`) visible |
 | TC-4033 | Insurance Tab Click Updates URL Hash | dashboard, insurance, tab-navigation | Insurance tab click → URL hash `#ins` |
+| TC-4034 | Create New Application Button Visible And Clickable In Header (Existing User) | dashboard, application, smoke | Header button visible + click → dialog or URL change (switches to EXISTING_USER_MOBILE) |
+| TC-4035 | Create New Application Button Visible And Clickable In Empty State (New User) | dashboard, application, smoke | Empty-state button visible + click → navigates away (switches to NEW_USER_MOBILE) |
+| TC-4036 | AD Tab App Code Label Is Visible | dashboard, auto-payments, smoke | "App. Code:" label visible (switches to AD_MOBILE) |
+| TC-4037 | AD Tab Copy Button Is Visible | dashboard, auto-payments, ui | Copy button visible on first AD card |
+| TC-4038 | AD Tab Repayment Active Status Is Visible | dashboard, auto-payments, ui, status | "Your repayment is active" visible |
+| TC-4039 | AD Tab Repayment Pending Status Is Visible | dashboard, auto-payments, ui, status | "Your repayment is pending" visible |
+| TC-4040 | AD Tab Action Button Is Visible | dashboard, auto-payments, ui | `auto-debit-action-button` visible on first AD card |
+| TC-4041 | AD Action Button Opens Detail Modal | dashboard, auto-payments, modal | Action button → modal with Summary, Repayment Complete, Student Details |
+| TC-4042 | AD Detail Modal Close Button Dismisses Modal | dashboard, auto-payments, modal | Close button → modal hidden |
+| TC-4043 | AD Schedule Section Is Visible | dashboard, auto-payments, ui | "Auto payments schedule" heading visible |
+| TC-4044 | EMI Card Shows Application ID Label | dashboard, emi, ui | "Application ID:" label visible on EMI card |
+| TC-4045 | EMI Card App Copy Button Is Visible | dashboard, emi, ui | `app-id-copy-button` visible on first EMI card |
+| TC-4046 | EMI Load More Button Is Visible | dashboard, emi, ui, pagination | `load-more-button` visible when multiple EMI apps exist |
+| TC-4047 | EMI Tab Shows No Applications For New User | dashboard, emi, empty-state, smoke | New user → "No Data Found" empty state (switches to DASHBOARD_NEW_MOBILE) |
+| TC-4048 | AD Tab Shows No Data Alert For New User | dashboard, auto-payments, empty-state | New user → ARIA alert on AD tab |
+| TC-4049 | PG Online Sub-tab Shows No Transactions For New User | dashboard, pg, empty-state | New user → "Online transactions not found" |
+| TC-4050 | PG Offline Sub-tab Shows No Data For New User | dashboard, pg, empty-state | New user → "No Data Found" + "You have not done any" |
+| TC-4051 | PG Filter Applied Shows Inline Clear | dashboard, pg, filter, inline-clear | Apply filter → inline Clear chip visible and clickable |
 | TC-4009 | Logout Returns To Login Page | dashboard, profile, logout, session | Logout → redirects to login page *(runs last)* |
 
 ---
 
-### Student Details Tests (`tests/student_details_tests.robot`) — 14 tests
+### Insurance Dashboard Tests (`tests/dashboard_ins_tests.robot`) — 15 tests (TC-4101–TC-4115)
+
+Tests the Insurance tab (`/my-applications#ins`). TC-4101–TC-4111 require `${INS_MOBILE}` (8668768645) with active policies. TC-4112–TC-4115 use `${DASHBOARD_NEW_MOBILE}` (dynamic fresh mobile, no policies).
+
+| TC | Test | Tags | Description |
+|----|------|------|-------------|
+| TC-4101 | Insurance Tab Click Updates URL Hash | dashboard, insurance, navigation, smoke | Insurance tab click → URL hash `#ins` |
+| TC-4102 | Education Banner Image Is Visible | dashboard, insurance, ui, banner | "Education costs illustration" image visible |
+| TC-4103 | Education Banner Heading Is Correct | dashboard, insurance, ui, banner | Heading "Education costs are rising" visible |
+| TC-4104 | Education Banner Subtext Is Visible | dashboard, insurance, ui, banner | Subtext "Education inflation is real." visible |
+| TC-4105 | Guardian One Logo Is Visible | dashboard, insurance, ui, banner | Guardian One insurance provider logo visible |
+| TC-4106 | Your Policies Heading Is Visible | dashboard, insurance, ui, policies | "Your Policies" section heading visible |
+| TC-4107 | Policy App ID Copy Button Is Visible | dashboard, insurance, ui, policies | `app-id-copy-button` visible on first policy card |
+| TC-4108 | Policy Status Issued Badge Is Visible | dashboard, insurance, ui, policies | "Status: Issued" badge visible |
+| TC-4109 | Policy Status Applied Badge Is Visible | dashboard, insurance, ui, policies | "Status: Applied" badge visible |
+| TC-4110 | Policy Download Button Is Visible And Enabled | dashboard, insurance, ui, policies | Download button visible and enabled on first policy card |
+| TC-4111 | Calculate Now Button Opens New Tab | dashboard, insurance, navigation, calculator | "CALCULATE NOW" CTA opens insurance calculator in new tab |
+| TC-4112 | Insurance Plan Heading Is Visible For New User | dashboard, insurance, ui, new-user, smoke | New user → "Choose your Insurance Plan" heading visible |
+| TC-4113 | Education Coverage Plan Is Visible For New User | dashboard, insurance, ui, new-user | New user → "Education Coverage" plan card visible |
+| TC-4114 | Recommended Plan Badge Is Visible For New User | dashboard, insurance, ui, new-user | New user → "Recommended" badge visible on plan card |
+| TC-4115 | Complete Life Plan Is Visible For New User | dashboard, insurance, ui, new-user | New user → "Complete Life" plan card visible |
+
+### Student Details Tests (`tests/student_details_tests.robot`) — 21 tests
 
 Tests the `/student-details` wizard step. TC-5014 (Show Plans button) runs last — it advances the wizard to `/choose-plan`.
 
@@ -241,8 +291,15 @@ Tests the `/student-details` wizard step. TC-5014 (Show Plans button) runs last 
 | TC-5008 | URL contains /student-details | |
 | TC-5009–5013 | Name inputs, student type radio, student ID, loan amount visible/accept input | |
 | TC-5014 | Show Plans button visible + advances to /choose-plan *(runs last)* | slow |
+| TC-5015 | Page subtitle visible ("Enter the Student Details to...") | ui |
+| TC-5016 | Student Details section title visible (`student-details-title`) | ui |
+| TC-5017 | Facing Issue link visible and opens support modal | ui |
+| TC-5018 | Support modal shows Contact Number and Support Email | ui |
+| TC-5019 | Existing Student radio option visible | ui |
+| TC-5020 | New Admission radio option visible | ui |
+| TC-5021 | Show Plans validation errors visible when form incomplete | validation, negative |
 
-### Choose Plan Tests (`tests/choose_plan_tests.robot`) — 10 tests
+### Choose Plan Tests (`tests/choose_plan_tests.robot`) — 16 tests (TC-6001–TC-6016)
 
 Tests the `/choose-plan` wizard step. TC-6008 (select plan + proceed) runs last — advances to `/select-applicant`.
 
@@ -253,7 +310,13 @@ Tests the `/choose-plan` wizard step. TC-6008 (select plan + proceed) runs last 
 | TC-6005–6006 | Plan selection, switching plans | |
 | TC-6007 | Submit disabled before selection | |
 | TC-6009 | URL contains /choose-plan | |
+| TC-6010 | "Fee paying to" text visible | |
 | TC-6011 | Page accessible after navigation | |
+| TC-6012 | "Most Popular" badge visible in plan detail view | |
+| TC-6013 | EMI card action button visible on first plan card | |
+| TC-6014 | Plan detail shows "Interest per month" and "Payable Today" | |
+| TC-6015 | Submit without plan selection shows "Please select plan" error | validation, negative |
+| TC-6016 | Back button returns to /student-details | navigation |
 | TC-6008 | Select plan → submit enabled → advances to /select-applicant *(runs last)* | |
 
 ### Select Applicant Tests (`tests/select_applicant_tests.robot`) — 10 tests
@@ -332,6 +395,8 @@ All configuration is in `variables/variables.robot`.
 | `NON_NUMERIC_OTP` | `abcd` | Non-numeric OTP string for validation test (TC-314) |
 | `DASHBOARD_MOBILE` | `8108556708` | Dashboard suite login — account has active EMI applications |
 | `PG_MOBILE` | `7757855472` | PG account — used for TC-4030/TC-4031 (has transaction records) |
+| `AD_MOBILE` | `8763694182` | AD account — used for TC-4036–TC-4043 (has active AD applications) |
+| `INS_MOBILE` | `8668768645` | Insurance account — used for TC-4101–TC-4111 (has active insurance policies) |
 | `TEST_OTP` | `9999` | Fixed OTP configured in UAT for all mobile numbers |
 | `BROWSER` | `chromium` | Playwright browser (`chromium`, `firefox`, `webkit`) |
 | `HEADLESS` | `True` | Run headless (`True`) or with visible browser (`False`) |
@@ -379,7 +444,9 @@ All configuration is in `variables/variables.robot`.
 - `Suite Teardown` — closes browser
 - TC-4009 (Logout) **must remain the last test** — it destroys the shared session
 
-**Account switching (TC-4030):** TC-4030 calls `Switch To Account` to log in as `PG_MOBILE` (7757855472) which has transaction records. This logout-then-login happens within the same browser context (~3 minutes after Suite Setup, so rate limits are cleared). TC-4031 inherits the PG_MOBILE session.
+**Account switching (TC-4030):** TC-4030 calls `Switch To Account` to log in as `PG_MOBILE` (7757855472) which has transaction records. TC-4036 later switches to `AD_MOBILE` (8763694182). TC-4034 switches to `EXISTING_USER_MOBILE` (8108556708) and TC-4035 to `NEW_USER_MOBILE`. TC-4047 switches to `DASHBOARD_NEW_MOBILE`. These logout-then-login hops happen within the same browser context.
+
+**Insurance dashboard session (`dashboard_ins_tests.robot`):** Separate suite — `Suite Setup` logs in once with `INS_MOBILE` (8668768645). TC-4112 uses `[Setup] Navigate To Insurance Tab New User` which switches to `DASHBOARD_NEW_MOBILE`. TC-4113–TC-4115 inherit that session.
 
 ---
 
@@ -404,6 +471,7 @@ Key selectors:
 | EMI tab | `css=[data-testid='emi-tab-navigation-button']` |
 | PG tab | `css=[data-testid='pg-tab-navigation-button']` |
 | Filter button | `css=[data-testid='filter-button']` |
+| Insurance tab | `css=[data-testid='ins-tab-navigation-button']` |
 
 ---
 

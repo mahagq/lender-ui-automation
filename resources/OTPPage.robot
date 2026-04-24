@@ -42,7 +42,7 @@ ${DASHBOARD_TITLE}         css=[data-testid='dashboard-title']
 
 # Post-OTP landing state — existing vs new customer differentiation
 ${EMI_CONTENT_TAB}         css=[data-testid='emi-tab-navigation-button']
-${EMI_APPLICATION_CARD}    css=[data-testid*='emi-card']
+${EMI_APPLICATION_CARD}    css=[data-testid^='emi-card-'] >> nth=0
 ${NEW_USER_EMPTY_STATE}    css=[data-testid='emi-not-data-found']
 
 *** Keywords ***
