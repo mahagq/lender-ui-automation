@@ -190,6 +190,54 @@ OTP With Non-Numeric Characters Shows Error
     ${error}=    Get OTP Error Message
     Should Be Equal    ${error}    Only numeric values allowed
 
+Existing Customer OTP Verification Lands On Dashboard With Applications
+    [Documentation]
+    ...    An existing customer (mobile with active EMI applications) who completes OTP
+    ...    verification should be redirected to /my-applications where the EMI tab and
+    ...    at least one application card are visible.
+    ...    Recorded in login_20260424_114543.js — mobile 8108556708.
+    ...    Satisfies: TC-317
+    [Tags]    otp    valid    existing-customer    dashboard
+    [Setup]    Navigate To OTP Page    ${DASHBOARD_MOBILE}
+    Submit OTP Form    ${TEST_OTP}
+    Wait For Dashboard
+    Existing User Dashboard Should Show Applications
+
+New Customer OTP Verification Lands On Dashboard With Create Application Prompt
+    [Documentation]
+    ...    A new customer (mobile with no applications) who completes OTP verification
+    ...    should be redirected to /my-applications where the emi-not-data-found empty
+    ...    state container is visible, prompting them to create their first application.
+    ...    Satisfies: TC-318
+    [Tags]    otp    valid    new-customer    dashboard
+    [Setup]    Navigate To OTP Page    ${NEW_USER_MOBILE}
+    Submit OTP Form    ${TEST_OTP}
+    Wait For Dashboard
+    New User Dashboard Should Show Empty State
+
+OTP Page Heading Is Enter 4 Digit OTP
+    [Documentation]
+    ...    The OTP verification page should display the heading "Enter 4 Digit OTP"
+    ...    via data-testid='desktop-view-form-title'. Recorded in login_20260424_112212.js.
+    ...    Satisfies: TC-315
+    [Tags]    otp    ui    heading
+    [Setup]    Navigate To OTP Page    ${NEW_USER_MOBILE}
+    ${title}=    Get OTP Page Title
+    Should Be Equal    ${title}    Enter 4 Digit OTP
+
+Back Button Then Re-Login Navigates To OTP Page
+    [Documentation]
+    ...    After landing on the OTP page and clicking the back button, re-submitting
+    ...    the login form with the same mobile should navigate back to /verify.
+    ...    Covers the round-trip flow: OTP page → back → login → OTP page.
+    ...    Satisfies: TC-316
+    [Tags]    otp    navigation    back-button
+    [Setup]    Navigate To OTP Page    ${DASHBOARD_MOBILE}
+    Click Back Button
+    Wait For Elements State    ${LOGIN_FORM}    visible    timeout=${TIMEOUT}
+    Submit Login Form    ${DASHBOARD_MOBILE}
+    Wait For OTP Page
+
 OTP Not Received
     [Documentation]
     ...    Manual test case: verify UX when OTP is not received (e.g. carrier issues).

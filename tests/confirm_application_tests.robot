@@ -21,6 +21,7 @@ Documentation
 Resource    ../resources/ApplicationCreationFlowPage.robot
 Resource    ../resources/ConfirmApplicationPage.robot
 Resource    ../variables/variables.robot
+Variables   ../variables/dynamic_variables.py
 
 Suite Setup     Navigate To Confirm Application
 Suite Teardown  Close Browser

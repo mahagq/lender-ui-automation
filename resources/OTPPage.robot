@@ -40,6 +40,11 @@ ${OTP_PAGE_TITLE}          css=[data-testid='desktop-view-form-title']
 ${OTP_TOAST_ERROR}         text=Incorrect OTP
 ${DASHBOARD_TITLE}         css=[data-testid='dashboard-title']
 
+# Post-OTP landing state — existing vs new customer differentiation
+${EMI_CONTENT_TAB}         css=[data-testid='emi-tab-navigation-button']
+${EMI_APPLICATION_CARD}    css=[data-testid*='emi-card']
+${NEW_USER_EMPTY_STATE}    css=[data-testid='emi-not-data-found']
+
 *** Keywords ***
 Wait For OTP Page
     [Documentation]
@@ -210,6 +215,19 @@ Dashboard Greeting Should Be Visible
     Wait For Elements State    ${DASHBOARD_TITLE}    visible    timeout=${TIMEOUT}
     ${greeting}=    Get Text    ${DASHBOARD_TITLE}
     Should Contain    ${greeting}    Hello,
+
+Existing User Dashboard Should Show Applications
+    [Documentation]
+    ...    Asserts the EMI tab and at least one application card are visible after login.
+    ...    Confirms an existing customer's post-OTP landing state on /my-applications.
+    Wait For Elements State    ${EMI_CONTENT_TAB}    visible    timeout=${TIMEOUT}
+    Wait For Elements State    ${EMI_APPLICATION_CARD}    visible    timeout=${LONG_TIMEOUT}
+
+New User Dashboard Should Show Empty State
+    [Documentation]
+    ...    Asserts the emi-not-data-found empty state container is visible after login.
+    ...    Confirms a new customer's post-OTP landing state — no applications yet.
+    Wait For Elements State    ${NEW_USER_EMPTY_STATE}    visible    timeout=${TIMEOUT}
 
 Navigate To OTP Page
     [Documentation]

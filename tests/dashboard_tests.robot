@@ -1,13 +1,16 @@
 *** Settings ***
 Documentation
 ...    Dashboard test suite for the GQ Customer Portal (/my-applications).
-...    Covers TC-4001 to TC-4031: header, tab navigation, profile menu, EMI content,
-...    Transaction History filters, and download functionality.
+...    Covers TC-4001 to TC-4043: header, tab navigation, profile menu, EMI content,
+...    Transaction History filters, download functionality, Auto Payments (AD) content,
+...    AD detail modal, and Insurance/AD tab navigation.
 ...    Ported from gq_customer_ui_automation (Java/Selenium) DashboardTestClass1-4.
 ...
-...    PRECONDITION (TN2 resolution B): The UAT test account (${DASHBOARD_MOBILE}) must have:
-...      - At least one active EMI application for TC-4001 and TC-4011 to be assertable.
-...      - At least one transaction record for TC-4013 through TC-4031 to be assertable.
+...    PRECONDITION (TN2 resolution B): UAT test accounts must have pre-existing data:
+...      - ${DASHBOARD_MOBILE} (8108556708): active EMI applications (TC-4001, TC-4011).
+...      - ${PG_MOBILE} (7757855472): transaction records (TC-4030, TC-4031).
+...      - ${AD_MOBILE} (8763694182): active AD applications with active/pending repayment
+...        statuses and schedule data (TC-4036 to TC-4043).
 ...    A failure indicating "no data found" signals an account seeding need, not a test defect.
 ...
 ...    Session model (O1 + TN4 + TN1 resolutions):
@@ -119,8 +122,10 @@ EMI Tab Click Shows EMI Content
 
 Auto Payments Tab Click
     [Documentation]
-    ...    TC-4012: Clicking the Auto Payments tab button should update the URL hash to #ad
-    ...    and load the Auto Payments content area.
+    ...    TC-4012: Clicking the Auto Payments tab button should update the URL hash to #ad.
+    ...    Tab navigation is assertable with ${DASHBOARD_MOBILE} (no account switch required).
+    ...    AD content assertions (App. Code:, copy button, repayment status, action button,
+    ...    detail modal, schedule) require ${AD_MOBILE} (8763694182) — see TC-4036 to TC-4044.
     ...    Satisfies: TC-4012, U2, B1
     [Tags]    dashboard    auto-payments    tab-navigation
     Click AD Tab And Verify
@@ -326,6 +331,87 @@ Download Icon Is Visible For Online Payment
     Click Online Sub-tab
     Download Button Should Be Visible For First Row
 
+AD Tab App Code Label Is Visible
+    [Documentation]
+    ...    TC-4036: Switches to ${AD_MOBILE} (8763694182) which has active AD applications,
+    ...    navigates to the Auto Payments tab, and asserts the "App. Code:" label is visible.
+    ...    Subsequent AD content tests (TC-4037 to TC-4044) inherit this AD_MOBILE session.
+    ...    Switch To Account logs out ${PG_MOBILE} and logs in as ${AD_MOBILE} in the same
+    ...    browser context — rate limits are clear by this point in the suite.
+    ...    PRECONDITION: ${AD_MOBILE} must have at least one active AD application on UAT.
+    ...    A failure signals an account seeding need, not a test defect.
+    ...    Satisfies: TC-4036
+    [Tags]    dashboard    auto-payments    session    smoke
+    Switch To Account    ${AD_MOBILE}
+    Click AD Tab And Verify
+    AD App Code Label Should Be Visible
+
+AD Tab Copy Button Is Visible
+    [Documentation]
+    ...    TC-4037: The copy button on the first AD application card should be visible.
+    ...    PRECONDITION: ${AD_MOBILE} must have at least one AD application.
+    ...    Satisfies: TC-4037
+    [Tags]    dashboard    auto-payments    ui
+    Click AD Tab And Verify
+    AD Copy Button Should Be Visible
+
+AD Tab Repayment Active Status Is Visible
+    [Documentation]
+    ...    TC-4038: At least one AD application card should display "Your repayment is active".
+    ...    PRECONDITION: ${AD_MOBILE} must have at least one active repayment.
+    ...    Satisfies: TC-4038
+    [Tags]    dashboard    auto-payments    ui    status
+    Click AD Tab And Verify
+    AD Repayment Active Status Should Be Visible
+
+AD Tab Repayment Pending Status Is Visible
+    [Documentation]
+    ...    TC-4039: At least one AD application card should display "Your repayment is pending".
+    ...    PRECONDITION: ${AD_MOBILE} must have at least one pending repayment.
+    ...    Satisfies: TC-4039
+    [Tags]    dashboard    auto-payments    ui    status
+    Click AD Tab And Verify
+    AD Repayment Pending Status Should Be Visible
+
+AD Tab Action Button Is Visible
+    [Documentation]
+    ...    TC-4040: The auto-debit-action-button should be visible on the first AD card.
+    ...    PRECONDITION: ${AD_MOBILE} must have at least one AD application.
+    ...    Satisfies: TC-4040
+    [Tags]    dashboard    auto-payments    ui
+    Click AD Tab And Verify
+    AD Action Button Should Be Visible
+
+AD Action Button Opens Detail Modal
+    [Documentation]
+    ...    TC-4041: Clicking the first auto-debit-action-button should open a detail modal
+    ...    showing structural content: "See your active auto payment", "Summary",
+    ...    "Repayment Complete", and "Student Details". Dynamic data (amounts, student name,
+    ...    school) is intentionally not asserted as it varies by account seeding.
+    ...    PRECONDITION: ${AD_MOBILE} must have at least one AD application with detail data.
+    ...    Satisfies: TC-4041
+    [Tags]    dashboard    auto-payments    modal
+    Click AD Tab And Verify
+    AD Action Button Should Open Detail Modal
+
+AD Detail Modal Close Button Dismisses Modal
+    [Documentation]
+    ...    TC-4042: After opening the first AD application's detail modal, clicking the Close
+    ...    button should dismiss the modal (content "See your active auto payment" becomes hidden).
+    ...    Satisfies: TC-4042
+    [Tags]    dashboard    auto-payments    modal
+    Click AD Tab And Verify
+    AD Detail Modal Close Button Should Dismiss Modal
+
+AD Schedule Section Is Visible
+    [Documentation]
+    ...    TC-4043: The "Auto payments schedule" section heading should be visible on the AD tab.
+    ...    PRECONDITION: ${AD_MOBILE} must have at least one AD application with schedule data.
+    ...    Satisfies: TC-4043
+    [Tags]    dashboard    auto-payments    ui
+    Click AD Tab And Verify
+    AD Schedule Section Should Be Visible
+
 Insurance Tab Button Is Visible On Dashboard
     [Documentation]
     ...    TC-4032: The Insurance tab navigation button (data-testid='ins-tab-navigation-button')
@@ -345,7 +431,7 @@ Insurance Tab Click Updates URL Hash
 
 TC-4034 Create New Application Button Is Visible And Clickable In Header For Existing User
     [Documentation]
-    ...    TC-4034: For a user with existing applications (${EXISTING_USER_MOBILE} = 8108556701),
+    ...    TC-4034: For a user with existing applications (${EXISTING_USER_MOBILE} = 8108556708),
     ...    the Create New Application button renders in the top navigation header
     ...    (data-testid='create-new-application-button'). Verifies the button is visible and
     ...    that clicking it produces a UI response — either a "Before you proceed" dialog

@@ -23,6 +23,7 @@ Resource    ../resources/ApplicationCreationFlowPage.robot
 Resource    ../resources/EmploymentTypePage.robot
 Resource    ../resources/ApplicantEmploymentPage.robot
 Resource    ../variables/variables.robot
+Variables   ../variables/dynamic_variables.py
 
 Suite Setup     Navigate To Employment Type
 Suite Teardown  Close Browser

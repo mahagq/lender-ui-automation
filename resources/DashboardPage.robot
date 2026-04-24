@@ -66,6 +66,23 @@ ${FILTER_LAST_YEAR}             css=[data-testid='Last Year']
 ${FILTER_PAID}                  css=[data-testid='Paid']
 ${FILTER_FAILED}                css=[data-testid='Failed']
 
+# Auto Payments (AD) tab content — data-testid and stable text selectors only.
+# CSS module class selectors (._RepaymentScheduleCard_*, ._ADRepaymentSchedule_*) are skipped
+# per T1 — those selectors are hashed and unstable. Debit breakdown tests require clicking a
+# CSS-class card and are therefore omitted.
+# PRECONDITION: ${AD_MOBILE} (8763694182) must have active AD applications for content tests.
+${AD_APP_CODE_LABEL}           text=App. Code:
+${AD_COPY_BUTTON}              css=[data-testid='copy-button'] >> nth=0
+${AD_STATUS_ACTIVE}            text=Your repayment is active
+${AD_STATUS_PENDING}           text=Your repayment is pending
+${AD_ACTION_BUTTON}            css=[data-testid='auto-debit-action-button'] >> nth=0
+${AD_MODAL_ACTIVE_TEXT}        text=See your active auto payment
+${AD_MODAL_SUMMARY}            text=Summary
+${AD_MODAL_REPAYMENT_COMPLETE}    text=Repayment Complete
+${AD_MODAL_STUDENT_DETAILS}    text=Student Details
+${AD_MODAL_CLOSE}              css=button:has-text("Close")
+${AD_SCHEDULE_SECTION}         text=Auto payments schedule
+
 # URL hash fragments for tab navigation assertions (U2).
 # Stored as variables because Robot Framework treats '#' as a comment character when
 # passed as a literal argument token — e.g., `Keyword    #emi` strips the argument.
@@ -452,3 +469,72 @@ Download Button Should Be Visible For First Row
     ...    Wait For Elements State    ${locator}    visible    timeout=${TIMEOUT}
     Should Be True    ${visible}
     ...    No download button found — UAT account needs at least one transaction record (TN2 precondition, not a test defect).
+
+AD App Code Label Should Be Visible
+    [Documentation]
+    ...    Asserts the "App. Code:" label is visible in the Auto Payments tab content area.
+    ...    PRECONDITION: ${AD_MOBILE} must have at least one active AD application.
+    ...    A failure signals an account seeding need, not a test defect.
+    ...    Satisfies: TC-4037
+    Wait For Elements State    ${AD_APP_CODE_LABEL}    visible    timeout=${TIMEOUT}
+
+AD Copy Button Should Be Visible
+    [Documentation]
+    ...    Asserts the copy button is visible on the first AD application card.
+    ...    PRECONDITION: ${AD_MOBILE} must have at least one AD application.
+    ...    Satisfies: TC-4038
+    Wait For Elements State    ${AD_COPY_BUTTON}    visible    timeout=${TIMEOUT}
+
+AD Repayment Active Status Should Be Visible
+    [Documentation]
+    ...    Asserts "Your repayment is active" status text is visible on at least one AD card.
+    ...    PRECONDITION: ${AD_MOBILE} must have at least one active repayment.
+    ...    Satisfies: TC-4039
+    Wait For Elements State    ${AD_STATUS_ACTIVE}    visible    timeout=${TIMEOUT}
+
+AD Repayment Pending Status Should Be Visible
+    [Documentation]
+    ...    Asserts "Your repayment is pending" status text is visible on at least one AD card.
+    ...    PRECONDITION: ${AD_MOBILE} must have at least one pending repayment.
+    ...    Satisfies: TC-4040
+    Wait For Elements State    ${AD_STATUS_PENDING}    visible    timeout=${TIMEOUT}
+
+AD Action Button Should Be Visible
+    [Documentation]
+    ...    Asserts the auto-debit-action-button is visible on the first AD card.
+    ...    PRECONDITION: ${AD_MOBILE} must have at least one AD application.
+    ...    Satisfies: TC-4041
+    Wait For Elements State    ${AD_ACTION_BUTTON}    visible    timeout=${TIMEOUT}
+
+AD Action Button Should Open Detail Modal
+    [Documentation]
+    ...    Clicks the first auto-debit-action-button and asserts the detail modal opens,
+    ...    showing stable structural content: "See your active auto payment", "Summary",
+    ...    "Repayment Complete", and "Student Details". Dynamic values (amounts, names,
+    ...    school) are not asserted — they vary by account data.
+    ...    PRECONDITION: ${AD_MOBILE} must have at least one AD application with detail data.
+    ...    Satisfies: TC-4042
+    Wait For Elements State    ${AD_ACTION_BUTTON}    visible    timeout=${TIMEOUT}
+    Click    ${AD_ACTION_BUTTON}
+    Wait For Elements State    ${AD_MODAL_ACTIVE_TEXT}    visible    timeout=${TIMEOUT}
+    Wait For Elements State    ${AD_MODAL_SUMMARY}    visible    timeout=${TIMEOUT}
+    Wait For Elements State    ${AD_MODAL_REPAYMENT_COMPLETE}    visible    timeout=${TIMEOUT}
+    Wait For Elements State    ${AD_MODAL_STUDENT_DETAILS}    visible    timeout=${TIMEOUT}
+
+AD Detail Modal Close Button Should Dismiss Modal
+    [Documentation]
+    ...    Opens the first AD application's detail modal, clicks the Close button,
+    ...    and asserts the modal content ("See your active auto payment") is no longer visible.
+    ...    Satisfies: TC-4043
+    Wait For Elements State    ${AD_ACTION_BUTTON}    visible    timeout=${TIMEOUT}
+    Click    ${AD_ACTION_BUTTON}
+    Wait For Elements State    ${AD_MODAL_ACTIVE_TEXT}    visible    timeout=${TIMEOUT}
+    Click    ${AD_MODAL_CLOSE}
+    Wait For Elements State    ${AD_MODAL_ACTIVE_TEXT}    hidden    timeout=${TIMEOUT}
+
+AD Schedule Section Should Be Visible
+    [Documentation]
+    ...    Asserts the "Auto payments schedule" section heading is visible in the AD tab.
+    ...    PRECONDITION: ${AD_MOBILE} must have at least one AD application with schedule data.
+    ...    Satisfies: TC-4044
+    Wait For Elements State    ${AD_SCHEDULE_SECTION}    visible    timeout=${TIMEOUT}

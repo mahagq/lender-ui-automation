@@ -16,6 +16,7 @@ Documentation
 Resource    ../resources/ApplicationCreationFlowPage.robot
 Resource    ../resources/StudentDetailsPage.robot
 Resource    ../variables/variables.robot
+Variables   ../variables/dynamic_variables.py
 
 Suite Setup     Create Application And Navigate To Student Details
 Suite Teardown  Close Browser

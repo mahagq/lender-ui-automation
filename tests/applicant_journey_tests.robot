@@ -25,6 +25,7 @@ Resource    ../resources/OnboardingPage.robot
 Resource    ../resources/ApplicantPersonalDetailsPage.robot
 Resource    ../resources/ApplicantResidentialDetailsPage.robot
 Resource    ../variables/variables.robot
+Variables   ../variables/dynamic_variables.py
 
 Suite Setup     Navigate To Applicant Basic Details
 Suite Teardown  Close Browser

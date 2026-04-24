@@ -1,0 +1,15 @@
+{
+  "name": "customer-portal-uat",
+  "version": "1.0.0",
+  "description": "Playwright codegen recorder and replay scripts for GQ Customer Portal UAT",
+  "scripts": {
+    "replay": "node replay.js",
+    "replay:headed": "node replay-headed.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@playwright/test": "^1.59.1"
+  }
+}

@@ -73,6 +73,14 @@ ${EXT_OTP_MOBILE_9}       9876543225
 # Distinct from all OTP_MOBILE_* and EXT_* numbers.
 ${DASHBOARD_MOBILE}       8108556708
 
+# Insurance tab mobile — for dashboard_ins_tests.robot suite.
+# 8668768645 has active insurance policies (Status: Issued + Status: Applied).
+${INS_MOBILE}             8668768645
+
+# Auto Payments tab mobile — for TC-4036 to TC-4043 which need active AD applications.
+# 8763694182 has multiple AD cards with active/pending repayment statuses and schedule data.
+${AD_MOBILE}              8763694182
+
 # PG account mobile — for TC-4030/TC-4031 which need transaction records.
 # Switch To Account is called in TC-4030 body (runs ~3 min after Suite Setup,
 # so rate limits are cleared before the second authentication attempt).
@@ -81,7 +89,7 @@ ${PG_MOBILE}              7757855472
 # Create-application button scenario mobiles (TC-4034/TC-4035)
 # TC-4034: existing user — has applications, so button renders in the top nav header.
 # TC-4035: new user — no applications, so button renders inside emi-not-data-found empty state.
-${EXISTING_USER_MOBILE}   8108556701
+${EXISTING_USER_MOBILE}   8108556708
 ${NEW_USER_MOBILE}        9938383856
 
 # Extended login test mobiles (TC-221+)
@@ -94,9 +102,9 @@ ${EXT_OTP_MOBILE_10}      9876543226
 ${NON_NUMERIC_OTP}        abcd
 
 # Application Creation Flow test data (RT-8, TN4 resolution)
-# APP_CREATION_MOBILE is a dedicated number — distinct from all OTP/dashboard/PG numbers to
-# prevent checkMobilePost rate-limit collisions across suites. Use a fresh UAT number here.
-${APP_CREATION_MOBILE}        9876540001
+# APP_CREATION_MOBILE is generated dynamically per run in variables/dynamic_variables.py.
+# Wizard suites import that file via `Variables` to get a fresh mobile each execution.
+# Existing application journey tests use ${EXISTING_USER_MOBILE}.
 
 # Student details stub data (used by traversal helpers in Suite Setups)
 ${APP_STUDENT_FIRST_NAME}     Test

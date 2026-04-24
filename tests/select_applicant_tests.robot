@@ -16,6 +16,7 @@ Documentation
 Resource    ../resources/ApplicationCreationFlowPage.robot
 Resource    ../resources/SelectApplicantPage.robot
 Resource    ../variables/variables.robot
+Variables   ../variables/dynamic_variables.py
 
 Suite Setup     Navigate To Select Applicant
 Suite Teardown  Close Browser

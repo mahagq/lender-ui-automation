@@ -290,3 +290,24 @@ Mobile Footer Is Present On Login Page
     [Tags]    login    ui    mobile-footer
     Open Login Page
     Mobile Footer Should Be Present
+
+Consent Label Text Contains Sign In Agreement
+    [Documentation]
+    ...    The consent label (data-testid='consent-checkbox-label') should be visible and
+    ...    contain the text "By signing in, I agree to the".
+    ...    Satisfies: TC-227
+    [Tags]    login    ui    consent
+    Open Login Page
+    ${text}=    Get Consent Label Text
+    Should Contain    ${text}    By signing in, I agree to the
+
+Consent Checkbox Label Click Checks Consent Checkbox
+    [Documentation]
+    ...    Clicking the consent label element (data-testid='consent-checkbox-label') should
+    ...    check the underlying consent-checkbox input — the label is wired to the input
+    ...    via htmlFor/id in CheckBox.jsx.
+    ...    Satisfies: TC-228
+    [Tags]    login    ui    consent
+    Open Login Page
+    Click Consent Checkbox Label
+    Get Element States    ${CONSENT_CHECKBOX}    contains    checked

@@ -17,6 +17,7 @@ Documentation
 Resource    ../resources/ApplicationCreationFlowPage.robot
 Resource    ../resources/ChoosePlanPage.robot
 Resource    ../variables/variables.robot
+Variables   ../variables/dynamic_variables.py
 
 Suite Setup     Navigate To Choose Plan
 Suite Teardown  Close Browser

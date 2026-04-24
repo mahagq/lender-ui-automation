@@ -28,6 +28,7 @@ ${MOBILE_INPUT}          css=[data-testid='mobile-number-input']
 ${MOBILE_ERROR}          css=[data-testid='mobile-number-input-error']
 ${MOBILE_NOTE}           css=[data-testid='mobile-number-input-note']
 ${CONSENT_CHECKBOX}      css=[data-testid='consent-checkbox']
+${CONSENT_LABEL}         css=[data-testid='consent-checkbox-label']
 ${CONSENT_ERROR}         css=[data-testid='consent-checkbox-error']
 ${SEND_OTP_BUTTON}       css=[data-testid='send-otp-button']
 ${TERMS_LINK_FORM}       css=a[data-testid='terms-link']
@@ -146,6 +147,21 @@ Mobile Note Should Be Visible
     ...    data-testid='mobile-number-input-note'. Note renders only when there is no validation error.
     ...    Satisfies: TC-222
     Wait For Elements State    ${MOBILE_NOTE}    visible    timeout=${TIMEOUT}
+
+Get Consent Label Text
+    [Documentation]
+    ...    Returns the full text of the consent label (data-testid='consent-checkbox-label').
+    ...    The label contains "By signing in, I agree to the Terms of Services & Privacy Policy".
+    Wait For Elements State    ${CONSENT_LABEL}    visible    timeout=${TIMEOUT}
+    ${text}=    Get Text    ${CONSENT_LABEL}
+    RETURN    ${text}
+
+Click Consent Checkbox Label
+    [Documentation]
+    ...    Clicks the consent label element (data-testid='consent-checkbox-label').
+    ...    Clicking the label toggles the associated consent-checkbox input.
+    Wait For Elements State    ${CONSENT_LABEL}    visible    timeout=${TIMEOUT}
+    Click    ${CONSENT_LABEL}
 
 Mobile Footer Should Be Present
     [Documentation]
