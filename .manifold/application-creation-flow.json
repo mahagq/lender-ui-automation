@@ -302,6 +302,23 @@
       "gaps_found": 2,
       "gaps_fixed_in_session": 1,
       "gaps_open": 1
+    },
+    {
+      "number": 6,
+      "phase": "post-verify-student-details-fixes",
+      "timestamp": "2026-04-25T00:00:00Z",
+      "result": "Multiple fixes to StudentDetailsPage.robot and student_details_tests.robot. (1) react-select portal rendering: all GILE dropdowns (institute/location/board/academic-year/class) now use keyboard navigation (container click + Sleep 500ms + ArrowDown + Enter) instead of CSS descendant selectors that cannot reach portalled menus. Institute uses async search pattern (type + Sleep 2s + ArrowDown + Enter). (2) Strict mode fix: institute input selector narrowed from [data-testid='institute-id-react-select'] input to input[role='combobox'] to avoid matching hidden input[name='institute_id']. (3) TC-5027 fix: /student-details has no back button — replaced ${SD_BACK_BUTTON} with ${SD_CLOSE_BUTTON} = css=[data-testid='close-button']; test renamed to 'Close Button Navigates To Dashboard'. (4) Keyword disambiguation: 4 keywords renamed with 'Student' prefix (Student First Name Error Should Be Visible, Student Last Name Error Should Be Visible, Student Class Error Should Be Visible, Student Loan Amount Error Should Be Visible) to resolve conflict with identical names in ApplicantBasicDetailsPage.robot. (5) Added 14 new tests: TC-5022–5027 (GILE selection positive scenarios + close button navigation) and TC-5N-01–5N-08 (validation negative scenarios). Total: 21 → 35 tests.",
+      "modified_files": ["resources/StudentDetailsPage.robot", "tests/student_details_tests.robot"],
+      "fixes": [
+        "react-select portal rendering → keyboard navigation for all 5 GILE dropdowns",
+        "institute strict mode → input[role='combobox'] selector",
+        "back button absent → close button (data-testid='close-button')",
+        "keyword name conflict → Student prefix on 4 error keywords"
+      ],
+      "new_tests": 14,
+      "test_count_before": 21,
+      "test_count_after": 35,
+      "new_tcs": ["TC-5022", "TC-5023", "TC-5024", "TC-5025", "TC-5026", "TC-5027", "TC-5N-01", "TC-5N-02", "TC-5N-03", "TC-5N-04", "TC-5N-05", "TC-5N-06", "TC-5N-07", "TC-5N-08"]
     }
   ],
   "convergence": {

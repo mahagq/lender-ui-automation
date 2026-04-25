@@ -83,6 +83,79 @@ TC-7011 Select Applicant Page Loads After Navigation
     ...    Ported from: GQCP-TC-7011 (close button — session persistence).
     Select Applicant Title Should Be Visible
 
+TC-7010 Age And Salary Checkboxes Appear After Parent Guardian Selection
+    [Documentation]
+    ...    Verifies both eligibility checkboxes appear when Parent/Guardian option is selected.
+    ...    Ported from recording observation — checkboxes appear for both applicant types.
+    [Tags]    smoke
+    Select Parent Guardian Option
+    Age Checkbox Should Be Visible After Selection
+    Salary Checkbox Should Be Visible After Selection
+
+TC-7012 Eligibility Checkboxes Are Individually Checkable
+    [Documentation]
+    ...    Verifies age-checkbox and salary-checkbox can be checked on the Student path.
+    Select Student Option
+    Check Age Eligibility Checkbox
+    Check Salary Eligibility Checkbox
+    ${age}=     Get Property    ${SA_AGE_CHECKBOX}      checked
+    ${sal}=     Get Property    ${SA_SALARY_CHECKBOX}   checked
+    Should Be True    ${age}
+    Should Be True    ${sal}
+
+TC-7013 Submit Enabled After Student Selection And Both Checkboxes Checked
+    [Documentation]
+    ...    Verifies submit button is enabled after selecting Student and checking both eligibility boxes.
+    Select Student Option
+    Check Both Eligibility Checkboxes
+    Submit Button Should Be Enabled After Selection
+
+TC-7016 Toggling Radios Keeps Only One Selected
+    [Documentation]
+    ...    Verifies toggling from Parent/Guardian to Student leaves only Student selected.
+    Select Parent Guardian Option
+    Select Student Option
+    ${pg_checked}=    Get Property    ${SA_PARENT_OPTION}    checked
+    ${st_checked}=    Get Property    ${SA_STUDENT_OPTION}   checked
+    Should Be True    not ${pg_checked}
+    Should Be True    ${st_checked}
+
+TC-7N-02 Submit Student Without Eligibility Checkboxes Shows Consent Error
+    [Documentation]
+    ...    Verifies conset-error appears when Student is selected and submit is clicked
+    ...    without checking either eligibility checkbox.
+    [Tags]    negative
+    Select Student Option
+    Click Submit Applicant Type Button
+    Eligibility Consent Error Should Be Visible
+
+TC-7N-03 Submit Student With Only One Checkbox Checked Shows Consent Error
+    [Documentation]
+    ...    Verifies conset-error appears when only the age-checkbox is checked (salary unchecked).
+    [Tags]    negative
+    Select Student Option
+    Check Age Eligibility Checkbox
+    Click Submit Applicant Type Button
+    Eligibility Consent Error Should Be Visible
+
+TC-7N-04 Submit Student With Only Salary Checkbox Checked Shows Consent Error
+    [Documentation]
+    ...    Verifies conset-error appears when only the salary-checkbox is checked
+    ...    (age-checkbox unchecked). Complements TC-7N-03 (age-only path).
+    ...    Satisfies: TC-7N-04
+    [Tags]    negative
+    Select Student Option
+    Check Salary Eligibility Checkbox
+    Click Submit Applicant Type Button
+    Eligibility Consent Error Should Be Visible
+
+TC-7015 Back Button Navigates To Choose Plan
+    [Documentation]
+    ...    Verifies back-button on /select-applicant navigates to /choose-plan.
+    Navigate Back From Select Applicant
+    ${url}=    Get Url
+    Should Contain    ${url}    /choose-plan
+
 TC-7008 Select Parent Guardian Enables Submit And Proceed
     [Documentation]
     ...    Verifies: (a) selecting Parent/Guardian enables the submit button,

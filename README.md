@@ -14,9 +14,14 @@ customer_portal_ui_automation/
 │   ├── login_tests.robot                     # Login form tests (23 tests, TC-201, TC-207–228)
 │   ├── otp_tests.robot                       # OTP verification tests (18 tests, 3 skipped, TC-301–318)
 │   ├── bypass_auth_tests.robot               # Bypass auth tests (4 tests, 3 skipped)
-│   ├── dashboard_tests.robot                 # Dashboard tests (33 tests, 2 skipped, TC-4001–4051)
-│   ├── dashboard_ins_tests.robot             # Insurance tab tests (15 tests, TC-4101–4115)
-│   ├── student_details_tests.robot           # /student-details tests (21 tests, TC-5001–5021)
+│   ├── dashboard_tests.robot                 # Dashboard — header/general/create-app/insurance/logout (11 tests, 2 skipped)
+│   ├── dashboard_emi_tests.robot             # EMI tab tests (5 tests, TC-4001, TC-4011, TC-4044–4046; DASHBOARD_MOBILE)
+│   ├── dashboard_ad_tests.robot              # Auto Debit tab tests (10 tests, TC-4002, TC-4012, TC-4036–4043; AD_MOBILE)
+│   ├── dashboard_pg_tests.robot              # Transaction History tab tests (21 tests, TC-4003, TC-4013–4031, TC-4051; PG_MOBILE)
+│   ├── dashboard_new_user_tests.robot        # New-user empty state tests (4 tests, TC-4047–4050; DASHBOARD_NEW_MOBILE)
+│   ├── dashboard_ins_tests.robot             # Insurance tab tests (11 tests, TC-4101–4111; INS_MOBILE)
+│   ├── dashboard_ins_new_user_tests.robot    # Insurance new-user tests (4 tests, TC-4112–4115; DASHBOARD_NEW_MOBILE)
+│   ├── student_details_tests.robot           # /student-details tests (35 tests, TC-5001–5027, TC-5N-01–5N-08)
 │   ├── choose_plan_tests.robot               # /choose-plan tests (16 tests, TC-6001–6016)
 │   ├── select_applicant_tests.robot          # /select-applicant tests (10 tests, TC-7001–7011)
 │   ├── applicant_journey_tests.robot         # Basic+Onboarding+Personal+Residential (27 tests, TC-8001–11007)
@@ -74,7 +79,12 @@ All dependencies live in the project virtualenv at `./venv/`.
 ./venv/bin/robot --outputdir results/ tests/otp_tests.robot
 ./venv/bin/robot --outputdir results/ tests/bypass_auth_tests.robot
 ./venv/bin/robot --outputdir results/ tests/dashboard_tests.robot
+./venv/bin/robot --outputdir results/ tests/dashboard_emi_tests.robot
+./venv/bin/robot --outputdir results/ tests/dashboard_ad_tests.robot
+./venv/bin/robot --outputdir results/ tests/dashboard_pg_tests.robot
+./venv/bin/robot --outputdir results/ tests/dashboard_new_user_tests.robot
 ./venv/bin/robot --outputdir results/ tests/dashboard_ins_tests.robot
+./venv/bin/robot --outputdir results/ tests/dashboard_ins_new_user_tests.robot
 ./venv/bin/robot --outputdir results/ tests/student_details_tests.robot
 ./venv/bin/robot --outputdir results/ tests/choose_plan_tests.robot
 ./venv/bin/robot --outputdir results/ tests/select_applicant_tests.robot
@@ -199,21 +209,66 @@ Tests the `/instant-eligibility` page used for tokenised ERP access without OTP.
 | Bypass Auth No Account Error State Is Visible *(skipped)* | bypass-auth, negative | bypassAuthPost failure → no-account error state (needs specific UAT mobile) |
 | Sign In Button On No Account State Navigates To Login *(skipped)* | bypass-auth, negative, navigation | Sign In on no-account state → / (depends on TC-403 precondition) |
 
-### Dashboard Tests (`tests/dashboard_tests.robot`) — 33 tests (2 skipped, TC-4001–TC-4051)
+### Dashboard Tests — Overview
+
+Dashboard tests are split across **7 independent files**, each with its own browser session and dedicated `Suite Setup` login. No cross-file `Switch To Account` calls.
+
+| File | Suite Setup account | Tests | TCs |
+|------|---------------------|-------|-----|
+| `dashboard_tests.robot` | DASHBOARD_MOBILE → NEW_USER_MOBILE | 11 (2 skipped) | TC-4004–4010, TC-4034, TC-4032–4033, TC-4035, TC-4009 |
+| `dashboard_emi_tests.robot` | DASHBOARD_MOBILE | 5 | TC-4001, TC-4011, TC-4044–4046 |
+| `dashboard_ad_tests.robot` | AD_MOBILE (8763694182) | 10 | TC-4002, TC-4012, TC-4036–4043 |
+| `dashboard_pg_tests.robot` | PG_MOBILE (7757855472) | 21 | TC-4003, TC-4013–4029, TC-4051, TC-4030–4031 |
+| `dashboard_new_user_tests.robot` | DASHBOARD_NEW_MOBILE | 4 | TC-4047–4050 |
+| `dashboard_ins_tests.robot` | INS_MOBILE (8668768645) | 11 | TC-4101–4111 |
+| `dashboard_ins_new_user_tests.robot` | DASHBOARD_NEW_MOBILE | 4 | TC-4112–4115 |
+
+#### `dashboard_tests.robot` — 11 tests (2 skipped): Header / General / Insurance Tab Nav / Create App / Logout
 
 | TC | Test | Tags | Description |
 |----|------|------|-------------|
-| TC-4001 | EMI Applications Are Visible On Dashboard | dashboard, emi, smoke | At least one EMI card visible after login |
-| TC-4002 | Auto Debit Applications On Dashboard | dashboard, auto-debit, tab-navigation | Auto Payments (AD) tab button visible |
-| TC-4003 | Payment Gateway Applications Are Visible | dashboard, pg, smoke | Transaction History tab + Online/Offline sub-tabs visible |
 | TC-4004 | Stages And CTA Of Stages *(skipped)* | stages | No data-testid for stage elements |
 | TC-4005 | Back Button Is Not Present On Dashboard *(skipped)* | navigation | No back button on dashboard |
 | TC-4006 | GrayQuest Logo Is Visible On Dashboard | dashboard, logo, ui, smoke | GQ logo + "Hello," title + "Autopay subscriptions" subtitle |
 | TC-4007 | Profile Icon Shows FAQ And Logout Options | dashboard, profile, ui | Profile dropdown shows FAQ and Logout |
 | TC-4008 | FAQ Link Navigates To FAQ Page | dashboard, profile, navigation | FAQ click → URL contains /faq |
 | TC-4010 | Create New Application Button Has Visible Effect | dashboard, application, smoke | Button click → modal or URL change |
+| TC-4034 | Create New Application Button Visible And Clickable In Header (Existing User) | dashboard, application, smoke | Header button visible + click → dialog or URL change |
+| TC-4032 | Insurance Tab Button Is Visible On Dashboard | dashboard, insurance, tab-navigation | Insurance tab button visible |
+| TC-4033 | Insurance Tab Click Updates URL Hash | dashboard, insurance, tab-navigation | Insurance tab click → URL hash `#ins` |
+| TC-4035 | Create New Application Button Visible And Clickable In Empty State (New User) | dashboard, application, smoke | Empty-state button visible + click → navigates away (switches to NEW_USER_MOBILE) |
+| TC-4009 | Logout Returns To Login Page | dashboard, profile, logout, session | Logout → redirects to login page *(runs last — destroys shared session)* |
+
+#### `dashboard_emi_tests.robot` — 5 tests: EMI Tab
+
+| TC | Test | Tags | Description |
+|----|------|------|-------------|
+| TC-4001 | EMI Applications Are Visible On Dashboard | dashboard, emi, smoke | At least one EMI card visible after login |
 | TC-4011 | EMI Tab Click Shows EMI Content | dashboard, emi, tab-navigation | EMI tab click → URL hash #emi + EMI cards visible |
+| TC-4044 | EMI Card Shows Application ID Label | dashboard, emi, ui | "Application ID:" label visible on EMI card |
+| TC-4045 | EMI Card App Copy Button Is Visible | dashboard, emi, ui | `app-id-copy-button` visible on first EMI card |
+| TC-4046 | EMI Load More Button Is Visible | dashboard, emi, ui, pagination | `load-more-button` visible when multiple EMI apps exist |
+
+#### `dashboard_ad_tests.robot` — 10 tests: Auto Debit Tab
+
+| TC | Test | Tags | Description |
+|----|------|------|-------------|
+| TC-4002 | Auto Debit Applications On Dashboard | dashboard, auto-debit, tab-navigation | Auto Payments (AD) tab button visible |
 | TC-4012 | Auto Payments Tab Click | dashboard, auto-payments, tab-navigation | Auto Payments tab click → URL hash `#ad` |
+| TC-4036 | AD Tab App Code Label Is Visible | dashboard, auto-payments, smoke | "App. Code:" label visible on AD card |
+| TC-4037 | AD Tab Copy Button Is Visible | dashboard, auto-payments, ui | Copy button visible on first AD card |
+| TC-4038 | AD Tab Repayment Active Status Is Visible | dashboard, auto-payments, ui, status | "Your repayment is active" visible |
+| TC-4039 | AD Tab Repayment Pending Status Is Visible | dashboard, auto-payments, ui, status | "Your repayment is pending" visible |
+| TC-4040 | AD Tab Action Button Is Visible | dashboard, auto-payments, ui | `auto-debit-action-button` visible on first AD card |
+| TC-4041 | AD Action Button Opens Detail Modal | dashboard, auto-payments, modal | Action button → modal with Summary, Repayment Complete, Student Details |
+| TC-4042 | AD Detail Modal Close Button Dismisses Modal | dashboard, auto-payments, modal | Close button → modal hidden |
+| TC-4043 | AD Schedule Section Is Visible | dashboard, auto-payments, ui | "Auto payments schedule" heading visible |
+
+#### `dashboard_pg_tests.robot` — 21 tests: Transaction History / PG Tab
+
+| TC | Test | Tags | Description |
+|----|------|------|-------------|
+| TC-4003 | Payment Gateway Applications Are Visible | dashboard, pg, smoke | Transaction History tab + Online/Offline sub-tabs visible |
 | TC-4013 | Transaction History Tab Click | dashboard, pg, tab-navigation, smoke | PG tab click → URL hash #direct + sub-tabs visible |
 | TC-4014 | Offline Payments Sub-tab Is Accessible | dashboard, pg, sub-tab | Offline sub-tab visible and clickable |
 | TC-4015 | Online Payments Sub-tab Is Accessible | dashboard, pg, sub-tab | Online sub-tab visible and clickable |
@@ -231,35 +286,26 @@ Tests the `/instant-eligibility` page used for tokenised ERP access without OTP.
 | TC-4027 | Filter By Last Year For Offline Payments | dashboard, pg, filter, offline, time-filter | "Last Year" filter selectable on Offline tab |
 | TC-4028 | Clear Filter Button Works | dashboard, pg, filter, clear-filter | Clear button resets filter selection |
 | TC-4029 | Apply Filter Button Works | dashboard, pg, filter, apply-filter | Apply button applies selected filter |
-| TC-4030 | Download Icon Is Visible For Offline Payment | dashboard, pg, download, offline | Download button visible on first Offline row (switches to PG_MOBILE) |
+| TC-4051 | PG Filter Applied Shows Inline Clear | dashboard, pg, filter, inline-clear | Apply filter → inline Clear chip visible and clickable |
+| TC-4030 | Download Icon Is Visible For Offline Payment | dashboard, pg, download, offline | Download button visible on first Offline row |
 | TC-4031 | Download Icon Is Visible For Online Payment | dashboard, pg, download, online | Download button visible on first Online row |
-| TC-4032 | Insurance Tab Button Is Visible On Dashboard | dashboard, insurance, tab-navigation | Insurance tab button (`ins-tab-navigation-button`) visible |
-| TC-4033 | Insurance Tab Click Updates URL Hash | dashboard, insurance, tab-navigation | Insurance tab click → URL hash `#ins` |
-| TC-4034 | Create New Application Button Visible And Clickable In Header (Existing User) | dashboard, application, smoke | Header button visible + click → dialog or URL change (switches to EXISTING_USER_MOBILE) |
-| TC-4035 | Create New Application Button Visible And Clickable In Empty State (New User) | dashboard, application, smoke | Empty-state button visible + click → navigates away (switches to NEW_USER_MOBILE) |
-| TC-4036 | AD Tab App Code Label Is Visible | dashboard, auto-payments, smoke | "App. Code:" label visible (switches to AD_MOBILE) |
-| TC-4037 | AD Tab Copy Button Is Visible | dashboard, auto-payments, ui | Copy button visible on first AD card |
-| TC-4038 | AD Tab Repayment Active Status Is Visible | dashboard, auto-payments, ui, status | "Your repayment is active" visible |
-| TC-4039 | AD Tab Repayment Pending Status Is Visible | dashboard, auto-payments, ui, status | "Your repayment is pending" visible |
-| TC-4040 | AD Tab Action Button Is Visible | dashboard, auto-payments, ui | `auto-debit-action-button` visible on first AD card |
-| TC-4041 | AD Action Button Opens Detail Modal | dashboard, auto-payments, modal | Action button → modal with Summary, Repayment Complete, Student Details |
-| TC-4042 | AD Detail Modal Close Button Dismisses Modal | dashboard, auto-payments, modal | Close button → modal hidden |
-| TC-4043 | AD Schedule Section Is Visible | dashboard, auto-payments, ui | "Auto payments schedule" heading visible |
-| TC-4044 | EMI Card Shows Application ID Label | dashboard, emi, ui | "Application ID:" label visible on EMI card |
-| TC-4045 | EMI Card App Copy Button Is Visible | dashboard, emi, ui | `app-id-copy-button` visible on first EMI card |
-| TC-4046 | EMI Load More Button Is Visible | dashboard, emi, ui, pagination | `load-more-button` visible when multiple EMI apps exist |
-| TC-4047 | EMI Tab Shows No Applications For New User | dashboard, emi, empty-state, smoke | New user → "No Data Found" empty state (switches to DASHBOARD_NEW_MOBILE) |
+
+#### `dashboard_new_user_tests.robot` — 4 tests: New User Empty States
+
+| TC | Test | Tags | Description |
+|----|------|------|-------------|
+| TC-4047 | EMI Tab Shows No Applications For New User | dashboard, emi, empty-state, smoke | New user → "No Data Found" empty state |
 | TC-4048 | AD Tab Shows No Data Alert For New User | dashboard, auto-payments, empty-state | New user → ARIA alert on AD tab |
 | TC-4049 | PG Online Sub-tab Shows No Transactions For New User | dashboard, pg, empty-state | New user → "Online transactions not found" |
 | TC-4050 | PG Offline Sub-tab Shows No Data For New User | dashboard, pg, empty-state | New user → "No Data Found" + "You have not done any" |
-| TC-4051 | PG Filter Applied Shows Inline Clear | dashboard, pg, filter, inline-clear | Apply filter → inline Clear chip visible and clickable |
-| TC-4009 | Logout Returns To Login Page | dashboard, profile, logout, session | Logout → redirects to login page *(runs last)* |
 
 ---
 
-### Insurance Dashboard Tests (`tests/dashboard_ins_tests.robot`) — 15 tests (TC-4101–TC-4115)
+### Insurance Dashboard Tests — 15 tests (TC-4101–TC-4115)
 
-Tests the Insurance tab (`/my-applications#ins`). TC-4101–TC-4111 require `${INS_MOBILE}` (8668768645) with active policies. TC-4112–TC-4115 use `${DASHBOARD_NEW_MOBILE}` (dynamic fresh mobile, no policies).
+Tests the Insurance tab (`/my-applications#ins`), split across two independent files.
+
+#### `dashboard_ins_tests.robot` — 11 tests: Insurance Tab (INS_MOBILE)
 
 | TC | Test | Tags | Description |
 |----|------|------|-------------|
@@ -274,14 +320,19 @@ Tests the Insurance tab (`/my-applications#ins`). TC-4101–TC-4111 require `${I
 | TC-4109 | Policy Status Applied Badge Is Visible | dashboard, insurance, ui, policies | "Status: Applied" badge visible |
 | TC-4110 | Policy Download Button Is Visible And Enabled | dashboard, insurance, ui, policies | Download button visible and enabled on first policy card |
 | TC-4111 | Calculate Now Button Opens New Tab | dashboard, insurance, navigation, calculator | "CALCULATE NOW" CTA opens insurance calculator in new tab |
+
+#### `dashboard_ins_new_user_tests.robot` — 4 tests: Insurance New User (DASHBOARD_NEW_MOBILE)
+
+| TC | Test | Tags | Description |
+|----|------|------|-------------|
 | TC-4112 | Insurance Plan Heading Is Visible For New User | dashboard, insurance, ui, new-user, smoke | New user → "Choose your Insurance Plan" heading visible |
 | TC-4113 | Education Coverage Plan Is Visible For New User | dashboard, insurance, ui, new-user | New user → "Education Coverage" plan card visible |
 | TC-4114 | Recommended Plan Badge Is Visible For New User | dashboard, insurance, ui, new-user | New user → "Recommended" badge visible on plan card |
 | TC-4115 | Complete Life Plan Is Visible For New User | dashboard, insurance, ui, new-user | New user → "Complete Life" plan card visible |
 
-### Student Details Tests (`tests/student_details_tests.robot`) — 21 tests
+### Student Details Tests (`tests/student_details_tests.robot`) — 35 tests
 
-Tests the `/student-details` wizard step. TC-5014 (Show Plans button) runs last — it advances the wizard to `/choose-plan`.
+Tests the `/student-details` wizard step. TC-5014 (Show Plans button) runs last — it advances the wizard to `/choose-plan`. The page has a **Close button** (`data-testid='close-button'`) instead of a back button.
 
 | TC | Description | Tags |
 |----|-------------|------|
@@ -293,11 +344,25 @@ Tests the `/student-details` wizard step. TC-5014 (Show Plans button) runs last 
 | TC-5014 | Show Plans button visible + advances to /choose-plan *(runs last)* | slow |
 | TC-5015 | Page subtitle visible ("Enter the Student Details to...") | ui |
 | TC-5016 | Student Details section title visible (`student-details-title`) | ui |
-| TC-5017 | Facing Issue link visible and opens support modal | ui |
+| TC-5017 | Facing Issue link visible | ui |
 | TC-5018 | Support modal shows Contact Number and Support Email | ui |
 | TC-5019 | Existing Student radio option visible | ui |
 | TC-5020 | New Admission radio option visible | ui |
 | TC-5021 | Show Plans validation errors visible when form incomplete | validation, negative |
+| TC-5022 | GILE Institute dropdown accepts search and selects first option | |
+| TC-5023 | GILE Location dropdown is selectable after institute selection | |
+| TC-5024 | GILE Board dropdown is selectable after institute and location | |
+| TC-5025 | Personal Details section appears after all GILE dropdowns filled | |
+| TC-5026 | Class dropdown is visible and selectable after GILE filled | |
+| TC-5027 | Close button navigates to /my-applications | navigation |
+| TC-5N-01 | Personal Details section hidden before GILE is filled | negative |
+| TC-5N-02 | Show Plans button hidden before GILE is filled | negative |
+| TC-5N-03 | Show Plans with only First Name shows three errors | negative |
+| TC-5N-04 | Show Plans with only Last Name shows three errors | negative |
+| TC-5N-05 | Show Plans with Name fields filled but no Class or Loan shows two errors | negative |
+| TC-5N-06 | Show Plans with Name and Class filled but no Loan shows Loan error | negative |
+| TC-5N-07 | Show Plans with only Loan Amount filled shows three errors | negative |
+| TC-5N-08 | Show Plans with Loan Amount zero shows Loan error | negative |
 
 ### Choose Plan Tests (`tests/choose_plan_tests.robot`) — 16 tests (TC-6001–TC-6016)
 
@@ -437,16 +502,19 @@ All configuration is in `variables/variables.robot`.
 - On `/verify` (OTP form visible) → re-enter OTP and click Verify
 - On `/` (login page) → rate limit forced full logout, re-submit login form then OTP
 
-**Dashboard session model:** The dashboard suite uses a **single shared browser session** across all tests:
-- `Suite Setup` — logs in once with `DASHBOARD_MOBILE` (8108556708), lands on /my-applications
-- `Test Setup` — navigates to /my-applications (resets tab/filter state, no new login)
-- `Test Teardown` — none (shared session preserved between tests)
-- `Suite Teardown` — closes browser
-- TC-4009 (Logout) **must remain the last test** — it destroys the shared session
+**Dashboard session model:** Dashboard tests are split across **7 independent files**, each with its own browser session and `Suite Setup` login. This eliminates session contamination and avoids mid-suite rate-limit failures from `Switch To Account` calls:
 
-**Account switching (TC-4030):** TC-4030 calls `Switch To Account` to log in as `PG_MOBILE` (7757855472) which has transaction records. TC-4036 later switches to `AD_MOBILE` (8763694182). TC-4034 switches to `EXISTING_USER_MOBILE` (8108556708) and TC-4035 to `NEW_USER_MOBILE`. TC-4047 switches to `DASHBOARD_NEW_MOBILE`. These logout-then-login hops happen within the same browser context.
+| File | `Suite Setup` account | Notes |
+|------|-----------------------|-------|
+| `dashboard_tests.robot` | DASHBOARD_MOBILE → NEW_USER_MOBILE | TC-4035 switches to NEW_USER_MOBILE; TC-4009 (logout) runs last |
+| `dashboard_emi_tests.robot` | DASHBOARD_MOBILE | Independent |
+| `dashboard_ad_tests.robot` | AD_MOBILE (8763694182) | `Login And Navigate To Dashboard As ${AD_MOBILE}` |
+| `dashboard_pg_tests.robot` | PG_MOBILE (7757855472) | `Login And Navigate To Dashboard As ${PG_MOBILE}` |
+| `dashboard_new_user_tests.robot` | DASHBOARD_NEW_MOBILE | `Login And Navigate To Dashboard As ${DASHBOARD_NEW_MOBILE}` |
+| `dashboard_ins_tests.robot` | INS_MOBILE (8668768645) | `Login And Navigate To Insurance Tab` |
+| `dashboard_ins_new_user_tests.robot` | DASHBOARD_NEW_MOBILE | `Login And Navigate To Dashboard As ${DASHBOARD_NEW_MOBILE}` |
 
-**Insurance dashboard session (`dashboard_ins_tests.robot`):** Separate suite — `Suite Setup` logs in once with `INS_MOBILE` (8668768645). TC-4112 uses `[Setup] Navigate To Insurance Tab New User` which switches to `DASHBOARD_NEW_MOBILE`. TC-4113–TC-4115 inherit that session.
+All files share the same pattern: `Test Setup` → `Navigate To Dashboard` (hard navigation to reset state), `Test Teardown` → NONE, `Suite Teardown` → `Close Browser`.
 
 ---
 

@@ -3,8 +3,28 @@
 ## Overview
 
 Jenkins pipeline for the GQ Customer Portal UI Automation suite.
-Runs Robot Framework + Playwright tests against UAT, generates an Allure report,
-uploads it to S3, and preserves history for trend graphs across builds.
+Runs Robot Framework + Playwright tests against UAT across **17 suite files** (~250 tests),
+generates an Allure report, uploads it to S3, and preserves history for trend graphs across builds.
+
+| Suite File | Tests | Account |
+|------------|-------|---------|
+| login_left_component_tests | 9 | TEST_MOBILE |
+| login_tests | 23 | OTP_MOBILE_* / EXT_* |
+| otp_tests | 18 (3 skipped) | OTP_MOBILE_* / EXT_* |
+| bypass_auth_tests | 4 (3 skipped) | TEST_MOBILE |
+| dashboard_tests | 11 (2 skipped) | DASHBOARD_MOBILE → NEW_USER_MOBILE |
+| dashboard_emi_tests | 5 | DASHBOARD_MOBILE |
+| dashboard_ad_tests | 10 | AD_MOBILE |
+| dashboard_pg_tests | 21 | PG_MOBILE |
+| dashboard_new_user_tests | 4 | DASHBOARD_NEW_MOBILE |
+| dashboard_ins_tests | 11 | INS_MOBILE |
+| dashboard_ins_new_user_tests | 4 | DASHBOARD_NEW_MOBILE |
+| student_details_tests | 35 | APP_CREATION_MOBILE |
+| choose_plan_tests | 16 | APP_CREATION_MOBILE |
+| select_applicant_tests | 10 | APP_CREATION_MOBILE |
+| applicant_journey_tests | 27 | APP_CREATION_MOBILE |
+| employment_tests | 30 | APP_CREATION_MOBILE |
+| confirm_application_tests | 12 | APP_CREATION_MOBILE |
 
 ---
 
@@ -176,8 +196,8 @@ gq-qa-reports/
 | Tab | Content |
 |-----|---------|
 | **Overview** | Summary stats, trend graph, suite pass/fail blocks |
-| **Behaviors** | Epic: CP UI Automation → Feature: Authentication → Story: Login Left Component / Login / OTP Verification / Bypass Authentication; Feature: Dashboard → Story: Dashboard / Insurance Tab; Feature: Application Creation Flow → Story: Student Details / Choose Plan / Select Applicant / Applicant Journey / Employment / Confirm Application |
-| **Suites** | CP UI Automation [UAT] → Login Left Component Tests / Login Tests / Otp Tests / Bypass Auth Tests / Dashboard Tests / Dashboard Ins Tests / Student Details Tests / Choose Plan Tests / Select Applicant Tests / Applicant Journey Tests / Employment Tests / Confirm Application Tests |
+| **Behaviors** | Epic: CP UI Automation → Feature: Authentication → Story: Login Left Component / Login / OTP Verification / Bypass Authentication; Feature: Dashboard → Story: Dashboard / Auto Debit / Payment Gateway / New User Empty States / Insurance Tab; Feature: Application Creation Flow → Story: Student Details / Choose Plan / Select Applicant / Applicant Journey / Employment / Confirm Application |
+| **Suites** | CP UI Automation [UAT] → Login Left Component Tests / Login Tests / Otp Tests / Bypass Auth Tests / Dashboard Tests / Dashboard Emi Tests / Dashboard Ad Tests / Dashboard Pg Tests / Dashboard New User Tests / Dashboard Ins Tests / Dashboard Ins New User Tests / Student Details Tests / Choose Plan Tests / Select Applicant Tests / Applicant Journey Tests / Employment Tests / Confirm Application Tests |
 | **Categories** | Product Defects / Test Infrastructure Defects / Skipped Tests |
 | **Timeline** | Tests plotted by execution time |
 
@@ -229,4 +249,5 @@ allure open results/allure-report
 | AWS CLI | Installed on node with S3 write access to `gq-qa-reports` |
 | Docker | Installed on node, ubuntu user in docker group |
 | Allure CLI | Inside Docker image `cp-ui-automation:playwright` |
-| Env Var | `BYPASS_AUTH_MOBILE` — UAT mobile registered for ERP bypass auth (bypassAuthPost). TC-401 (`Bypass Auth With Valid Mobile Redirects Away From Instant Eligibility`) is currently tagged `robot:skip` — confirmed that general OTP test accounts (incl. `9876543210`, `8108556708`) are not ERP-whitelisted and do not redirect. To enable TC-401: identify a UAT ERP-whitelisted mobile, set `BYPASS_AUTH_MOBILE` as a Jenkins env var or pipeline parameter, and remove `robot:skip` from the test. |
+| Env Var | `BYPASS_AUTH_MOBILE` — UAT mobile registered for ERP bypass auth (bypassAuthPost). TC-401 is currently tagged `robot:skip` — general OTP test accounts are not ERP-whitelisted. To enable: set this var to an ERP-whitelisted UAT mobile and remove `robot:skip`. |
+| Env Var | `APP_INSTITUTE_SEARCH` — search term used to trigger the async GILE institute dropdown API in Application Creation Flow suite setups. Defaults to `Sch`. Override if UAT data changes and `Sch` returns no results. |

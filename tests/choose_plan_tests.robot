@@ -129,6 +129,19 @@ TC-6016 Back Button Returns To Student Details URL
     ChoosePlanPage.Click Back Button
     Wait Until Keyword Succeeds    ${TIMEOUT}    200ms    Student Details URL Should Be Active
 
+TC-6N-01 Selecting Plan After Error Clears Validation Message
+    [Documentation]
+    ...    Verifies that after clicking submit with no plan selected (triggering the
+    ...    "Please select plan" error), selecting a plan clears the error message
+    ...    and enables the submit button.
+    ...    Satisfies: TC-6N-01
+    [Tags]    negative
+    Click Submit Plan Button
+    Please Select Plan Error Should Be Visible
+    Click First Plan
+    Please Select Plan Error Should Not Be Visible
+    Submit Button Should Be Enabled After Plan Selection
+
 TC-6008 Plan Selection Enables Submit Button And Proceed
     [Documentation]
     ...    Verifies: (a) submit button is enabled after plan selection, (b) clicking proceed

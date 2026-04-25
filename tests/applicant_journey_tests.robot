@@ -75,6 +75,79 @@ TC-8007 Submit Button Is Enabled With Valid Data
     Check Basic Details Consent
     Submit Button Should Be Enabled With Valid Data
 
+TC-8009 Basic Details Info Section Is Visible
+    [Documentation]    Verifies applicant-basic-details-info element is visible.
+    [Setup]    Navigate To Basic Details Within Session
+    Basic Details Info Should Be Visible
+
+TC-8N-01 Submit Empty Form Shows First And Last Name Errors
+    [Documentation]
+    ...    Verifies both first-name-input-error and last-name-input-error appear
+    ...    when submit is clicked with both name fields empty.
+    [Setup]    Navigate To Basic Details Within Session
+    [Tags]    negative
+    Click Submit Basic Details
+    First Name Error Should Be Visible
+    Last Name Error Should Be Visible
+
+TC-8N-02 Submit With Only First Name Shows Last Name Error
+    [Documentation]
+    ...    Verifies last-name-input-error appears when only first name is filled.
+    [Setup]    Navigate To Basic Details Within Session
+    [Tags]    negative
+    Fill Basic Details First Name    ${APP_FIRST_NAME}
+    Click Submit Basic Details
+    Last Name Error Should Be Visible
+
+TC-8N-03 Submit With Only Last Name Shows First Name Error
+    [Documentation]
+    ...    Verifies first-name-input-error appears when only last name is filled.
+    [Setup]    Navigate To Basic Details Within Session
+    [Tags]    negative
+    Fill Basic Details Last Name    ${APP_LAST_NAME}
+    Click Submit Basic Details
+    First Name Error Should Be Visible
+
+TC-8N-04 Submit With Valid Names And Consent Unchecked Shows Consent Error
+    [Documentation]
+    ...    Verifies consent-checkbox-error appears when names are filled but consent is unchecked.
+    [Setup]    Navigate To Basic Details Within Session
+    [Tags]    negative
+    Fill Basic Details First Name    ${APP_FIRST_NAME}
+    Fill Basic Details Last Name    ${APP_LAST_NAME}
+    Uncheck Basic Details Consent
+    Click Submit Basic Details
+    Consent Error Should Be Visible
+
+TC-8N-05 Submit Disabled With Only Consent Checked
+    [Documentation]
+    ...    Verifies submit-button remains disabled when consent is checked but both
+    ...    name fields are empty. Confirms consent alone is insufficient to enable submit.
+    ...    Satisfies: TC-8N-05
+    [Setup]    Navigate To Basic Details Within Session
+    [Tags]    negative
+    Check Basic Details Consent
+    Submit Button Should Be Disabled Without Data
+
+TC-8N-06 Submit Disabled With First Name And Consent But No Last Name
+    [Documentation]
+    ...    Verifies submit-button remains disabled when first name and consent are
+    ...    filled but last name is still empty.
+    ...    Satisfies: TC-8N-06
+    [Setup]    Navigate To Basic Details Within Session
+    [Tags]    negative
+    Fill Basic Details First Name    ${APP_FIRST_NAME}
+    Check Basic Details Consent
+    Submit Button Should Be Disabled Without Data
+
+TC-8012 Back Button Navigates To Select Applicant
+    [Documentation]
+    ...    Verifies back-button on /applicant-basic-details navigates to /select-applicant.
+    [Setup]    Navigate To Basic Details Within Session
+    Navigate Back From Basic Details
+    ${url}=    Get Url
+    Should Contain    ${url}    /select-applicant
+
 TC-8008 Basic Details Proceeds To Onboarding
     [Documentation]
     ...    Fills valid data, clicks submit, and verifies navigation to /onboarding.
@@ -102,11 +175,37 @@ TC-9002 Onboarding Proceed Button Is Visible
     [Setup]    NONE
     Onboarding Proceed Button Should Be Visible
 
+TC-9004 Onboarding Title Is Visible
+    [Documentation]    Verifies onboarding-title is visible on the onboarding page.
+    [Setup]    NONE
+    [Tags]    smoke
+    Onboarding Title Should Be Visible
+
+TC-9005 Onboarding Illustration Is Visible
+    [Documentation]    Verifies the illustration image is visible on the onboarding page.
+    [Setup]    NONE
+    Onboarding Illustration Should Be Visible
+
+TC-9006 Onboarding URL Is Correct
+    [Documentation]    Verifies the URL contains /onboarding.
+    [Setup]    NONE
+    Onboarding URL Should Be Active
+
+TC-9N-01 Back Button On Onboarding Navigates To Basic Details
+    [Documentation]
+    ...    Verifies back-button on /onboarding navigates to /applicant-basic-details.
+    [Setup]    NONE
+    [Tags]    negative
+    Navigate Back From Onboarding
+    ${url}=    Get Url
+    Should Contain    ${url}    /applicant-basic-details
+
 TC-9003 Onboarding Proceeds To Personal Details
     [Documentation]
     ...    Clicks Proceed on Onboarding and verifies navigation to /applicant-personal-details.
     ...    Runs LAST in this section — advances wizard to personal details.
-    [Setup]    NONE
+    ...    Uses Navigate To Onboarding Within Session setup because TC-9N-01 navigates away.
+    [Setup]    Navigate To Onboarding Within Session
     Click Onboarding Proceed
     Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    Personal Details URL Should Be Active
 

@@ -77,18 +77,17 @@ ${DASHBOARD_MOBILE}       8108556708
 # 8668768645 has active insurance policies (Status: Issued + Status: Applied).
 ${INS_MOBILE}             8668768645
 
-# Auto Payments tab mobile — for TC-4036 to TC-4043 which need active AD applications.
+# Auto Payments tab mobile — Suite Setup account for dashboard_ad_tests.robot (independent suite).
 # 8763694182 has multiple AD cards with active/pending repayment statuses and schedule data.
 ${AD_MOBILE}              8763694182
 
-# PG account mobile — for TC-4030/TC-4031 which need transaction records.
-# Switch To Account is called in TC-4030 body (runs ~3 min after Suite Setup,
-# so rate limits are cleared before the second authentication attempt).
+# PG account mobile — Suite Setup account for dashboard_pg_tests.robot (independent suite).
+# 7757855472 has transaction records so TC-4030/TC-4031 (download buttons) pass.
 ${PG_MOBILE}              7757855472
 
-# Create-application button scenario mobiles (TC-4034/TC-4035)
-# TC-4034: existing user — has applications, so button renders in the top nav header.
-# TC-4035: new user — no applications, so button renders inside emi-not-data-found empty state.
+# Create-application button scenario mobiles (TC-4034/TC-4035 in dashboard_tests.robot)
+# TC-4034: runs under the already-logged-in DASHBOARD_MOBILE session — no Switch To Account.
+# TC-4035: switches to NEW_USER_MOBILE which has no applications → empty-state button visible.
 ${EXISTING_USER_MOBILE}   8108556708
 ${NEW_USER_MOBILE}        9938383856
 

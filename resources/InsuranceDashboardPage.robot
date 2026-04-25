@@ -21,7 +21,7 @@ Resource    DashboardPage.robot
 
 *** Variables ***
 # Insurance tab — education banner (no data-testids; stable alt/text attributes used per T1 exception)
-${INS_BANNER_IMAGE}             css=img[alt='Education costs illustration']
+${INS_BANNER_IMAGE}             css=img[alt='Education costs illustration with graduation cap and coins']
 ${INS_BANNER_HEADING}           text=Education costs are rising
 ${INS_BANNER_SUBTEXT}           text=Education inflation is real.
 ${GUARDIAN_ONE_LOGO}            css=img[alt='Guardian One logo']
@@ -167,15 +167,40 @@ Calculate Now Button Opens New Tab
 
 Navigate To Insurance Tab New User
     [Documentation]
-    ...    Used as [Setup] for TC-4112. Switches to ${DASHBOARD_NEW_MOBILE} (a dynamically
-    ...    generated fresh mobile with no insurance policies) and navigates to the Insurance tab.
-    ...    A fresh mobile shows the plan selection screen ("Choose your Insurance Plan") instead
-    ...    of existing policy cards.
-    ...    TC-4113 to TC-4115 inherit this session via the suite-level Test Setup
-    ...    (Navigate To Insurance Tab hard-navigates to /my-applications and clicks INS tab,
-    ...    keeping the DASHBOARD_NEW_MOBILE session).
+    ...    Suite Setup for dashboard_ins_new_user_tests.robot.
+    ...    Opens a brand-new browser and logs in as ${DASHBOARD_NEW_MOBILE} (dynamically
+    ...    generated mobile with no insurance policies). Completely standalone — no dependency
+    ...    on any prior suite or session. Navigates to the Insurance tab.
+    ...    A fresh mobile shows the plan selection screen ("Choose your Insurance Plan").
     ...    Satisfies: TC-4112 to TC-4115
-    Switch To Account    ${DASHBOARD_NEW_MOBILE}
+    New Browser    ${BROWSER}    headless=${HEADLESS}
+    New Context
+    New Page    ${BASE_URL}
+    Wait For Elements State    ${LOGIN_FORM}    visible    timeout=${TIMEOUT}
+    Submit Login Form    ${DASHBOARD_NEW_MOBILE}
+    ${otp_loaded}=    Run Keyword And Return Status
+    ...    Wait For Elements State    ${OTP_FORM}    visible    timeout=${LONG_TIMEOUT}
+    IF    not ${otp_loaded}
+        Log    checkMobilePost rate limit in Navigate To Insurance Tab New User — waiting ${RATE_LIMIT_WAIT} then retrying.    console=True
+        Close Browser
+        Sleep    ${RATE_LIMIT_WAIT}
+        New Browser    ${BROWSER}    headless=${HEADLESS}
+        New Context
+        New Page    ${BASE_URL}
+        Submit Login Form    ${DASHBOARD_NEW_MOBILE}
+        Wait For OTP Page
+    END
+    Submit OTP Form    ${TEST_OTP}
+    ${redirected}=    Run Keyword And Return Status
+    ...    Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    Dashboard URL Should Be Visible
+    IF    not ${redirected}
+        Log    verifyOtpPost rate limit — waiting ${RATE_LIMIT_WAIT} then retrying.    console=True
+        Sleep    ${RATE_LIMIT_WAIT}
+        Enter OTP    ${TEST_OTP}
+        Click Verify OTP Button
+    END
+    Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    Dashboard URL Should Be Visible
+    Wait For Elements State    ${DASHBOARD_TITLE}    visible    timeout=${TIMEOUT}
     Click    ${INS_TAB}
     Wait Until Keyword Succeeds    ${TIMEOUT}    200ms    URL Should Contain Hash    ${HASH_INS}
 

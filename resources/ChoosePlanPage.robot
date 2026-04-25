@@ -162,6 +162,13 @@ Please Select Plan Error Should Be Visible
     ...    Satisfies: TC-6015, U1
     Wait For Elements State    ${CP_PLEASE_SELECT_PLAN}    visible    timeout=${TIMEOUT}
 
+Please Select Plan Error Should Not Be Visible
+    [Documentation]
+    ...    Asserts the "Please select plan" validation message is not visible.
+    ...    Called after a plan is selected to verify error state is cleared.
+    ...    Satisfies: TC-6N-01
+    Wait For Elements State    ${CP_PLEASE_SELECT_PLAN}    hidden    timeout=${TIMEOUT}
+
 Click Back Button
     [Documentation]
     ...    Clicks the back-button on the choose-plan page to navigate back to /student-details.

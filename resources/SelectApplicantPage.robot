@@ -27,6 +27,7 @@ ${SA_AGE_CHECKBOX}              css=[data-testid='age-checkbox']
 ${SA_SALARY_CHECKBOX}           css=[data-testid='salary-checkbox']
 ${SA_CONSENT_ERROR}             css=[data-testid='conset-error']
 ${SA_SUBMIT_BUTTON}             css=[data-testid='submit-applicant-type-button']
+${SA_BACK_BUTTON}               css=[data-testid='back-button']
 
 *** Keywords ***
 Select Applicant Title Should Be Visible
@@ -103,3 +104,49 @@ Select Applicant URL Should Be Active
     [Documentation]    Helper — asserts the current URL contains /select-applicant.
     ${url}=    Get Url
     Should Contain    ${url}    /select-applicant
+
+Age Checkbox Should Be Visible After Selection
+    [Documentation]
+    ...    Asserts age-checkbox is visible after any radio option is selected.
+    ...    Satisfies: TC-7010
+    Wait For Elements State    ${SA_AGE_CHECKBOX}    visible    timeout=${TIMEOUT}
+
+Salary Checkbox Should Be Visible After Selection
+    [Documentation]
+    ...    Asserts salary-checkbox is visible after any radio option is selected.
+    ...    Satisfies: TC-7010
+    Wait For Elements State    ${SA_SALARY_CHECKBOX}    visible    timeout=${TIMEOUT}
+
+Check Age Eligibility Checkbox
+    [Documentation]    Checks the age-checkbox eligibility consent if not already checked.
+    Wait For Elements State    ${SA_AGE_CHECKBOX}    visible    timeout=${TIMEOUT}
+    ${checked}=    Get Property    ${SA_AGE_CHECKBOX}    checked
+    IF    not ${checked}
+        Click    ${SA_AGE_CHECKBOX}
+    END
+
+Check Salary Eligibility Checkbox
+    [Documentation]    Checks the salary-checkbox eligibility consent if not already checked.
+    Wait For Elements State    ${SA_SALARY_CHECKBOX}    visible    timeout=${TIMEOUT}
+    ${checked}=    Get Property    ${SA_SALARY_CHECKBOX}    checked
+    IF    not ${checked}
+        Click    ${SA_SALARY_CHECKBOX}
+    END
+
+Check Both Eligibility Checkboxes
+    [Documentation]    Checks both age and salary eligibility checkboxes.
+    Check Age Eligibility Checkbox
+    Check Salary Eligibility Checkbox
+
+Eligibility Consent Error Should Be Visible
+    [Documentation]
+    ...    Asserts conset-error is visible after submit without eligibility checkboxes.
+    ...    Note: testid typo 'conset-error' is intentional — matches UAT source.
+    ...    Satisfies: TC-7N-02, TC-7N-03
+    Wait For Elements State    ${SA_CONSENT_ERROR}    visible    timeout=${TIMEOUT}
+
+Navigate Back From Select Applicant
+    [Documentation]    Clicks back-button on /select-applicant to return to /choose-plan.
+    ...    Satisfies: TC-7015
+    Wait For Elements State    ${SA_BACK_BUTTON}    visible    timeout=${TIMEOUT}
+    Click    ${SA_BACK_BUTTON}

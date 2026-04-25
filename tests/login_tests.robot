@@ -248,20 +248,22 @@ TC-222 Mobile Input Note Text Is Visible
 TC-223 Terms Of Service Link In Consent Opens New Tab
     [Documentation]
     ...    The "Terms of Services" link inside the consent label (data-testid='terms-link')
-    ...    should open the T&C page in a new tab. Satisfies: TC-223
+    ...    should open the T&C page in a new tab.
+    ...    Asserts URL contains 'terms' — page uses generic GrayQuest site title. Satisfies: TC-223
     [Tags]    login    ui    consent    navigation
     Open Login Page
-    ${title}=    Terms Link In Form Opens New Tab
-    Should Contain    ${title}    Terms
+    ${url}=    Terms Link In Form Opens New Tab
+    Should Contain    ${url}    terms
 
 TC-224 Privacy Policy Link In Consent Opens New Tab
     [Documentation]
     ...    The "Privacy Policy" link inside the consent label (data-testid='privacy-policy-link')
-    ...    should open the Privacy Policy page in a new tab. Satisfies: TC-224
+    ...    should open the Privacy Policy page in a new tab.
+    ...    Asserts URL contains 'privacy' — page uses generic GrayQuest site title. Satisfies: TC-224
     [Tags]    login    ui    consent    navigation
     Open Login Page
-    ${title}=    Privacy Link In Form Opens New Tab
-    Should Contain    ${title}    Privacy
+    ${url}=    Privacy Link In Form Opens New Tab
+    Should Contain    ${url}    privacy
 
 TC-225 Mobile Number Prefill Via Query Param Navigates To OTP Page
     [Documentation]

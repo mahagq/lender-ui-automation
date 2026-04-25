@@ -174,28 +174,30 @@ Mobile Footer Should Be Present
 Terms Link In Form Opens New Tab
     [Documentation]
     ...    Clicks the Terms of Services link in the consent area, switches to the new tab,
-    ...    returns the page title, then closes the tab.
+    ...    returns the page URL, then closes the tab.
+    ...    NOTE: T&C page uses the generic GrayQuest site title — URL is asserted instead.
     ...    data-testid='terms-link'. Satisfies: TC-223
     Wait For Elements State    ${TERMS_LINK_FORM}    visible    timeout=${TIMEOUT}
     Click    ${TERMS_LINK_FORM}
     Switch Page    NEW
     Wait For Load State    domcontentloaded
-    ${title}=    Get Title
+    ${url}=    Get Url
     Close Page
-    RETURN    ${title}
+    RETURN    ${url}
 
 Privacy Link In Form Opens New Tab
     [Documentation]
     ...    Clicks the Privacy Policy link in the consent area, switches to the new tab,
-    ...    returns the page title, then closes the tab.
+    ...    returns the page URL, then closes the tab.
+    ...    NOTE: Privacy Policy page uses the generic GrayQuest site title — URL is asserted instead.
     ...    data-testid='privacy-policy-link'. Satisfies: TC-224
     Wait For Elements State    ${PRIVACY_LINK_FORM}    visible    timeout=${TIMEOUT}
     Click    ${PRIVACY_LINK_FORM}
     Switch Page    NEW
     Wait For Load State    domcontentloaded
-    ${title}=    Get Title
+    ${url}=    Get Url
     Close Page
-    RETURN    ${title}
+    RETURN    ${url}
 
 Open Login Page With Prefill
     [Documentation]

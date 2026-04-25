@@ -5,7 +5,7 @@ APP_CREATION_MOBILE  — Fresh mobile for the Application Creation Flow wizard.
                        All wizard suites share this number within one run.
 DASHBOARD_NEW_MOBILE — Fresh mobile for new-user dashboard tests (EMI empty
                        state, AD alert, PG empty state, Insurance plan selection).
-                       Starts with '8' to avoid colliding with APP_CREATION_MOBILE.
+                       Starts with '6' — new number generated on every run.
 
 Each new robot invocation (new Python process) generates new numbers.
 To override for a specific suite run:
@@ -29,5 +29,5 @@ _env_dash = os.environ.get('DASHBOARD_NEW_MOBILE', '').strip()
 if _env_dash:
     DASHBOARD_NEW_MOBILE = _env_dash
 else:
-    # '8' + last 9 digits of epoch timestamp → different from APP_CREATION_MOBILE
+    # '8' + last 9 digits of epoch timestamp → fresh mobile each run, starts with 8
     DASHBOARD_NEW_MOBILE = '8' + str(_ts)[-9:]

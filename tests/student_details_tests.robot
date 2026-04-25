@@ -154,3 +154,160 @@ TC-5021 Show Plans Shows Validation Errors When Required Fields Empty
     ...    Satisfies: TC-5021
     [Setup]    Navigate To Student Details With GILE Filled
     Show Plans Validation Errors Should Be Visible
+
+# ===========================================================================
+# GILE SELECTION — positive interaction (TC-5022–TC-5027)
+# ===========================================================================
+
+TC-5022 GILE Institute Dropdown Accepts Search And Selects First Option
+    [Documentation]
+    ...    Types search term into institute dropdown, waits for async results,
+    ...    and selects the first option. Verifies dropdown interaction completes.
+    ...    Satisfies: TC-5022
+    Select GILE Institute
+    GILE Institute Dropdown Should Be Visible
+
+TC-5023 GILE Location Dropdown Is Selectable After Institute Selection
+    [Documentation]
+    ...    After institute is selected, verifies location dropdown is enabled
+    ...    and first option can be selected.
+    ...    Satisfies: TC-5023
+    Select GILE Institute
+    Select GILE Location
+    GILE Location Dropdown Should Be Visible
+
+TC-5024 GILE Board Dropdown Is Selectable After Institute And Location
+    [Documentation]
+    ...    After institute + location are selected, verifies board dropdown
+    ...    is enabled and first option can be selected.
+    ...    Satisfies: TC-5024
+    Select GILE Institute
+    Select GILE Location
+    Select GILE Board
+    GILE Board Dropdown Should Be Visible
+
+TC-5025 Personal Details Section Appears After All GILE Dropdowns Filled
+    [Documentation]
+    ...    Fills all 4 GILE dropdowns in sequence and verifies the personal
+    ...    details section (student-details-title) becomes visible.
+    ...    Satisfies: TC-5025
+    Select GILE Institute
+    Select GILE Location
+    Select GILE Board
+    Select GILE Academic Year
+    Personal Details Section Should Appear After GILE
+
+TC-5026 Class Dropdown Is Visible And Selectable After GILE Filled
+    [Documentation]
+    ...    Verifies class dropdown is visible and first option is selectable
+    ...    after GILE section is complete.
+    ...    Satisfies: TC-5026
+    [Setup]    Navigate To Student Details With GILE Filled
+    Select GILE Class
+
+TC-5027 Close Button Navigates To Dashboard
+    [Documentation]
+    ...    Verifies the Close button on /student-details navigates back to /my-applications.
+    ...    /student-details has no back-button — exit is via data-testid='close-button'.
+    ...    Satisfies: TC-5027
+    Navigate Back From Student Details
+    ${url}=    Get Url
+    Should Contain    ${url}    /my-applications
+
+# ===========================================================================
+# NEGATIVE SCENARIOS (TC-5N-01–TC-5N-08)
+# ===========================================================================
+
+TC-5N-01 Personal Details Section Hidden Before GILE Is Filled
+    [Documentation]
+    ...    Verifies student-details-title is not visible on fresh page load
+    ...    before any GILE dropdown is selected.
+    ...    Satisfies: TC-5N-01
+    [Tags]    negative
+    Personal Details Section Should Not Be Visible
+
+TC-5N-02 Show Plans Button Hidden Before GILE Is Filled
+    [Documentation]
+    ...    Verifies show-plans-button is not visible before GILE is complete.
+    ...    Satisfies: TC-5N-02
+    [Tags]    negative
+    Show Plans Button Should Not Be Visible
+
+TC-5N-03 Show Plans With Only First Name Shows Three Errors
+    [Documentation]
+    ...    Fills only first name, clicks Show Plans, and verifies last name,
+    ...    class, and loan amount errors are all shown.
+    ...    Satisfies: TC-5N-03
+    [Setup]    Navigate To Student Details With GILE Filled
+    [Tags]    negative
+    Fill First Name    ${APP_STUDENT_FIRST_NAME}
+    Click Show Plans Button
+    Student Last Name Error Should Be Visible
+    Student Class Error Should Be Visible
+    Student Loan Amount Error Should Be Visible
+
+TC-5N-04 Show Plans With Only Last Name Shows Three Errors
+    [Documentation]
+    ...    Fills only last name, clicks Show Plans, and verifies first name,
+    ...    class, and loan amount errors are all shown.
+    ...    Satisfies: TC-5N-04
+    [Setup]    Navigate To Student Details With GILE Filled
+    [Tags]    negative
+    Fill Last Name    ${APP_STUDENT_LAST_NAME}
+    Click Show Plans Button
+    Student First Name Error Should Be Visible
+    Student Class Error Should Be Visible
+    Student Loan Amount Error Should Be Visible
+
+TC-5N-05 Show Plans With Name Fields Filled But No Class Or Loan Shows Two Errors
+    [Documentation]
+    ...    Fills first and last name only, clicks Show Plans, and verifies
+    ...    class and loan amount errors are shown.
+    ...    Satisfies: TC-5N-05
+    [Setup]    Navigate To Student Details With GILE Filled
+    [Tags]    negative
+    Fill First Name    ${APP_STUDENT_FIRST_NAME}
+    Fill Last Name    ${APP_STUDENT_LAST_NAME}
+    Click Show Plans Button
+    Student Class Error Should Be Visible
+    Student Loan Amount Error Should Be Visible
+
+TC-5N-06 Show Plans With Name And Class Filled But No Loan Shows Loan Error
+    [Documentation]
+    ...    Fills first name, last name, and class, clicks Show Plans,
+    ...    and verifies only loan amount error is shown.
+    ...    Satisfies: TC-5N-06
+    [Setup]    Navigate To Student Details With GILE Filled
+    [Tags]    negative
+    Fill First Name    ${APP_STUDENT_FIRST_NAME}
+    Fill Last Name    ${APP_STUDENT_LAST_NAME}
+    Select GILE Class
+    Click Show Plans Button
+    Student Loan Amount Error Should Be Visible
+
+TC-5N-07 Show Plans With Only Loan Amount Filled Shows Three Errors
+    [Documentation]
+    ...    Fills only loan amount, clicks Show Plans, and verifies first name,
+    ...    last name, and class errors are all shown.
+    ...    Satisfies: TC-5N-07
+    [Setup]    Navigate To Student Details With GILE Filled
+    [Tags]    negative
+    Fill Loan Amount    ${APP_LOAN_AMOUNT}
+    Click Show Plans Button
+    Student First Name Error Should Be Visible
+    Student Last Name Error Should Be Visible
+    Student Class Error Should Be Visible
+
+TC-5N-08 Show Plans With Loan Amount Zero Shows Loan Error
+    [Documentation]
+    ...    Fills all required fields with loan amount = 0, clicks Show Plans,
+    ...    and verifies the loan amount error is shown.
+    ...    Satisfies: TC-5N-08
+    [Setup]    Navigate To Student Details With GILE Filled
+    [Tags]    negative
+    Fill First Name    ${APP_STUDENT_FIRST_NAME}
+    Fill Last Name    ${APP_STUDENT_LAST_NAME}
+    Select GILE Class
+    Fill Loan Amount    0
+    Click Show Plans Button
+    Student Loan Amount Error Should Be Visible

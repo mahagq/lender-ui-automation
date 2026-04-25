@@ -19,10 +19,15 @@ Library     Browser
 *** Variables ***
 ${BD_TITLE}                     css=[data-testid='applicant-basic-details-title']
 ${BD_NOTE}                      css=[data-testid='applicant-basic-details-note']
+${BD_INFO}                      css=[data-testid='applicant-basic-details-info']
 ${BD_FIRST_NAME}                css=[data-testid='first-name-input']
 ${BD_LAST_NAME}                 css=[data-testid='last-name-input']
+${BD_FIRST_NAME_ERROR}          css=[data-testid='first-name-input-error']
+${BD_LAST_NAME_ERROR}           css=[data-testid='last-name-input-error']
 ${BD_CONSENT}                   css=[data-testid='consent-checkbox']
+${BD_CONSENT_ERROR}             css=[data-testid='consent-checkbox-error']
 ${BD_SUBMIT_BUTTON}             css=[data-testid='submit-button']
+${BD_BACK_BUTTON}               css=[data-testid='back-button']
 
 *** Keywords ***
 Basic Details Title Should Be Visible
@@ -90,3 +95,41 @@ Basic Details URL Should Be Active
     [Documentation]    Helper — asserts the current URL contains /applicant-basic-details.
     ${url}=    Get Url
     Should Contain    ${url}    /applicant-basic-details
+
+Basic Details Info Should Be Visible
+    [Documentation]
+    ...    Asserts applicant-basic-details-info element is visible.
+    ...    Satisfies: TC-8009
+    Wait For Elements State    ${BD_INFO}    visible    timeout=${TIMEOUT}
+
+First Name Error Should Be Visible
+    [Documentation]
+    ...    Asserts first-name-input-error is visible after submit with empty first name.
+    ...    Satisfies: TC-8N-01, TC-8N-03
+    Wait For Elements State    ${BD_FIRST_NAME_ERROR}    visible    timeout=${TIMEOUT}
+
+Last Name Error Should Be Visible
+    [Documentation]
+    ...    Asserts last-name-input-error is visible after submit with empty last name.
+    ...    Satisfies: TC-8N-01, TC-8N-02
+    Wait For Elements State    ${BD_LAST_NAME_ERROR}    visible    timeout=${TIMEOUT}
+
+Consent Error Should Be Visible
+    [Documentation]
+    ...    Asserts consent-checkbox-error is visible after submit without consent.
+    ...    Satisfies: TC-8N-04
+    Wait For Elements State    ${BD_CONSENT_ERROR}    visible    timeout=${TIMEOUT}
+
+Uncheck Basic Details Consent
+    [Documentation]    Unchecks the consent-checkbox if it is currently checked.
+    ${checked}=    Get Property    ${BD_CONSENT}    checked
+    IF    ${checked}
+        Click    ${BD_CONSENT}
+    END
+
+Navigate Back From Basic Details
+    [Documentation]
+    ...    Clicks back-button on /applicant-basic-details to return to /select-applicant.
+    ...    Satisfies: TC-8012
+    Wait For Elements State    ${BD_BACK_BUTTON}    visible    timeout=${TIMEOUT}
+    Click    ${BD_BACK_BUTTON}

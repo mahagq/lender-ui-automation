@@ -90,20 +90,20 @@ TC-106 Privacy Policy Link Opens Privacy Policy Page
     [Documentation]
     ...    The Privacy Policy link (li[data-testid='privacy-policy-link']) in the left panel
     ...    footer should open the Privacy Policy page in a new tab.
-    ...    Page title should contain "Privacy Policy".
+    ...    Asserts URL contains 'privacy' — page uses generic GrayQuest site title.
     [Tags]    left-component    navigation    new-tab
-    ${title}=    Click Privacy Policy Link And Switch To New Tab
-    Should Contain    ${title}    Privacy Policy
+    ${url}=    Click Privacy Policy Link And Switch To New Tab
+    Should Contain    ${url}    privacy
     Refresh Login Page
 
 TC-107 Terms And Conditions Link Opens Terms And Conditions Page
     [Documentation]
     ...    The Terms & Conditions link (data-testid='terms-&-conditions-link') in the left
     ...    panel footer should open the T&C page in a new tab.
-    ...    Page title should contain "Terms & Conditions".
+    ...    Asserts URL contains 'terms' — page uses generic GrayQuest site title.
     [Tags]    left-component    navigation    new-tab
-    ${title}=    Click Terms And Conditions Link And Switch To New Tab
-    Should Contain    ${title}    Terms & Conditions
+    ${url}=    Click Terms And Conditions Link And Switch To New Tab
+    Should Contain    ${url}    terms
     Refresh Login Page
 
 TC-108 Contact Us Link Opens Contact Us Page

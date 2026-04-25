@@ -101,28 +101,32 @@ Click About Us Link And Switch To New Tab
 Click Privacy Policy Link And Switch To New Tab
     [Documentation]
     ...    Clicks the Privacy Policy link in the left panel footer, switches to the
-    ...    new tab, and returns the page title. Satisfies: TC-106
+    ...    new tab, and returns the page URL.
+    ...    NOTE: The Privacy Policy page uses the generic GrayQuest site title — URL is
+    ...    asserted instead of title. Satisfies: TC-106
     Wait For Elements State    ${PRIVACY_LINK_LEFT}    visible    timeout=${TIMEOUT}
     Get Element States    ${PRIVACY_LINK_LEFT}    contains    enabled
     Click    ${PRIVACY_LINK_LEFT}
     Switch Page    NEW
     Wait For Load State    domcontentloaded
-    ${title}=    Get Title
+    ${url}=    Get Url
     Close Page
-    RETURN    ${title}
+    RETURN    ${url}
 
 Click Terms And Conditions Link And Switch To New Tab
     [Documentation]
     ...    Clicks the Terms & Conditions link in the left panel footer, switches to the
-    ...    new tab, and returns the page title. Satisfies: TC-107
+    ...    new tab, and returns the page URL.
+    ...    NOTE: The T&C page uses the generic GrayQuest site title — URL is
+    ...    asserted instead of title. Satisfies: TC-107
     Wait For Elements State    ${TC_LINK_LEFT}    visible    timeout=${TIMEOUT}
     Get Element States    ${TC_LINK_LEFT}    contains    enabled
     Click    ${TC_LINK_LEFT}
     Switch Page    NEW
     Wait For Load State    domcontentloaded
-    ${title}=    Get Title
+    ${url}=    Get Url
     Close Page
-    RETURN    ${title}
+    RETURN    ${url}
 
 Click Contact Us Link And Switch To New Tab
     [Documentation]

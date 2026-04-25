@@ -43,43 +43,73 @@ Sources: `gqcustomer_frontend` UAT branch + `gq_customer_ui_automation` Java tes
 | Apply filter button | `css=[data-testid='apply-filter-button']` |
 | Download button (row N) | `css=[data-testid='table-row-N-download-button']` |
 
-**Test scope (33 test cases — TC-4001 to TC-4033):**
+**Test scope (55 test cases across 7 independent files — TC-4001 to TC-4115):**
 
-| TC | Description | Status |
-|----|-------------|--------|
-| TC-4001 | EMI applications visible on dashboard | enabled |
-| TC-4002 | Auto Debit applications on Dashboard | enabled — AD tab button visible on UAT |
-| TC-4003 | Payment Gateway applications visible | enabled |
-| TC-4004 | Stages and CTA of stages | enabled (empty body) |
-| TC-4005 | Back button | enabled (empty body — no back button on dashboard) |
-| TC-4006 | GrayQuest Logo visible | enabled |
-| TC-4007 | Profile icon — FAQ + Logout options visible | enabled |
-| TC-4008 | FAQ link navigates to FAQ page | enabled |
-| TC-4009 | Logout returns to login page | enabled |
-| TC-4010 | Create new application button — modal or redirect | enabled |
-| TC-4011 | EMI tab click and content | enabled |
-| TC-4012 | Auto Payments tab click | enabled — AD tab click → URL hash #ad |
-| TC-4013 | Transaction History tab click | enabled |
-| TC-4014 | Offline Payments sub-tab | enabled |
-| TC-4015 | Online Payments sub-tab | enabled |
-| TC-4016 | Filter for Online Payments visible | enabled |
-| TC-4017 | Filter by Time — All Months (Online) | enabled |
-| TC-4018 | Filter by Time — This Month (Online) | enabled |
-| TC-4019 | Filter by Time — This Year (Online) | enabled |
-| TC-4020 | Filter by Time — Last Year (Online) | enabled |
-| TC-4021 | Filter by Status — Paid | enabled |
-| TC-4022 | Filter by Status — Failed | enabled |
-| TC-4023 | Filter for Offline Payments visible | enabled |
-| TC-4024 | Filter by Time — All Months (Offline) | enabled |
-| TC-4025 | Filter by Time — This Month (Offline) | enabled — same filter UI as Online |
-| TC-4026 | Filter by Time — This Year (Offline) | enabled — same filter UI as Online |
-| TC-4027 | Filter by Time — Last Year (Offline) | enabled |
-| TC-4028 | Clear filter button | enabled |
-| TC-4029 | Apply filter button | enabled |
-| TC-4030 | Download icon — offline payment | enabled |
-| TC-4031 | Download icon — online payment | enabled (Class3) / **disabled** (Class4 duplicate) |
-| TC-4032 | Insurance tab button visible | enabled — UAT branch addition |
-| TC-4033 | Insurance tab click updates URL hash to #ins | enabled — UAT branch addition |
+| File | Account | TCs | Count |
+|------|---------|-----|-------|
+| `dashboard_tests.robot` | DASHBOARD_MOBILE → NEW_USER_MOBILE | TC-4004–4010, TC-4034, TC-4032–4033, TC-4035, TC-4009 | 11 (2 skip) |
+| `dashboard_emi_tests.robot` | DASHBOARD_MOBILE | TC-4001, TC-4011, TC-4044–4046 | 5 |
+| `dashboard_ad_tests.robot` | AD_MOBILE | TC-4002, TC-4012, TC-4036–4043 | 10 |
+| `dashboard_pg_tests.robot` | PG_MOBILE | TC-4003, TC-4013–4029, TC-4051, TC-4030–4031 | 21 |
+| `dashboard_new_user_tests.robot` | DASHBOARD_NEW_MOBILE | TC-4047–4050 | 4 |
+| `dashboard_ins_tests.robot` | INS_MOBILE | TC-4101–4111 | 11 |
+| `dashboard_ins_new_user_tests.robot` | DASHBOARD_NEW_MOBILE | TC-4112–4115 | 4 |
+
+| TC | Description | File | Status |
+|----|-------------|------|--------|
+| TC-4001 | EMI applications visible on dashboard | dashboard_emi_tests | enabled |
+| TC-4002 | Auto Debit applications on Dashboard | dashboard_ad_tests | enabled |
+| TC-4003 | Payment Gateway applications visible | dashboard_pg_tests | enabled |
+| TC-4004 | Stages and CTA of stages | dashboard_tests | skipped (empty body) |
+| TC-4005 | Back button | dashboard_tests | skipped (no back button) |
+| TC-4006 | GrayQuest Logo visible | dashboard_tests | enabled |
+| TC-4007 | Profile icon — FAQ + Logout options visible | dashboard_tests | enabled |
+| TC-4008 | FAQ link navigates to FAQ page | dashboard_tests | enabled |
+| TC-4009 | Logout returns to login page | dashboard_tests | enabled (runs last) |
+| TC-4010 | Create new application button — modal or redirect | dashboard_tests | enabled |
+| TC-4011 | EMI tab click and content | dashboard_emi_tests | enabled |
+| TC-4012 | Auto Payments tab click | dashboard_ad_tests | enabled |
+| TC-4013 | Transaction History tab click | dashboard_pg_tests | enabled |
+| TC-4014 | Offline Payments sub-tab | dashboard_pg_tests | enabled |
+| TC-4015 | Online Payments sub-tab | dashboard_pg_tests | enabled |
+| TC-4016 | Filter for Online Payments visible | dashboard_pg_tests | enabled |
+| TC-4017 | Filter by Time — All Months (Online) | dashboard_pg_tests | enabled |
+| TC-4018 | Filter by Time — This Month (Online) | dashboard_pg_tests | enabled |
+| TC-4019 | Filter by Time — This Year (Online) | dashboard_pg_tests | enabled |
+| TC-4020 | Filter by Time — Last Year (Online) | dashboard_pg_tests | enabled |
+| TC-4021 | Filter by Status — Paid | dashboard_pg_tests | enabled |
+| TC-4022 | Filter by Status — Failed | dashboard_pg_tests | enabled |
+| TC-4023 | Filter for Offline Payments visible | dashboard_pg_tests | enabled |
+| TC-4024 | Filter by Time — All Months (Offline) | dashboard_pg_tests | enabled |
+| TC-4025 | Filter by Time — This Month (Offline) | dashboard_pg_tests | enabled |
+| TC-4026 | Filter by Time — This Year (Offline) | dashboard_pg_tests | enabled |
+| TC-4027 | Filter by Time — Last Year (Offline) | dashboard_pg_tests | enabled |
+| TC-4028 | Clear filter button | dashboard_pg_tests | enabled |
+| TC-4029 | Apply filter button | dashboard_pg_tests | enabled |
+| TC-4030 | Download icon — offline payment | dashboard_pg_tests | enabled |
+| TC-4031 | Download icon — online payment | dashboard_pg_tests | enabled |
+| TC-4032 | Insurance tab button visible | dashboard_tests | enabled |
+| TC-4033 | Insurance tab click updates URL hash to #ins | dashboard_tests | enabled |
+| TC-4034 | Create new application button — existing user header | dashboard_tests | enabled |
+| TC-4035 | Create new application button — new user empty state | dashboard_tests | enabled |
+| TC-4036 | AD Tab App Code Label visible | dashboard_ad_tests | enabled |
+| TC-4037 | AD Tab Copy Button visible | dashboard_ad_tests | enabled |
+| TC-4038 | AD Tab Repayment Active Status visible | dashboard_ad_tests | enabled |
+| TC-4039 | AD Tab Repayment Pending Status visible | dashboard_ad_tests | enabled |
+| TC-4040 | AD Tab Action Button visible | dashboard_ad_tests | enabled |
+| TC-4041 | AD Action Button Opens Detail Modal | dashboard_ad_tests | enabled |
+| TC-4042 | AD Detail Modal Close Button Dismisses Modal | dashboard_ad_tests | enabled |
+| TC-4043 | AD Schedule Section visible | dashboard_ad_tests | enabled |
+| TC-4044 | EMI Card Application ID Label visible | dashboard_emi_tests | enabled |
+| TC-4045 | EMI Card Copy Button visible | dashboard_emi_tests | enabled |
+| TC-4046 | EMI Load More Button visible | dashboard_emi_tests | enabled |
+| TC-4047 | EMI Tab — no applications for new user | dashboard_new_user_tests | enabled |
+| TC-4048 | AD Tab — no data alert for new user | dashboard_new_user_tests | enabled |
+| TC-4049 | PG Online sub-tab — no transactions for new user | dashboard_new_user_tests | enabled |
+| TC-4050 | PG Offline sub-tab — no data for new user | dashboard_new_user_tests | enabled |
+| TC-4051 | PG Filter Applied shows inline Clear | dashboard_pg_tests | enabled |
+| TC-4101–4111 | Insurance tab tests (policies) | dashboard_ins_tests | enabled |
+| TC-4112–4115 | Insurance new-user tests | dashboard_ins_new_user_tests | enabled |
 
 ---
 

@@ -31,11 +31,11 @@ ${SD_STUDENT_DETAILS_TITLE}         css=[data-testid='student-details-title']
 ${SD_PAGE_SUBTITLE}                 text=Enter the Student Details to
 
 # Facing issue support link and modal (testid confirmed in recording login_20260424_145708.js)
-${SD_FACING_ISSUE_LINK}             css=[data-testid='facing-issue-text']
+${SD_FACING_ISSUE_LINK}             css=[data-testid='facing-issue-text'] >>nth=0
 ${SD_SUPPORT_HEADING}               text=Facing any issues?
 ${SD_SUPPORT_CONTACT}               text=Contact Number:
 ${SD_SUPPORT_EMAIL}                 text=Support Email:
-${SD_SUPPORT_CLOSE}                 css=button:has-text("Close")
+${SD_SUPPORT_CLOSE}                 css=button[aria-label="Close"]
 
 # GILE dropdowns (institute/location/board/academic year)
 ${SD_INSTITUTE_SELECT}              css=[data-testid='institute-id-react-select']
@@ -68,6 +68,16 @@ ${SD_LOAN_AMOUNT_ERROR}             css=[data-testid='loan-amount-input-error']
 
 # NOTE: show-plans-button uses 'testidfor' attribute, not 'data-testid'
 ${SD_SHOW_PLANS_BUTTON}             css=[testidfor='show-plans-button']
+
+# Close button — /student-details has no back-button; the exit control is a Close button
+${SD_CLOSE_BUTTON}                  css=[data-testid='close-button']
+
+# react-select first option — approved T1 exception (react-select package class, not CSS Modules)
+${SD_INSTITUTE_INPUT}               css=[data-testid='institute-id-react-select'] input[role='combobox']
+${SD_LOCATION_FIRST_OPTION}         css=[data-testid='location-id-react-select'] input[role='combobox']
+${SD_BOARD_FIRST_OPTION}            css=[data-testid='board-id-react-select'] input[role='combobox']
+${SD_ACADEMIC_YEAR_FIRST_OPTION}    css=[data-testid='academic-year-id-react-select'] .react-select__option:first-child
+${SD_CLASS_FIRST_OPTION}            css=[data-testid='class-id-react-select'] .react-select__option:first-child
 
 *** Keywords ***
 Student Details Title Should Be Visible
@@ -253,3 +263,115 @@ Student Details URL Should Be Active
     [Documentation]    Helper — asserts the current URL contains /student-details.
     ${url}=    Get Url
     Should Contain    ${url}    /student-details
+
+Select GILE Institute
+    [Documentation]
+    ...    Types the institute search term, waits 2s for async API results, then selects
+    ...    the first result using ArrowDown + Enter keyboard navigation.
+    ...    react-select portals the menu outside the container so CSS descendant selectors
+    ...    cannot reach the options — keyboard navigation is the reliable alternative.
+    ...    Mirrors Search And Select First Option In React Select (ApplicationCreationFlowPage.robot).
+    ...    Satisfies: TC-5022
+    Wait For Elements State    ${SD_INSTITUTE_INPUT}    visible    timeout=${TIMEOUT}
+    Click    ${SD_INSTITUTE_INPUT}
+    Type Text    ${SD_INSTITUTE_INPUT}    ${APP_INSTITUTE_SEARCH}
+    Sleep    2s
+    Keyboard Key    press    ArrowDown
+    Keyboard Key    press    Enter
+
+Select GILE Location
+    [Documentation]
+    ...    Opens the location dropdown and selects the first option via ArrowDown + Enter.
+    ...    Requires institute to be selected first (cascade dependency).
+    ...    Clicks the container (not the inner input) and waits 500ms for the portal menu
+    ...    to render — mirrors Select First Option In React Select (ApplicationCreationFlowPage.robot).
+    ...    Satisfies: TC-5023
+    Wait For Elements State    ${SD_LOCATION_SELECT}    visible    timeout=${TIMEOUT}
+    Click    ${SD_LOCATION_SELECT}
+    Sleep    500ms
+    Keyboard Key    press    ArrowDown
+    Keyboard Key    press    Enter
+
+Select GILE Board
+    [Documentation]
+    ...    Opens the board dropdown and selects the first option via ArrowDown + Enter.
+    ...    Requires institute + location to be selected first.
+    ...    Clicks the container (not the inner input) and waits 500ms for the portal menu
+    ...    to render — mirrors Select First Option In React Select (ApplicationCreationFlowPage.robot).
+    ...    Satisfies: TC-5024
+    Wait For Elements State    ${SD_BOARD_SELECT}    visible    timeout=${TIMEOUT}
+    Click    ${SD_BOARD_SELECT}
+    Sleep    500ms
+    Keyboard Key    press    ArrowDown
+    Keyboard Key    press    Enter
+
+Select GILE Academic Year
+    [Documentation]
+    ...    Opens the academic year dropdown and selects the first option via ArrowDown + Enter.
+    ...    Requires institute + location + board to be selected first.
+    ...    Clicks the container and waits 500ms for the portal menu to render.
+    ...    Satisfies: TC-5025
+    Wait For Elements State    ${SD_ACADEMIC_YEAR_SELECT}    visible    timeout=${TIMEOUT}
+    Click    ${SD_ACADEMIC_YEAR_SELECT}
+    Sleep    500ms
+    Keyboard Key    press    ArrowDown
+    Keyboard Key    press    Enter
+
+Select GILE Class
+    [Documentation]
+    ...    Opens the class dropdown and selects the first option via ArrowDown + Enter.
+    ...    Requires GILE filled (personal details section visible).
+    ...    Clicks the container and waits 500ms for the portal menu to render.
+    ...    Satisfies: TC-5026
+    Wait For Elements State    ${SD_CLASS_SELECT}    visible    timeout=${TIMEOUT}
+    Click    ${SD_CLASS_SELECT}
+    Sleep    500ms
+    Keyboard Key    press    ArrowDown
+    Keyboard Key    press    Enter
+
+Personal Details Section Should Appear After GILE
+    [Documentation]
+    ...    Asserts student-details-title becomes visible after all GILE dropdowns are filled.
+    ...    Satisfies: TC-5025
+    Wait For Elements State    ${SD_STUDENT_DETAILS_TITLE}    visible    timeout=${LONG_TIMEOUT}
+
+Personal Details Section Should Not Be Visible
+    [Documentation]
+    ...    Asserts student-details-title is hidden before GILE is filled.
+    ...    Satisfies: TC-5N-01
+    Wait For Elements State    ${SD_STUDENT_DETAILS_TITLE}    hidden    timeout=${TIMEOUT}
+
+Show Plans Button Should Not Be Visible
+    [Documentation]
+    ...    Asserts show-plans-button is not present before GILE is complete.
+    ...    Satisfies: TC-5N-02
+    Wait For Elements State    ${SD_SHOW_PLANS_BUTTON}    hidden    timeout=${TIMEOUT}
+
+Student First Name Error Should Be Visible
+    [Documentation]    Asserts first-name-input-error is visible. Satisfies: TC-5N-04, TC-5N-07.
+    Wait For Elements State    ${SD_FIRST_NAME_ERROR}    visible    timeout=${TIMEOUT}
+
+Student Last Name Error Should Be Visible
+    [Documentation]    Asserts last-name-input-error is visible. Satisfies: TC-5N-03, TC-5N-07.
+    Wait For Elements State    ${SD_LAST_NAME_ERROR}    visible    timeout=${TIMEOUT}
+
+Student Class Error Should Be Visible
+    [Documentation]    Asserts class-id-react-select-error is visible. Satisfies: TC-5N-03, TC-5N-07.
+    Wait For Elements State    ${SD_CLASS_ERROR}    visible    timeout=${TIMEOUT}
+
+Student Loan Amount Error Should Be Visible
+    [Documentation]    Asserts loan-amount-input-error is visible. Satisfies: TC-5N-06, TC-5N-08.
+    Wait For Elements State    ${SD_LOAN_AMOUNT_ERROR}    visible    timeout=${TIMEOUT}
+
+Click Show Plans Button
+    [Documentation]    Clicks the Show Plans button. Satisfies: TC-5N-03 through TC-5N-08.
+    Wait For Elements State    ${SD_SHOW_PLANS_BUTTON}    visible    timeout=${LONG_TIMEOUT}
+    Click    ${SD_SHOW_PLANS_BUTTON}
+
+Navigate Back From Student Details
+    [Documentation]
+    ...    Clicks the Close button on /student-details to return to /my-applications.
+    ...    /student-details has no back-button — the exit control is data-testid='close-button'.
+    ...    Satisfies: TC-5027
+    Wait For Elements State    ${SD_CLOSE_BUTTON}    visible    timeout=${TIMEOUT}
+    Click    ${SD_CLOSE_BUTTON}

@@ -20,6 +20,12 @@ Robot Framework UI automation suite for the GQ Customer Portal. Covers the login
 ./venv/bin/robot --outputdir results/ tests/otp_tests.robot
 ./venv/bin/robot --outputdir results/ tests/bypass_auth_tests.robot
 ./venv/bin/robot --outputdir results/ tests/dashboard_tests.robot
+./venv/bin/robot --outputdir results/ tests/dashboard_emi_tests.robot
+./venv/bin/robot --outputdir results/ tests/dashboard_ad_tests.robot
+./venv/bin/robot --outputdir results/ tests/dashboard_pg_tests.robot
+./venv/bin/robot --outputdir results/ tests/dashboard_ins_tests.robot
+./venv/bin/robot --outputdir results/ tests/dashboard_ins_new_user_tests.robot
+./venv/bin/robot --outputdir results/ tests/dashboard_new_user_tests.robot
 # Application Creation Flow suites (each requires UAT + APP_CREATION_MOBILE registered):
 ./venv/bin/robot --outputdir results/ tests/student_details_tests.robot
 ./venv/bin/robot --outputdir results/ tests/choose_plan_tests.robot
@@ -63,9 +69,14 @@ tests/                     — Test suites (import resources and variables)
   login_tests.robot                 — 23 login form tests (TC-201, TC-207–TC-228)
   otp_tests.robot                   — 18 OTP tests: 15 active, 3 skipped (TC-301–TC-318)
   bypass_auth_tests.robot           — 4 bypass auth tests (2 skipped)
-  dashboard_tests.robot             — 33 dashboard tests (2 skipped — TC-4004, TC-4005)
-  dashboard_ins_tests.robot         — 15 insurance tab tests (TC-4101–TC-4115; ${INS_MOBILE} 8668768645 for existing-policy tests, ${DASHBOARD_NEW_MOBILE} for new-user tests)
-  student_details_tests.robot       — 21 student details tests (TC-5001–TC-5021)
+  dashboard_tests.robot             — 11 dashboard tests (2 skipped — TC-4004, TC-4005): header, create-app, insurance tab nav, logout
+  dashboard_new_user_tests.robot    — 4 new-user empty state tests (TC-4047–TC-4050; DASHBOARD_NEW_MOBILE, independent)
+  dashboard_emi_tests.robot         — 5 EMI tab tests (TC-4001, TC-4011, TC-4044–TC-4046; DASHBOARD_MOBILE, independent)
+  dashboard_ad_tests.robot          — 10 AD tab tests (TC-4002, TC-4012, TC-4036–TC-4043; AD_MOBILE 8763694182, independent)
+  dashboard_pg_tests.robot          — 21 PG/Transaction History tests (TC-4003, TC-4013–TC-4029, TC-4051, TC-4030–TC-4031; PG_MOBILE 7757855472, independent)
+  dashboard_ins_tests.robot         — 11 insurance tab tests (TC-4101–TC-4111; INS_MOBILE 8668768645, independent)
+  dashboard_ins_new_user_tests.robot — 4 insurance new-user tests (TC-4112–TC-4115; DASHBOARD_NEW_MOBILE, independent)
+  student_details_tests.robot       — 35 student details tests (TC-5001–TC-5027, TC-5N-01–TC-5N-08)
   choose_plan_tests.robot           — 16 choose plan tests (TC-6001–TC-6016)
   select_applicant_tests.robot      — 10 select applicant tests (TC-7001–TC-7011)
   applicant_journey_tests.robot     — 27 sequential wizard tests (TC-8001–TC-11007)
@@ -112,13 +123,30 @@ results/                   — robot output (output.xml, log.html, report.html)
 
 ## Dashboard Session Model
 
-The dashboard suite uses a **single shared browser session** across all 33 tests (31 active, 2 skipped — TC-4004 and TC-4005):
-- `Suite Setup` — `Login And Navigate To Dashboard`: opens browser, logs in with `${DASHBOARD_MOBILE}` (8108556708), reaches /my-applications.
-- `Test Setup` — `Navigate To Dashboard`: hard-navigates to /my-applications (resets tab/filter/dropdown state). No new login.
-- `Test Teardown` — NONE (shared session preserved — no `Close Context`).
+Dashboard tests are split across **6 independent files**, each with its own browser session:
+
+| File | Suite Setup account | Tests |
+|------|---------------------|-------|
+| `dashboard_tests.robot` | DASHBOARD_MOBILE → NEW_USER_MOBILE | TC-4004–4010, TC-4034, TC-4032–4033, TC-4035, TC-4009 |
+| `dashboard_new_user_tests.robot` | DASHBOARD_NEW_MOBILE | TC-4047–4050 |
+| `dashboard_emi_tests.robot` | DASHBOARD_MOBILE | TC-4001, TC-4011, TC-4044–4046 |
+| `dashboard_ad_tests.robot` | AD_MOBILE (8763694182) | TC-4002, TC-4012, TC-4036–4043 |
+| `dashboard_pg_tests.robot` | PG_MOBILE (7757855472) | TC-4003, TC-4013–4029, TC-4051, TC-4030–4031 |
+| `dashboard_ins_tests.robot` | INS_MOBILE (8668768645) | TC-4101–4111 |
+| `dashboard_ins_new_user_tests.robot` | DASHBOARD_NEW_MOBILE (dynamic) | TC-4112–4115 |
+
+**Common session model (all dashboard files):**
+- `Suite Setup` — opens browser, logs in with the file's account, reaches /my-applications.
+- `Test Setup` — `Navigate To Dashboard`: hard-navigates to /my-applications (resets state). No new login.
+- `Test Teardown` — NONE (shared session preserved).
 - `Suite Teardown` — `Close Browser`.
+
+**`dashboard_tests.robot` specific:**
 - **TC-4009 (Logout) MUST remain the last test** — it destroys the shared session.
-- **TC-4030** calls `Switch To Account    ${PG_MOBILE}` (~3 min into the suite, rate limits cleared). TC-4031 inherits that session.
+- TC-4035 switches to `${NEW_USER_MOBILE}`; TC-4009 inherits.
+- TC-4032–TC-4033 (Insurance tab nav) run under DASHBOARD_MOBILE — no account switch needed.
+
+**AD/PG files:** Use `Login And Navigate To Dashboard As ${mobile}` (parameterized keyword in `DashboardPage.robot`) — no `Switch To Account` calls anywhere in these files.
 
 ## Insurance Dashboard Session Model
 

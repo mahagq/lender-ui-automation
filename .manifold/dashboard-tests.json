@@ -326,6 +326,17 @@
       "promoted_from_skip": ["TC-4002", "TC-4012", "TC-4025", "TC-4026"],
       "new_keywords": ["Click AD Tab And Verify"],
       "dryrun": "PASS 33 total (31 pass, 2 skip)"
+    },
+    {
+      "number": 9,
+      "phase": "post-verify-split",
+      "timestamp": "2026-04-25T00:00:00Z",
+      "result": "Dashboard suite split from single file into 7 independent files to eliminate session contamination and mid-suite rate-limit failures. Root cause: Switch To Account calls for DASHBOARD_NEW_MOBILE, AD_MOBILE, PG_MOBILE within DASHBOARD_MOBILE context caused auth failures on Test Setup (Navigate To Dashboard). Fix: each account type now has its own Suite Setup using Login And Navigate To Dashboard As ${mobile} keyword (parameterized). New files: dashboard_emi_tests.robot (5 tests, DASHBOARD_MOBILE), dashboard_ad_tests.robot (10 tests, AD_MOBILE), dashboard_pg_tests.robot (21 tests, PG_MOBILE), dashboard_new_user_tests.robot (4 tests, DASHBOARD_NEW_MOBILE). dashboard_tests.robot stripped to 11 tests (header/general + TC-4032/4033 + TC-4034/4035 + TC-4009). AD_APP_CODE_LABEL locator fixed: added >> nth=0 to resolve strict mode violation (text=App. Code: matched 3 elements). Login And Navigate To Dashboard As keyword added to DashboardPage.robot.",
+      "new_files": ["tests/dashboard_emi_tests.robot", "tests/dashboard_ad_tests.robot", "tests/dashboard_pg_tests.robot", "tests/dashboard_new_user_tests.robot"],
+      "modified_files": ["tests/dashboard_tests.robot", "resources/DashboardPage.robot"],
+      "new_keywords": ["Login And Navigate To Dashboard As"],
+      "locator_fixes": ["${AD_APP_CODE_LABEL} → text=App. Code: >> nth=0 (strict mode fix)"],
+      "session_model": "7 independent files, each with own Suite Setup login — no Switch To Account calls except DASHBOARD_MOBILE → NEW_USER_MOBILE within dashboard_tests.robot"
     }
   ],
   "generation": {
