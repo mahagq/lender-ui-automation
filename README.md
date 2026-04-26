@@ -16,22 +16,26 @@ customer_portal_ui_automation/
 │   ├── login_tests.robot                     # Login form tests (23 tests, TC-201, TC-207–228)
 │   ├── otp_tests.robot                       # OTP verification tests (18 tests, 3 skipped, TC-301–318)
 │   ├── bypass_auth_tests.robot               # Bypass auth tests (4 tests, 3 skipped)
-│   ├── dashboard_tests.robot                 # Dashboard — header/create-app/insurance/logout (11 tests, 2 skipped)
-│   ├── dashboard_emi_tests.robot             # EMI tab tests (5 tests; DASHBOARD_MOBILE)
-│   ├── dashboard_ad_tests.robot              # Auto Debit tab tests (10 tests; AD_MOBILE)
-│   ├── dashboard_pg_tests.robot              # Transaction History tab tests (21 tests; PG_MOBILE)
-│   ├── dashboard_new_user_tests.robot        # New-user empty state tests (4 tests; DASHBOARD_NEW_MOBILE)
-│   ├── dashboard_ins_tests.robot             # Insurance tab tests (11 tests; INS_MOBILE)
-│   ├── dashboard_ins_new_user_tests.robot    # Insurance new-user tests (4 tests; DASHBOARD_NEW_MOBILE)
-│   ├── student_details_tests.robot           # /student-details (40 tests, TC-5001–5N-13)
-│   ├── choose_plan_tests.robot               # /choose-plan (16 tests, TC-6001–6016)
-│   ├── select_applicant_tests.robot          # /select-applicant (10 tests, TC-7001–7011)
-│   ├── applicant_journey_tests.robot         # /applicant-basic-details (23 tests, TC-8001–8014-S)
-│   ├── onboarding_tests.robot                # /onboarding (7 tests, TC-9001–9N-01)
-│   ├── personal_details_tests.robot          # /applicant-personal-details (15 tests, TC-10001–10N-07)
-│   ├── residential_details_tests.robot       # /applicant-residential-details (12 tests, TC-11001–11N-05)
-│   ├── employment_tests.robot                # /select-employment + /applicant-employment-details (42 tests, TC-12001–12N-SE06)
-│   └── confirm_application_tests.robot       # /confirm-application (20 tests, TC-13001–13025)
+│   ├── dashboard/
+│   │   ├── dashboard_tests.robot             # Dashboard — header/create-app/insurance/logout (11 tests, 2 skipped)
+│   │   ├── dashboard_emi_tests.robot         # EMI tab tests (5 tests; DASHBOARD_MOBILE)
+│   │   ├── dashboard_ad_tests.robot          # Auto Debit tab tests (10 tests; AD_MOBILE)
+│   │   ├── dashboard_pg_tests.robot          # Transaction History tab tests (21 tests; PG_MOBILE)
+│   │   ├── dashboard_new_user_tests.robot    # New-user empty state tests (4 tests; DASHBOARD_NEW_MOBILE)
+│   │   ├── dashboard_ins_tests.robot         # Insurance tab tests (11 tests; INS_MOBILE)
+│   │   └── dashboard_ins_new_user_tests.robot # Insurance new-user tests (4 tests; DASHBOARD_NEW_MOBILE)
+│   ├── e2e/
+│   │   └── e2e_create_application_tests.robot    # Full E2E flow: Login → Confirm & Submit (data-driven via application_data.xlsx)
+│   └── application_creation_flow/
+│       ├── student_details_tests.robot           # /student-details (40 tests, TC-5001–5N-13)
+│       ├── choose_plan_tests.robot               # /choose-plan (18 tests, TC-6001–6018)
+│       ├── select_applicant_tests.robot          # /select-applicant (19 tests, TC-7001–7020)
+│       ├── applicant_basic_details_tests.robot   # /applicant-basic-details (23 tests, TC-8001–8014-S)
+│       ├── onboarding_tests.robot                # /onboarding (7 tests, TC-9001–9N-01)
+│       ├── personal_details_tests.robot          # /applicant-personal-details (15 tests, TC-10001–10N-07)
+│       ├── residential_details_tests.robot       # /applicant-residential-details (12 tests, TC-11001–11N-05)
+│       ├── employment_tests.robot                # /select-employment + /applicant-employment-details (46 tests, TC-12001–12N-SE06)
+│       └── confirm_application_tests.robot       # /confirm-application (20 tests, TC-13001–13025)
 ├── resources/
 │   ├── LoginLeftComponent.robot              # Page object keywords for left panel
 │   ├── LoginPage.robot                       # Page object keywords for / (login page)
@@ -87,24 +91,27 @@ All dependencies live in the project virtualenv at `./venv/`.
 ./venv/bin/robot --outputdir results/ tests/bypass_auth_tests.robot
 
 # Dashboard
-./venv/bin/robot --outputdir results/ tests/dashboard_tests.robot
-./venv/bin/robot --outputdir results/ tests/dashboard_emi_tests.robot
-./venv/bin/robot --outputdir results/ tests/dashboard_ad_tests.robot
-./venv/bin/robot --outputdir results/ tests/dashboard_pg_tests.robot
-./venv/bin/robot --outputdir results/ tests/dashboard_new_user_tests.robot
-./venv/bin/robot --outputdir results/ tests/dashboard_ins_tests.robot
-./venv/bin/robot --outputdir results/ tests/dashboard_ins_new_user_tests.robot
+./venv/bin/robot --outputdir results/ tests/dashboard/dashboard_tests.robot
+./venv/bin/robot --outputdir results/ tests/dashboard/dashboard_emi_tests.robot
+./venv/bin/robot --outputdir results/ tests/dashboard/dashboard_ad_tests.robot
+./venv/bin/robot --outputdir results/ tests/dashboard/dashboard_pg_tests.robot
+./venv/bin/robot --outputdir results/ tests/dashboard/dashboard_new_user_tests.robot
+./venv/bin/robot --outputdir results/ tests/dashboard/dashboard_ins_tests.robot
+./venv/bin/robot --outputdir results/ tests/dashboard/dashboard_ins_new_user_tests.robot
+
+# E2E
+./venv/bin/robot --outputdir results/ tests/e2e/e2e_create_application_tests.robot
 
 # Application Creation Flow
-./venv/bin/robot --outputdir results/ tests/student_details_tests.robot
-./venv/bin/robot --outputdir results/ tests/choose_plan_tests.robot
-./venv/bin/robot --outputdir results/ tests/select_applicant_tests.robot
-./venv/bin/robot --outputdir results/ tests/applicant_journey_tests.robot
-./venv/bin/robot --outputdir results/ tests/onboarding_tests.robot
-./venv/bin/robot --outputdir results/ tests/personal_details_tests.robot
-./venv/bin/robot --outputdir results/ tests/residential_details_tests.robot
-./venv/bin/robot --outputdir results/ tests/employment_tests.robot
-./venv/bin/robot --outputdir results/ tests/confirm_application_tests.robot
+./venv/bin/robot --outputdir results/ tests/application_creation_flow/student_details_tests.robot
+./venv/bin/robot --outputdir results/ tests/application_creation_flow/choose_plan_tests.robot
+./venv/bin/robot --outputdir results/ tests/application_creation_flow/select_applicant_tests.robot
+./venv/bin/robot --outputdir results/ tests/application_creation_flow/applicant_basic_details_tests.robot
+./venv/bin/robot --outputdir results/ tests/application_creation_flow/onboarding_tests.robot
+./venv/bin/robot --outputdir results/ tests/application_creation_flow/personal_details_tests.robot
+./venv/bin/robot --outputdir results/ tests/application_creation_flow/residential_details_tests.robot
+./venv/bin/robot --outputdir results/ tests/application_creation_flow/employment_tests.robot
+./venv/bin/robot --outputdir results/ tests/application_creation_flow/confirm_application_tests.robot
 ```
 
 ### Run by tag
@@ -117,8 +124,8 @@ All dependencies live in the project virtualenv at `./venv/`.
 ./venv/bin/robot --include dashboard --outputdir results/ tests/
 ./venv/bin/robot --include application-creation-flow --outputdir results/ tests/
 ./venv/bin/robot --include negative --outputdir results/ tests/
-./venv/bin/robot --include salaried --outputdir results/ tests/employment_tests.robot
-./venv/bin/robot --include self-employed --outputdir results/ tests/employment_tests.robot
+./venv/bin/robot --include salaried --outputdir results/ tests/application_creation_flow/employment_tests.robot
+./venv/bin/robot --include self-employed --outputdir results/ tests/application_creation_flow/employment_tests.robot
 ./venv/bin/robot --include resend --outputdir results/ tests/otp_tests.robot    # ~3 min
 ```
 
@@ -140,29 +147,30 @@ BYPASS_AUTH_MOBILE=<erp_mobile> ./venv/bin/robot --outputdir results/ tests/bypa
 
 ## Test Suites Summary
 
-| Suite File | Tests | Wizard Page(s) |
-|------------|-------|----------------|
+| Suite File | Tests | Page(s) |
+|------------|-------|---------|
 | login_left_component_tests | 9 | Left panel |
 | login_tests | 23 | / (login form) |
 | otp_tests | 18 (3 skipped) | /verify |
 | bypass_auth_tests | 4 (3 skipped) | /instant-eligibility |
-| dashboard_tests | 11 (2 skipped) | /my-applications |
-| dashboard_emi_tests | 5 | /my-applications#emi |
-| dashboard_ad_tests | 10 | /my-applications#ad |
-| dashboard_pg_tests | 21 | /my-applications#direct |
-| dashboard_new_user_tests | 4 | /my-applications (new user) |
-| dashboard_ins_tests | 11 | /my-applications#ins |
-| dashboard_ins_new_user_tests | 4 | /my-applications#ins (new user) |
-| student_details_tests | 40 | /student-details |
-| choose_plan_tests | 16 | /choose-plan |
-| select_applicant_tests | 10 | /select-applicant |
-| applicant_journey_tests | 23 | /applicant-basic-details |
-| onboarding_tests | 7 | /onboarding |
-| personal_details_tests | 15 | /applicant-personal-details |
-| residential_details_tests | 12 | /applicant-residential-details |
-| employment_tests | 42 | /select-employment + /applicant-employment-details |
-| confirm_application_tests | 20 | /confirm-application |
-| **Total** | **~295** | |
+| dashboard/dashboard_tests | 11 (2 skipped) | /my-applications |
+| dashboard/dashboard_emi_tests | 5 | /my-applications#emi |
+| dashboard/dashboard_ad_tests | 10 | /my-applications#ad |
+| dashboard/dashboard_pg_tests | 21 | /my-applications#direct |
+| dashboard/dashboard_new_user_tests | 4 | /my-applications (new user) |
+| dashboard/dashboard_ins_tests | 11 | /my-applications#ins |
+| dashboard/dashboard_ins_new_user_tests | 4 | /my-applications#ins (new user) |
+| e2e/e2e_create_application_tests | — | Login → Confirm & Submit (data-driven) |
+| application_creation_flow/student_details_tests | 40 | /student-details |
+| application_creation_flow/choose_plan_tests | 18 | /choose-plan |
+| application_creation_flow/select_applicant_tests | 19 | /select-applicant |
+| application_creation_flow/applicant_basic_details_tests | 23 | /applicant-basic-details |
+| application_creation_flow/onboarding_tests | 7 | /onboarding |
+| application_creation_flow/personal_details_tests | 15 | /applicant-personal-details |
+| application_creation_flow/residential_details_tests | 12 | /applicant-residential-details |
+| application_creation_flow/employment_tests | 46 | /select-employment + /applicant-employment-details |
+| application_creation_flow/confirm_application_tests | 20 | /confirm-application |
+| **Total** | **320** | |
 
 ---
 
@@ -206,9 +214,9 @@ All configuration is in `variables/variables.robot`.
 
 **checkMobilePost rate limit:** ~3 calls per ~60 seconds per IP. `Navigate To OTP Page` auto-detects and retries after `RATE_LIMIT_WAIT` (45s).
 
-**Application Creation Flow session model:** Each wizard suite (`applicant_journey_tests`, `onboarding_tests`, `personal_details_tests`, `residential_details_tests`, `employment_tests`, `confirm_application_tests`) has its own independent `Suite Setup` that traverses the full wizard from login. `Test Setup` hard-navigates to the target page within the existing session.
+**Application Creation Flow session model:** Each wizard suite has its own independent `Suite Setup` that traverses the full wizard from login. `Test Setup` hard-navigates to the target page within the existing session.
 
-**Dashboard session model:** Dashboard tests are split across 7 independent files, each with its own browser session and dedicated `Suite Setup` login.
+**Dashboard session model:** Dashboard tests are split across 7 independent files under `tests/dashboard/`, each with its own browser session and dedicated `Suite Setup` login.
 
 ---
 

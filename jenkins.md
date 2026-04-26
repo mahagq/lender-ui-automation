@@ -3,7 +3,7 @@
 ## Overview
 
 Jenkins pipeline for the GQ Customer Portal UI Automation suite.
-Runs Robot Framework + Playwright tests against UAT across **20 suite files** (~295 tests),
+Runs Robot Framework + Playwright tests against UAT across **20 suite files** (320 tests),
 generates an Allure report, uploads it to S3, and preserves history for trend graphs across builds.
 
 | Suite File | Tests | Account |
@@ -12,22 +12,23 @@ generates an Allure report, uploads it to S3, and preserves history for trend gr
 | login_tests | 23 | OTP_MOBILE_* / EXT_* |
 | otp_tests | 18 (3 skipped) | OTP_MOBILE_* / EXT_* |
 | bypass_auth_tests | 4 (3 skipped) | TEST_MOBILE |
-| dashboard_tests | 11 (2 skipped) | DASHBOARD_MOBILE → NEW_USER_MOBILE |
-| dashboard_emi_tests | 5 | DASHBOARD_MOBILE |
-| dashboard_ad_tests | 10 | AD_MOBILE |
-| dashboard_pg_tests | 21 | PG_MOBILE |
-| dashboard_new_user_tests | 4 | DASHBOARD_NEW_MOBILE |
-| dashboard_ins_tests | 11 | INS_MOBILE |
-| dashboard_ins_new_user_tests | 4 | DASHBOARD_NEW_MOBILE |
-| student_details_tests | 40 | APP_CREATION_MOBILE |
-| choose_plan_tests | 16 | APP_CREATION_MOBILE |
-| select_applicant_tests | 10 | APP_CREATION_MOBILE |
-| applicant_journey_tests | 23 | APP_CREATION_MOBILE |
-| onboarding_tests | 7 | APP_CREATION_MOBILE |
-| personal_details_tests | 15 | APP_CREATION_MOBILE |
-| residential_details_tests | 12 | APP_CREATION_MOBILE |
-| employment_tests | 42 | APP_CREATION_MOBILE |
-| confirm_application_tests | 20 | APP_CREATION_MOBILE |
+| dashboard/dashboard_tests | 11 (2 skipped) | DASHBOARD_MOBILE → NEW_USER_MOBILE |
+| dashboard/dashboard_emi_tests | 5 | DASHBOARD_MOBILE |
+| dashboard/dashboard_ad_tests | 10 | AD_MOBILE |
+| dashboard/dashboard_pg_tests | 21 | PG_MOBILE |
+| dashboard/dashboard_new_user_tests | 4 | DASHBOARD_NEW_MOBILE |
+| dashboard/dashboard_ins_tests | 11 | INS_MOBILE |
+| dashboard/dashboard_ins_new_user_tests | 4 | DASHBOARD_NEW_MOBILE |
+| e2e/e2e_create_application_tests | — (data-driven) | APP_CREATION_MOBILE / dynamic |
+| application_creation_flow/student_details_tests | 40 | APP_CREATION_MOBILE |
+| application_creation_flow/choose_plan_tests | 18 | APP_CREATION_MOBILE |
+| application_creation_flow/select_applicant_tests | 19 | APP_CREATION_MOBILE |
+| application_creation_flow/applicant_basic_details_tests | 23 | APP_CREATION_MOBILE |
+| application_creation_flow/onboarding_tests | 7 | APP_CREATION_MOBILE |
+| application_creation_flow/personal_details_tests | 15 | APP_CREATION_MOBILE |
+| application_creation_flow/residential_details_tests | 12 | APP_CREATION_MOBILE |
+| application_creation_flow/employment_tests | 46 | APP_CREATION_MOBILE |
+| application_creation_flow/confirm_application_tests | 20 | APP_CREATION_MOBILE |
 
 ---
 

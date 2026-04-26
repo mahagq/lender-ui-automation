@@ -16,9 +16,9 @@ Documentation
 ...    Covers: TC-4047 to TC-4050
 
 Library          Browser
-Resource         ../resources/DashboardPage.robot
-Resource         ../variables/variables.robot
-Variables        ../variables/dynamic_variables.py
+Resource         ../../resources/DashboardPage.robot
+Resource         ../../variables/variables.robot
+Variables        ../../variables/dynamic_variables.py
 
 Suite Setup      Login And Navigate To Dashboard As    ${DASHBOARD_NEW_MOBILE}
 Suite Teardown   Close Browser

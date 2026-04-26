@@ -15,10 +15,10 @@ Documentation
 ...    PRECONDITION: ${APP_CREATION_MOBILE} must be registered on UAT.
 ...    Satisfies: RT-5, T1, U1, U2
 
-Resource    ../resources/ApplicationCreationFlowPage.robot
-Resource    ../resources/OnboardingPage.robot
-Resource    ../variables/variables.robot
-Variables   ../variables/dynamic_variables.py
+Resource    ../../resources/ApplicationCreationFlowPage.robot
+Resource    ../../resources/OnboardingPage.robot
+Resource    ../../variables/variables.robot
+Variables   ../../variables/dynamic_variables.py
 
 Suite Setup     Navigate To Onboarding
 Suite Teardown  Close Browser

@@ -14,10 +14,10 @@ Documentation
 ...    A "no plans" result indicates account data seeding need, not a test defect.
 ...    Satisfies: RT-3, B1 (Java TCs ported), T1, U2, U3
 
-Resource    ../resources/ApplicationCreationFlowPage.robot
-Resource    ../resources/ChoosePlanPage.robot
-Resource    ../variables/variables.robot
-Variables   ../variables/dynamic_variables.py
+Resource    ../../resources/ApplicationCreationFlowPage.robot
+Resource    ../../resources/ChoosePlanPage.robot
+Resource    ../../variables/variables.robot
+Variables   ../../variables/dynamic_variables.py
 
 Suite Setup     Navigate To Choose Plan
 Suite Teardown  Close Browser

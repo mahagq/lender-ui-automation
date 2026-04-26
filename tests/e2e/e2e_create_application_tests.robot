@@ -11,13 +11,13 @@ Documentation
 ...    button position adapts automatically — header for existing accounts, empty-state for new).
 ...
 ...    Run:
-...      ./venv/bin/robot --outputdir results/ tests/e2e_create_application_tests.robot
+...      ./venv/bin/robot --outputdir results/ tests/e2e/e2e_create_application_tests.robot
 ...
 ...    Tag: e2e, application-creation-flow
 
-Library     ../libraries/ApplicationDataReader.py
-Resource    ../resources/E2EApplicationFlow.robot
-Resource    ../variables/variables.robot
+Library     ../../libraries/ApplicationDataReader.py
+Resource    ../../resources/E2EApplicationFlow.robot
+Resource    ../../variables/variables.robot
 
 Test Tags   e2e    application-creation-flow
 

@@ -19,23 +19,26 @@ Robot Framework UI automation suite for the GQ Customer Portal. Covers the login
 ./venv/bin/robot --outputdir results/ tests/login_tests.robot
 ./venv/bin/robot --outputdir results/ tests/otp_tests.robot
 ./venv/bin/robot --outputdir results/ tests/bypass_auth_tests.robot
-./venv/bin/robot --outputdir results/ tests/dashboard_tests.robot
-./venv/bin/robot --outputdir results/ tests/dashboard_emi_tests.robot
-./venv/bin/robot --outputdir results/ tests/dashboard_ad_tests.robot
-./venv/bin/robot --outputdir results/ tests/dashboard_pg_tests.robot
-./venv/bin/robot --outputdir results/ tests/dashboard_ins_tests.robot
-./venv/bin/robot --outputdir results/ tests/dashboard_ins_new_user_tests.robot
-./venv/bin/robot --outputdir results/ tests/dashboard_new_user_tests.robot
+# Dashboard suites:
+./venv/bin/robot --outputdir results/ tests/dashboard/dashboard_tests.robot
+./venv/bin/robot --outputdir results/ tests/dashboard/dashboard_emi_tests.robot
+./venv/bin/robot --outputdir results/ tests/dashboard/dashboard_ad_tests.robot
+./venv/bin/robot --outputdir results/ tests/dashboard/dashboard_pg_tests.robot
+./venv/bin/robot --outputdir results/ tests/dashboard/dashboard_ins_tests.robot
+./venv/bin/robot --outputdir results/ tests/dashboard/dashboard_ins_new_user_tests.robot
+./venv/bin/robot --outputdir results/ tests/dashboard/dashboard_new_user_tests.robot
+# E2E:
+./venv/bin/robot --outputdir results/ tests/e2e/e2e_create_application_tests.robot
 # Application Creation Flow suites (each requires UAT + APP_CREATION_MOBILE registered):
-./venv/bin/robot --outputdir results/ tests/student_details_tests.robot
-./venv/bin/robot --outputdir results/ tests/choose_plan_tests.robot
-./venv/bin/robot --outputdir results/ tests/select_applicant_tests.robot
-./venv/bin/robot --outputdir results/ tests/applicant_journey_tests.robot
-./venv/bin/robot --outputdir results/ tests/onboarding_tests.robot
-./venv/bin/robot --outputdir results/ tests/personal_details_tests.robot
-./venv/bin/robot --outputdir results/ tests/residential_details_tests.robot
-./venv/bin/robot --outputdir results/ tests/employment_tests.robot
-./venv/bin/robot --outputdir results/ tests/confirm_application_tests.robot
+./venv/bin/robot --outputdir results/ tests/application_creation_flow/student_details_tests.robot
+./venv/bin/robot --outputdir results/ tests/application_creation_flow/choose_plan_tests.robot
+./venv/bin/robot --outputdir results/ tests/application_creation_flow/select_applicant_tests.robot
+./venv/bin/robot --outputdir results/ tests/application_creation_flow/applicant_basic_details_tests.robot
+./venv/bin/robot --outputdir results/ tests/application_creation_flow/onboarding_tests.robot
+./venv/bin/robot --outputdir results/ tests/application_creation_flow/personal_details_tests.robot
+./venv/bin/robot --outputdir results/ tests/application_creation_flow/residential_details_tests.robot
+./venv/bin/robot --outputdir results/ tests/application_creation_flow/employment_tests.robot
+./venv/bin/robot --outputdir results/ tests/application_creation_flow/confirm_application_tests.robot
 ```
 
 ### Run tests by tag
@@ -47,8 +50,8 @@ Robot Framework UI automation suite for the GQ Customer Portal. Covers the login
 ./venv/bin/robot --outputdir results/ --include dashboard tests/                # dashboard tests only
 ./venv/bin/robot --outputdir results/ --include resend tests/otp_tests.robot    # ~3min resend test
 ./venv/bin/robot --outputdir results/ --include application-creation-flow tests/  # all wizard tests
-./venv/bin/robot --outputdir results/ --include salaried tests/employment_tests.robot    # salaried only
-./venv/bin/robot --outputdir results/ --include self-employed tests/employment_tests.robot  # SE only
+./venv/bin/robot --outputdir results/ --include salaried tests/application_creation_flow/employment_tests.robot    # salaried only
+./venv/bin/robot --outputdir results/ --include self-employed tests/application_creation_flow/employment_tests.robot  # SE only
 ```
 
 ### Dry run (syntax check, no browser)
@@ -72,22 +75,26 @@ tests/                     — Test suites (import resources and variables)
   login_tests.robot                 — 23 login form tests (TC-201, TC-207–TC-228)
   otp_tests.robot                   — 18 OTP tests: 15 active, 3 skipped (TC-301–TC-318)
   bypass_auth_tests.robot           — 4 bypass auth tests (2 skipped)
-  dashboard_tests.robot             — 11 dashboard tests (2 skipped — TC-4004, TC-4005): header, create-app, insurance tab nav, logout
-  dashboard_new_user_tests.robot    — 4 new-user empty state tests (TC-4047–TC-4050; DASHBOARD_NEW_MOBILE, independent)
-  dashboard_emi_tests.robot         — 5 EMI tab tests (TC-4001, TC-4011, TC-4044–TC-4046; DASHBOARD_MOBILE, independent)
-  dashboard_ad_tests.robot          — 10 AD tab tests (TC-4002, TC-4012, TC-4036–TC-4043; AD_MOBILE 8763694182, independent)
-  dashboard_pg_tests.robot          — 21 PG/Transaction History tests (TC-4003, TC-4013–TC-4029, TC-4051, TC-4030–TC-4031; PG_MOBILE 7757855472, independent)
-  dashboard_ins_tests.robot         — 11 insurance tab tests (TC-4101–TC-4111; INS_MOBILE 8668768645, independent)
-  dashboard_ins_new_user_tests.robot — 4 insurance new-user tests (TC-4112–TC-4115; DASHBOARD_NEW_MOBILE, independent)
-  student_details_tests.robot            — 40 student details tests (TC-5001–TC-5027, TC-5N-01–TC-5N-13)
-  choose_plan_tests.robot                — 16 choose plan tests (TC-6001–TC-6016)
-  select_applicant_tests.robot           — 10 select applicant tests (TC-7001–TC-7011)
-  applicant_journey_tests.robot          — 23 applicant basic details tests (TC-8001–TC-8014-S, independent)
-  onboarding_tests.robot                 — 7 onboarding tests (TC-9001–TC-9N-01, independent)
-  personal_details_tests.robot           — 15 personal details tests (TC-10001–TC-10N-07, independent)
-  residential_details_tests.robot        — 12 residential details tests (TC-11001–TC-11N-05, independent)
-  employment_tests.robot                 — 42 employment tests: 7 type + 13 salaried + 10 SE + 12 validation (TC-12001–TC-12N-SE06)
-  confirm_application_tests.robot        — 20 confirm application tests (TC-13001–TC-13025)
+  dashboard/
+    dashboard_tests.robot             — 11 dashboard tests (2 skipped — TC-4004, TC-4005): header, create-app, insurance tab nav, logout
+    dashboard_new_user_tests.robot    — 4 new-user empty state tests (TC-4047–TC-4050; DASHBOARD_NEW_MOBILE, independent)
+    dashboard_emi_tests.robot         — 5 EMI tab tests (TC-4001, TC-4011, TC-4044–TC-4046; DASHBOARD_MOBILE, independent)
+    dashboard_ad_tests.robot          — 10 AD tab tests (TC-4002, TC-4012, TC-4036–TC-4043; AD_MOBILE 8763694182, independent)
+    dashboard_pg_tests.robot          — 21 PG/Transaction History tests (TC-4003, TC-4013–TC-4029, TC-4051, TC-4030–TC-4031; PG_MOBILE 7757855472, independent)
+    dashboard_ins_tests.robot         — 11 insurance tab tests (TC-4101–TC-4111; INS_MOBILE 8668768645, independent)
+    dashboard_ins_new_user_tests.robot — 4 insurance new-user tests (TC-4112–TC-4115; DASHBOARD_NEW_MOBILE, independent)
+  e2e/
+    e2e_create_application_tests.robot     — Data-driven full E2E application creation (Login → Confirm & Submit; driven by data/application_data.xlsx)
+  application_creation_flow/
+    student_details_tests.robot            — 40 student details tests (TC-5001–TC-5027, TC-5N-01–TC-5N-13)
+    choose_plan_tests.robot                — 18 choose plan tests (TC-6001–TC-6018)
+    select_applicant_tests.robot           — 19 select applicant tests (TC-7001–TC-7020)
+    applicant_basic_details_tests.robot    — 23 applicant basic details tests (TC-8001–TC-8014-S, independent)
+    onboarding_tests.robot                 — 7 onboarding tests (TC-9001–TC-9N-01, independent)
+    personal_details_tests.robot           — 15 personal details tests (TC-10001–TC-10N-07, independent)
+    residential_details_tests.robot        — 12 residential details tests (TC-11001–TC-11N-05, independent)
+    employment_tests.robot                 — 46 employment tests: 7 type + 13 salaried + 10 SE + 12 validation + misc (TC-12001–TC-12N-SE06)
+    confirm_application_tests.robot        — 20 confirm application tests (TC-13001–TC-13025)
 
 resources/                 — Page Object keyword libraries (no variable imports)
   LoginLeftComponent.robot           — Keywords + locators for left panel component
@@ -177,7 +184,9 @@ Each wizard test suite uses a **single shared browser session** using `${APP_CRE
 - react-select dropdowns: `Select First Option In React Select` helper (approved T1 exception for traversal only)
 - PAN lookup and pincode city/state API calls require `Sleep 2s` during traversal
 
-**`applicant_journey_tests.robot`** covers `/applicant-basic-details` only (TC-8001–TC-8014-S). Each test uses `[Setup] Navigate To Basic Details Within Session` except TC-8014 (`[Setup] NONE`, sequential after TC-8013) and TC-8014-S (standalone close+resume test).
+**E2E tests** live exclusively in `tests/e2e/`. All new end-to-end journey test files must be placed there. E2E suites are data-driven (Excel via `data/application_data.xlsx`) and cover full flows from Login → Confirm & Submit. They use `resources/E2EApplicationFlow.robot` and `libraries/ApplicationDataReader.py`.
+
+**`applicant_basic_details_tests.robot`** covers `/applicant-basic-details` only (TC-8001–TC-8014-S). Each test uses `[Setup] Navigate To Basic Details Within Session` except TC-8014 (`[Setup] NONE`, sequential after TC-8013) and TC-8014-S (standalone close+resume test).
 
 **`onboarding_tests.robot`**, **`personal_details_tests.robot`**, **`residential_details_tests.robot`** are each fully independent suites with their own Suite Setup traversal — no cross-file ordering dependencies.
 

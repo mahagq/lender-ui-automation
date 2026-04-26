@@ -17,8 +17,8 @@ Documentation
 ...    Covers: TC-4003, TC-4013 to TC-4029, TC-4051, TC-4030, TC-4031
 
 Library          Browser
-Resource         ../resources/DashboardPage.robot
-Resource         ../variables/variables.robot
+Resource         ../../resources/DashboardPage.robot
+Resource         ../../variables/variables.robot
 
 Suite Setup      Login And Navigate To Dashboard As    ${PG_MOBILE}
 Suite Teardown   Close Browser
