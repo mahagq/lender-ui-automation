@@ -200,13 +200,20 @@ Navigate To Select Applicant
     [Documentation]
     ...    Suite Setup for select_applicant_tests.robot.
     ...    Traverses through student-details and choose-plan to reach /select-applicant.
+    ...    If the wizard skips /select-applicant (applicant type already set on the account),
+    ...    falls back to a direct URL navigation.
     ...    Satisfies: RT-1, RT-4
     Navigate To Choose Plan
     Wait For Elements State    ${CP_PLAN_LIST}    visible    timeout=${LONG_TIMEOUT}
     Click First Plan In List
     Wait For Elements State    ${CP_SUBMIT_BUTTON}    visible    timeout=${TIMEOUT}
     Click    ${CP_SUBMIT_BUTTON}
-    Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    Select Applicant URL Should Be Active
+    ${on_select_applicant}=    Run Keyword And Return Status
+    ...    Wait Until Keyword Succeeds    10s    500ms    Select Applicant URL Should Be Active
+    IF    not ${on_select_applicant}
+        Log    Wizard skipped /select-applicant — falling back to direct navigation.    console=True
+        Navigate To Select Applicant Within Session
+    END
 
 Navigate To Applicant Basic Details
     [Documentation]
@@ -229,9 +236,8 @@ Navigate To Onboarding
     Wait For Elements State    ${BD_FIRST_NAME}    visible    timeout=${TIMEOUT}
     Fill Text    ${BD_FIRST_NAME}    ${APP_FIRST_NAME}
     Fill Text    ${BD_LAST_NAME}    ${APP_LAST_NAME}
-    ${consent_checked}=    Run Keyword And Return Status
-    ...    Get Property    ${BD_CONSENT}    checked
-    IF    not ${consent_checked}
+    ${checked}=    Get Property    ${BD_CONSENT}    checked
+    IF    not ${checked}
         Click    ${BD_CONSENT}
     END
     Click    ${BD_SUBMIT_BUTTON}
@@ -297,9 +303,8 @@ Navigate To Confirm Application
     Wait For Elements State    ${SED_EMPLOYER_NAME}    visible    timeout=${TIMEOUT}
     Fill Text    ${SED_EMPLOYER_NAME}    ${APP_EMPLOYER_NAME}
     Fill Text    ${SED_SALARY}    ${APP_MONTHLY_SALARY}
-    ${consent_checked}=    Run Keyword And Return Status
-    ...    Get Property    ${SED_CONSENT}    checked
-    IF    not ${consent_checked}
+    ${checked}=    Get Property    ${SED_CONSENT}    checked
+    IF    not ${checked}
         Click    ${SED_CONSENT}
     END
     Click    ${SED_PROCEED_BUTTON}
@@ -372,6 +377,20 @@ Navigate To Basic Details Within Session
     ...    Test Setup for applicant_journey_tests.robot (basic details section).
     Go To    ${BASE_URL}${URL_BASIC_DETAILS}
     Wait For Elements State    css=[data-testid='applicant-basic-details-title']    visible    timeout=${TIMEOUT}
+
+Navigate To Personal Details Within Session
+    [Documentation]
+    ...    Test Setup for personal details validation tests in applicant_journey_tests.robot.
+    ...    Hard-navigates to /applicant-personal-details within the active wizard session.
+    Go To    ${BASE_URL}${URL_PERSONAL_DETAILS}
+    Wait For Elements State    css=[data-testid='personal-details-title']    visible    timeout=${TIMEOUT}
+
+Navigate To Residential Details Within Session
+    [Documentation]
+    ...    Test Setup for residential details validation tests in applicant_journey_tests.robot.
+    ...    Hard-navigates to /applicant-residential-details within the active wizard session.
+    Go To    ${BASE_URL}${URL_RESIDENTIAL_DETAILS}
+    Wait For Elements State    css=[data-testid='residential-details-title']    visible    timeout=${TIMEOUT}
 
 Navigate To Employment Type Within Session
     [Documentation]
@@ -449,10 +468,10 @@ Click First Plan In List
     [Documentation]
     ...    Traversal helper — clicks the first available plan in the plan list container.
     ...    The plan list renders items with dynamic testids (index-planId).
-    ...    Uses >> nth=0 to select the first child of the list container.
+    ...    Uses > div:first-child to explicitly target the first plan card inside the container.
     ...    Satisfies: RT-1 (traversal)
     Wait For Elements State    ${CP_PLAN_LIST}    visible    timeout=${LONG_TIMEOUT}
-    Click    ${CP_PLAN_LIST} >> nth=0
+    Click    css=[data-testid='plan-list-container'] > div:first-child
 
 Fill Personal Details With Stub Data
     [Documentation]

@@ -3,7 +3,7 @@
 ## Overview
 
 Jenkins pipeline for the GQ Customer Portal UI Automation suite.
-Runs Robot Framework + Playwright tests against UAT across **17 suite files** (~250 tests),
+Runs Robot Framework + Playwright tests against UAT across **20 suite files** (~295 tests),
 generates an Allure report, uploads it to S3, and preserves history for trend graphs across builds.
 
 | Suite File | Tests | Account |
@@ -19,12 +19,15 @@ generates an Allure report, uploads it to S3, and preserves history for trend gr
 | dashboard_new_user_tests | 4 | DASHBOARD_NEW_MOBILE |
 | dashboard_ins_tests | 11 | INS_MOBILE |
 | dashboard_ins_new_user_tests | 4 | DASHBOARD_NEW_MOBILE |
-| student_details_tests | 35 | APP_CREATION_MOBILE |
+| student_details_tests | 40 | APP_CREATION_MOBILE |
 | choose_plan_tests | 16 | APP_CREATION_MOBILE |
 | select_applicant_tests | 10 | APP_CREATION_MOBILE |
-| applicant_journey_tests | 27 | APP_CREATION_MOBILE |
-| employment_tests | 30 | APP_CREATION_MOBILE |
-| confirm_application_tests | 12 | APP_CREATION_MOBILE |
+| applicant_journey_tests | 23 | APP_CREATION_MOBILE |
+| onboarding_tests | 7 | APP_CREATION_MOBILE |
+| personal_details_tests | 15 | APP_CREATION_MOBILE |
+| residential_details_tests | 12 | APP_CREATION_MOBILE |
+| employment_tests | 42 | APP_CREATION_MOBILE |
+| confirm_application_tests | 20 | APP_CREATION_MOBILE |
 
 ---
 
@@ -196,8 +199,8 @@ gq-qa-reports/
 | Tab | Content |
 |-----|---------|
 | **Overview** | Summary stats, trend graph, suite pass/fail blocks |
-| **Behaviors** | Epic: CP UI Automation → Feature: Authentication → Story: Login Left Component / Login / OTP Verification / Bypass Authentication; Feature: Dashboard → Story: Dashboard / Auto Debit / Payment Gateway / New User Empty States / Insurance Tab; Feature: Application Creation Flow → Story: Student Details / Choose Plan / Select Applicant / Applicant Journey / Employment / Confirm Application |
-| **Suites** | CP UI Automation [UAT] → Login Left Component Tests / Login Tests / Otp Tests / Bypass Auth Tests / Dashboard Tests / Dashboard Emi Tests / Dashboard Ad Tests / Dashboard Pg Tests / Dashboard New User Tests / Dashboard Ins Tests / Dashboard Ins New User Tests / Student Details Tests / Choose Plan Tests / Select Applicant Tests / Applicant Journey Tests / Employment Tests / Confirm Application Tests |
+| **Behaviors** | Epic: CP UI Automation → Feature: Authentication → Story: Login Left Component / Login / OTP Verification / Bypass Authentication; Feature: Dashboard → Story: Dashboard / Auto Debit / Payment Gateway / New User Empty States / Insurance Tab; Feature: Application Creation Flow → Story: Student Details / Choose Plan / Select Applicant / Applicant Basic Details / Onboarding / Applicant Personal Details / Applicant Residential Details / Employment / Confirm Application |
+| **Suites** | CP UI Automation [UAT] → Login Left Component Tests / Login Tests / Otp Tests / Bypass Auth Tests / Dashboard Tests / Dashboard Emi Tests / Dashboard Ad Tests / Dashboard Pg Tests / Dashboard New User Tests / Dashboard Ins Tests / Dashboard Ins New User Tests / Student Details Tests / Choose Plan Tests / Select Applicant Tests / Applicant Journey Tests / Onboarding Tests / Personal Details Tests / Residential Details Tests / Employment Tests / Confirm Application Tests |
 | **Categories** | Product Defects / Test Infrastructure Defects / Skipped Tests |
 | **Timeline** | Tests plotted by execution time |
 

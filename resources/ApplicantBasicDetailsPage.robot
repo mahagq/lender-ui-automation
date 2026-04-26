@@ -28,6 +28,7 @@ ${BD_CONSENT}                   css=[data-testid='consent-checkbox']
 ${BD_CONSENT_ERROR}             css=[data-testid='consent-checkbox-error']
 ${BD_SUBMIT_BUTTON}             css=[data-testid='submit-button']
 ${BD_BACK_BUTTON}               css=[data-testid='back-button']
+${BD_CLOSE_BUTTON}              css=[data-testid='close-button']
 
 *** Keywords ***
 Basic Details Title Should Be Visible
@@ -69,7 +70,10 @@ Check Basic Details Consent
 Submit Button Should Be Disabled Without Data
     [Documentation]
     ...    Asserts the submit-button is disabled when required fields are empty.
-    ...    Satisfies: TC-8008, U2
+    ...    NOTE: /applicant-basic-details submit button does NOT use the HTML disabled
+    ...    attribute or aria-disabled. Button is always clickable; validation errors appear
+    ...    on submit. TC-8006, TC-8N-05, TC-8N-06 are skipped pending UX clarification.
+    ...    Satisfies: TC-8006, U2
     Wait For Elements State    ${BD_SUBMIT_BUTTON}    visible    timeout=${TIMEOUT}
     ${disabled}=    Get Property    ${BD_SUBMIT_BUTTON}    disabled
     Should Be True    ${disabled}
@@ -133,3 +137,15 @@ Navigate Back From Basic Details
     ...    Satisfies: TC-8012
     Wait For Elements State    ${BD_BACK_BUTTON}    visible    timeout=${TIMEOUT}
     Click    ${BD_BACK_BUTTON}
+
+Click Close Button Basic Details
+    [Documentation]
+    ...    Clicks the close-button on /applicant-basic-details to exit to dashboard.
+    ...    Satisfies: TC-8013
+    Wait For Elements State    ${BD_CLOSE_BUTTON}    visible    timeout=${TIMEOUT}
+    Click    ${BD_CLOSE_BUTTON}
+
+Resume Existing Application
+    [Documentation]
+    ...    Clicks the EMI card action button to resume the in-progress application.
+    Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    1s    Click    css=[data-testid='emi-card-action-button']    

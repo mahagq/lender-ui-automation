@@ -33,6 +33,9 @@ ${PD_EMAIL_TITLE}                   css=[data-testid='email-title']
 ${PD_EMAIL_INPUT}                   css=[data-testid='email-input']
 ${PD_CONSENT}                       css=[data-testid='consent-checkbox']
 ${PD_PROCEED_BUTTON}                css=[data-testid='proceed-button']
+${PD_PAN_ERROR}                     css=[data-testid='pan-number-input-error']
+${PD_EMAIL_ERROR}                   css=[data-testid='email-input-error']
+${PD_CONSENT_ERROR}                 css=[data-testid='consent-checkbox-error']
 
 *** Keywords ***
 Personal Details Title Should Be Visible
@@ -115,3 +118,28 @@ Personal Details URL Should Be Active
     [Documentation]    Helper — asserts the current URL contains /applicant-personal-details.
     ${url}=    Get Url
     Should Contain    ${url}    /applicant-personal-details
+
+PAN Error Should Be Visible
+    [Documentation]
+    ...    Asserts pan-number-input-error is visible after proceed with invalid/empty PAN.
+    ...    Satisfies: TC-10N-01, TC-10N-02, TC-10N-03
+    Wait For Elements State    ${PD_PAN_ERROR}    visible    timeout=${TIMEOUT}
+
+Email Error Should Be Visible
+    [Documentation]
+    ...    Asserts email-input-error is visible after proceed with invalid/empty email.
+    ...    Satisfies: TC-10N-04, TC-10N-05, TC-10N-06
+    Wait For Elements State    ${PD_EMAIL_ERROR}    visible    timeout=${TIMEOUT}
+
+Personal Details Consent Error Should Be Visible
+    [Documentation]
+    ...    Asserts consent-checkbox-error is visible after proceed without consent checked.
+    ...    Satisfies: TC-10N-07
+    Wait For Elements State    ${PD_CONSENT_ERROR}    visible    timeout=${TIMEOUT}
+
+Uncheck Personal Details Consent
+    [Documentation]    Unchecks the consent-checkbox on personal details if currently checked.
+    ${checked}=    Get Property    ${PD_CONSENT}    checked
+    IF    ${checked}
+        Click    ${PD_CONSENT}
+    END

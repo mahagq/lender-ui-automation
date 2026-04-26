@@ -1,75 +1,67 @@
 *** Settings ***
 Documentation
-...    Sequential journey test suite for the middle wizard steps:
-...      - /applicant-basic-details (TC-8001–TC-8010)
-...      - /onboarding               (TC-9001–TC-9003)
-...      - /applicant-personal-details (TC-10001–TC-10010)
-...      - /applicant-residential-details (TC-11001–TC-11010)
-...
-...    New pages — no Java TC coverage. Tests run sequentially in wizard order.
-...    Each section advances the wizard before the next section's tests begin.
+...    Independent test suite for the GQ Customer Portal Applicant Basic Details page (/applicant-basic-details).
+...    Covers TC-8001–TC-8014-S and TC-8008 (proceed to onboarding).
 ...
 ...    Session model:
-...      Suite Setup    → Navigate To Applicant Basic Details
-...      Test Setup     → NONE (tests run in strict wizard order; [Setup] set per section)
+...      Suite Setup    → Navigate To Applicant Basic Details (full wizard traversal)
+...      Test Setup     → Navigate To Basic Details Within Session (Go To)
 ...      Test Teardown  → NONE (shared session)
 ...      Suite Teardown → Close Browser
 ...
+...    TC-8008 (proceed → onboarding) runs LAST — advances wizard past basic-details.
+...    TC-8013 + TC-8014 are sequential (close → resume). TC-8014-S is the standalone version.
+...
 ...    PRECONDITION: ${APP_CREATION_MOBILE} must be registered on UAT.
-...    All APP_* variables must be correctly set in variables.robot.
-...    Satisfies: RT-5, B2 (new-page coverage), T1, T5 (TN4 static/computed assertions), U1
+...    Satisfies: RT-5, T1, U1, U2
 
 Resource    ../resources/ApplicationCreationFlowPage.robot
 Resource    ../resources/ApplicantBasicDetailsPage.robot
-Resource    ../resources/OnboardingPage.robot
-Resource    ../resources/ApplicantPersonalDetailsPage.robot
-Resource    ../resources/ApplicantResidentialDetailsPage.robot
 Resource    ../variables/variables.robot
 Variables   ../variables/dynamic_variables.py
 
 Suite Setup     Navigate To Applicant Basic Details
 Suite Teardown  Close Browser
-Test Tags       applicant-journey    application-creation-flow    allure.label.epic:CP UI Automation    allure.label.feature:Application Creation Flow    allure.label.story:Applicant Journey
+Test Setup      Navigate To Basic Details Within Session
+Test Tags       applicant-basic-details    application-creation-flow    allure.label.epic:CP UI Automation    allure.label.feature:Application Creation Flow    allure.label.story:Applicant Basic Details
 
 *** Test Cases ***
-# ===========================================================================
-# APPLICANT BASIC DETAILS — /applicant-basic-details (TC-8001–TC-8010)
-# ===========================================================================
-
 TC-8001 Basic Details Title Is Visible
     [Documentation]    Verifies applicant-basic-details-title is visible.
-    [Setup]    Navigate To Basic Details Within Session
     [Tags]    smoke
     Basic Details Title Should Be Visible
 
 TC-8002 Basic Details Form Elements Are Visible
     [Documentation]    Verifies all key form elements (name inputs, consent, submit) are visible.
-    [Setup]    Navigate To Basic Details Within Session
     Basic Details Form Elements Should Be Visible
 
 TC-8003 Basic Details URL Is Correct
     [Documentation]    Verifies URL contains /applicant-basic-details.
-    [Setup]    Navigate To Basic Details Within Session
     Basic Details URL Should Be Active
 
 TC-8004 First Name Input Accepts Text
     [Documentation]    Verifies first-name-input accepts text input.
-    [Setup]    Navigate To Basic Details Within Session
     Fill Basic Details First Name    TestFirst
 
 TC-8005 Last Name Input Accepts Text
     [Documentation]    Verifies last-name-input accepts text input.
-    [Setup]    Navigate To Basic Details Within Session
     Fill Basic Details Last Name    TestLast
 
-TC-8006 Submit Button Is Disabled Without Data
-    [Documentation]    Verifies submit-button is disabled when name fields are empty.
-    [Setup]    Navigate To Basic Details Within Session
-    Submit Button Should Be Disabled Without Data
+TC-8006 Submit Empty Form Shows Errors And User Cannot Proceed
+    [Documentation]
+    ...    Verifies clicking submit with all fields empty shows both first-name and
+    ...    last-name validation errors and user stays on /applicant-basic-details.
+    ...    Ref: recordings/login_20260426_204159.js
+    Fill Basic Details First Name    ${EMPTY}
+    Fill Basic Details Last Name    ${EMPTY}
+    Uncheck Basic Details Consent
+    Click Submit Basic Details
+    First Name Error Should Be Visible
+    Last Name Error Should Be Visible
+    Basic Details URL Should Be Active
 
 TC-8007 Submit Button Is Enabled With Valid Data
     [Documentation]    Verifies submit-button is enabled after filling names and checking consent.
-    [Setup]    Navigate To Basic Details Within Session
     Fill Basic Details First Name    ${APP_FIRST_NAME}
     Fill Basic Details Last Name    ${APP_LAST_NAME}
     Check Basic Details Consent
@@ -77,32 +69,26 @@ TC-8007 Submit Button Is Enabled With Valid Data
 
 TC-8009 Basic Details Info Section Is Visible
     [Documentation]    Verifies applicant-basic-details-info element is visible.
-    [Setup]    Navigate To Basic Details Within Session
     Basic Details Info Should Be Visible
 
 TC-8N-01 Submit Empty Form Shows First And Last Name Errors
     [Documentation]
     ...    Verifies both first-name-input-error and last-name-input-error appear
     ...    when submit is clicked with both name fields empty.
-    [Setup]    Navigate To Basic Details Within Session
     [Tags]    negative
     Click Submit Basic Details
     First Name Error Should Be Visible
     Last Name Error Should Be Visible
 
 TC-8N-02 Submit With Only First Name Shows Last Name Error
-    [Documentation]
-    ...    Verifies last-name-input-error appears when only first name is filled.
-    [Setup]    Navigate To Basic Details Within Session
+    [Documentation]    Verifies last-name-input-error appears when only first name is filled.
     [Tags]    negative
     Fill Basic Details First Name    ${APP_FIRST_NAME}
     Click Submit Basic Details
     Last Name Error Should Be Visible
 
 TC-8N-03 Submit With Only Last Name Shows First Name Error
-    [Documentation]
-    ...    Verifies first-name-input-error appears when only last name is filled.
-    [Setup]    Navigate To Basic Details Within Session
+    [Documentation]    Verifies first-name-input-error appears when only last name is filled.
     [Tags]    negative
     Fill Basic Details Last Name    ${APP_LAST_NAME}
     Click Submit Basic Details
@@ -111,7 +97,6 @@ TC-8N-03 Submit With Only Last Name Shows First Name Error
 TC-8N-04 Submit With Valid Names And Consent Unchecked Shows Consent Error
     [Documentation]
     ...    Verifies consent-checkbox-error appears when names are filled but consent is unchecked.
-    [Setup]    Navigate To Basic Details Within Session
     [Tags]    negative
     Fill Basic Details First Name    ${APP_FIRST_NAME}
     Fill Basic Details Last Name    ${APP_LAST_NAME}
@@ -119,196 +104,97 @@ TC-8N-04 Submit With Valid Names And Consent Unchecked Shows Consent Error
     Click Submit Basic Details
     Consent Error Should Be Visible
 
-TC-8N-05 Submit Disabled With Only Consent Checked
+TC-8N-05 Submit With Only Consent Checked Shows Name Errors And User Cannot Proceed
     [Documentation]
-    ...    Verifies submit-button remains disabled when consent is checked but both
-    ...    name fields are empty. Confirms consent alone is insufficient to enable submit.
-    ...    Satisfies: TC-8N-05
-    [Setup]    Navigate To Basic Details Within Session
+    ...    Verifies that clicking submit with consent checked but both name fields empty
+    ...    shows first-name and last-name errors and user stays on /applicant-basic-details.
     [Tags]    negative
     Check Basic Details Consent
-    Submit Button Should Be Disabled Without Data
+    Click Submit Basic Details
+    First Name Error Should Be Visible
+    Last Name Error Should Be Visible
+    Basic Details URL Should Be Active
 
-TC-8N-06 Submit Disabled With First Name And Consent But No Last Name
+TC-8N-06 Submit With First Name And Consent But No Last Name Shows Last Name Error
     [Documentation]
-    ...    Verifies submit-button remains disabled when first name and consent are
-    ...    filled but last name is still empty.
-    ...    Satisfies: TC-8N-06
-    [Setup]    Navigate To Basic Details Within Session
+    ...    Verifies that clicking submit with first name and consent filled but last name
+    ...    empty shows last-name error and user stays on /applicant-basic-details.
     [Tags]    negative
     Fill Basic Details First Name    ${APP_FIRST_NAME}
     Check Basic Details Consent
-    Submit Button Should Be Disabled Without Data
+    Click Submit Basic Details
+    Last Name Error Should Be Visible
+    Basic Details URL Should Be Active
+
+TC-8N-07 Numeric First Name Shows First Name Error
+    [Documentation]    Verifies first-name-input-error appears when first name contains only numbers.
+    [Tags]    negative
+    Fill Basic Details First Name    12345
+    Click Submit Basic Details
+    First Name Error Should Be Visible
+
+TC-8N-08 Numeric Last Name Shows Last Name Error
+    [Documentation]    Verifies last-name-input-error appears when last name contains only numbers.
+    [Tags]    negative
+    Fill Basic Details Last Name    12345
+    Click Submit Basic Details
+    Last Name Error Should Be Visible
+
+TC-8N-09 Special Chars In First Name Show First Name Error
+    [Documentation]    Verifies first-name-input-error appears when first name contains special characters.
+    [Tags]    negative
+    Fill Basic Details First Name    Test@#1
+    Click Submit Basic Details
+    First Name Error Should Be Visible
+
+TC-8N-10 Special Chars In Last Name Show Last Name Error
+    [Documentation]    Verifies last-name-input-error appears when last name contains special characters.
+    [Tags]    negative
+    Fill Basic Details Last Name    Test@#1
+    Click Submit Basic Details
+    Last Name Error Should Be Visible
 
 TC-8012 Back Button Navigates To Select Applicant
-    [Documentation]
-    ...    Verifies back-button on /applicant-basic-details navigates to /select-applicant.
-    [Setup]    Navigate To Basic Details Within Session
+    [Documentation]    Verifies back-button on /applicant-basic-details navigates to /select-applicant.
     Navigate Back From Basic Details
     ${url}=    Get Url
     Should Contain    ${url}    /select-applicant
 
+TC-8013 Close Button Navigates To Dashboard
+    [Documentation]    Verifies close-button on /applicant-basic-details navigates to /my-applications.
+    Click Close Button Basic Details
+    ${url}=    Get Url
+    Should Contain    ${url}    /my-applications
+
+#in sequence with TC-8013
+TC-8014 Resume Application Returns To Basic Details
+    [Documentation]
+    ...    Verifies that resuming the in-progress application from the dashboard
+    ...    navigates back to /applicant-basic-details.
+    ...    Runs sequentially after TC-8013 (which leaves session on /my-applications).
+    [Setup]    NONE
+    Resume Existing Application
+    Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    Basic Details URL Should Be Active
+
+#seperate test case for standalone version of TC-8014
+TC-8014-S Close And Resume Basic Details Standalone
+    [Documentation]
+    ...    Standalone version of TC-8013 + TC-8014 combined.
+    ...    Navigates to /applicant-basic-details, clicks close to go to /my-applications,
+    ...    resumes the application via the dashboard card, and verifies return to /applicant-basic-details.
+    ...    Can be run independently without relying on TC-8013 session state.
+    Click Close Button Basic Details
+    ${url}=    Get Url
+    Should Contain    ${url}    /my-applications
+    Resume Existing Application
+    Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    Basic Details URL Should Be Active
+
 TC-8008 Basic Details Proceeds To Onboarding
     [Documentation]
     ...    Fills valid data, clicks submit, and verifies navigation to /onboarding.
-    ...    Runs LAST in this section — advances wizard to onboarding.
-    ...    NOTE: After this test, subsequent [Setup] keywords use onboarding URL.
-    [Setup]    Navigate To Basic Details Within Session
+    ...    Runs LAST — advances wizard past basic-details.
     Fill Basic Details First Name    ${APP_FIRST_NAME}
     Fill Basic Details Last Name    ${APP_LAST_NAME}
     Check Basic Details Consent
     Click Submit Basic Details
     Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    Onboarding URL Should Be Active
-
-# ===========================================================================
-# ONBOARDING — /onboarding (TC-9001–TC-9003)
-# ===========================================================================
-
-TC-9001 Onboarding Info Sections Are Visible
-    [Documentation]    Verifies all three onboarding info sections are visible.
-    [Setup]    NONE
-    [Tags]    smoke
-    Onboarding Info Sections Should Be Visible
-
-TC-9002 Onboarding Proceed Button Is Visible
-    [Documentation]    Verifies the proceed-button is visible on the onboarding page.
-    [Setup]    NONE
-    Onboarding Proceed Button Should Be Visible
-
-TC-9004 Onboarding Title Is Visible
-    [Documentation]    Verifies onboarding-title is visible on the onboarding page.
-    [Setup]    NONE
-    [Tags]    smoke
-    Onboarding Title Should Be Visible
-
-TC-9005 Onboarding Illustration Is Visible
-    [Documentation]    Verifies the illustration image is visible on the onboarding page.
-    [Setup]    NONE
-    Onboarding Illustration Should Be Visible
-
-TC-9006 Onboarding URL Is Correct
-    [Documentation]    Verifies the URL contains /onboarding.
-    [Setup]    NONE
-    Onboarding URL Should Be Active
-
-TC-9N-01 Back Button On Onboarding Navigates To Basic Details
-    [Documentation]
-    ...    Verifies back-button on /onboarding navigates to /applicant-basic-details.
-    [Setup]    NONE
-    [Tags]    negative
-    Navigate Back From Onboarding
-    ${url}=    Get Url
-    Should Contain    ${url}    /applicant-basic-details
-
-TC-9003 Onboarding Proceeds To Personal Details
-    [Documentation]
-    ...    Clicks Proceed on Onboarding and verifies navigation to /applicant-personal-details.
-    ...    Runs LAST in this section — advances wizard to personal details.
-    ...    Uses Navigate To Onboarding Within Session setup because TC-9N-01 navigates away.
-    [Setup]    Navigate To Onboarding Within Session
-    Click Onboarding Proceed
-    Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    Personal Details URL Should Be Active
-
-# ===========================================================================
-# APPLICANT PERSONAL DETAILS — /applicant-personal-details (TC-10001–TC-10010)
-# ===========================================================================
-
-TC-10001 Personal Details Title And Form Are Visible
-    [Documentation]    Verifies personal-details-title and form container are visible.
-    [Setup]    NONE
-    [Tags]    smoke
-    Personal Details Title Should Be Visible
-    Personal Details Form Should Be Visible
-
-TC-10002 PAN Input Is Visible
-    [Documentation]    Verifies pan-number-input field is visible.
-    [Setup]    NONE
-    PAN Input Should Be Visible
-
-TC-10003 Gender Section Is Visible
-    [Documentation]    Verifies the gender-react-select dropdown is visible.
-    [Setup]    NONE
-    Gender Section Should Be Visible
-
-TC-10004 Date Of Birth Dropdowns Are Visible
-    [Documentation]    Verifies year/month/day react-select dropdowns are all visible.
-    [Setup]    NONE
-    DOB Section Should Be Visible
-
-TC-10005 Marital Status Options Are Visible
-    [Documentation]    Verifies marital-status-radio options are visible.
-    [Setup]    NONE
-    Marital Status Section Should Be Visible
-
-TC-10006 Email Input Is Visible
-    [Documentation]    Verifies email-input field is visible.
-    [Setup]    NONE
-    Email Input Should Be Visible
-
-TC-10007 Personal Details URL Is Correct
-    [Documentation]    Verifies URL contains /applicant-personal-details.
-    [Setup]    NONE
-    Personal Details URL Should Be Active
-
-TC-10008 Personal Details Proceeds To Residential Details
-    [Documentation]
-    ...    Fills personal details with APP_* stub data and proceeds to /applicant-residential-details.
-    ...    Static assertions: form visible before and after fill.
-    ...    Runs LAST in this section — advances wizard.
-    [Setup]    NONE
-    Personal Details Form Should Be Visible
-    Fill PAN Number    ${APP_PAN_NUMBER}
-    Sleep    2s    # PAN lookup API call
-    Fill Email    ${APP_EMAIL}
-    Check Personal Details Consent
-    Click Personal Details Proceed
-    Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    Residential Details URL Should Be Active
-
-# ===========================================================================
-# APPLICANT RESIDENTIAL DETAILS — /applicant-residential-details (TC-11001–TC-11010)
-# ===========================================================================
-
-TC-11001 Residential Details Title Is Visible
-    [Documentation]    Verifies residential-details-title is visible.
-    [Setup]    NONE
-    [Tags]    smoke
-    Residential Details Title Should Be Visible
-
-TC-11002 Address Fields Are Visible
-    [Documentation]    Verifies addr-line-1, addr-line-2, and pincode fields are visible.
-    [Setup]    NONE
-    Address Fields Should Be Visible
-
-TC-11003 Residence Type Radio Is Visible
-    [Documentation]    Verifies type-radio options are visible.
-    [Setup]    NONE
-    Residence Type Radio Should Be Visible
-
-TC-11004 Address Line 1 Accepts Text
-    [Documentation]    Verifies addr-line-1-input accepts text.
-    [Setup]    NONE
-    Fill Address Line 1    123 Test Avenue
-
-TC-11005 Pincode Field Accepts Numbers
-    [Documentation]    Verifies pincode-input accepts numeric input.
-    [Setup]    NONE
-    Fill Pincode    400001
-
-TC-11006 Residential Details URL Is Correct
-    [Documentation]    Verifies URL contains /applicant-residential-details.
-    [Setup]    NONE
-    Residential Details URL Should Be Active
-
-TC-11007 Residential Details Proceeds To Employment Type
-    [Documentation]
-    ...    Fills residential details with APP_* stub data and proceeds to /select-employment.
-    ...    TN4 resolution: City/state are API-populated — asserted as visible (not exact value).
-    ...    Runs LAST in this section — advances wizard to employment type.
-    [Setup]    NONE
-    Fill Address Line 1    ${APP_ADDRESS_LINE1}
-    Fill Address Line 2    ${APP_ADDRESS_LINE2}
-    Fill Pincode    ${APP_PINCODE}
-    Sleep    2s    # Pincode city/state auto-populate
-    Click First Residence Type Radio
-    Click Residential Details Proceed
-    Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    Employment Type URL Should Be Active

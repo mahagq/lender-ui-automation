@@ -57,11 +57,25 @@ TC-13004 EMI Plan Edit Button Is Visible
     ...    Ported from: GQCP-TC-13004.
     EMI Plan Section Edit Button Should Be Visible
 
+TC-13005 EMI Plan Edit Button Navigates To Choose Plan
+    [Documentation]
+    ...    Clicks the EMI Plan Details edit button and verifies navigation to /choose-plan.
+    ...    Satisfies: U4 (edit button navigation)
+    Click EMI Plan Edit Button
+    Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    Choose Plan URL Should Be Active
+
 TC-13007 Who Is Applying Edit Button Is Visible
     [Documentation]
     ...    Verifies the Who Is Applying? section edit button is visible.
     ...    Ported from: GQCP-TC-13007.
     Who Is Applying Section Edit Button Should Be Visible
+
+TC-13008 Who Is Applying Edit Button Navigates To Select Applicant
+    [Documentation]
+    ...    Clicks the Who Is Applying? edit button and verifies navigation to /select-applicant.
+    ...    Satisfies: U4 (edit button navigation)
+    Click Who Is Applying Edit Button
+    Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    Select Applicant URL Should Be Active
 
 TC-13010 General Details Edit Button Is Visible
     [Documentation]
@@ -75,17 +89,38 @@ TC-13011 Confirm Application Proceed Button Is Visible
     ...    Ported from: GQCP-TC-13011.
     Wait For Elements State    css=[data-testid='proceed-button']    visible    timeout=${TIMEOUT}
 
+TC-13012 General Details Edit Button Navigates To Personal Details
+    [Documentation]
+    ...    Clicks the Your General Details edit button and verifies navigation to /applicant-personal-details.
+    ...    Satisfies: U4 (edit button navigation)
+    Click General Details Edit Button
+    Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    Personal Details URL Should Be Active
+
 TC-13013 Residential Details Edit Button Is Visible
     [Documentation]
     ...    Verifies the Residential Details section edit button is visible.
     ...    Ported from: GQCP-TC-13013.
     Residential Section Edit Button Should Be Visible
 
+TC-13014 Residential Details Edit Button Navigates To Residential Details
+    [Documentation]
+    ...    Clicks the Residential Details edit button and verifies navigation to /applicant-residential-details.
+    ...    Satisfies: U4 (edit button navigation)
+    Click Residential Details Edit Button
+    Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    Residential Details URL Should Be Active
+
 TC-13016 Employment Details Edit Button Is Visible
     [Documentation]
     ...    Verifies the Employment Details section edit button is visible.
     ...    Ported from: GQCP-TC-13016.
     Employment Section Edit Button Should Be Visible
+
+TC-13017 Employment Details Edit Button Navigates To Employment Page
+    [Documentation]
+    ...    Clicks the Employment Details edit button and verifies navigation to /select-employment.
+    ...    Satisfies: U4 (edit button navigation)
+    Click Employment Details Edit Button
+    Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    Employment Type URL Should Be Active
 
 TC-13019 Consent Checkbox Is Visible And Unchecked By Default
     [Documentation]

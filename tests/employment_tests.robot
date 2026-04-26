@@ -207,6 +207,80 @@ TC-12034 Salaried Proceed Disabled With Empty Fields
     [Tags]    salaried
     Salaried Proceed Button Should Be Disabled Without Data
 
+# ===========================================================================
+# SALARIED VALIDATION — /applicant-employment-details (TC-12N-S01–TC-12N-S06)
+# ===========================================================================
+
+TC-12N-S01 Submit Empty Salaried Form Shows Employer Name Error
+    [Documentation]
+    ...    Verifies clicking proceed with all salaried fields empty shows
+    ...    employer-name-input-error and user stays on /applicant-employment-details.
+    [Setup]    Navigate To Salaried Employment Details In Session
+    [Tags]    negative    salaried
+    Fill Employer Name    ${EMPTY}
+    Fill Monthly Salary    ${EMPTY}
+    Click Salaried Proceed
+    Employer Name Error Should Be Visible
+    Employment Details URL Should Be Active
+
+TC-12N-S02 Special Chars In Employer Name Show Error
+    [Documentation]
+    ...    Verifies employer-name-input-error appears when employer name contains
+    ...    special characters and proceed is clicked.
+    [Setup]    Navigate To Salaried Employment Details In Session
+    [Tags]    negative    salaried
+    Fill Employer Name    @#$%^&*
+    Click Salaried Proceed
+    Employer Name Error Should Be Visible
+    Employment Details URL Should Be Active
+
+TC-12N-S03 Valid Employer Name But Empty Salary Shows Salary Error
+    [Documentation]
+    ...    Verifies net-monthly-salary-input-error appears when employer name is
+    ...    valid but salary is empty.
+    [Setup]    Navigate To Salaried Employment Details In Session
+    [Tags]    negative    salaried
+    Fill Employer Name    ${APP_EMPLOYER_NAME}
+    Fill Monthly Salary    ${EMPTY}
+    Click Salaried Proceed
+    Monthly Salary Error Should Be Visible
+    Employment Details URL Should Be Active
+
+TC-12N-S04 Alphabets In Monthly Salary Show Error
+    [Documentation]
+    ...    Verifies net-monthly-salary-input-error appears when salary contains alphabets.
+    [Setup]    Navigate To Salaried Employment Details In Session
+    [Tags]    negative    salaried
+    Fill Employer Name    ${APP_EMPLOYER_NAME}
+    Fill Monthly Salary    abcde
+    Click Salaried Proceed
+    Monthly Salary Error Should Be Visible
+    Employment Details URL Should Be Active
+
+TC-12N-S05 Special Chars In Monthly Salary Show Error
+    [Documentation]
+    ...    Verifies net-monthly-salary-input-error appears when salary contains special characters.
+    [Setup]    Navigate To Salaried Employment Details In Session
+    [Tags]    negative    salaried
+    Fill Employer Name    ${APP_EMPLOYER_NAME}
+    Fill Monthly Salary    @#$%
+    Click Salaried Proceed
+    Monthly Salary Error Should Be Visible
+    Employment Details URL Should Be Active
+
+TC-12N-S06 Valid Data Without Consent Shows Consent Error
+    [Documentation]
+    ...    Verifies consent-checkbox-error appears when employer name and salary are
+    ...    valid but consent is unchecked.
+    [Setup]    Navigate To Salaried Employment Details In Session
+    [Tags]    negative    salaried
+    Fill Employer Name    ${APP_EMPLOYER_NAME}
+    Fill Monthly Salary    ${APP_MONTHLY_SALARY}
+    Uncheck Salaried Consent
+    Click Salaried Proceed
+    Salaried Consent Error Should Be Visible
+    Employment Details URL Should Be Active
+
 TC-12045 Salaried Employment Proceeds To Next Step
     [Documentation]
     ...    Fills valid salaried data + consent and clicks proceed.
@@ -318,6 +392,80 @@ TC-12081 Self Employed Proceed Disabled With Empty Fields
     [Setup]    Navigate To Self Employed Details In Session
     [Tags]    self-employed
     Self Employed Proceed Button Should Be Disabled Without Data
+
+# ===========================================================================
+# SELF-EMPLOYED VALIDATION — /applicant-employment-details (TC-12N-SE01–TC-12N-SE06)
+# ===========================================================================
+
+TC-12N-SE01 Submit Empty Self Employed Form Shows Business Name Error
+    [Documentation]
+    ...    Verifies clicking proceed with all self-employed fields empty shows
+    ...    business-name-input-error and user stays on /applicant-employment-details.
+    [Setup]    Navigate To Self Employed Details In Session
+    [Tags]    negative    self-employed
+    Fill Business Name    ${EMPTY}
+    Click Self Employed Proceed
+    Business Name Error Should Be Visible
+    Employment Details URL Should Be Active
+
+TC-12N-SE02 Special Chars In Business Name Show Error
+    [Documentation]
+    ...    Verifies business-name-input-error appears when business name contains
+    ...    special characters.
+    [Setup]    Navigate To Self Employed Details In Session
+    [Tags]    negative    self-employed
+    Fill Business Name    @#$%^&*
+    Click Self Employed Proceed
+    Business Name Error Should Be Visible
+    Employment Details URL Should Be Active
+
+TC-12N-SE03 Valid Business Name But Empty Annual Income Shows Income Error
+    [Documentation]
+    ...    Verifies business-annual-income-input-error appears when business name is
+    ...    valid but annual income is empty.
+    [Setup]    Navigate To Self Employed Details In Session
+    [Tags]    negative    self-employed
+    Fill Business Name    ${APP_BUSINESS_NAME}
+    Fill Annual Income    ${EMPTY}
+    Click Self Employed Proceed
+    Annual Income Error Should Be Visible
+    Employment Details URL Should Be Active
+
+TC-12N-SE04 Alphabets In Annual Income Show Error
+    [Documentation]
+    ...    Verifies business-annual-income-input-error appears when income contains alphabets.
+    [Setup]    Navigate To Self Employed Details In Session
+    [Tags]    negative    self-employed
+    Fill Business Name    ${APP_BUSINESS_NAME}
+    Fill Annual Income    abcde
+    Click Self Employed Proceed
+    Annual Income Error Should Be Visible
+    Employment Details URL Should Be Active
+
+TC-12N-SE05 Valid Fields But Empty Years In Business Shows Error
+    [Documentation]
+    ...    Verifies years-of-current-business-input-error appears when business name
+    ...    and income are valid but years field is empty.
+    [Setup]    Navigate To Self Employed Details In Session
+    [Tags]    negative    self-employed
+    Fill Business Name    ${APP_BUSINESS_NAME}
+    Fill Annual Income    ${APP_BUSINESS_INCOME}
+    Fill Years In Business    ${EMPTY}
+    Click Self Employed Proceed
+    Years In Business Error Should Be Visible
+    Employment Details URL Should Be Active
+
+TC-12N-SE06 Alphabets In Years In Business Show Error
+    [Documentation]
+    ...    Verifies years-of-current-business-input-error appears when years contains alphabets.
+    [Setup]    Navigate To Self Employed Details In Session
+    [Tags]    negative    self-employed
+    Fill Business Name    ${APP_BUSINESS_NAME}
+    Fill Annual Income    ${APP_BUSINESS_INCOME}
+    Fill Years In Business    abc
+    Click Self Employed Proceed
+    Years In Business Error Should Be Visible
+    Employment Details URL Should Be Active
 
 TC-12082 Self Employed Proceed Enabled With Valid Data
     [Documentation]

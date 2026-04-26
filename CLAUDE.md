@@ -31,6 +31,9 @@ Robot Framework UI automation suite for the GQ Customer Portal. Covers the login
 ./venv/bin/robot --outputdir results/ tests/choose_plan_tests.robot
 ./venv/bin/robot --outputdir results/ tests/select_applicant_tests.robot
 ./venv/bin/robot --outputdir results/ tests/applicant_journey_tests.robot
+./venv/bin/robot --outputdir results/ tests/onboarding_tests.robot
+./venv/bin/robot --outputdir results/ tests/personal_details_tests.robot
+./venv/bin/robot --outputdir results/ tests/residential_details_tests.robot
 ./venv/bin/robot --outputdir results/ tests/employment_tests.robot
 ./venv/bin/robot --outputdir results/ tests/confirm_application_tests.robot
 ```
@@ -76,12 +79,15 @@ tests/                     — Test suites (import resources and variables)
   dashboard_pg_tests.robot          — 21 PG/Transaction History tests (TC-4003, TC-4013–TC-4029, TC-4051, TC-4030–TC-4031; PG_MOBILE 7757855472, independent)
   dashboard_ins_tests.robot         — 11 insurance tab tests (TC-4101–TC-4111; INS_MOBILE 8668768645, independent)
   dashboard_ins_new_user_tests.robot — 4 insurance new-user tests (TC-4112–TC-4115; DASHBOARD_NEW_MOBILE, independent)
-  student_details_tests.robot       — 35 student details tests (TC-5001–TC-5027, TC-5N-01–TC-5N-08)
-  choose_plan_tests.robot           — 16 choose plan tests (TC-6001–TC-6016)
-  select_applicant_tests.robot      — 10 select applicant tests (TC-7001–TC-7011)
-  applicant_journey_tests.robot     — 27 sequential wizard tests (TC-8001–TC-11007)
-  employment_tests.robot            — 30 employment tests: 7 type + 13 salaried + 10 SE (TC-12001–TC-12094)
-  confirm_application_tests.robot   — 12 confirm application tests (TC-13001–TC-13025)
+  student_details_tests.robot            — 40 student details tests (TC-5001–TC-5027, TC-5N-01–TC-5N-13)
+  choose_plan_tests.robot                — 16 choose plan tests (TC-6001–TC-6016)
+  select_applicant_tests.robot           — 10 select applicant tests (TC-7001–TC-7011)
+  applicant_journey_tests.robot          — 23 applicant basic details tests (TC-8001–TC-8014-S, independent)
+  onboarding_tests.robot                 — 7 onboarding tests (TC-9001–TC-9N-01, independent)
+  personal_details_tests.robot           — 15 personal details tests (TC-10001–TC-10N-07, independent)
+  residential_details_tests.robot        — 12 residential details tests (TC-11001–TC-11N-05, independent)
+  employment_tests.robot                 — 42 employment tests: 7 type + 13 salaried + 10 SE + 12 validation (TC-12001–TC-12N-SE06)
+  confirm_application_tests.robot        — 20 confirm application tests (TC-13001–TC-13025)
 
 resources/                 — Page Object keyword libraries (no variable imports)
   LoginLeftComponent.robot           — Keywords + locators for left panel component
@@ -171,7 +177,9 @@ Each wizard test suite uses a **single shared browser session** using `${APP_CRE
 - react-select dropdowns: `Select First Option In React Select` helper (approved T1 exception for traversal only)
 - PAN lookup and pincode city/state API calls require `Sleep 2s` during traversal
 
-**`applicant_journey_tests.robot`** runs 4 pages (basic-details, onboarding, personal-details, residential-details) **sequentially** with `[Setup] NONE` after the first section advances the wizard. Strict test ordering is required.
+**`applicant_journey_tests.robot`** covers `/applicant-basic-details` only (TC-8001–TC-8014-S). Each test uses `[Setup] Navigate To Basic Details Within Session` except TC-8014 (`[Setup] NONE`, sequential after TC-8013) and TC-8014-S (standalone close+resume test).
+
+**`onboarding_tests.robot`**, **`personal_details_tests.robot`**, **`residential_details_tests.robot`** are each fully independent suites with their own Suite Setup traversal — no cross-file ordering dependencies.
 
 **`employment_tests.robot`** covers both Salaried and Self-Employed variants in one file. Per-test `[Setup]` navigates back to `/select-employment` and selects the desired variant.
 

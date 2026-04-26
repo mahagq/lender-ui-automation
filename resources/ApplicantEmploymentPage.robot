@@ -33,6 +33,8 @@ ${SED_CONSENT}                  css=[data-testid='consent-checkbox']
 ${SED_CONSENT_ERROR}            css=[data-testid='consent-checkbox-error']
 ${SED_NOTE}                     css=[data-testid='employment-details-note']
 ${SED_PROCEED_BUTTON}           css=[data-testid='proceed-button']
+${SED_EMPLOYER_ERROR}           css=[data-testid='employer-name-input-error']
+${SED_SALARY_ERROR}             css=[data-testid='net-monthly-salary-input-error']
 
 # --- SELF-EMPLOYED DETAILS ---
 ${SE_BUSINESS_NAME_TITLE}       css=[data-testid='business-name-title']
@@ -42,6 +44,9 @@ ${SE_YEARS}                     css=[data-testid='years-of-current-business-inpu
 ${SE_DESCRIPTION}               css=[data-testid='business-description-input']
 ${SE_INFO}                      css=[data-testid='info']
 ${SE_PROCEED_BUTTON}            css=[data-testid='proceed-button']
+${SE_BUSINESS_NAME_ERROR}       css=[data-testid='business-name-input-error']
+${SE_ANNUAL_INCOME_ERROR}       css=[data-testid='business-annual-income-input-error']
+${SE_YEARS_ERROR}               css=[data-testid='years-of-current-business-input-error']
 
 *** Keywords ***
 # =====================================================================
@@ -211,3 +216,54 @@ Employment Details URL Should Be Active
     [Documentation]    Helper — asserts the current URL contains /applicant-employment-details.
     ${url}=    Get Url
     Should Contain    ${url}    /applicant-employment-details
+
+# =====================================================================
+# SALARIED VALIDATION KEYWORDS
+# =====================================================================
+
+Employer Name Error Should Be Visible
+    [Documentation]
+    ...    Asserts employer-name-input-error is visible after proceed with invalid/empty employer name.
+    ...    Satisfies: TC-12N-S01, TC-12N-S02
+    Wait For Elements State    ${SED_EMPLOYER_ERROR}    visible    timeout=${TIMEOUT}
+
+Monthly Salary Error Should Be Visible
+    [Documentation]
+    ...    Asserts net-monthly-salary-input-error is visible after proceed with invalid/empty salary.
+    ...    Satisfies: TC-12N-S03, TC-12N-S04, TC-12N-S05
+    Wait For Elements State    ${SED_SALARY_ERROR}    visible    timeout=${TIMEOUT}
+
+Salaried Consent Error Should Be Visible
+    [Documentation]
+    ...    Asserts consent-checkbox-error is visible after proceed without consent.
+    ...    Satisfies: TC-12N-S06
+    Wait For Elements State    ${SED_CONSENT_ERROR}    visible    timeout=${TIMEOUT}
+
+Uncheck Salaried Consent
+    [Documentation]    Unchecks the salaried consent-checkbox if currently checked.
+    ${checked}=    Get Property    ${SED_CONSENT}    checked
+    IF    ${checked}
+        Click    ${SED_CONSENT}
+    END
+
+# =====================================================================
+# SELF-EMPLOYED VALIDATION KEYWORDS
+# =====================================================================
+
+Business Name Error Should Be Visible
+    [Documentation]
+    ...    Asserts business-name-input-error is visible after proceed with invalid/empty business name.
+    ...    Satisfies: TC-12N-SE01, TC-12N-SE02
+    Wait For Elements State    ${SE_BUSINESS_NAME_ERROR}    visible    timeout=${TIMEOUT}
+
+Annual Income Error Should Be Visible
+    [Documentation]
+    ...    Asserts business-annual-income-input-error is visible after proceed with invalid/empty income.
+    ...    Satisfies: TC-12N-SE03, TC-12N-SE04
+    Wait For Elements State    ${SE_ANNUAL_INCOME_ERROR}    visible    timeout=${TIMEOUT}
+
+Years In Business Error Should Be Visible
+    [Documentation]
+    ...    Asserts years-of-current-business-input-error is visible after proceed with invalid/empty years.
+    ...    Satisfies: TC-12N-SE05, TC-12N-SE06
+    Wait For Elements State    ${SE_YEARS_ERROR}    visible    timeout=${TIMEOUT}

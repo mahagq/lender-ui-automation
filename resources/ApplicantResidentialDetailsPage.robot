@@ -29,6 +29,8 @@ ${RD_STATE_SELECT}              css=[data-testid='state-react-select']
 ${RD_RESIDENCE_TYPE_TITLE}      css=[data-testid='residence-type-title']
 ${RD_TYPE_RADIO}                css=[data-testid='type-radio']
 ${RD_PROCEED_BUTTON}            css=[data-testid='proceed-button']
+${RD_ADDR_LINE1_ERROR}          css=[data-testid='addr-line-1-input-error']
+${RD_PINCODE_ERROR}             css=[data-testid='pincode-input-error']
 
 *** Keywords ***
 Residential Details Title Should Be Visible
@@ -98,3 +100,15 @@ Residential Details URL Should Be Active
     [Documentation]    Helper — asserts the current URL contains /applicant-residential-details.
     ${url}=    Get Url
     Should Contain    ${url}    /applicant-residential-details
+
+Address Line 1 Error Should Be Visible
+    [Documentation]
+    ...    Asserts addr-line-1-input-error is visible after proceed with empty address line 1.
+    ...    Satisfies: TC-11N-01
+    Wait For Elements State    ${RD_ADDR_LINE1_ERROR}    visible    timeout=${TIMEOUT}
+
+Pincode Error Should Be Visible
+    [Documentation]
+    ...    Asserts pincode-input-error is visible after proceed with invalid/empty pincode.
+    ...    Satisfies: TC-11N-02, TC-11N-03, TC-11N-04, TC-11N-05
+    Wait For Elements State    ${RD_PINCODE_ERROR}    visible    timeout=${TIMEOUT}

@@ -311,3 +311,57 @@ TC-5N-08 Show Plans With Loan Amount Zero Shows Loan Error
     Fill Loan Amount    0
     Click Show Plans Button
     Student Loan Amount Error Should Be Visible
+
+TC-5N-09 Numeric Student First Name Shows First Name Error
+    [Documentation]
+    ...    Verifies first-name-input-error appears when student first name contains only numbers.
+    ...    Satisfies: TC-5N-09
+    [Setup]    Navigate To Student Details With GILE Filled
+    [Tags]    negative
+    Fill First Name    12345
+    Click Show Plans Button
+    Student First Name Error Should Be Visible
+
+TC-5N-10 Special Chars In Student First Name Show First Name Error
+    [Documentation]
+    ...    Verifies first-name-input-error appears when student first name contains special characters.
+    ...    Satisfies: TC-5N-10
+    [Setup]    Navigate To Student Details With GILE Filled
+    [Tags]    negative
+    Fill First Name    Test@#!
+    Click Show Plans Button
+    Student First Name Error Should Be Visible
+
+TC-5N-11 Numeric Student Last Name Shows Last Name Error
+    [Documentation]
+    ...    Verifies last-name-input-error appears when student last name contains only numbers.
+    ...    Satisfies: TC-5N-11
+    [Setup]    Navigate To Student Details With GILE Filled
+    [Tags]    negative
+    Fill Last Name    12345
+    Click Show Plans Button
+    Student Last Name Error Should Be Visible
+
+TC-5N-12 Special Chars In Student Last Name Show Last Name Error
+    [Documentation]
+    ...    Verifies last-name-input-error appears when student last name contains special characters.
+    ...    Satisfies: TC-5N-12
+    [Setup]    Navigate To Student Details With GILE Filled
+    [Tags]    negative
+    Fill Last Name    Test@#!
+    Click Show Plans Button
+    Student Last Name Error Should Be Visible
+
+TC-5N-13 Alphabets In Loan Amount Show Loan Amount Error
+    [Documentation]
+    ...    Verifies loan-amount-input-error appears when loan amount contains alphabetic characters.
+    ...    Fills valid names and class so only the loan amount error is shown.
+    ...    Satisfies: TC-5N-13
+    [Setup]    Navigate To Student Details With GILE Filled
+    [Tags]    negative
+    Fill First Name    ${APP_STUDENT_FIRST_NAME}
+    Fill Last Name    ${APP_STUDENT_LAST_NAME}
+    Select GILE Class
+    Fill Loan Amount    abcde
+    Click Show Plans Button
+    Student Loan Amount Error Should Be Visible

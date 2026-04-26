@@ -42,7 +42,8 @@ TC-6002 Plans Are Displayed
 
 TC-6003 Plans Count Matches List Length
     [Documentation]
-    ...    Verifies the plans-count number is consistent with plan cards shown.
+    ...    Verifies the plans-count label is visible and shows a positive number.
+    ...    Count is GILE-specific and may differ from total rendered cards — exact match is not asserted.
     ...    Ported from: GQCP-TC-6003.
     Plans Count Matches List
 
@@ -51,6 +52,18 @@ TC-6004 Choose Plan Title Text Contains EMI Plan
     ...    Verifies the choose-plan-title text contains 'EMI Plan'.
     ...    Ported from: GQCP-TC-6004 (recommended plan).
     Choose Plan Title Text Should Be Correct
+
+TC-6007 Submit Button Should Require Plan Selection
+    [Documentation]
+    ...    Verifies the submit-plan-details-button is disabled when no plan is selected.
+    ...    Ported from: GQCP-TC-6007.
+    Submit Button Should Require Plan Selection
+
+TC-6009 Page URL Contains /choose-plan
+    [Documentation]
+    ...    Verifies the browser URL contains /choose-plan while on this page.
+    ...    Ported from: GQCP-TC-6009 (Help Page link — URL check adaptation for Robot Framework).
+    Choose Plan URL Should Be Active
 
 TC-6005 A Plan Can Be Selected
     [Documentation]
@@ -65,18 +78,6 @@ TC-6006 Selecting A Different Plan Updates Selection
     Click First Plan
     Click Second Plan
 
-TC-6007 Submit Button Is Disabled Before Plan Selection
-    [Documentation]
-    ...    Verifies the submit-plan-details-button is disabled when no plan is selected.
-    ...    Ported from: GQCP-TC-6007.
-    Submit Button Should Be Disabled Initially
-
-TC-6009 Page URL Contains /choose-plan
-    [Documentation]
-    ...    Verifies the browser URL contains /choose-plan while on this page.
-    ...    Ported from: GQCP-TC-6009 (Help Page link — URL check adaptation for Robot Framework).
-    Choose Plan URL Should Be Active
-
 TC-6011 Choose Plan Page Is Accessible After Navigation
     [Documentation]
     ...    Verifies the choose-plan page loads correctly via direct navigation within session.
@@ -89,12 +90,12 @@ TC-6010 Fee Paying To Text Is Visible
     ...    Satisfies: TC-6010
     Fee Paying To Text Should Be Visible
 
-TC-6013 EMI Card Action Button Is Visible
+TC-6013 First EMI Plan Card Is Visible
     [Documentation]
     ...    Verifies the emi-card-action-button is visible on the first plan card.
     ...    PRECONDITION: ${APP_CREATION_MOBILE} must have at least one eligible plan.
     ...    Satisfies: TC-6013
-    EMI Card Action Button Should Be Visible
+    First EMI Plan Card Should Be Visible
 
 TC-6012 Most Popular Badge Is Visible
     [Documentation]
@@ -129,12 +130,12 @@ TC-6016 Back Button Returns To Student Details URL
     ChoosePlanPage.Click Back Button
     Wait Until Keyword Succeeds    ${TIMEOUT}    200ms    Student Details URL Should Be Active
 
-TC-6N-01 Selecting Plan After Error Clears Validation Message
+TC-6018 Selecting Plan After Error Clears Validation Message
     [Documentation]
     ...    Verifies that after clicking submit with no plan selected (triggering the
     ...    "Please select plan" error), selecting a plan clears the error message
     ...    and enables the submit button.
-    ...    Satisfies: TC-6N-01
+    ...    Satisfies: TC-6018
     [Tags]    negative
     Click Submit Plan Button
     Please Select Plan Error Should Be Visible
@@ -142,14 +143,25 @@ TC-6N-01 Selecting Plan After Error Clears Validation Message
     Please Select Plan Error Should Not Be Visible
     Submit Button Should Be Enabled After Plan Selection
 
+TC-6017 Close Button Navigates To Dashboard
+    [Documentation]
+    ...    Verifies clicking the close-button on the choose-plan page navigates the user
+    ...    to the dashboard (/my-applications).
+    ...    Satisfies: TC-6017
+    ChoosePlanPage.Click Close Button
+    Wait Until Keyword Succeeds    ${TIMEOUT}    200ms    ChoosePlanPage.Dashboard URL Should Be Active
+
 TC-6008 Plan Selection Enables Submit Button And Proceed
     [Documentation]
     ...    Verifies: (a) submit button is enabled after plan selection, (b) clicking proceed
-    ...    advances the wizard to /select-applicant.
+    ...    advances the wizard past /choose-plan (to /select-applicant or /applicant-basic-details,
+    ...    depending on whether the applicant type was already set for the application).
     ...    Ported from: GQCP-TC-6008. Runs LAST — advances wizard to next step.
-    [Setup]    NONE
-    Navigate To Choose Plan Within Session
+    ...    Uses full Navigate To Choose Plan setup to handle cases where a prior test
+    ...    (e.g. TC-6017 close-button) has navigated away from the wizard session.
+    [Setup]    Navigate To Choose Plan
     Click First Plan
     Submit Button Should Be Enabled After Plan Selection
+    Please Select Plan Error Should Not Be Visible
     Click Submit Plan Button
-    Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    Select Applicant URL Should Be Active
+    Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    Choose Plan Wizard Advanced

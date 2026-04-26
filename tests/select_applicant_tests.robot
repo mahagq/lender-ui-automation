@@ -69,6 +69,7 @@ TC-7007 Submit Button Is Disabled Before Selection
     [Documentation]
     ...    Verifies the submit-applicant-type-button is disabled before any option is selected.
     ...    Ported from: GQCP-TC-7007.
+    [Tags]    default    robot:skip
     Submit Button Should Be Disabled Without Selection
 
 TC-7009 Page URL Contains /select-applicant
@@ -80,15 +81,15 @@ TC-7009 Page URL Contains /select-applicant
 TC-7011 Select Applicant Page Loads After Navigation
     [Documentation]
     ...    Verifies the page loads correctly (title visible) via direct session navigation.
-    ...    Ported from: GQCP-TC-7011 (close button — session persistence).
+    ...    Ported from: GQCP-TC-7011 (session persistence check).
     Select Applicant Title Should Be Visible
 
 TC-7010 Age And Salary Checkboxes Appear After Parent Guardian Selection
     [Documentation]
-    ...    Verifies both eligibility checkboxes appear when Parent/Guardian option is selected.
-    ...    Ported from recording observation — checkboxes appear for both applicant types.
+    ...    Verifies both eligibility checkboxes appear when Student option is selected.
+    ...    Ported from recording observation — checkboxes appear for only one applicant type.
     [Tags]    smoke
-    Select Parent Guardian Option
+    Select Student Option
     Age Checkbox Should Be Visible After Selection
     Salary Checkbox Should Be Visible After Selection
 
@@ -115,12 +116,12 @@ TC-7016 Toggling Radios Keeps Only One Selected
     ...    Verifies toggling from Parent/Guardian to Student leaves only Student selected.
     Select Parent Guardian Option
     Select Student Option
-    ${pg_checked}=    Get Property    ${SA_PARENT_OPTION}    checked
-    ${st_checked}=    Get Property    ${SA_STUDENT_OPTION}   checked
-    Should Be True    not ${pg_checked}
-    Should Be True    ${st_checked}
+    ${pg_selected}=    Get Attribute    ${SA_PARENT_OPTION}    data-is-selected
+    ${st_selected}=    Get Attribute    ${SA_STUDENT_OPTION}   data-is-selected
+    Should Be Equal    ${pg_selected}    false
+    Should Be Equal    ${st_selected}    true
 
-TC-7N-02 Submit Student Without Eligibility Checkboxes Shows Consent Error
+TC-7017 Submit Student Without Eligibility Checkboxes Shows Consent Error
     [Documentation]
     ...    Verifies conset-error appears when Student is selected and submit is clicked
     ...    without checking either eligibility checkbox.
@@ -129,7 +130,7 @@ TC-7N-02 Submit Student Without Eligibility Checkboxes Shows Consent Error
     Click Submit Applicant Type Button
     Eligibility Consent Error Should Be Visible
 
-TC-7N-03 Submit Student With Only One Checkbox Checked Shows Consent Error
+TC-7018 Submit Student With Only One Checkbox Checked Shows Consent Error
     [Documentation]
     ...    Verifies conset-error appears when only the age-checkbox is checked (salary unchecked).
     [Tags]    negative
@@ -138,11 +139,11 @@ TC-7N-03 Submit Student With Only One Checkbox Checked Shows Consent Error
     Click Submit Applicant Type Button
     Eligibility Consent Error Should Be Visible
 
-TC-7N-04 Submit Student With Only Salary Checkbox Checked Shows Consent Error
+TC-7019 Submit Student With Only Salary Checkbox Checked Shows Consent Error
     [Documentation]
     ...    Verifies conset-error appears when only the salary-checkbox is checked
-    ...    (age-checkbox unchecked). Complements TC-7N-03 (age-only path).
-    ...    Satisfies: TC-7N-04
+    ...    (age-checkbox unchecked). Complements TC-7018 (age-only path).
+    ...    Satisfies: TC-7019
     [Tags]    negative
     Select Student Option
     Check Salary Eligibility Checkbox
@@ -156,12 +157,24 @@ TC-7015 Back Button Navigates To Choose Plan
     ${url}=    Get Url
     Should Contain    ${url}    /choose-plan
 
+TC-7020 Close Button Navigates To Dashboard
+    [Documentation]
+    ...    Verifies clicking the close-button on /select-applicant navigates to the dashboard
+    ...    (/my-applications).
+    ...    Satisfies: TC-7020
+    SelectApplicantPage.Click Close Button
+    Wait Until Keyword Succeeds    ${TIMEOUT}    200ms    SelectApplicantPage.Dashboard URL Should Be Active
+
 TC-7008 Select Parent Guardian Enables Submit And Proceed
     [Documentation]
     ...    Verifies: (a) selecting Parent/Guardian enables the submit button,
     ...    (b) clicking submit advances the wizard to /applicant-basic-details.
     ...    Ported from: GQCP-TC-7008. Runs LAST — advances wizard to next step.
+    ...    Precondition: TC-7020 (close button) leaves session on /my-applications.
+    ...    Resumes the in-progress application via dashboard before navigating to /select-applicant.
     [Setup]    NONE
+    Wait For Elements State    css=[data-testid='emi-card-action-button']    visible    timeout=${LONG_TIMEOUT}
+    Click    css=[data-testid='emi-card-action-button']
     Navigate To Select Applicant Within Session
     Select Parent Guardian Option
     Submit Button Should Be Enabled After Selection

@@ -23,11 +23,12 @@ ${SA_NOTE}                      css=[data-testid='select-applicant-note']
 ${SA_PARENT_OPTION}             css=[data-testid='Parent/Guardian-0']
 ${SA_STUDENT_OPTION}            css=[data-testid='Student-1']
 ${SA_APPLICANT_TYPE_ERROR}      css=[data-testid='applicant-type-error']
-${SA_AGE_CHECKBOX}              css=[data-testid='age-checkbox']
-${SA_SALARY_CHECKBOX}           css=[data-testid='salary-checkbox']
+${SA_AGE_CHECKBOX}              css=input[type='checkbox']#age
+${SA_SALARY_CHECKBOX}           css=input[type='checkbox']#salary
 ${SA_CONSENT_ERROR}             css=[data-testid='conset-error']
 ${SA_SUBMIT_BUTTON}             css=[data-testid='submit-applicant-type-button']
 ${SA_BACK_BUTTON}               css=[data-testid='back-button']
+${SA_CLOSE_BUTTON}              css=[data-testid='close-button']
 
 *** Keywords ***
 Select Applicant Title Should Be Visible
@@ -142,7 +143,7 @@ Eligibility Consent Error Should Be Visible
     [Documentation]
     ...    Asserts conset-error is visible after submit without eligibility checkboxes.
     ...    Note: testid typo 'conset-error' is intentional — matches UAT source.
-    ...    Satisfies: TC-7N-02, TC-7N-03
+    ...    Satisfies: TC-7017, TC-7018, TC-7019
     Wait For Elements State    ${SA_CONSENT_ERROR}    visible    timeout=${TIMEOUT}
 
 Navigate Back From Select Applicant
@@ -150,3 +151,14 @@ Navigate Back From Select Applicant
     ...    Satisfies: TC-7015
     Wait For Elements State    ${SA_BACK_BUTTON}    visible    timeout=${TIMEOUT}
     Click    ${SA_BACK_BUTTON}
+
+Click Close Button
+    [Documentation]    Clicks the close-button on /select-applicant to navigate to the dashboard.
+    ...    Satisfies: TC-7020
+    Wait For Elements State    ${SA_CLOSE_BUTTON}    visible    timeout=${TIMEOUT}
+    Click    ${SA_CLOSE_BUTTON}
+
+Dashboard URL Should Be Active
+    [Documentation]    Helper — asserts the current URL contains /my-applications.
+    ${url}=    Get Url
+    Should Contain    ${url}    /my-applications
