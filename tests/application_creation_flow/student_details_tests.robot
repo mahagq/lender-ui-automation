@@ -13,10 +13,10 @@ Documentation
 ...    PRECONDITION: ${APP_CREATION_MOBILE} must be registered on UAT.
 ...    Satisfies: RT-2, B2 (new-page coverage), T1, U1
 
-Resource    ../resources/ApplicationCreationFlowPage.robot
-Resource    ../resources/StudentDetailsPage.robot
-Resource    ../variables/variables.robot
-Variables   ../variables/dynamic_variables.py
+Resource    ../../resources/ApplicationCreationFlowPage.robot
+Resource    ../../resources/StudentDetailsPage.robot
+Resource    ../../variables/variables.robot
+Variables   ../../variables/dynamic_variables.py
 
 Suite Setup     Create Application And Navigate To Student Details
 Suite Teardown  Close Browser

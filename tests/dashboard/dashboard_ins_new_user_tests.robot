@@ -18,9 +18,9 @@ Documentation
 ...    Covers: TC-4112 to TC-4115
 
 Library          Browser
-Resource         ../resources/InsuranceDashboardPage.robot
-Resource         ../variables/variables.robot
-Variables        ../variables/dynamic_variables.py
+Resource         ../../resources/InsuranceDashboardPage.robot
+Resource         ../../variables/variables.robot
+Variables        ../../variables/dynamic_variables.py
 
 Suite Setup      Navigate To Insurance Tab New User
 Suite Teardown   Close Browser

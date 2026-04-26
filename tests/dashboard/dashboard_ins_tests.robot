@@ -22,9 +22,9 @@ Documentation
 ...               U2 (explicit waits), U3 (redirect and URL hash assertions), O1 (shared session)
 
 Library          Browser
-Resource         ../resources/InsuranceDashboardPage.robot
-Resource         ../variables/variables.robot
-Variables        ../variables/dynamic_variables.py
+Resource         ../../resources/InsuranceDashboardPage.robot
+Resource         ../../variables/variables.robot
+Variables        ../../variables/dynamic_variables.py
 
 Suite Setup      Login And Navigate To Insurance Tab
 Suite Teardown   Close Browser

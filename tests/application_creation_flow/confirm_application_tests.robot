@@ -18,10 +18,10 @@ Documentation
 ...    Satisfies: RT-7, B1 (Java TCs ported), T1, T5 (TN4 static/computed assertions),
 ...    U1, U4 (edit button navigation)
 
-Resource    ../resources/ApplicationCreationFlowPage.robot
-Resource    ../resources/ConfirmApplicationPage.robot
-Resource    ../variables/variables.robot
-Variables   ../variables/dynamic_variables.py
+Resource    ../../resources/ApplicationCreationFlowPage.robot
+Resource    ../../resources/ConfirmApplicationPage.robot
+Resource    ../../variables/variables.robot
+Variables   ../../variables/dynamic_variables.py
 
 Suite Setup     Navigate To Confirm Application
 Suite Teardown  Close Browser

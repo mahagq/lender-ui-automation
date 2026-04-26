@@ -24,8 +24,8 @@ Documentation
 ...    ⚠ TC-4009 (logout) MUST remain the final test in this file (TN1 resolution).
 
 Library          Browser
-Resource         ../resources/DashboardPage.robot
-Resource         ../variables/variables.robot
+Resource         ../../resources/DashboardPage.robot
+Resource         ../../variables/variables.robot
 
 Suite Setup      Login And Navigate To Dashboard
 Suite Teardown   Close Browser

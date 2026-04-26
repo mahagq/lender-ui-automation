@@ -16,8 +16,8 @@ Documentation
 ...    Covers: TC-4002, TC-4012, TC-4036 to TC-4043
 
 Library          Browser
-Resource         ../resources/DashboardPage.robot
-Resource         ../variables/variables.robot
+Resource         ../../resources/DashboardPage.robot
+Resource         ../../variables/variables.robot
 
 Suite Setup      Login And Navigate To Dashboard As    ${AD_MOBILE}
 Suite Teardown   Close Browser

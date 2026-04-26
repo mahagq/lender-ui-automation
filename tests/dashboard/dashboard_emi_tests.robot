@@ -16,8 +16,8 @@ Documentation
 ...    Covers: TC-4001, TC-4011, TC-4044 to TC-4046
 
 Library          Browser
-Resource         ../resources/DashboardPage.robot
-Resource         ../variables/variables.robot
+Resource         ../../resources/DashboardPage.robot
+Resource         ../../variables/variables.robot
 
 Suite Setup      Login And Navigate To Dashboard
 Suite Teardown   Close Browser

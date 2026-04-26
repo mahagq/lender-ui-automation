@@ -19,11 +19,11 @@ Documentation
 ...    (SelectEmploymentTest + SalariedEmploymentTest + SelfEmploymentTest + classes, Java/Selenium)
 ...    Satisfies: RT-6, B1 (Java TCs ported), T1, T4 (dual-variant), TN3 resolution
 
-Resource    ../resources/ApplicationCreationFlowPage.robot
-Resource    ../resources/EmploymentTypePage.robot
-Resource    ../resources/ApplicantEmploymentPage.robot
-Resource    ../variables/variables.robot
-Variables   ../variables/dynamic_variables.py
+Resource    ../../resources/ApplicationCreationFlowPage.robot
+Resource    ../../resources/EmploymentTypePage.robot
+Resource    ../../resources/ApplicantEmploymentPage.robot
+Resource    ../../variables/variables.robot
+Variables   ../../variables/dynamic_variables.py
 
 Suite Setup     Navigate To Employment Type
 Suite Teardown  Close Browser
