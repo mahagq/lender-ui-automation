@@ -105,6 +105,14 @@ ${NON_NUMERIC_OTP}        abcd
 # Wizard suites import that file via `Variables` to get a fresh mobile each execution.
 # Existing application journey tests use ${EXISTING_USER_MOBILE}.
 
+# Renewal Journey suite mobile — UAT account that already has at least one completed application.
+# Used by all tests/renewal_journey_flow/ suites and renewal E2E.
+${RENEWAL_MOBILE}         %{RENEWAL_MOBILE=8108556708}
+
+# Resume Journey suite mobile — UAT account kept perpetually in-progress (application never submitted).
+# Used by tests/e2e/resume_journey_e2e_tests.robot.
+${RESUME_MOBILE}          %{RESUME_MOBILE=9876543210}
+
 # Student details stub data (used by traversal helpers in Suite Setups)
 ${APP_STUDENT_FIRST_NAME}     Test
 ${APP_STUDENT_LAST_NAME}      Student
@@ -116,7 +124,7 @@ ${APP_INSTITUTE_SEARCH}       %{APP_INSTITUTE_SEARCH=Sch}
 # Applicant (parent/guardian) details
 ${APP_FIRST_NAME}             Test
 ${APP_LAST_NAME}              Parent
-${APP_PAN_NUMBER}             ABCDE1234F
+${APP_PAN_NUMBER}             DDDPD1621M
 ${APP_EMAIL}                  testparent@example.com
 
 # Residential details

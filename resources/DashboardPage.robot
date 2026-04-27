@@ -95,7 +95,9 @@ ${FILTER_FAILED}                css=[data-testid='Failed']
 # per T1 — those selectors are hashed and unstable. Debit breakdown tests require clicking a
 # CSS-class card and are therefore omitted.
 # PRECONDITION: ${AD_MOBILE} (8763694182) must have active AD applications for content tests.
-${AD_APP_CODE_LABEL}           text=App. Code: >> nth=0
+#${AD_APP_CODE_LABEL}           text=App. Code: >> nth=0
+${AD_FIRST_CARD}               css=div[data-testid^="GQAD-"] >> nth=0
+${AD_APP_CODE_LABEL}           ${AD_FIRST_CARD} >> css=span:has-text("App. Code:")
 ${AD_COPY_BUTTON}              css=[data-testid='copy-button'] >> nth=0
 ${AD_STATUS_ACTIVE}            text=Your repayment is active >> nth=0
 ${AD_STATUS_PENDING}           text=Your repayment is pending
@@ -189,6 +191,41 @@ Navigate To Dashboard
     ...    Called as Test Setup for every test in the suite (except those with [Setup] NONE).
     ...    Satisfies: RT-2, O1
     Go To    ${BASE_URL}/my-applications
+    Wait For Elements State    ${DASHBOARD_TITLE}    visible    timeout=${TIMEOUT}
+
+Login Fresh And Navigate To Dashboard As
+    [Documentation]
+    ...    Logs in from scratch as ${mobile} — navigates to the login page, submits the form,
+    ...    enters OTP, and waits for /my-applications to load. Does NOT open or close the
+    ...    browser; reuses the existing browser context (session-agnostic).
+    ...    Includes checkMobilePost and verifyOtpPost rate-limit retry handling.
+    ...    Used as the [Setup] for TC-4009 (Logout) to make it fully independent of any
+    ...    previous test's session state.
+    ...    Satisfies: TC-4009, TN1
+    [Arguments]    ${mobile}
+    Go To    ${BASE_URL}/
+    Wait For Elements State    ${LOGIN_FORM}    visible    timeout=${LONG_TIMEOUT}
+    Submit Login Form    ${mobile}
+    ${otp_loaded}=    Run Keyword And Return Status
+    ...    Wait For Elements State    ${OTP_FORM}    visible    timeout=${LONG_TIMEOUT}
+    IF    not ${otp_loaded}
+        Log    checkMobilePost rate limit in Login Fresh — waiting ${RATE_LIMIT_WAIT} then retrying.    console=True
+        Sleep    ${RATE_LIMIT_WAIT}
+        Go To    ${BASE_URL}/
+        Wait For Elements State    ${LOGIN_FORM}    visible    timeout=${LONG_TIMEOUT}
+        Submit Login Form    ${mobile}
+        Wait For OTP Page
+    END
+    Submit OTP Form    ${TEST_OTP}
+    ${redirected}=    Run Keyword And Return Status
+    ...    Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    Dashboard URL Should Be Visible
+    IF    not ${redirected}
+        Log    verifyOtpPost rate limit in Login Fresh — waiting ${RATE_LIMIT_WAIT} then retrying.    console=True
+        Sleep    ${RATE_LIMIT_WAIT}
+        Enter OTP    ${TEST_OTP}
+        Click Verify OTP Button
+    END
+    Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    Dashboard URL Should Be Visible
     Wait For Elements State    ${DASHBOARD_TITLE}    visible    timeout=${TIMEOUT}
 
 Switch To Account
@@ -311,6 +348,8 @@ Logout And Verify Redirect To Login
     ...    Satisfies: TC-4009, TN1, O1, S1
     Click    ${LOGOUT_OPTION}
     Wait For Elements State    ${LOGIN_FORM}    visible    timeout=${LONG_TIMEOUT}
+    ${url}=    Get Url
+    Should Be Equal    ${url}    ${BASE_URL}/
 
 Click Create New Application And Verify Response
     [Documentation]

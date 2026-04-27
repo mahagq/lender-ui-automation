@@ -21,12 +21,14 @@ ${PD_FORM}                          css=[data-testid='applicant-personal-details
 ${PD_PAN_DETAILS_TITLE}             css=[data-testid='pan-details-title']
 ${PD_PAN_INPUT}                     css=[data-testid='pan-number-input']
 ${PD_GENDER_TITLE}                  css=[data-testid='gender-title']
-${PD_GENDER_SELECT}                 css=[data-testid='gender-react-select']
+${PD_GENDER_SELECT}                 css=[data-testid='gender-title']
 ${PD_DOB_TITLE}                     css=[data-testid='dob-title']
 ${PD_YEAR_SELECT}                   css=[data-testid='year-react-select']
 ${PD_MONTH_SELECT}                  css=[data-testid='month-react-select']
 ${PD_DAY_SELECT}                    css=[data-testid='day-react-select']
 ${PD_DOB_ERROR}                     css=[data-testid='dob-error']
+${PD_GENDER_ERROR}                  css=[data-testid='gender-react-select-error']
+${PD_MARITAL_STATUS_ERROR}          css=[data-testid='marital-status-radio-error']
 ${PD_MARITAL_STATUS_TITLE}          css=[data-testid='marital-status-title']
 ${PD_MARITAL_STATUS_RADIO}          css=[data-testid='marital-status-radio']
 ${PD_EMAIL_TITLE}                   css=[data-testid='email-title']
@@ -36,6 +38,7 @@ ${PD_PROCEED_BUTTON}                css=[data-testid='proceed-button']
 ${PD_PAN_ERROR}                     css=[data-testid='pan-number-input-error']
 ${PD_EMAIL_ERROR}                   css=[data-testid='email-input-error']
 ${PD_CONSENT_ERROR}                 css=[data-testid='consent-checkbox-error']
+${PD_GENDER_MALE_RADIO}             css=button[value='MALE']
 
 *** Keywords ***
 Personal Details Title Should Be Visible
@@ -74,7 +77,9 @@ Marital Status Section Should Be Visible
     [Documentation]
     ...    Asserts at least one marital-status-radio option is visible.
     ...    Satisfies: TC-10005, U1
-    Wait For Elements State    ${PD_MARITAL_STATUS_RADIO}    visible    timeout=${TIMEOUT}
+    Wait For Elements State    ${PD_MARITAL_STATUS_TITLE}    visible    timeout=${TIMEOUT}
+    ${count}=    Get Element Count    ${PD_MARITAL_STATUS_RADIO}
+    Should Be Equal As Integers    ${count}    3
 
 Email Input Should Be Visible
     [Documentation]
@@ -107,12 +112,31 @@ Proceed Button Should Be Visible
     ...    Satisfies: TC-10009, U2
     Wait For Elements State    ${PD_PROCEED_BUTTON}    visible    timeout=${TIMEOUT}
 
+Select Gender Male
+    [Documentation]
+    ...    Selects the Male gender radio button using css=button[value='MALE'].
+    ...    Uses the value attribute (MALE/FEMALE) to avoid strict mode — both radio buttons share data-testid='gender-react-select'.
+    ...    Satisfies: TC-10N-04, TC-10N-07, TC-10N-08, TC-10N-09, TC-10N-10, TC-10008
+    Wait For Elements State    ${PD_GENDER_MALE_RADIO}    visible    timeout=${TIMEOUT}
+    Click    ${PD_GENDER_MALE_RADIO}
+
 Click Personal Details Proceed
     [Documentation]
-    ...    Clicks the proceed-button to advance to /applicant-residential-details.
+    ...    Waits for the proceed-button to become enabled, then clicks it to advance to /applicant-residential-details.
+    ...    Uses LONG_TIMEOUT to allow React form state to settle after all fields are filled.
     ...    Satisfies: TC-10010, RT-5 (proceed)
-    Wait For Elements State    ${PD_PROCEED_BUTTON}    visible    timeout=${TIMEOUT}
+    Wait For Elements State    ${PD_PROCEED_BUTTON}    enabled    timeout=${LONG_TIMEOUT}
     Click    ${PD_PROCEED_BUTTON}
+
+Force Click Personal Details Proceed
+    [Documentation]
+    ...    Triggers form validation on the proceed-button even when it is disabled.
+    ...    Used for tests where a required field (gender/DOB/marital) is intentionally omitted.
+    ...    Uses Evaluate JavaScript to dispatch a bubbling MouseEvent — bypasses the browser's
+    ...    disabled-element click suppression and reaches React's root event delegation listener.
+    ...    Satisfies: TC-10N-08, TC-10N-09, TC-10N-10
+    Evaluate JavaScript    ${PD_PROCEED_BUTTON}    (element) => element.dispatchEvent(new MouseEvent('click', {bubbles: true, cancelable: true}))
+    Sleep    500ms
 
 Personal Details URL Should Be Active
     [Documentation]    Helper — asserts the current URL contains /applicant-personal-details.
@@ -143,3 +167,21 @@ Uncheck Personal Details Consent
     IF    ${checked}
         Click    ${PD_CONSENT}
     END
+
+Gender Error Should Be Visible
+    [Documentation]
+    ...    Asserts gender-error is visible after proceed without selecting gender.
+    ...    Satisfies: TC-10N-08
+    Wait For Elements State    ${PD_GENDER_ERROR}    visible    timeout=${TIMEOUT}
+
+DOB Error Should Be Visible
+    [Documentation]
+    ...    Asserts dob-error is visible after proceed without completing date of birth.
+    ...    Satisfies: TC-10N-09
+    Wait For Elements State    ${PD_DOB_ERROR}    visible    timeout=${TIMEOUT}
+
+Marital Status Error Should Be Visible
+    [Documentation]
+    ...    Asserts marital-status-error is visible after proceed without selecting marital status.
+    ...    Satisfies: TC-10N-10
+    Wait For Elements State    ${PD_MARITAL_STATUS_ERROR}    visible    timeout=${TIMEOUT}

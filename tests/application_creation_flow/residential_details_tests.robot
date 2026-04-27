@@ -34,10 +34,6 @@ TC-11002 Address Fields Are Visible
     [Documentation]    Verifies addr-line-1, addr-line-2, and pincode fields are visible.
     Address Fields Should Be Visible
 
-TC-11003 Residence Type Radio Is Visible
-    [Documentation]    Verifies type-radio options are visible.
-    Residence Type Radio Should Be Visible
-
 TC-11004 Address Line 1 Accepts Text
     [Documentation]    Verifies addr-line-1-input accepts text.
     Fill Address Line 1    123 Test Avenue
@@ -96,6 +92,30 @@ TC-11N-05 Short Pincode Shows Error
     Pincode Error Should Be Visible
     Residential Details URL Should Be Active
 
+TC-11003 Residence Type Radio Is Visible After Address Submission
+    [Documentation]
+    ...    Verifies type-radio options are visible after filling address fields and clicking Proceed.
+    ...    The residence type radio is a second step on the same URL — it only renders after
+    ...    address line 1, address line 2, and pincode are submitted via the first Proceed click.
+    Fill Address Line 1    ${APP_ADDRESS_LINE1}
+    Fill Address Line 2    ${APP_ADDRESS_LINE2}
+    Fill Pincode    ${APP_PINCODE}
+    Sleep    2s
+    Click Residential Details Proceed
+    Residence Type Radio Should Be Visible
+
+TC-11008 All Residence Type Radios Are Selectable
+    [Documentation]
+    ...    Verifies all three residence type options (Rented, Self Owned, Other) can be clicked
+    ...    and each becomes checked when selected. The radio step renders only after address
+    ...    fields are submitted via the first Proceed click.
+    Fill Address Line 1    ${APP_ADDRESS_LINE1}
+    Fill Address Line 2    ${APP_ADDRESS_LINE2}
+    Fill Pincode    ${APP_PINCODE}
+    Sleep    2s
+    Click Residential Details Proceed
+    All Residence Type Radios Should Be Selectable
+
 TC-11007 Residential Details Proceeds To Employment Type
     [Documentation]
     ...    Fills residential details with APP_* stub data and proceeds to /select-employment.
@@ -105,6 +125,7 @@ TC-11007 Residential Details Proceeds To Employment Type
     Fill Address Line 2    ${APP_ADDRESS_LINE2}
     Fill Pincode    ${APP_PINCODE}
     Sleep    2s    # Pincode city/state auto-populate
-    Click First Residence Type Radio
     Click Residential Details Proceed
+    Click First Residence Type Radio
+    Click Residence Type Step Proceed
     Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    Employment Type URL Should Be Active

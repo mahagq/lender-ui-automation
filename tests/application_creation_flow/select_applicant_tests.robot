@@ -173,8 +173,8 @@ TC-7008 Select Parent Guardian Enables Submit And Proceed
     ...    Precondition: TC-7020 (close button) leaves session on /my-applications.
     ...    Resumes the in-progress application via dashboard before navigating to /select-applicant.
     [Setup]    NONE
-    Wait For Elements State    css=[data-testid='emi-card-action-button']    visible    timeout=${LONG_TIMEOUT}
-    Click    css=[data-testid='emi-card-action-button']
+    Wait For Elements State    css=[data-testid='emi-card-action-button'] >> nth=0    visible    timeout=${LONG_TIMEOUT}
+    Click    css=[data-testid='emi-card-action-button'] >> nth=0
     Navigate To Select Applicant Within Session
     Select Parent Guardian Option
     Submit Button Should Be Enabled After Selection

@@ -304,6 +304,25 @@
       "gaps_open": 1
     },
     {
+      "number": 7,
+      "phase": "post-verify-personal-details-validation",
+      "timestamp": "2026-04-27T00:00:00Z",
+      "result": "Added gender/DOB/marital-status validation test cases to close G2 (U1 — non-blocking gap). 3 new keywords in ApplicantPersonalDetailsPage.robot: Gender Error Should Be Visible, DOB Error Should Be Visible, Marital Status Error Should Be Visible. 2 new variables: ${PD_GENDER_ERROR} (data-testid='gender-error'), ${PD_MARITAL_STATUS_ERROR} (data-testid='marital-status-error'). 3 new negative test cases in personal_details_tests.robot: TC-10N-08 (no gender), TC-10N-09 (no DOB), TC-10N-10 (no marital status). personal_details count: 15 → 18. Total suite: 320 → 323 tests. G2 closed; U1 status: PARTIAL → SATISFIED.",
+      "modified_files": [
+        "resources/ApplicantPersonalDetailsPage.robot",
+        "tests/application_creation_flow/personal_details_tests.robot",
+        "CLAUDE.md",
+        "README.md",
+        "jenkins.md",
+        ".manifold/application-creation-flow.verify.json"
+      ],
+      "new_tests": 3,
+      "test_count_before": 320,
+      "test_count_after": 323,
+      "new_tcs": ["TC-10N-08", "TC-10N-09", "TC-10N-10"],
+      "gap_closed": "G2"
+    },
+    {
       "number": 6,
       "phase": "post-verify-student-details-fixes",
       "timestamp": "2026-04-25T00:00:00Z",

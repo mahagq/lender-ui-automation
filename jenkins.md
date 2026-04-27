@@ -3,7 +3,7 @@
 ## Overview
 
 Jenkins pipeline for the GQ Customer Portal UI Automation suite.
-Runs Robot Framework + Playwright tests against UAT across **20 suite files** (320 tests),
+Runs Robot Framework + Playwright tests against UAT across **28 suite files** (381 tests + data-driven rows),
 generates an Allure report, uploads it to S3, and preserves history for trend graphs across builds.
 
 | Suite File | Tests | Account |
@@ -20,12 +20,19 @@ generates an Allure report, uploads it to S3, and preserves history for trend gr
 | dashboard/dashboard_ins_tests | 11 | INS_MOBILE |
 | dashboard/dashboard_ins_new_user_tests | 4 | DASHBOARD_NEW_MOBILE |
 | e2e/e2e_create_application_tests | — (data-driven) | APP_CREATION_MOBILE / dynamic |
+| e2e/smoke_e2e_tests | 1 | dynamic (auto-generated mobile) |
+| e2e/resume_journey_e2e_tests | 9 | RESUME_MOBILE |
+| e2e/renewal_flow_e2e_tests | — (data-driven) | RENEWAL_MOBILE |
+| renewal_journey_flow/student_details_tests | 7 | RENEWAL_MOBILE |
+| renewal_journey_flow/choose_plan_tests | 8 | RENEWAL_MOBILE |
+| renewal_journey_flow/welcome_back_tests | 6 | RENEWAL_MOBILE |
+| renewal_journey_flow/verify_details_tests | 25 | RENEWAL_MOBILE |
 | application_creation_flow/student_details_tests | 40 | APP_CREATION_MOBILE |
 | application_creation_flow/choose_plan_tests | 18 | APP_CREATION_MOBILE |
 | application_creation_flow/select_applicant_tests | 19 | APP_CREATION_MOBILE |
 | application_creation_flow/applicant_basic_details_tests | 23 | APP_CREATION_MOBILE |
 | application_creation_flow/onboarding_tests | 7 | APP_CREATION_MOBILE |
-| application_creation_flow/personal_details_tests | 15 | APP_CREATION_MOBILE |
+| application_creation_flow/personal_details_tests | 18 | APP_CREATION_MOBILE |
 | application_creation_flow/residential_details_tests | 12 | APP_CREATION_MOBILE |
 | application_creation_flow/employment_tests | 46 | APP_CREATION_MOBILE |
 | application_creation_flow/confirm_application_tests | 20 | APP_CREATION_MOBILE |

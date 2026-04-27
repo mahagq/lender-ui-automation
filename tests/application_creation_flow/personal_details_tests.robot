@@ -71,7 +71,6 @@ TC-10N-02 Invalid PAN Format Shows PAN Error
     ...    (valid PAN: 5 letters + 4 digits + 1 letter, e.g. ABCDE1234F).
     [Tags]    negative
     Fill PAN Number    12345ABCDE
-    Click Personal Details Proceed
     PAN Error Should Be Visible
     Personal Details URL Should Be Active
 
@@ -79,7 +78,6 @@ TC-10N-03 PAN With Special Characters Shows PAN Error
     [Documentation]    Verifies pan-number-input-error appears when PAN contains special characters.
     [Tags]    negative
     Fill PAN Number    ABCDE@#$%F
-    Click Personal Details Proceed
     PAN Error Should Be Visible
     Personal Details URL Should Be Active
 
@@ -87,11 +85,17 @@ TC-10N-04 Submit Empty Email Shows Email Error And User Cannot Proceed
     [Documentation]
     ...    Verifies clicking proceed with empty email shows email-input-error
     ...    and user stays on /applicant-personal-details.
+    ...    Consent must be checked — if both email and consent are missing the form shows consent error first.
     [Tags]    negative
     Fill PAN Number    ${APP_PAN_NUMBER}
     Sleep    2s
+    Select Gender Male
+    Select First Option In React Select    year-react-select
+    Select First Option In React Select    month-react-select
+    Select First Option In React Select    day-react-select
+    Click    css=[data-testid='marital-status-radio'] >> nth=0
     Fill Email    ${EMPTY}
-    Uncheck Personal Details Consent
+    Check Personal Details Consent
     Click Personal Details Proceed
     Email Error Should Be Visible
     Personal Details URL Should Be Active
@@ -101,6 +105,11 @@ TC-10N-05 Email Missing At Symbol Shows Email Error
     [Tags]    negative
     Fill PAN Number    ${APP_PAN_NUMBER}
     Sleep    2s
+    Select Gender Male
+    Select First Option In React Select    year-react-select
+    Select First Option In React Select    month-react-select
+    Select First Option In React Select    day-react-select
+    Click    css=[data-testid='marital-status-radio'] >> nth=0
     Fill Email    invalidemail.com
     Click Personal Details Proceed
     Email Error Should Be Visible
@@ -111,6 +120,11 @@ TC-10N-06 Email Without Domain Shows Email Error
     [Tags]    negative
     Fill PAN Number    ${APP_PAN_NUMBER}
     Sleep    2s
+    Select Gender Male
+    Select First Option In React Select    year-react-select
+    Select First Option In React Select    month-react-select
+    Select First Option In React Select    day-react-select
+    Click    css=[data-testid='marital-status-radio'] >> nth=0
     Fill Email    test@
     Click Personal Details Proceed
     Email Error Should Be Visible
@@ -120,13 +134,68 @@ TC-10N-07 Valid Data Without Consent Shows Consent Error And User Cannot Proceed
     [Documentation]
     ...    Verifies that clicking proceed with valid PAN and email but consent unchecked
     ...    shows consent-checkbox-error and user stays on /applicant-personal-details.
+    ...    Proceed button is enabled without consent — consent error appears on click.
     [Tags]    negative
     Fill PAN Number    ${APP_PAN_NUMBER}
     Sleep    2s
+    Select Gender Male
+    Select First Option In React Select    year-react-select
+    Select First Option In React Select    month-react-select
+    Select First Option In React Select    day-react-select
+    Click    css=[data-testid='marital-status-radio'] >> nth=0
     Fill Email    ${APP_EMAIL}
     Uncheck Personal Details Consent
     Click Personal Details Proceed
     Personal Details Consent Error Should Be Visible
+    Personal Details URL Should Be Active
+
+TC-10N-08 Submit Without Gender Shows Gender Error
+    [Documentation]
+    ...    Verifies gender-error appears when proceed is clicked without selecting a gender.
+    ...    All other required fields (PAN, DOB, marital status, email, consent) are filled.
+    [Tags]    negative
+    Fill PAN Number    ${APP_PAN_NUMBER}
+    Sleep    2s
+    Select First Option In React Select    year-react-select
+    Select First Option In React Select    month-react-select
+    Select First Option In React Select    day-react-select
+    Click    css=[data-testid='marital-status-radio'] >> nth=0
+    Fill Email    ${APP_EMAIL}
+    Check Personal Details Consent
+    Click Personal Details Proceed
+    Gender Error Should Be Visible
+    Personal Details URL Should Be Active
+
+TC-10N-09 Submit Without DOB Shows DOB Error
+    [Documentation]
+    ...    Verifies dob-error appears when proceed is clicked without selecting any date of birth.
+    ...    All other required fields (PAN, gender, marital status, email, consent) are filled.
+    [Tags]    negative
+    Fill PAN Number    ${APP_PAN_NUMBER}
+    Sleep    2s
+    Select Gender Male
+    Click    css=[data-testid='marital-status-radio'] >> nth=0
+    Fill Email    ${APP_EMAIL}
+    Check Personal Details Consent
+    Click Personal Details Proceed
+    DOB Error Should Be Visible
+    Personal Details URL Should Be Active
+
+TC-10N-10 Submit Without Marital Status Shows Marital Status Error
+    [Documentation]
+    ...    Verifies marital-status-error appears when proceed is clicked without selecting a marital status.
+    ...    All other required fields (PAN, gender, DOB, email, consent) are filled.
+    [Tags]    negative
+    Fill PAN Number    ${APP_PAN_NUMBER}
+    Sleep    2s
+    Select Gender Male
+    Select First Option In React Select    year-react-select
+    Select First Option In React Select    month-react-select
+    Select First Option In React Select    day-react-select
+    Fill Email    ${APP_EMAIL}
+    Check Personal Details Consent
+    Click Personal Details Proceed
+    Marital Status Error Should Be Visible
     Personal Details URL Should Be Active
 
 TC-10008 Personal Details Proceeds To Residential Details
@@ -135,6 +204,11 @@ TC-10008 Personal Details Proceeds To Residential Details
     ...    Runs LAST — advances wizard past personal details.
     Fill PAN Number    ${APP_PAN_NUMBER}
     Sleep    2s    # PAN lookup API call
+    Select Gender Male
+    Select First Option In React Select    year-react-select
+    Select First Option In React Select    month-react-select
+    Select First Option In React Select    day-react-select
+    Click    css=[data-testid='marital-status-radio'] >> nth=0
     Fill Email    ${APP_EMAIL}
     Check Personal Details Consent
     Click Personal Details Proceed

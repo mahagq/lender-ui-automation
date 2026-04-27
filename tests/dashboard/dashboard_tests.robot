@@ -15,12 +15,13 @@ Documentation
 ...      - ${DASHBOARD_MOBILE} (8108556708): active applications (TC-4034).
 ...      - ${NEW_USER_MOBILE} (9938383856): no applications — empty-state create-app (TC-4035).
 ...
-...    Session model — 2 logins total:
+...    Session model — 3 logins total:
 ...      Suite Setup:    Opens browser, logs in as DASHBOARD_MOBILE, lands on /my-applications.
 ...      Test Setup:     Navigates to /my-applications (resets tab/filter/dropdown/scroll state).
 ...      Test Teardown:  NONE — shared session is preserved between tests.
 ...      Suite Teardown: Closes browser.
 ...      Account switch: TC-4035 → NEW_USER_MOBILE
+...      TC-4009 setup: Switch To Account → DASHBOARD_MOBILE (independent fresh login)
 ...    ⚠ TC-4009 (logout) MUST remain the final test in this file (TN1 resolution).
 
 Library          Browser
@@ -132,14 +133,13 @@ TC-4035 Create New Application Button Is Visible And Clickable In Empty State Fo
     ...    the Create New Application button renders inside the emi-not-data-found empty-state
     ...    container as a yellow "+ CREATE NEW APPLICATION" button. Verifies the button is
     ...    visible and that clicking it navigates away from /my-applications.
-    ...    TC-4009 (Logout) inherits this NEW_USER_MOBILE session — no extra login needed.
     ...    Satisfies: TC-4035, B1, T1
     [Tags]    dashboard    application    create-application    smoke
     Switch To Account    ${NEW_USER_MOBILE}
     Create New Application Button Should Be Visible And Clickable In Empty State
 
 # ──────────────────────────────────────────────────────────────────────────────
-# LOGOUT  (session: NEW_USER_MOBILE inherited — no login)
+# LOGOUT  (independent — logs in as DASHBOARD_MOBILE, then logs out)
 # ⚠ MUST REMAIN LAST — destroys shared session (TN1 resolution)
 # ──────────────────────────────────────────────────────────────────────────────
 
@@ -147,10 +147,13 @@ Logout Returns To Login Page
     [Documentation]
     ...    TC-4009: Clicking Logout in the profile dropdown should clear the authenticated
     ...    session and redirect to the login page at the base URL.
+    ...    Independent — setup logs in fresh as ${DASHBOARD_MOBILE} via Switch To Account,
+    ...    removing any dependency on the previous test's session state.
     ...    ⚠ ORDERING CONSTRAINT (TN1 resolution): This test MUST remain LAST in this file.
     ...    After logout the shared browser session is destroyed — all subsequent dashboard
     ...    tests would fail. Suite Teardown closes the browser immediately after.
     ...    Satisfies: TC-4009, TN1, O1, S1, B1
+    [Setup]    Login Fresh And Navigate To Dashboard As    ${DASHBOARD_MOBILE}
     [Tags]    dashboard    profile    logout    session
     Open Profile Menu
     Logout And Verify Redirect To Login
