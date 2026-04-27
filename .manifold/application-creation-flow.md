@@ -495,7 +495,7 @@ Group early-flow pages into fewer suites: (StudentDetails + ChoosePlan), (Select
 | T5: Confirm Application data consistency | BOUNDARY | ✓ | ✓ | ✓ | SATISFIED |
 | T6: Browser library (Playwright) | INVARIANT | ✓ | ✓ | ✓ | SATISFIED |
 | T7: Rate limits handled | BOUNDARY | ✓ | ✓ | ✓ | SATISFIED |
-| U1: Form validation error testids | INVARIANT | ✓ | ◐ | ✓ | **PARTIAL** (G2) |
+| U1: Form validation error testids | INVARIANT | ✓ | ✓ | ✓ | SATISFIED (G2 fixed 2026-04-27) |
 | U2: Button state assertions | INVARIANT | ✓ | ✓ | ✓ | SATISFIED |
 | U3: Page title on every test | GOAL | ✓ | ✓ | ✓ | SATISFIED |
 | U4: Back navigation tests | GOAL | ✓ | ✓ | ✓ | SATISFIED |
@@ -510,6 +510,6 @@ Group early-flow pages into fewer suites: (StudentDetails + ChoosePlan), (Select
 
 **G1 (FIXED):** O3 — All 6 wizard test suites were missing `allure.label.epic`, `allure.label.feature`, `allure.label.story` tags. Fixed by adding Allure label tags to all 6 Test Tags lines in this verify session.
 
-**G2 (OPEN — non-blocking):** U1 — New UAT pages (StudentDetails, ApplicantBasicDetails, Onboarding, PersonalDetails, ResidentialDetails) lack explicit form-validation error keywords and error-state test cases. Employment and Confirm Application pages are fully covered. This gap does not block convergence but reduces validation coverage for new pages.
+**G2 (FIXED 2026-04-27):** U1 — Added `Gender Error Should Be Visible`, `DOB Error Should Be Visible`, `Marital Status Error Should Be Visible` keywords to `ApplicantPersonalDetailsPage.robot` and TC-10N-08/09/10 to `personal_details_tests.robot`. personal_details suite: 15 → 18 tests. Total: 320 → 323 tests.
 
 ⚡ = Binding constraint artifact (generated first)

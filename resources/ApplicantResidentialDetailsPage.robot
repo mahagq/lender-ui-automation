@@ -29,6 +29,7 @@ ${RD_STATE_SELECT}              css=[data-testid='state-react-select']
 ${RD_RESIDENCE_TYPE_TITLE}      css=[data-testid='residence-type-title']
 ${RD_TYPE_RADIO}                css=[data-testid='type-radio']
 ${RD_PROCEED_BUTTON}            css=[data-testid='proceed-button']
+${RD_RADIO_STEP_PROCEED}        role=button[name=Proceed]
 ${RD_ADDR_LINE1_ERROR}          css=[data-testid='addr-line-1-input-error']
 ${RD_PINCODE_ERROR}             css=[data-testid='pincode-input-error']
 
@@ -50,8 +51,9 @@ Address Fields Should Be Visible
 Residence Type Radio Should Be Visible
     [Documentation]
     ...    Asserts at least one type-radio option is visible for residence type selection.
+    ...    Uses nth=0 to avoid strict mode violation (3 type-radio elements exist).
     ...    Satisfies: TC-11003, U1
-    Wait For Elements State    ${RD_TYPE_RADIO}    visible    timeout=${TIMEOUT}
+    Wait For Elements State    ${RD_TYPE_RADIO} >> nth=0    visible    timeout=${TIMEOUT}
 
 Fill Address Line 1
     [Documentation]    Fills the addr-line-1-input field.
@@ -79,9 +81,24 @@ City State Should Auto Populate
     Wait For Elements State    ${RD_CITY_STATE}    visible    timeout=${LONG_TIMEOUT}
 
 Click First Residence Type Radio
-    [Documentation]    Selects the first residence type radio option.
-    Wait For Elements State    ${RD_TYPE_RADIO}    visible    timeout=${TIMEOUT}
+    [Documentation]
+    ...    Selects the first residence type radio option (Rented) and waits for Radix UI
+    ...    data-state to become 'checked' before returning — ensures the form is ready before
+    ...    the subsequent Proceed click. Browser library 'checked' state does not apply to
+    ...    Radix UI button-based radios; data-state attribute is used instead.
+    Wait For Elements State    ${RD_TYPE_RADIO} >> nth=0    visible    timeout=${TIMEOUT}
     Click    ${RD_TYPE_RADIO} >> nth=0
+    Wait For Elements State    css=[data-testid='type-radio'][data-state='checked']    visible    timeout=${TIMEOUT}
+
+All Residence Type Radios Should Be Selectable
+    [Documentation]
+    ...    Verifies all three residence type radio buttons (Rented, Self Owned, Other) are
+    ...    clickable — each click succeeds without error. No selection state assertion needed.
+    ...    Satisfies: TC-11008, U1
+    Wait For Elements State    ${RD_TYPE_RADIO} >> nth=0    visible    timeout=${TIMEOUT}
+    Click    ${RD_TYPE_RADIO} >> nth=0
+    Click    ${RD_TYPE_RADIO} >> nth=1
+    Click    ${RD_TYPE_RADIO} >> nth=2
 
 Proceed Button Should Be Visible
     [Documentation]
@@ -91,10 +108,19 @@ Proceed Button Should Be Visible
 
 Click Residential Details Proceed
     [Documentation]
-    ...    Clicks the proceed-button to advance to /select-employment.
+    ...    Clicks the proceed-button on the address form step (step 1 of 2).
     ...    Satisfies: TC-11010, RT-5 (proceed)
     Wait For Elements State    ${RD_PROCEED_BUTTON}    visible    timeout=${TIMEOUT}
     Click    ${RD_PROCEED_BUTTON}
+
+Click Residence Type Step Proceed
+    [Documentation]
+    ...    Clicks the Proceed button on the residence type radio step (step 2 of 2).
+    ...    This button is role-based (accessible name "Proceed"), not data-testid='proceed-button'.
+    ...    Confirmed from Playwright recording: getByRole('button', { name: 'Proceed' }).
+    ...    Satisfies: TC-11007, RT-5 (proceed)
+    Wait For Elements State    ${RD_RADIO_STEP_PROCEED}    visible    timeout=${TIMEOUT}
+    Click    ${RD_RADIO_STEP_PROCEED}
 
 Residential Details URL Should Be Active
     [Documentation]    Helper — asserts the current URL contains /applicant-residential-details.

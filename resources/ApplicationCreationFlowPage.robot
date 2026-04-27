@@ -481,8 +481,8 @@ Fill Personal Details With Stub Data
     Wait For Elements State    ${PD_FORM}    visible    timeout=${TIMEOUT}
     Fill Text    ${PD_PAN_INPUT}    ${APP_PAN_NUMBER}
     Sleep    2s    # Wait for PAN lookup to complete
-    # Gender react-select
-    Select First Option In React Select    gender-react-select
+    # Gender — click Male radio button (value='MALE') to avoid strict mode on gender-react-select
+    Select Gender Male
     # Date of birth — year/month/day react-selects
     Select First Option In React Select    year-react-select
     Select First Option In React Select    month-react-select
@@ -490,8 +490,7 @@ Fill Personal Details With Stub Data
     # Marital status radio
     Click    css=[data-testid='marital-status-radio'] >> nth=0
     Fill Text    ${PD_EMAIL_INPUT}    ${APP_EMAIL}
-    ${consent_checked}=    Run Keyword And Return Status
-    ...    Get Property    ${PD_CONSENT}    checked
+    ${consent_checked}=    Get Property    ${PD_CONSENT}    checked
     IF    not ${consent_checked}
         Click    ${PD_CONSENT}
     END
@@ -507,4 +506,92 @@ Fill Residential Details With Stub Data
     Fill Text    ${RD_PINCODE}    ${APP_PINCODE}
     Sleep    2s    # Wait for city/state to auto-populate from pincode
     Click    ${RD_RESIDENCE_TYPE_RADIO} >> nth=0
-    Click    ${RD_PROCEED_BUTTON}
+    Wait For Elements State    css=[data-testid='type-radio'][data-state='checked']    visible    timeout=${TIMEOUT}
+    Click    role=button[name=Proceed]
+
+# ════════════════════════════════════════════════════════════════════════════════
+# Renewal Journey traversal keywords
+# Uses ${RENEWAL_MOBILE} — an existing account that already has prior applications.
+# Entry is always via the header "Create new application" button (no empty-state fallback).
+# Pages: Student Details and Choose Plan are identical to the first-application flow.
+# After Choose Plan: Welcome Back screen → Verify Details screen (renewal-specific).
+# ════════════════════════════════════════════════════════════════════════════════
+
+Login And Create Renewal Application
+    [Documentation]
+    ...    Logs in with ${RENEWAL_MOBILE} (existing account with prior applications).
+    ...    Clicks the header "Create new application" button.
+    ...    If "Before you proceed" dialog appears, clicks CREATE NEW APPLICATION.
+    ...    Leaves browser on /student-details ready for renewal suite traversal.
+    New Browser    ${BROWSER}    headless=${HEADLESS}
+    Open Login Page
+    Submit Login Form    ${RENEWAL_MOBILE}
+    ${otp_loaded}=    Run Keyword And Return Status
+    ...    Wait For Elements State    ${OTP_FORM}    visible    timeout=${LONG_TIMEOUT}
+    IF    not ${otp_loaded}
+        Log    Rate limit detected — waiting ${RATE_LIMIT_WAIT} then retrying.    console=True
+        Go To    ${BASE_URL}
+        Sleep    ${RATE_LIMIT_WAIT}
+        Submit Login Form    ${RENEWAL_MOBILE}
+        Wait For Elements State    ${OTP_FORM}    visible    timeout=${LONG_TIMEOUT}
+    END
+    Submit OTP Form    ${TEST_OTP}
+    ${redirected}=    Run Keyword And Return Status
+    ...    Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    Dashboard URL Should Be Visible
+    IF    not ${redirected}
+        Sleep    ${RATE_LIMIT_WAIT}
+        Enter OTP    ${TEST_OTP}
+        Click Verify OTP Button
+    END
+    Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    Dashboard URL Should Be Visible
+    Wait For Elements State    ${DASHBOARD_TITLE}    visible    timeout=${TIMEOUT}
+    Click Create Application Button And Wait For Student Details
+
+Navigate To Student Details Via Renewal
+    [Documentation]
+    ...    Suite Setup for renewal_journey_flow/student_details_tests.robot.
+    ...    Logs in with ${RENEWAL_MOBILE} and lands on /student-details.
+    Login And Create Renewal Application
+
+Navigate To Choose Plan Via Renewal
+    [Documentation]
+    ...    Suite Setup for renewal_journey_flow/choose_plan_tests.robot.
+    ...    Traverses student details with stub data then proceeds to /choose-plan.
+    Login And Create Renewal Application
+    Wait For Elements State    ${SD_FORM}    visible    timeout=${TIMEOUT}
+    Fill Student Details With Stub Data
+    Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    Choose Plan URL Should Be Active
+
+Navigate To Welcome Back Via Renewal
+    [Documentation]
+    ...    Suite Setup for renewal_journey_flow/welcome_back_tests.robot.
+    ...    Traverses student details + selects plan, then lands on the Welcome Back screen.
+    Login And Create Renewal Application
+    Wait For Elements State    ${SD_FORM}    visible    timeout=${TIMEOUT}
+    Fill Student Details With Stub Data
+    Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    Choose Plan URL Should Be Active
+    Click First Plan In List
+    Click Submit Plan Button
+    Wait For Elements State    text=CONTINUE WITH THESE DETAILS    visible    timeout=${LONG_TIMEOUT}
+
+Navigate To Verify Details Via Renewal
+    [Documentation]
+    ...    Suite Setup for renewal_journey_flow/verify_details_tests.robot.
+    ...    Traverses through Welcome Back → clicks "CONTINUE WITH THESE DETAILS" → Verify Details.
+    Navigate To Welcome Back Via Renewal
+    Click    text=CONTINUE WITH THESE DETAILS
+    Wait For Elements State    css=[data-testid='current-address-title']    visible    timeout=${LONG_TIMEOUT}
+
+Resume In Progress Application
+    [Documentation]
+    ...    Clicks the header "Create new application" button on the dashboard.
+    ...    When a "Before you proceed" dialog appears (in-progress application exists),
+    ...    clicks "CONTINUE EXISTING APPLICATION" to resume from where the user left off.
+    ...    Use this in resume journey tests AFTER re-logging in with ${RESUME_MOBILE}.
+    Wait For Elements State    ${EMI_TAB}    visible    timeout=${TIMEOUT}
+    Click    ${EMI_TAB}
+    Sleep    1s
+    Wait For Elements State    ${CREATE_APP_BUTTON}    visible    timeout=${TIMEOUT}
+    Click    ${CREATE_APP_BUTTON}
+    Wait For Elements State    css=[role='dialog']    visible    timeout=${LONG_TIMEOUT}
+    Click    css=[role='dialog'] >> text=CONTINUE EXISTING APPLICATION

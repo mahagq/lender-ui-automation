@@ -2,6 +2,30 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## MCP Tools: code-review-graph
+
+**ALWAYS use code-review-graph tools BEFORE Grep/Glob/Read.** The graph is pre-indexed, token-efficient, and provides structural context (callers, dependents, test coverage) that file scanning cannot.
+
+### When to use graph tools FIRST
+
+| Task | Graph tool | Do NOT use |
+|------|-----------|------------|
+| Find a keyword/function | `semantic_search_nodes` | Grep across all `.robot` files |
+| Understand impact of a change | `get_impact_radius` | Manually trace imports |
+| Code review | `detect_changes` + `get_review_context` | Reading entire resource files |
+| Find callers of a keyword | `query_graph` (callers_of) | Grep for keyword name |
+| Architecture questions | `get_architecture_overview` | Reading directory trees |
+| Find test coverage | `query_graph` (tests_for) | Scanning test files |
+
+Fall back to Grep/Glob/Read **only** when the graph returns no result.
+
+### Graph-first workflow for this project
+
+1. **New task** → `semantic_search_nodes` to locate relevant keywords/resources
+2. **Before editing a resource file** → `get_impact_radius` to see which test suites are affected
+3. **Code review** → `detect_changes` first, then `get_review_context` for snippets only
+4. **Adding keywords** → `query_graph` (callers_of) to verify nothing already does the job
+
 ## Overview
 
 Robot Framework UI automation suite for the GQ Customer Portal. Covers the login left component, login form, OTP verification flow, bypass authentication, dashboard, and the full Application Creation Flow wizard (10 pages: `/student-details` → `/confirm-application`) — targeting UAT: `https://customer.uat.graydev.in/`. Uses the **Browser library (Playwright)** — not SeleniumLibrary.
@@ -29,7 +53,15 @@ Robot Framework UI automation suite for the GQ Customer Portal. Covers the login
 ./venv/bin/robot --outputdir results/ tests/dashboard/dashboard_new_user_tests.robot
 # E2E:
 ./venv/bin/robot --outputdir results/ tests/e2e/e2e_create_application_tests.robot
-# Application Creation Flow suites (each requires UAT + APP_CREATION_MOBILE registered):
+./venv/bin/robot --outputdir results/ tests/e2e/smoke_e2e_tests.robot
+./venv/bin/robot --outputdir results/ tests/e2e/resume_journey_e2e_tests.robot
+./venv/bin/robot --outputdir results/ tests/e2e/renewal_flow_e2e_tests.robot
+# Renewal Journey Flow (requires RENEWAL_MOBILE + RESUME_MOBILE registered on UAT):
+./venv/bin/robot --outputdir results/ tests/renewal_journey_flow/student_details_tests.robot
+./venv/bin/robot --outputdir results/ tests/renewal_journey_flow/choose_plan_tests.robot
+./venv/bin/robot --outputdir results/ tests/renewal_journey_flow/welcome_back_tests.robot
+./venv/bin/robot --outputdir results/ tests/renewal_journey_flow/verify_details_tests.robot
+# Application Creation Flow suites (APP_CREATION_MOBILE auto-generated fresh each run — do NOT set via env var):
 ./venv/bin/robot --outputdir results/ tests/application_creation_flow/student_details_tests.robot
 ./venv/bin/robot --outputdir results/ tests/application_creation_flow/choose_plan_tests.robot
 ./venv/bin/robot --outputdir results/ tests/application_creation_flow/select_applicant_tests.robot
@@ -85,13 +117,21 @@ tests/                     — Test suites (import resources and variables)
     dashboard_ins_new_user_tests.robot — 4 insurance new-user tests (TC-4112–TC-4115; DASHBOARD_NEW_MOBILE, independent)
   e2e/
     e2e_create_application_tests.robot     — Data-driven full E2E application creation (Login → Confirm & Submit; driven by data/application_data.xlsx)
+    smoke_e2e_tests.robot                  — Single fixed happy-path E2E (Salaried + Parent/Guardian; 1 test)
+    resume_journey_e2e_tests.robot         — Resume-at-every-page: 9 tests closing at each wizard page and resuming (RESUME_MOBILE)
+    renewal_flow_e2e_tests.robot           — Data-driven renewal E2E (existing account; Welcome Back → Verify Details; driven by renewal_application_data.xlsx)
+  renewal_journey_flow/
+    student_details_tests.robot            — Renewal: Student Details (same UI as ACF; RENEWAL_MOBILE)
+    choose_plan_tests.robot                — Renewal: Choose Plan (same UI as ACF; RENEWAL_MOBILE)
+    welcome_back_tests.robot               — Renewal: Welcome Back pre-fill screen (6 tests; TC-WB01–WB06)
+    verify_details_tests.robot             — Renewal: Verify Details — skip, edit residential, edit employment, validations, proceed (25 tests; TC-VD01–VD25)
   application_creation_flow/
     student_details_tests.robot            — 40 student details tests (TC-5001–TC-5027, TC-5N-01–TC-5N-13)
     choose_plan_tests.robot                — 18 choose plan tests (TC-6001–TC-6018)
     select_applicant_tests.robot           — 19 select applicant tests (TC-7001–TC-7020)
     applicant_basic_details_tests.robot    — 23 applicant basic details tests (TC-8001–TC-8014-S, independent)
     onboarding_tests.robot                 — 7 onboarding tests (TC-9001–TC-9N-01, independent)
-    personal_details_tests.robot           — 15 personal details tests (TC-10001–TC-10N-07, independent)
+    personal_details_tests.robot           — 18 personal details tests (TC-10001–TC-10N-10, independent)
     residential_details_tests.robot        — 12 residential details tests (TC-11001–TC-11N-05, independent)
     employment_tests.robot                 — 46 employment tests: 7 type + 13 salaried + 10 SE + 12 validation + misc (TC-12001–TC-12N-SE06)
     confirm_application_tests.robot        — 20 confirm application tests (TC-13001–TC-13025)
@@ -114,6 +154,9 @@ resources/                 — Page Object keyword libraries (no variable import
   EmploymentTypePage.robot           — Keywords + locators for /select-employment
   ApplicantEmploymentPage.robot      — Keywords + locators for /applicant-employment-details (salaried + SE)
   ConfirmApplicationPage.robot       — Keywords + locators for /confirm-application
+  WelcomeBackPage.robot              — Keywords + locators for renewal Welcome Back pre-fill screen
+  VerifyDetailsPage.robot            — Keywords + locators for renewal Verify Details review screen
+  E2EApplicationFlow.robot           — E2E orchestration: Create Full Application + Create Full Renewal Application
 
 variables/
   variables.robot           — All variables: BASE_URL, timeouts, test data, browser settings, APP_* wizard data
@@ -172,7 +215,7 @@ Dashboard tests are split across **6 independent files**, each with its own brow
 
 ## Application Creation Flow Session Model
 
-Each wizard test suite uses a **single shared browser session** using `${APP_CREATION_MOBILE}` (9876540001):
+Each wizard test suite uses a **single shared browser session** using `${APP_CREATION_MOBILE}` (generated fresh per run by `variables/dynamic_variables.py` — never a static value):
 - `Suite Setup` — `Navigate To <Page>`: logs in once, creates new application, traverses all preceding wizard steps with stub data.
 - `Test Setup` — `Navigate To <Page> Within Session`: hard-navigates (`Go To`) to the target URL. No new login.
 - `Test Teardown` — NONE (shared session preserved).
@@ -180,7 +223,7 @@ Each wizard test suite uses a **single shared browser session** using `${APP_CRE
 - **Wizard-advancing tests (proceed/submit) run LAST** in each suite with `[Setup] NONE` to avoid resetting position.
 
 **Traversal stub data** uses `APP_*` variables from `variables.robot`:
-- `APP_CREATION_MOBILE=9876540001` — dedicated mobile distinct from all auth suite numbers
+- `APP_CREATION_MOBILE` — always dynamic (timestamp-based, generated by `dynamic_variables.py`); env var override intentionally removed to prevent in-progress application accumulation across runs
 - react-select dropdowns: `Select First Option In React Select` helper (approved T1 exception for traversal only)
 - PAN lookup and pincode city/state API calls require `Sleep 2s` during traversal
 
@@ -285,6 +328,18 @@ Whenever a new feature is given:
 * Prefer production-ready code directly
 * Do not generate theoretical examples
 * Focus on executable automation code only
+
+### File Update Rules (VERY IMPORTANT)
+
+Whenever any change is made to the project — new test cases, new keywords, new resources, new variables, structural changes, or bug fixes — **always update ALL relevant project files in the same session**:
+
+* **CLAUDE.md** — update architecture, commands, session model, locator tables, or any section that reflects the changed area
+* **README.md** — update if the change affects setup, usage, or feature coverage
+* **jenkins.md** — update if the change affects CI/CD pipeline configuration or test execution
+* **`.manifold/` files** — update any manifold constraint or artifact files that relate to the changed feature or flow
+* **Test case files** (`tests/` and subdirectories) — update existing test cases or add new ones to cover the changed functionality; ensure TC IDs, tags, and assertions stay consistent with the change
+
+Do NOT complete a task and stop without checking whether each of these files needs updating. Even small changes (e.g., a new test tag, a renamed keyword, a new mobile number) must be reflected in the relevant documentation and test files in the same response.
 
 ## Routes
 

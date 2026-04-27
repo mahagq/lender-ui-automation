@@ -1,7 +1,7 @@
 # Customer Portal UI Automation
 
 Robot Framework end-to-end test suite for the GQ Customer Portal.
-Covers the login left component, mobile number login form, OTP verification flow, bypass authentication, dashboard, and the full Application Creation Flow wizard (10 pages, TC-5001–TC-13025) — all targeting the UAT environment (`https://customer.uat.graydev.in`).
+Covers the login left component, mobile number login form, OTP verification flow, bypass authentication, dashboard, full Application Creation Flow wizard (10 pages, TC-5001–TC-13025), E2E journeys (smoke, resume, renewal), and Renewal Journey Flow (screen-by-screen) — all targeting the UAT environment (`https://customer.uat.graydev.in`).
 
 > **Test Cases:** See [`CP_UI_Automation_Test_Cases.xlsx`](./CP_UI_Automation_Test_Cases.xlsx) for the full test case list with descriptions, steps, and expected results.
 
@@ -25,14 +25,22 @@ customer_portal_ui_automation/
 │   │   ├── dashboard_ins_tests.robot         # Insurance tab tests (11 tests; INS_MOBILE)
 │   │   └── dashboard_ins_new_user_tests.robot # Insurance new-user tests (4 tests; DASHBOARD_NEW_MOBILE)
 │   ├── e2e/
-│   │   └── e2e_create_application_tests.robot    # Full E2E flow: Login → Confirm & Submit (data-driven via application_data.xlsx)
+│   │   ├── e2e_create_application_tests.robot    # Full E2E flow: Login → Confirm & Submit (data-driven via application_data.xlsx)
+│   │   ├── smoke_e2e_tests.robot                 # Single fixed happy-path E2E — Salaried Parent Guardian (1 test)
+│   │   ├── resume_journey_e2e_tests.robot        # Close-and-resume at every wizard page (9 tests; RESUME_MOBILE)
+│   │   └── renewal_flow_e2e_tests.robot          # Data-driven renewal E2E: nth application happy path (RENEWAL_MOBILE)
+│   ├── renewal_journey_flow/
+│   │   ├── student_details_tests.robot           # Renewal: /student-details — same UI as ACF (7 tests, TC-R5001–R5007)
+│   │   ├── choose_plan_tests.robot               # Renewal: /choose-plan — same UI as ACF (8 tests, TC-R6001–R6008)
+│   │   ├── welcome_back_tests.robot              # Renewal: Welcome Back screen (6 tests, TC-WB01–WB06)
+│   │   └── verify_details_tests.robot            # Renewal: Verify Details — edit/skip/confirm (25 tests, TC-VD01–VD25)
 │   └── application_creation_flow/
 │       ├── student_details_tests.robot           # /student-details (40 tests, TC-5001–5N-13)
 │       ├── choose_plan_tests.robot               # /choose-plan (18 tests, TC-6001–6018)
 │       ├── select_applicant_tests.robot          # /select-applicant (19 tests, TC-7001–7020)
 │       ├── applicant_basic_details_tests.robot   # /applicant-basic-details (23 tests, TC-8001–8014-S)
 │       ├── onboarding_tests.robot                # /onboarding (7 tests, TC-9001–9N-01)
-│       ├── personal_details_tests.robot          # /applicant-personal-details (15 tests, TC-10001–10N-07)
+│       ├── personal_details_tests.robot          # /applicant-personal-details (18 tests, TC-10001–10N-10)
 │       ├── residential_details_tests.robot       # /applicant-residential-details (12 tests, TC-11001–11N-05)
 │       ├── employment_tests.robot                # /select-employment + /applicant-employment-details (46 tests, TC-12001–12N-SE06)
 │       └── confirm_application_tests.robot       # /confirm-application (20 tests, TC-13001–13025)
@@ -43,7 +51,8 @@ customer_portal_ui_automation/
 │   ├── BypassAuthPage.robot                  # Page object keywords for /instant-eligibility
 │   ├── DashboardPage.robot                   # Page object keywords for /my-applications
 │   ├── InsuranceDashboardPage.robot          # Page object keywords for /my-applications#ins
-│   ├── ApplicationCreationFlowPage.robot     # Wizard navigation infrastructure + traversal helpers
+│   ├── ApplicationCreationFlowPage.robot     # Wizard navigation infrastructure + traversal helpers (incl. renewal keywords)
+│   ├── E2EApplicationFlow.robot              # High-level E2E keywords: Create Full Application, Create Full Renewal Application
 │   ├── StudentDetailsPage.robot              # Page object keywords for /student-details
 │   ├── ChoosePlanPage.robot                  # Page object keywords for /choose-plan
 │   ├── SelectApplicantPage.robot             # Page object keywords for /select-applicant
@@ -53,7 +62,9 @@ customer_portal_ui_automation/
 │   ├── ApplicantResidentialDetailsPage.robot # Page object keywords for /applicant-residential-details
 │   ├── EmploymentTypePage.robot              # Page object keywords for /select-employment
 │   ├── ApplicantEmploymentPage.robot         # Page object keywords for /applicant-employment-details
-│   └── ConfirmApplicationPage.robot          # Page object keywords for /confirm-application
+│   ├── ConfirmApplicationPage.robot          # Page object keywords for /confirm-application
+│   ├── WelcomeBackPage.robot                 # Page object keywords for Welcome Back screen (renewal)
+│   └── VerifyDetailsPage.robot               # Page object keywords for Verify Details screen (renewal)
 ├── variables/
 │   └── variables.robot                       # All test configuration, test data, and APP_* wizard variables
 ├── CP_UI_Automation_Test_Cases.xlsx          # Full test case documentation
@@ -101,6 +112,15 @@ All dependencies live in the project virtualenv at `./venv/`.
 
 # E2E
 ./venv/bin/robot --outputdir results/ tests/e2e/e2e_create_application_tests.robot
+./venv/bin/robot --outputdir results/ tests/e2e/smoke_e2e_tests.robot
+./venv/bin/robot --outputdir results/ tests/e2e/resume_journey_e2e_tests.robot
+./venv/bin/robot --outputdir results/ tests/e2e/renewal_flow_e2e_tests.robot
+
+# Renewal Journey Flow
+./venv/bin/robot --outputdir results/ tests/renewal_journey_flow/student_details_tests.robot
+./venv/bin/robot --outputdir results/ tests/renewal_journey_flow/choose_plan_tests.robot
+./venv/bin/robot --outputdir results/ tests/renewal_journey_flow/welcome_back_tests.robot
+./venv/bin/robot --outputdir results/ tests/renewal_journey_flow/verify_details_tests.robot
 
 # Application Creation Flow
 ./venv/bin/robot --outputdir results/ tests/application_creation_flow/student_details_tests.robot
@@ -127,6 +147,12 @@ All dependencies live in the project virtualenv at `./venv/`.
 ./venv/bin/robot --include salaried --outputdir results/ tests/application_creation_flow/employment_tests.robot
 ./venv/bin/robot --include self-employed --outputdir results/ tests/application_creation_flow/employment_tests.robot
 ./venv/bin/robot --include resend --outputdir results/ tests/otp_tests.robot    # ~3 min
+./venv/bin/robot --include e2e --outputdir results/ tests/e2e/
+./venv/bin/robot --include renewal --outputdir results/ tests/
+./venv/bin/robot --include renewal-journey-flow --outputdir results/ tests/renewal_journey_flow/
+./venv/bin/robot --include skip-journey --outputdir results/ tests/renewal_journey_flow/verify_details_tests.robot
+./venv/bin/robot --include edit-residential --outputdir results/ tests/renewal_journey_flow/verify_details_tests.robot
+./venv/bin/robot --include edit-employment --outputdir results/ tests/renewal_journey_flow/verify_details_tests.robot
 ```
 
 ### Dry run (syntax check, no browser)
@@ -160,17 +186,24 @@ BYPASS_AUTH_MOBILE=<erp_mobile> ./venv/bin/robot --outputdir results/ tests/bypa
 | dashboard/dashboard_new_user_tests | 4 | /my-applications (new user) |
 | dashboard/dashboard_ins_tests | 11 | /my-applications#ins |
 | dashboard/dashboard_ins_new_user_tests | 4 | /my-applications#ins (new user) |
-| e2e/e2e_create_application_tests | — | Login → Confirm & Submit (data-driven) |
+| e2e/e2e_create_application_tests | — (data-driven) | Login → Confirm & Submit |
+| e2e/smoke_e2e_tests | 1 | Full wizard — single salaried happy path |
+| e2e/resume_journey_e2e_tests | 9 | Close + resume at each wizard page |
+| e2e/renewal_flow_e2e_tests | — (data-driven) | Renewal E2E (RENEWAL_MOBILE) |
+| renewal_journey_flow/student_details_tests | 7 | /student-details (renewal) |
+| renewal_journey_flow/choose_plan_tests | 8 | /choose-plan (renewal) |
+| renewal_journey_flow/welcome_back_tests | 6 | Welcome Back screen |
+| renewal_journey_flow/verify_details_tests | 25 | Verify Details — edit, skip, confirm |
 | application_creation_flow/student_details_tests | 40 | /student-details |
 | application_creation_flow/choose_plan_tests | 18 | /choose-plan |
 | application_creation_flow/select_applicant_tests | 19 | /select-applicant |
 | application_creation_flow/applicant_basic_details_tests | 23 | /applicant-basic-details |
 | application_creation_flow/onboarding_tests | 7 | /onboarding |
-| application_creation_flow/personal_details_tests | 15 | /applicant-personal-details |
+| application_creation_flow/personal_details_tests | 18 | /applicant-personal-details |
 | application_creation_flow/residential_details_tests | 12 | /applicant-residential-details |
 | application_creation_flow/employment_tests | 46 | /select-employment + /applicant-employment-details |
 | application_creation_flow/confirm_application_tests | 20 | /confirm-application |
-| **Total** | **320** | |
+| **Total** | **381** (+ data-driven rows) | |
 
 ---
 
@@ -203,6 +236,8 @@ All configuration is in `variables/variables.robot`.
 | `APP_BUSINESS_NAME` | `Test Business` | Self-employed stub |
 | `APP_BUSINESS_INCOME` | `600000` | Self-employed stub |
 | `APP_BUSINESS_YEARS` | `05` | Self-employed stub |
+| `RENEWAL_MOBILE` | `%{RENEWAL_MOBILE=8108556708}` | Existing account for renewal/nth application journey |
+| `RESUME_MOBILE` | `%{RESUME_MOBILE=9876543210}` | Account kept in-progress for resume journey tests |
 
 ---
 

@@ -226,3 +226,65 @@ Create Full Application
 
     # ── Step 13: Assert Success ───────────────────────────────────────────────────
     Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    Confirm Application Submitted Successfully
+
+Create Full Renewal Application
+    [Documentation]
+    ...    Master E2E orchestration keyword for renewal (nth application) flow.
+    ...    Uses ${RENEWAL_MOBILE} (existing account with prior applications).
+    ...    After Choose Plan: Welcome Back screen → "CONTINUE WITH THESE DETAILS" → Verify Details → Submit.
+    ...    Simpler argument set than Create Full Application — no personal/employment data needed
+    ...    (pre-filled from previous application and confirmed as-is).
+    [Arguments]
+    ...    ${institute_search}    ${location}    ${course}    ${academic_year}
+    ...    ${student_first_name}    ${student_last_name}    ${admission_type}
+    ...    ${class}    ${student_id}    ${loan_amount}    ${referral_code}
+
+    # ── Step 1: Login with RENEWAL_MOBILE ───────────────────────────────────────
+    Login And Create Renewal Application
+
+    # ── Step 2: Student Details ──────────────────────────────────────────────────
+    Wait For Elements State    ${SD_FORM}    visible    timeout=${TIMEOUT}
+    Search And Select First Option In React Select    institute-id-react-select    ${institute_search}
+    Select Option By Text In React Select    location-id-react-select    ${location}
+    Select Option By Text In React Select    board-id-react-select    ${course}
+    Select Option By Text In React Select    academic-year-id-react-select    ${academic_year}
+    Wait For Elements State    ${SD_FIRST_NAME}    visible    timeout=${LONG_TIMEOUT}
+    Fill Text    ${SD_FIRST_NAME}    ${student_first_name}
+    Fill Text    ${SD_LAST_NAME}    ${student_last_name}
+    Click    text=${admission_type}
+    Sleep    500ms
+    Select Option By Text In React Select    class-id-react-select    ${class}
+    Fill Text    ${SD_STUDENT_ID}    ${student_id}
+    Fill Text    ${SD_LOAN_AMOUNT}    ${loan_amount}
+    Wait For Elements State    ${SD_SHOW_PLANS_BUTTON}    visible    timeout=${LONG_TIMEOUT}
+    Click    ${SD_SHOW_PLANS_BUTTON}
+    Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    Choose Plan URL Should Be Active
+
+    # ── Step 3: Choose Plan ───────────────────────────────────────────────────────
+    Click First Plan In List
+    Click Submit Plan Button
+
+    # ── Step 4: Welcome Back screen ──────────────────────────────────────────────
+    Wait For Elements State    text=CONTINUE WITH THESE DETAILS    visible    timeout=${LONG_TIMEOUT}
+    Click    text=CONTINUE WITH THESE DETAILS
+
+    # ── Step 5: Verify Details — skip employment, confirm ────────────────────────
+    Wait For Elements State    css=[data-testid='current-address-title']    visible    timeout=${LONG_TIMEOUT}
+    ${has_skip}=    Run Keyword And Return Status
+    ...    Wait For Elements State    css=[data-testid='skip-button']    visible    timeout=4s
+    IF    ${has_skip}
+        Click    css=[data-testid='skip-button']
+    END
+    IF    '${referral_code}'.strip() != ''
+        Fill Text    css=[placeholder='Enter Referral Code']    ${referral_code}
+        Click    text=PROCEED
+        Sleep    1s
+    END
+    ${consent_checked}=    Get Property    css=[data-testid='consent-checkbox']    checked
+    IF    not ${consent_checked}
+        Click    css=[data-testid='consent-checkbox']
+    END
+    Click    text=CONFIRM AND PROCEED
+
+    # ── Step 6: Assert Success ────────────────────────────────────────────────────
+    Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    Confirm Application Submitted Successfully
