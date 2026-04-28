@@ -34,3 +34,4 @@ env/
 # Environment variables
 .env
 .env.*
+recordings/
