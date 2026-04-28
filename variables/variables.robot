@@ -114,30 +114,33 @@ ${RENEWAL_MOBILE}         %{RENEWAL_MOBILE=8108556708}
 ${RESUME_MOBILE}          %{RESUME_MOBILE=9876543210}
 
 # Student details stub data (used by traversal helpers in Suite Setups)
-${APP_STUDENT_FIRST_NAME}     Test
-${APP_STUDENT_LAST_NAME}      Student
+${APP_STUDENT_FIRST_NAME}     Masira
+${APP_STUDENT_LAST_NAME}      Darvesh
 ${APP_LOAN_AMOUNT}            100000
 # Institute search term for async GILE institute dropdown (types this to trigger API search).
 # Use a term that returns at least one result on UAT. Override via APP_INSTITUTE_SEARCH env var.
-${APP_INSTITUTE_SEARCH}       %{APP_INSTITUTE_SEARCH=Sch}
+${APP_INSTITUTE_SEARCH}       %{APP_INSTITUTE_SEARCH=Masira Darvesh}
 
 # Applicant (parent/guardian) details
-${APP_FIRST_NAME}             Test
-${APP_LAST_NAME}              Parent
+${APP_FIRST_NAME}             MAMANI
+${APP_LAST_NAME}              DAS
 ${APP_PAN_NUMBER}             DDDPD1621M
 ${APP_EMAIL}                  testparent@example.com
+${APP_DOB_YEAR}               1989
+${APP_DOB_MONTH}              Apr
+${APP_DOB_DAY}                13
 
 # Residential details
-${APP_ADDRESS_LINE1}          123 Test Street
-${APP_ADDRESS_LINE2}          Test Area
-${APP_PINCODE}                400001
+${APP_ADDRESS_LINE1}          0 SONARPUR NAYABAD SONARPUR SONARPUR NA
+${APP_ADDRESS_LINE2}          SONARPUR
+${APP_PINCODE}                700150
 
 # Salaried employment details
 ${APP_EMPLOYER_NAME}          Test Company Pvt Ltd
-${APP_MONTHLY_SALARY}         50000
+${APP_MONTHLY_SALARY}         980000
 
 # Self-employed details
 ${APP_BUSINESS_NAME}          Test Business
-${APP_BUSINESS_INCOME}        600000
+${APP_BUSINESS_INCOME}        6000000
 ${APP_BUSINESS_YEARS}         05
 ${APP_BUSINESS_DESC}          Software consulting and services

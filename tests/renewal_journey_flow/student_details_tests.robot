@@ -31,6 +31,8 @@ TC-R5003 Institute Search Field Is Visible
     GILE Institute Dropdown Should Be Visible
 
 TC-R5004 Loan Amount Field Is Visible
+    [Documentation]    Personal fields appear after GILE dropdowns are filled.
+    [Setup]    Navigate To Student Details With GILE Filled
     Loan Amount Input Should Be Visible
 
 TC-R5005 Student Details URL Is Correct

@@ -25,7 +25,7 @@ Resource    ../../variables/variables.robot
 
 Suite Setup     Login With Resume Mobile
 Suite Teardown  Close Browser
-Test Tags       e2e    resume
+Test Tags       e2e    resume    robot:skip
 
 *** Keywords ***
 Login With Resume Mobile

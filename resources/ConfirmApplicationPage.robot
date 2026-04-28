@@ -36,12 +36,21 @@ ${CA_PROCEED_BUTTON}            css=[data-testid='proceed-button']
 
 # Section edit buttons — testid: {section-name}-edit-button
 # Section name is lowercased + spaces → hyphens from the heading text passed to testIdFor
-${CA_STUDENT_DETAILS_EDIT}      css=[data-testid='student details-edit-button']
-${CA_EMI_PLAN_EDIT}             css=[data-testid='emi plan details-edit-button']
-${CA_WHO_APPLYING_EDIT}         css=[data-testid='who is applying?-edit-button']
-${CA_GENERAL_DETAILS_EDIT}      css=[data-testid='your general details-edit-button']
-${CA_RESIDENTIAL_EDIT}          css=[data-testid='residential details-edit-button']
-${CA_EMPLOYMENT_EDIT}           css=[data-testid='employment details-edit-button']
+${CA_STUDENT_DETAILS_EDIT}      css=[data-testid='student-details-edit-button']
+${CA_EMI_PLAN_EDIT}             css=[data-testid='emi-plan-details-edit-button']
+${CA_WHO_APPLYING_EDIT}         css=[data-testid='who-is-applying?-edit-button']
+${CA_GENERAL_DETAILS_EDIT}      css=[data-testid='your-general-details-edit-button']
+${CA_RESIDENTIAL_EDIT}          css=[data-testid='your-residential-details-edit-button']
+${CA_EMPLOYMENT_EDIT}           css=[data-testid='your-employment-details-edit-button']
+
+# Referral code popup locators
+${RC_SKIP_BUTTON}               css=[data-testid='skip-button']
+${RC_INPUT}                     css=input[placeholder='Enter Referral Code']
+${RC_PROCEED_BUTTON}            role=button[name=PROCEED]
+${RC_ERROR}                     css=[data-testid='undefined-error']
+${RC_HEADING}                   css=[data-testid='referral-code-heading']
+${RC_CODE_VALUE}                css=[data-testid='code-value']
+${RC_EDIT_BUTTON}               css=[data-testid='referral-code-edit-button']
 
 *** Keywords ***
 Confirm Application Title Should Be Visible
@@ -201,3 +210,78 @@ Confirm Application Submitted Successfully
     ...    Satisfies: TC-13023, RT-7 (final wizard submission)
     ${url}=    Get Url
     Should Not Contain    ${url}    /confirm-application
+
+# =====================================================================
+# REFERRAL CODE KEYWORDS
+# =====================================================================
+
+Handle Referral Code Popup If Present
+    [Documentation]
+    ...    Dismisses the referral code popup if it is visible on the confirm application page.
+    ...    Uses a short timeout to avoid slowing down tests where the popup is absent.
+    ...    Call this in standard Test Setup to unblock confirm-application test execution.
+    ${popup_visible}=    Run Keyword And Return Status
+    ...    Wait For Elements State    ${RC_SKIP_BUTTON}    visible    timeout=3s
+    IF    ${popup_visible}
+        Click    ${RC_SKIP_BUTTON}
+        Wait For Elements State    ${RC_HEADING}    visible    timeout=${TIMEOUT}
+    END
+
+Referral Code Popup Should Be Visible
+    [Documentation]
+    ...    Asserts the referral code popup skip button is visible.
+    ...    Satisfies: TC-13025
+    Wait For Elements State    ${RC_SKIP_BUTTON}    visible    timeout=${TIMEOUT}
+
+Skip Referral Code Popup
+    [Documentation]
+    ...    Clicks the skip-button to dismiss the referral code popup.
+    ...    Verifies the referral-code-heading section is visible after dismissal.
+    ...    Satisfies: TC-13026
+    Wait For Elements State    ${RC_SKIP_BUTTON}    visible    timeout=${TIMEOUT}
+    Click    ${RC_SKIP_BUTTON}
+    Wait For Elements State    ${RC_HEADING}    visible    timeout=${TIMEOUT}
+
+Fill Referral Code
+    [Documentation]
+    ...    Fills the referral code input and clicks PROCEED.
+    ...    [Arguments] ${code} — the referral code string to enter.
+    ...    Satisfies: TC-13027, TC-13028
+    [Arguments]    ${code}
+    Wait For Elements State    ${RC_INPUT}    visible    timeout=${TIMEOUT}
+    Fill Text    ${RC_INPUT}    ${code}
+    Click    ${RC_PROCEED_BUTTON}
+
+Referral Code Error Should Be Visible
+    [Documentation]
+    ...    Asserts the undefined-error element is visible after submitting an invalid/empty code.
+    ...    Satisfies: TC-13027
+    Wait For Elements State    ${RC_ERROR}    visible    timeout=${TIMEOUT}
+
+Referral Code Section Should Be Visible
+    [Documentation]
+    ...    Asserts the referral code heading and code value are visible on the confirm page.
+    ...    Satisfies: TC-13026
+    Wait For Elements State    ${RC_HEADING}    visible    timeout=${TIMEOUT}
+    Wait For Elements State    ${RC_CODE_VALUE}    visible    timeout=${TIMEOUT}
+
+Click Referral Code Edit Button
+    [Documentation]
+    ...    Clicks the referral-code-edit-button to open the edit input.
+    ...    Satisfies: TC-13028
+    Wait For Elements State    ${RC_EDIT_BUTTON}    visible    timeout=${TIMEOUT}
+    Click    ${RC_EDIT_BUTTON}
+
+Referral Code Updated Toast Should Be Visible
+    [Documentation]
+    ...    After clicking PROCEED on the referral code edit form, asserts the update was processed.
+    ...    Attempts to catch the auto-hiding "Referral code updated" toast; if the toast disappears
+    ...    before it can be caught, falls back to verifying the referral-code section remains visible
+    ...    (referral-code-heading + code-value), which confirms the edit was submitted successfully.
+    ...    Satisfies: TC-13028
+    ${toast_visible}=    Run Keyword And Return Status
+    ...    Wait For Elements State    text=Referral code updated    visible    timeout=5s
+    IF    not ${toast_visible}
+        Wait For Elements State    ${RC_HEADING}    visible    timeout=${TIMEOUT}
+        Wait For Elements State    ${RC_CODE_VALUE}    visible    timeout=${TIMEOUT}
+    END

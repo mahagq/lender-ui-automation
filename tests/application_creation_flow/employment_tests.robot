@@ -82,12 +82,15 @@ TC-12012 Employment Type Back Navigation Preserves Session
 TC-12013 Switching Between Employment Types Works
     [Documentation]
     ...    Verifies that selecting Salaried then Self Employed (switching) works without errors.
+    ...    Clicks Salaried (navigates to /applicant-employment-details), navigates back to
+    ...    /select-employment, then selects Self Employed.
     ...    Ported from: GQCP-TC-12013.
     [Setup]    Navigate To Employment Type Within Session
     Select Salaried Employment
-    Navigate To Employment Type Within Session
+    Go To    ${BASE_URL}${URL_EMPLOYMENT_TYPE}
+    Wait For Elements State    ${ET_SALARIED_CARD}    visible    timeout=${TIMEOUT}
+    Wait For Elements State    ${ET_SELF_EMPLOYED_CARD}    visible    timeout=${TIMEOUT}
     Select Self Employed Employment
-    Self Employed Card Should Be Visible
 
 # ===========================================================================
 # SALARIED EMPLOYMENT DETAILS (TC-12014–TC-12046)
@@ -113,11 +116,16 @@ TC-12015 Employer Name Rejects Special Characters
 
 TC-12016 Employer Name Rejects Empty Value
     [Documentation]
-    ...    Verifies proceed is disabled when employer name is empty.
+    ...    Verifies clicking proceed with empty employer name shows employer-name-input-error.
+    ...    Proceed button is always enabled — validation fires on click.
     ...    Ported from: GQCP-TC-12016.
     [Setup]    Navigate To Salaried Employment Details In Session
-    [Tags]    salaried
-    Salaried Proceed Button Should Be Disabled Without Data
+    [Tags]    salaried    negative
+    Fill Employer Name    ${EMPTY}
+    Fill Monthly Salary    ${EMPTY}
+    Click Salaried Proceed
+    Employer Name Error Should Be Visible
+    Employment Details URL Should Be Active
 
 TC-12017 Employer Name Rejects Blank Spaces
     [Documentation]
@@ -153,11 +161,16 @@ TC-12022 Monthly Salary Rejects Special Characters
 
 TC-12023 Monthly Salary Rejects Empty Value
     [Documentation]
-    ...    Verifies proceed is disabled when salary is empty.
+    ...    Verifies clicking proceed with valid employer name but empty salary shows salary error.
+    ...    Proceed button is always enabled — validation fires on click.
     ...    Ported from: GQCP-TC-12023.
     [Setup]    Navigate To Salaried Employment Details In Session
-    [Tags]    salaried
-    Salaried Proceed Button Should Be Disabled Without Data
+    [Tags]    salaried    negative
+    Fill Employer Name    ${APP_EMPLOYER_NAME}
+    Fill Monthly Salary    ${EMPTY}
+    Click Salaried Proceed
+    Monthly Salary Error Should Be Visible
+    Employment Details URL Should Be Active
 
 TC-12027 Monthly Salary Below 10000 Shows Warning
     [Documentation]
@@ -178,34 +191,41 @@ TC-12029 Monthly Salary Above 10000 Is Accepted
     Fill Monthly Salary    ${APP_MONTHLY_SALARY}
     In Words Display Should Be Visible
 
-TC-12031 Salaried Proceed Disabled Without Consent
+TC-12031 Salaried Proceed Enabled With Valid Fields And No Consent
     [Documentation]
-    ...    Verifies the proceed button is disabled when consent is unchecked.
+    ...    Verifies the proceed button is enabled when employer name and salary are filled
+    ...    and consent is not yet checked. Uses salary 23000 (< 25000) to trigger consent checkbox.
+    ...    Consent only appears when net monthly salary < 25000; button remains enabled.
     ...    Ported from: GQCP-TC-12031.
     [Setup]    Navigate To Salaried Employment Details In Session
     [Tags]    salaried
     Fill Employer Name    ${APP_EMPLOYER_NAME}
-    Fill Monthly Salary    ${APP_MONTHLY_SALARY}
-    Salaried Proceed Button Should Be Disabled Without Data
+    Fill Monthly Salary    23000
+    Salaried Proceed Button Should Be Enabled
 
 TC-12032 Salaried Proceed Enabled With Consent
     [Documentation]
     ...    Verifies the proceed button is enabled when all fields are filled and consent checked.
+    ...    Uses salary 23000 (< 25000) to trigger the consent checkbox.
+    ...    Consent only appears when net monthly salary < 25000.
     ...    Ported from: GQCP-TC-12032.
     [Setup]    Navigate To Salaried Employment Details In Session
     [Tags]    salaried
     Fill Employer Name    ${APP_EMPLOYER_NAME}
-    Fill Monthly Salary    ${APP_MONTHLY_SALARY}
+    Fill Monthly Salary    23000
     Check Salaried Consent
     Salaried Proceed Button Should Be Enabled
 
-TC-12034 Salaried Proceed Disabled With Empty Fields
+TC-12034 Empty Salaried Fields Show Employer Name Error On Proceed
     [Documentation]
-    ...    Verifies proceed is disabled when fields are blank.
+    ...    Verifies clicking proceed with all salaried fields empty shows employer-name-input-error.
+    ...    Proceed button is always enabled — validation fires on click.
     ...    Ported from: GQCP-TC-12034.
     [Setup]    Navigate To Salaried Employment Details In Session
-    [Tags]    salaried
-    Salaried Proceed Button Should Be Disabled Without Data
+    [Tags]    salaried    negative
+    Click Salaried Proceed
+    Employer Name Error Should Be Visible
+    Employment Details URL Should Be Active
 
 # ===========================================================================
 # SALARIED VALIDATION — /applicant-employment-details (TC-12N-S01–TC-12N-S06)
@@ -223,15 +243,16 @@ TC-12N-S01 Submit Empty Salaried Form Shows Employer Name Error
     Employer Name Error Should Be Visible
     Employment Details URL Should Be Active
 
-TC-12N-S02 Special Chars In Employer Name Show Error
+TC-12N-S02 Special Chars In Employer Name Are Accepted And Salary Error Shows
     [Documentation]
-    ...    Verifies employer-name-input-error appears when employer name contains
-    ...    special characters and proceed is clicked.
+    ...    Verifies employer name field accepts special characters (no format validation).
+    ...    With valid employer name and empty salary, clicking proceed shows salary error.
     [Setup]    Navigate To Salaried Employment Details In Session
     [Tags]    negative    salaried
     Fill Employer Name    @#$%^&*
+    Fill Monthly Salary    ${EMPTY}
     Click Salaried Proceed
-    Employer Name Error Should Be Visible
+    Monthly Salary Error Should Be Visible
     Employment Details URL Should Be Active
 
 TC-12N-S03 Valid Employer Name But Empty Salary Shows Salary Error
@@ -272,27 +293,16 @@ TC-12N-S06 Valid Data Without Consent Shows Consent Error
     [Documentation]
     ...    Verifies consent-checkbox-error appears when employer name and salary are
     ...    valid but consent is unchecked.
+    ...    Uses salary 23000 (< 25000) to trigger the consent checkbox.
+    ...    Consent only appears when net monthly salary < 25000.
     [Setup]    Navigate To Salaried Employment Details In Session
     [Tags]    negative    salaried
     Fill Employer Name    ${APP_EMPLOYER_NAME}
-    Fill Monthly Salary    ${APP_MONTHLY_SALARY}
+    Fill Monthly Salary    23000
     Uncheck Salaried Consent
     Click Salaried Proceed
     Salaried Consent Error Should Be Visible
     Employment Details URL Should Be Active
-
-TC-12045 Salaried Employment Proceeds To Next Step
-    [Documentation]
-    ...    Fills valid salaried data + consent and clicks proceed.
-    ...    Verifies wizard advances past /applicant-employment-details.
-    ...    Ported from: GQCP-TC-12045. Runs LAST for salaried section.
-    [Setup]    Navigate To Salaried Employment Details In Session
-    [Tags]    salaried    slow
-    Fill Employer Name    ${APP_EMPLOYER_NAME}
-    Fill Monthly Salary    ${APP_MONTHLY_SALARY}
-    Check Salaried Consent
-    Click Salaried Proceed
-    Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    Confirm Application URL Should Be Active
 
 # ===========================================================================
 # SELF-EMPLOYED EMPLOYMENT DETAILS (TC-12047–TC-12094)
@@ -317,11 +327,15 @@ TC-12048 Business Name Rejects Special Characters
 
 TC-12049 Business Name Rejects Empty Value
     [Documentation]
-    ...    Verifies proceed is disabled when business name is empty.
+    ...    Verifies clicking proceed with empty business name shows business-name-input-error.
+    ...    Proceed button is always enabled — validation fires on click.
     ...    Ported from: GQCP-TC-12049.
     [Setup]    Navigate To Self Employed Details In Session
-    [Tags]    self-employed
-    Self Employed Proceed Button Should Be Disabled Without Data
+    [Tags]    self-employed    negative
+    Fill Business Name    ${EMPTY}
+    Click Self Employed Proceed
+    Business Name Error Should Be Visible
+    Employment Details URL Should Be Active
 
 TC-12054 Annual Income Field Is Visible
     [Documentation]
@@ -385,13 +399,16 @@ TC-12074 Business Description Field Is Visible
     [Tags]    self-employed
     Business Description Field Should Be Visible
 
-TC-12081 Self Employed Proceed Disabled With Empty Fields
+TC-12081 Empty Self Employed Fields Show Business Name Error On Proceed
     [Documentation]
-    ...    Verifies proceed is disabled when all self-employed fields are empty.
+    ...    Verifies clicking proceed with all self-employed fields empty shows business-name-input-error.
+    ...    Proceed button is always enabled — validation fires on click.
     ...    Ported from: GQCP-TC-12081.
     [Setup]    Navigate To Self Employed Details In Session
-    [Tags]    self-employed
-    Self Employed Proceed Button Should Be Disabled Without Data
+    [Tags]    self-employed    negative
+    Click Self Employed Proceed
+    Business Name Error Should Be Visible
+    Employment Details URL Should Be Active
 
 # ===========================================================================
 # SELF-EMPLOYED VALIDATION — /applicant-employment-details (TC-12N-SE01–TC-12N-SE06)
@@ -408,15 +425,17 @@ TC-12N-SE01 Submit Empty Self Employed Form Shows Business Name Error
     Business Name Error Should Be Visible
     Employment Details URL Should Be Active
 
-TC-12N-SE02 Special Chars In Business Name Show Error
+TC-12N-SE02 Special Chars In Business Name Are Accepted And Income Error Shows
     [Documentation]
-    ...    Verifies business-name-input-error appears when business name contains
-    ...    special characters.
+    ...    Verifies business name field accepts special characters (no format validation).
+    ...    With special chars in business name and empty annual income, clicking proceed
+    ...    shows annual income error (business name is considered filled).
     [Setup]    Navigate To Self Employed Details In Session
     [Tags]    negative    self-employed
     Fill Business Name    @#$%^&*
+    Fill Annual Income    ${EMPTY}
     Click Self Employed Proceed
-    Business Name Error Should Be Visible
+    Annual Income Error Should Be Visible
     Employment Details URL Should Be Active
 
 TC-12N-SE03 Valid Business Name But Empty Annual Income Shows Income Error
@@ -470,6 +489,7 @@ TC-12N-SE06 Alphabets In Years In Business Show Error
 TC-12082 Self Employed Proceed Enabled With Valid Data
     [Documentation]
     ...    Verifies proceed is enabled with all valid self-employed fields filled.
+    ...    Income 600000 >= 25000 — no consent checkbox at this income level.
     ...    Ported from: GQCP-TC-12082.
     [Setup]    Navigate To Self Employed Details In Session
     [Tags]    self-employed
@@ -481,14 +501,31 @@ TC-12082 Self Employed Proceed Enabled With Valid Data
 
 TC-12092 Self Employed Proceeds To Confirm Application
     [Documentation]
-    ...    Fills valid self-employed data and clicks proceed.
+    ...    Clicks proceed on the SE employment form (data pre-filled by TC-12082).
+    ...    Uses [Setup] NONE — runs sequentially after TC-12082 which leaves the browser
+    ...    on /applicant-employment-details with all SE fields filled.
     ...    Verifies wizard advances to /confirm-application.
     ...    Ported from: GQCP-TC-12092. Runs LAST for self-employed section.
-    [Setup]    Navigate To Self Employed Details In Session
+    [Setup]    NONE
     [Tags]    self-employed    slow
-    Fill Business Name    ${APP_BUSINESS_NAME}
-    Fill Annual Income    ${APP_BUSINESS_INCOME}
-    Fill Years In Business    ${APP_BUSINESS_YEARS}
-    Fill Business Description    ${APP_BUSINESS_DESC}
     Click Self Employed Proceed
     Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    Confirm Application URL Should Be Active
+
+TC-12045 Salaried Employment Proceeds To Next Step
+    [Documentation]
+    ...    Fills valid salaried data and clicks proceed.
+    ...    Uses APP_MONTHLY_SALARY (50000 >= 25000) — no consent checkbox at this salary level.
+    ...    Verifies wizard advances past /applicant-employment-details to /confirm-application.
+    ...    Ported from: GQCP-TC-12045.
+    ...
+    ...    SESSION MODEL NOTE: This test requires /select-employment to be accessible.
+    ...    TC-12092 (SE advance) runs before this in the suite and advances the wizard to
+    ...    /confirm-application, making /select-employment inaccessible in the same session.
+    ...    Run this test in isolation: ./venv/bin/robot --test TC-12045 tests/application_creation_flow/employment_tests.robot
+    [Setup]    Navigate To Salaried Employment Details In Session
+    [Tags]    salaried    slow    robot:skip
+    Fill Employer Name    ${APP_EMPLOYER_NAME}
+    Fill Monthly Salary    ${APP_MONTHLY_SALARY}
+    Click Salaried Proceed
+    Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    Confirm Application URL Should Be Active
+

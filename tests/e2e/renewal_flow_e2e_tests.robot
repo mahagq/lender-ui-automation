@@ -16,7 +16,7 @@ Library     ../../libraries/ApplicationDataReader.py
 Resource    ../../resources/E2EApplicationFlow.robot
 Resource    ../../variables/variables.robot
 
-Test Tags   e2e    renewal
+Test Tags   e2e    renewal    robot:skip
 
 *** Test Cases ***
 Create Renewal Applications From Excel

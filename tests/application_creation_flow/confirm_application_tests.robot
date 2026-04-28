@@ -141,12 +141,12 @@ TC-13021 Confirm Application URL Is Correct
     ...    Ported from: GQCP-TC-13021 (T&C link text adaptation).
     Confirm Application URL Should Be Active
 
-TC-13022 Proceed Button Is Disabled Without Consent
+TC-13022 Proceed Button Is Enabled Without Consent
     [Documentation]
-    ...    Verifies proceed-button is disabled when consent is not checked.
-    ...    TN4 resolution: static behaviour assertion.
+    ...    Verifies the proceed-button is visible and enabled on the confirm page
+    ...    regardless of consent state (validation fires on click, not via disabled attribute).
     ...    Ported from: GQCP-TC-13022.
-    Proceed Button Should Be Disabled Without Consent
+    Proceed Button Should Be Enabled With Consent
 
 TC-13024 Back Navigation Returns To Previous Wizard Step
     [Documentation]
@@ -154,6 +154,45 @@ TC-13024 Back Navigation Returns To Previous Wizard Step
     ...    Ported from: GQCP-TC-13024 (back button).
     Click Student Details Edit Button
     Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    Student Details URL Should Be Active
+
+# ===========================================================================
+# REFERRAL CODE — /confirm-application referral popup (TC-13025–TC-13028)
+# Test Setup: Navigate To Confirm Application Without Popup Handling (popup NOT auto-dismissed)
+# ===========================================================================
+
+TC-13025 Referral Code Popup Is Visible On Confirm Page
+    [Documentation]
+    ...    Verifies the referral code popup skip-button is visible when navigating
+    ...    to /confirm-application without auto-dismissing the popup.
+    [Setup]    Navigate To Confirm Application Without Popup Handling
+    Referral Code Popup Should Be Visible
+
+TC-13027 Empty Referral Code Shows Error
+    [Documentation]
+    ...    Verifies that clicking PROCEED with an empty referral code input shows
+    ...    the undefined-error element on the referral popup.
+    [Setup]    Navigate To Confirm Application Without Popup Handling
+    [Tags]    negative
+    Fill Referral Code    ${EMPTY}
+    Referral Code Error Should Be Visible
+
+TC-13026 Skip Referral Code Popup Shows Referral Section
+    [Documentation]
+    ...    Verifies that clicking skip-button dismisses the referral popup and
+    ...    reveals the referral-code-heading and code-value section on the confirm page.
+    [Setup]    Navigate To Confirm Application Without Popup Handling
+    Skip Referral Code Popup
+    Referral Code Section Should Be Visible
+
+TC-13028 Edit Referral Code Updates Successfully
+    [Documentation]
+    ...    Verifies that clicking referral-code-edit-button, entering a code, and clicking
+    ...    PROCEED shows the "Referral code updated" toast.
+    ...    Runs sequentially after TC-13026 which leaves the referral-code section visible.
+    [Setup]    NONE
+    Click Referral Code Edit Button
+    Fill Referral Code    841
+    Referral Code Updated Toast Should Be Visible
 
 TC-13023 Proceed With Consent Submits Application
     [Documentation]

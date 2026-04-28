@@ -105,7 +105,7 @@ ${ET_TITLE}                     css=[data-testid='select-employment-type-title']
 ${SED_EMPLOYER_NAME}            css=[data-testid='employer-name-input']
 ${SED_SALARY}                   css=[data-testid='net-monthly-salary-input']
 ${SED_CONSENT}                  css=[data-testid='consent-checkbox']
-${SED_PROCEED_BUTTON}           css=[data-testid='proceed-button']
+${SED_PROCEED_BUTTON}           role=button[name=Proceed]
 
 # Confirm Application locators (traversal use)
 ${CA_FORM}                      css=[data-testid='confirm-application-form']
@@ -303,10 +303,6 @@ Navigate To Confirm Application
     Wait For Elements State    ${SED_EMPLOYER_NAME}    visible    timeout=${TIMEOUT}
     Fill Text    ${SED_EMPLOYER_NAME}    ${APP_EMPLOYER_NAME}
     Fill Text    ${SED_SALARY}    ${APP_MONTHLY_SALARY}
-    ${checked}=    Get Property    ${SED_CONSENT}    checked
-    IF    not ${checked}
-        Click    ${SED_CONSENT}
-    END
     Click    ${SED_PROCEED_BUTTON}
     Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    Confirm Application URL Should Be Active
     Wait For Elements State    ${CA_FORM}    visible    timeout=${TIMEOUT}
@@ -401,7 +397,17 @@ Navigate To Employment Type Within Session
 Navigate To Confirm Application Within Session
     [Documentation]
     ...    Test Setup for confirm_application_tests.robot.
-    ...    Hard-navigates to /confirm-application within the active wizard session.
+    ...    Hard-navigates to /confirm-application and auto-dismisses the referral code popup
+    ...    if present, so it does not block confirm-application test execution.
+    Go To    ${BASE_URL}${URL_CONFIRM_APPLICATION}
+    Wait For Elements State    ${CA_FORM}    visible    timeout=${TIMEOUT}
+    Handle Referral Code Popup If Present
+
+Navigate To Confirm Application Without Popup Handling
+    [Documentation]
+    ...    Test Setup for referral code test cases in confirm_application_tests.robot.
+    ...    Hard-navigates to /confirm-application WITHOUT dismissing the referral popup.
+    ...    Use this setup for tests that explicitly test the referral code popup behaviour.
     Go To    ${BASE_URL}${URL_CONFIRM_APPLICATION}
     Wait For Elements State    ${CA_FORM}    visible    timeout=${TIMEOUT}
 
@@ -431,6 +437,19 @@ Search And Select First Option In React Select
     Click    css=[data-testid='${testid}'] input[role='combobox']
     Type Text    css=[data-testid='${testid}'] input[role='combobox']    ${search_term}
     Sleep    2s    # Wait for async API search results to load
+    Keyboard Key    press    ArrowDown
+    Keyboard Key    press    Enter
+
+Select Specific Option In React Select
+    [Documentation]
+    ...    Traversal helper — types a value into a react-select to filter options, then selects it.
+    ...    Used for DOB (year/month/day) where a pinned value is required.
+    ...    This is an approved T1 exception for Suite Setup traversal helpers only.
+    ...    Satisfies: TN1 (wizard traversal cost), RT-1
+    [Arguments]    ${testid}    ${value}
+    Click    css=[data-testid='${testid}'] input[role='combobox']
+    Type Text    css=[data-testid='${testid}'] input[role='combobox']    ${value}
+    Sleep    300ms
     Keyboard Key    press    ArrowDown
     Keyboard Key    press    Enter
 
@@ -483,10 +502,10 @@ Fill Personal Details With Stub Data
     Sleep    2s    # Wait for PAN lookup to complete
     # Gender — click Male radio button (value='MALE') to avoid strict mode on gender-react-select
     Select Gender Male
-    # Date of birth — year/month/day react-selects
-    Select First Option In React Select    year-react-select
-    Select First Option In React Select    month-react-select
-    Select First Option In React Select    day-react-select
+    # Date of birth — year/month/day react-selects (pinned to APP_DOB_* variables)
+    Select Specific Option In React Select    year-react-select    ${APP_DOB_YEAR}
+    Select Specific Option In React Select    month-react-select    ${APP_DOB_MONTH}
+    Select Specific Option In React Select    day-react-select    ${APP_DOB_DAY}
     # Marital status radio
     Click    css=[data-testid='marital-status-radio'] >> nth=0
     Fill Text    ${PD_EMAIL_INPUT}    ${APP_EMAIL}
@@ -505,6 +524,8 @@ Fill Residential Details With Stub Data
     Fill Text    ${RD_ADDR_LINE2}    ${APP_ADDRESS_LINE2}
     Fill Text    ${RD_PINCODE}    ${APP_PINCODE}
     Sleep    2s    # Wait for city/state to auto-populate from pincode
+    Click    ${RD_PROCEED_BUTTON}
+    Wait For Elements State    ${RD_RESIDENCE_TYPE_RADIO} >> nth=0    visible    timeout=${TIMEOUT}
     Click    ${RD_RESIDENCE_TYPE_RADIO} >> nth=0
     Wait For Elements State    css=[data-testid='type-radio'][data-state='checked']    visible    timeout=${TIMEOUT}
     Click    role=button[name=Proceed]

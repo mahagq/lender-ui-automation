@@ -36,14 +36,15 @@ Resolve Mobile Number
 
 Select Option By Text In React Select
     [Documentation]
-    ...    Clicks a react-select input (located by data-testid), types ${option_text} to filter,
-    ...    waits for the matching option to appear, then clicks it using exact text match.
+    ...    Clicks a react-select container (located by data-testid) to open the dropdown,
+    ...    waits for options to render, then clicks the matching option by exact text.
     ...    T1 exception: uses .react-select__option (stable react-select library class).
     ...    Only one react-select portal is open at a time, so option scoping is unambiguous.
+    ...    Waits for the combobox to be enabled before clicking — dependent dropdowns (e.g. Location
+    ...    after Institute) are disabled while the upstream API call is in flight.
     [Arguments]    ${testid}    ${option_text}
-    Click    css=[data-testid='${testid}'] input[role='combobox']
-    Type Text    css=[data-testid='${testid}'] input[role='combobox']    ${option_text}    clear=True
-    Sleep    500ms
+    Wait For Elements State    css=[data-testid='${testid}'] input[role='combobox']    enabled    timeout=${LONG_TIMEOUT}
+    Click    css=[data-testid='${testid}']
     Wait For Elements State    css=.react-select__option    visible    timeout=${LONG_TIMEOUT}
     Click    css=.react-select__option >> text="${option_text}"
 
@@ -111,10 +112,22 @@ Create Full Application
     Wait For Elements State    ${SD_FORM}    visible    timeout=${TIMEOUT}
     # Institute: async search — type term then select first result
     Search And Select First Option In React Select    institute-id-react-select    ${institute_search}
-    # Location, course, academic year: select by exact option text
-    Select Option By Text In React Select    location-id-react-select    ${location}
-    Select Option By Text In React Select    board-id-react-select    ${course}
-    Select Option By Text In React Select    academic-year-id-react-select    ${academic_year}
+    # Location, course, academic year: exact text when provided, first option when empty
+    IF    '${location}' != ''
+        Select Option By Text In React Select    location-id-react-select    ${location}
+    ELSE
+        Select First Option In React Select    location-id-react-select
+    END
+    IF    '${course}' != ''
+        Select Option By Text In React Select    board-id-react-select    ${course}
+    ELSE
+        Select First Option In React Select    board-id-react-select
+    END
+    IF    '${academic_year}' != ''
+        Select Option By Text In React Select    academic-year-id-react-select    ${academic_year}
+    ELSE
+        Select First Option In React Select    academic-year-id-react-select
+    END
     # Personal details section appears after GILE dropdowns are filled
     Wait For Elements State    ${SD_FIRST_NAME}    visible    timeout=${LONG_TIMEOUT}
     Fill Text    ${SD_FIRST_NAME}    ${student_first_name}
@@ -122,8 +135,12 @@ Create Full Application
     # Admission type: click by visible text ("New Admission" / "Existing Student")
     Click    text=${admission_type}
     Sleep    500ms
-    # Class dropdown
-    Select Option By Text In React Select    class-id-react-select    ${class}
+    # Class dropdown: exact text when provided, first option when empty
+    IF    '${class}' != ''
+        Select Option By Text In React Select    class-id-react-select    ${class}
+    ELSE
+        Select First Option In React Select    class-id-react-select
+    END
     Fill Text    ${SD_STUDENT_ID}    ${student_id}
     Fill Text    ${SD_LOAN_AMOUNT}    ${loan_amount}
     Wait For Elements State    ${SD_SHOW_PLANS_BUTTON}    visible    timeout=${LONG_TIMEOUT}
@@ -167,27 +184,35 @@ Create Full Application
     Wait For Elements State    ${PD_FORM}    visible    timeout=${TIMEOUT}
     Fill Text    ${PD_PAN_INPUT}    ${pan_number}
     Sleep    2s
-    Select Option By Text In React Select    gender-react-select    ${gender}
-    Select Option By Text In React Select    year-react-select    ${dob_year}
-    Select Option By Text In React Select    month-react-select    ${dob_month}
-    Select Option By Text In React Select    day-react-select    ${dob_day}
+    # Gender is radio buttons (button[value='MALE'] / button[value='FEMALE']), not a react-select
+    ${gender_value}=    Evaluate    '${gender}'.upper()
+    Wait For Elements State    css=button[value='${gender_value}']    visible    timeout=${TIMEOUT}
+    Click    css=button[value='${gender_value}']
+    Select Specific Option In React Select    year-react-select    ${dob_year}
+    Select Specific Option In React Select    month-react-select    ${dob_month}
+    Select Specific Option In React Select    day-react-select    ${dob_day}
     Click    text=${marital_status}
     Fill Text    ${PD_EMAIL_INPUT}    ${email}
     ${consent_checked}=    Get Property    ${PD_CONSENT}    checked
     IF    not ${consent_checked}
         Click    ${PD_CONSENT}
     END
+    Wait For Elements State    ${PD_PROCEED_BUTTON}    enabled    timeout=${LONG_TIMEOUT}
     Click    ${PD_PROCEED_BUTTON}
     Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    Residential Details URL Should Be Active
 
     # ── Step 9: Applicant Residential Details ────────────────────────────────────
+    # Two-step page: (1) fill address → first proceed; (2) select residence type → second proceed
     Wait For Elements State    ${RD_ADDR_LINE1}    visible    timeout=${TIMEOUT}
     Fill Text    ${RD_ADDR_LINE1}    ${address_line1}
     Fill Text    ${RD_ADDR_LINE2}    ${address_line2}
     Fill Text    ${RD_PINCODE}    ${pincode}
     Sleep    2s
-    Click    text=${residence_type}
     Click    ${RD_PROCEED_BUTTON}
+    Wait For Elements State    ${RD_RESIDENCE_TYPE_RADIO} >> nth=0    visible    timeout=${TIMEOUT}
+    Click    text=${residence_type}
+    Wait For Elements State    css=[data-testid='type-radio'][data-state='checked']    visible    timeout=${TIMEOUT}
+    Click    role=button[name=Proceed]
     Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    Employment Type URL Should Be Active
 
     # ── Step 10: Select Employment Type ──────────────────────────────────────────
@@ -203,7 +228,6 @@ Create Full Application
     IF    '${employment_type}' == 'Salaried'
         Fill Employer Name    ${employer_name}
         Fill Monthly Salary    ${monthly_salary}
-        Check Salaried Consent
         Click Salaried Proceed
     ELSE
         Fill Business Name    ${business_name}
@@ -216,10 +240,17 @@ Create Full Application
 
     # ── Step 12: Confirm Application ─────────────────────────────────────────────
     Wait For Elements State    ${CA_FORM}    visible    timeout=${TIMEOUT}
-    IF    '${referral_code}'.strip() != ''
-        Fill Text    css=[placeholder='Enter Referral Code']    ${referral_code}
-        Click    text=PROCEED
-        Sleep    1s
+    # Referral code popup always appears on first visit — must be handled before consent is accessible
+    ${popup_visible}=    Run Keyword And Return Status
+    ...    Wait For Elements State    ${RC_SKIP_BUTTON}    visible    timeout=5s
+    IF    ${popup_visible}
+        IF    '${referral_code}'.strip() != ''
+            Fill Text    css=[placeholder='Enter Referral Code']    ${referral_code}
+            Click    ${RC_PROCEED_BUTTON}
+            Sleep    1s
+        ELSE
+            Click    ${RC_SKIP_BUTTON}
+        END
     END
     Check Confirm Application Consent
     Click Confirm Application Proceed

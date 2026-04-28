@@ -29,29 +29,29 @@ Smoke E2E Create Application — Salaried Parent Guardian
     Create Full Application
     ...    ${EMPTY}
     ...    ${APP_INSTITUTE_SEARCH}
-    ...    Pune
-    ...    Engineering
-    ...    2024-25
+    ...    ${EMPTY}
+    ...    ${EMPTY}
+    ...    ${EMPTY}
     ...    ${APP_STUDENT_FIRST_NAME}
     ...    ${APP_STUDENT_LAST_NAME}
     ...    New Admission
-    ...    10th
-    ...    STU001
+    ...    ${EMPTY}
+    ...    ST_001
     ...    ${APP_LOAN_AMOUNT}
     ...    Parent/Guardian
     ...    ${APP_FIRST_NAME}
     ...    ${APP_LAST_NAME}
     ...    ${APP_PAN_NUMBER}
-    ...    Male
-    ...    1985
-    ...    January
-    ...    15
-    ...    Single
+    ...    Female
+    ...    ${APP_DOB_YEAR}
+    ...    ${APP_DOB_MONTH}
+    ...    ${APP_DOB_DAY}
+    ...    Married
     ...    ${APP_EMAIL}
     ...    ${APP_ADDRESS_LINE1}
     ...    ${APP_ADDRESS_LINE2}
     ...    ${APP_PINCODE}
-    ...    Rented
+    ...    Self Owned
     ...    Salaried
     ...    ${APP_EMPLOYER_NAME}
     ...    ${APP_MONTHLY_SALARY}

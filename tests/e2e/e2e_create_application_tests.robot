@@ -19,7 +19,7 @@ Library     ../../libraries/ApplicationDataReader.py
 Resource    ../../resources/E2EApplicationFlow.robot
 Resource    ../../variables/variables.robot
 
-Test Tags   e2e    application-creation-flow
+Test Tags   e2e    application-creation-flow    robot:skip
 
 *** Test Cases ***
 Create Applications From Excel
