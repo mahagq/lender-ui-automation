@@ -7,6 +7,9 @@ log.html
 report.html
 playwright-log.txt
 
+# Recordings
+recordings/
+
 # Python
 __pycache__/
 *.py[cod]
@@ -22,16 +25,24 @@ venv/
 .venv/
 env/
 
+# Node.js
+node_modules/
+
 # IDE
 .idea/
 .vscode/
 *.swp
 *.swo
 
-# macOS
+# Claude / AI tool folders
+.claude/
+.manifold/
+.code-review-graph/
+
+# macOS / Windows
 .DS_Store
+Thumbs.db
 
 # Environment variables
 .env
 .env.*
-recordings/

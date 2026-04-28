@@ -28,7 +28,7 @@ Fall back to Grep/Glob/Read **only** when the graph returns no result.
 
 ## Overview
 
-Robot Framework UI automation suite for the GQ Customer Portal. Covers the login left component, login form, OTP verification flow, bypass authentication, dashboard, and the full Application Creation Flow wizard (10 pages: `/student-details` → `/confirm-application`) — targeting UAT: `https://customer.uat.graydev.in/`. Uses the **Browser library (Playwright)** — not SeleniumLibrary.
+Robot Framework UI automation suite for the GQ Customer Portal. Covers the login left component, login form, OTP verification flow, bypass authentication, dashboard, the full Application Creation Flow wizard (10 pages: `/student-details` → `/confirm-application`), and Renewal Journey Flow (Welcome Back + Verify Details) — targeting UAT: `https://customer.uat.graydev.in/`. Uses the **Browser library (Playwright)** — not SeleniumLibrary.
 
 ## Commands
 
@@ -84,6 +84,11 @@ Robot Framework UI automation suite for the GQ Customer Portal. Covers the login
 ./venv/bin/robot --outputdir results/ --include application-creation-flow tests/  # all wizard tests
 ./venv/bin/robot --outputdir results/ --include salaried tests/application_creation_flow/employment_tests.robot    # salaried only
 ./venv/bin/robot --outputdir results/ --include self-employed tests/application_creation_flow/employment_tests.robot  # SE only
+./venv/bin/robot --outputdir results/ --include renewal tests/                                                     # all renewal tests
+./venv/bin/robot --outputdir results/ --include renewal-journey-flow tests/renewal_journey_flow/                   # renewal journey flow only
+./venv/bin/robot --outputdir results/ --include skip-journey tests/renewal_journey_flow/verify_details_tests.robot    # skip employment tests
+./venv/bin/robot --outputdir results/ --include edit-residential tests/renewal_journey_flow/verify_details_tests.robot # edit residential tests
+./venv/bin/robot --outputdir results/ --include edit-employment tests/renewal_journey_flow/verify_details_tests.robot  # edit employment tests
 ```
 
 ### Dry run (syntax check, no browser)
@@ -121,8 +126,8 @@ tests/                     — Test suites (import resources and variables)
     resume_journey_e2e_tests.robot         — Resume-at-every-page: 9 tests closing at each wizard page and resuming (RESUME_MOBILE)
     renewal_flow_e2e_tests.robot           — Data-driven renewal E2E (existing account; Welcome Back → Verify Details; driven by renewal_application_data.xlsx)
   renewal_journey_flow/
-    student_details_tests.robot            — Renewal: Student Details (same UI as ACF; RENEWAL_MOBILE)
-    choose_plan_tests.robot                — Renewal: Choose Plan (same UI as ACF; RENEWAL_MOBILE)
+    student_details_tests.robot            — Renewal: Student Details (7 tests, TC-R5001–TC-R5007; RENEWAL_MOBILE)
+    choose_plan_tests.robot                — Renewal: Choose Plan (8 tests, TC-R6001–TC-R6008; RENEWAL_MOBILE)
     welcome_back_tests.robot               — Renewal: Welcome Back pre-fill screen (6 tests; TC-WB01–WB06)
     verify_details_tests.robot             — Renewal: Verify Details — skip, edit residential, edit employment, validations, proceed (25 tests; TC-VD01–VD25)
   application_creation_flow/
@@ -255,6 +260,15 @@ All locators use `data-testid` CSS selectors exclusively — CSS class names use
 | PG tab | `css=[data-testid='pg-tab-navigation-button']` |
 | Filter button | `css=[data-testid='filter-button']` |
 | Insurance tab | `css=[data-testid='ins-tab-navigation-button']` |
+| Welcome Back continue button | `text=CONTINUE WITH THESE DETAILS` |
+| Welcome Back change applicant | `text=CHANGE APPLICANT DETAILS` |
+| Verify Details address title | `css=[data-testid='current-address-title']` |
+| Verify Details addr line 1 | `css=[data-testid='addr-line-1-input']` |
+| Verify Details skip button | `css=[data-testid='skip-button']` |
+| Verify Details confirm button | `text=CONFIRM AND PROCEED` |
+| Verify Details business name | `css=[data-testid='business-name-input']` |
+| Verify Details annual income | `css=[data-testid='business-annual-income-input']` |
+| Verify Details years in business | `css=[data-testid='years-of-current-business-input']` |
 
 ## Exact Validation Error Strings
 
@@ -270,6 +284,11 @@ Tests assert these exact strings — do not paraphrase:
 | Short OTP (< 4 digits) | `otp-input-error` | `OTP number must contain 4 digits` |
 | Non-numeric OTP | `otp-input-error` | `Only numeric values allowed` |
 | Wrong OTP | URL stays on `/verify` (primary); toast `text=Incorrect OTP` (secondary — non-blocking, may be absent if verifyOtpPost rate-limited) |
+| Verify Details no consent | `consent-checkbox-error` | `Please accept Terms and Conditions` (Verify Details screen) |
+| Verify Details empty addr line 1 | `addr-line-1-input-error` | shown in residential edit form |
+| Verify Details invalid pincode | `pincode-input-error` | shown in residential edit form |
+| Verify Details empty business name | `business-name-input-error` | shown in employment edit form |
+| Verify Details invalid annual income | `business-annual-income-input-error` | shown in employment edit form |
 
 ## Claude Working Rules (VERY IMPORTANT)
 
@@ -360,3 +379,4 @@ Do NOT complete a task and stop without checking whether each of these files nee
 | Select Employment Type | `/select-employment` |
 | Applicant Employment Details | `/applicant-employment-details` (shared URL; form variant = salaried or self-employed) |
 | Confirm Application | `/confirm-application` |
+| Verify Details (renewal) | `/verify-details` |
