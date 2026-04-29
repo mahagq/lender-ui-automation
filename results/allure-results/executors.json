@@ -1,0 +1,9 @@
+{
+  "name": "Jenkins",
+  "type": "jenkins",
+  "buildOrder": "${BUILD_NUMBER}",
+  "buildName": "CP UI Automation #${BUILD_NUMBER}",
+  "buildUrl": "${BUILD_URL}",
+  "reportUrl": "${BUILD_URL}allure/",
+  "reportName": "Allure Report"
+}

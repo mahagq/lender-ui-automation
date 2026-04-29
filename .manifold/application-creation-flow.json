@@ -1,0 +1,386 @@
+{
+  "$schema": "https://raw.githubusercontent.com/dhanesh/manifold/main/install/manifold-structure.schema.json",
+  "schema_version": 3,
+  "feature": "application-creation-flow",
+  "phase": "VERIFIED",
+  "domain": "software",
+  "created": "2026-04-21T00:00:00Z",
+  "constraints": {
+    "business": [
+      {"id": "B1", "type": "invariant", "source": "interview", "challenger": "stakeholder"},
+      {"id": "B2", "type": "goal",      "source": "interview", "challenger": "stakeholder"},
+      {"id": "B3", "type": "invariant", "source": "interview", "challenger": "stakeholder"},
+      {"id": "B4", "type": "invariant", "source": "interview", "challenger": "technical-reality"}
+    ],
+    "technical": [
+      {"id": "T1", "type": "invariant", "source": "interview", "challenger": "technical-reality"},
+      {"id": "T2", "type": "invariant", "source": "interview", "challenger": "technical-reality"},
+      {"id": "T3", "type": "boundary",  "source": "interview", "challenger": "technical-reality"},
+      {"id": "T4", "type": "invariant", "source": "interview", "challenger": "technical-reality"},
+      {"id": "T5", "type": "boundary",  "source": "interview", "challenger": "technical-reality"},
+      {"id": "T6", "type": "invariant", "source": "interview", "challenger": "technical-reality"},
+      {"id": "T7", "type": "boundary",  "source": "interview", "challenger": "technical-reality"}
+    ],
+    "user_experience": [
+      {"id": "U1", "type": "invariant", "source": "interview", "challenger": "technical-reality"},
+      {"id": "U2", "type": "invariant", "source": "interview", "challenger": "technical-reality"},
+      {"id": "U3", "type": "goal",      "source": "interview", "challenger": "stakeholder"},
+      {"id": "U4", "type": "goal",      "source": "interview", "challenger": "stakeholder"}
+    ],
+    "security": [
+      {"id": "S1", "type": "invariant", "source": "interview", "challenger": "technical-reality"},
+      {"id": "S2", "type": "boundary",  "source": "interview", "challenger": "technical-reality"}
+    ],
+    "operational": [
+      {"id": "O1", "type": "invariant", "source": "interview", "challenger": "technical-reality"},
+      {"id": "O2", "type": "boundary",  "source": "interview", "challenger": "stakeholder"},
+      {"id": "O3", "type": "goal",      "source": "interview", "challenger": "stakeholder"},
+      {"id": "O4", "type": "boundary",  "source": "interview", "challenger": "technical-reality"}
+    ]
+  },
+  "tensions": [
+    {
+      "id": "TN1",
+      "type": "hidden_dependency",
+      "between": ["T2", "T3"],
+      "status": "resolved",
+      "decision": "B",
+      "validation_criteria": [
+        "Suite Setup keyword 'Create Application And Navigate To Student Details' successfully navigates from login to /student-details within LONG_TIMEOUT",
+        "Test Setup keyword navigates to the correct wizard page without triggering a new login",
+        "If Suite Setup fails (auth or app creation), entire suite is aborted and reports FAIL — no tests run against login page"
+      ],
+      "propagation_effects": [
+        {"constraint_id": "T7", "effect": "LOOSENED", "note": "One login per suite file instead of one per test — rate limit load reduced by ~10x"},
+        {"constraint_id": "S1", "effect": "TIGHTENED", "note": "Suite Setup abort-on-auth-failure is now mandatory — tests must not silently proceed against wrong page"}
+      ]
+    },
+    {
+      "id": "TN2",
+      "type": "resource_tension",
+      "between": ["B1", "T7"],
+      "status": "resolved",
+      "decision": "A",
+      "validation_criteria": [
+        "Each suite file has exactly one Suite Setup that calls the application creation helper keyword",
+        "Test Setup within each suite navigates to the wizard page without re-authenticating",
+        "Total UAT login calls across the entire test run equals the number of suite files, not the number of test cases"
+      ],
+      "propagation_effects": [
+        {"constraint_id": "O1", "effect": "LOOSENED", "note": "Fewer application records created per CI run — one per suite file, not one per test"},
+        {"constraint_id": "B1", "effect": "TIGHTENED", "note": "Test grouping must be deliberate — tests for the same wizard page must be in the same suite file to share the Suite Setup"}
+      ]
+    },
+    {
+      "id": "TN3",
+      "type": "trade_off",
+      "between": ["T4", "B4"],
+      "status": "resolved",
+      "decision": "B",
+      "validation_criteria": [
+        "Single ApplicantEmploymentPage.robot resource file contains keyword groups for both Salaried and Self-Employed variants",
+        "Salaried keywords only reference salaried data-testid fields; Self-Employed keywords only reference self-employed fields",
+        "application_creation_tests.robot or a dedicated employment_tests.robot file has two distinct test groups — one per variant"
+      ],
+      "propagation_effects": [
+        {"constraint_id": "B4", "effect": "LOOSENED", "note": "Single resource file per URL is maintained — consistent with Dashboard pattern (one resource, multiple tab sections)"},
+        {"constraint_id": "T4", "effect": "LOOSENED", "note": "Both variants are explicitly covered in distinct keyword groups, eliminating risk of missing one variant"}
+      ]
+    },
+    {
+      "id": "TN4",
+      "type": "trade_off",
+      "between": ["T5", "O1"],
+      "status": "resolved",
+      "decision": "A",
+      "validation_criteria": [
+        "Confirm Application tests assert exact values for all user-entered static fields (names, email, address, employment type, applicant type)",
+        "Confirm Application tests assert format-only (Should Match Regexp or Should Not Be Empty) for API-computed values (EMI amount, interest rate, tenure)",
+        "PRECONDITION comment in confirm-application test explains which fields are static vs computed"
+      ],
+      "propagation_effects": [
+        {"constraint_id": "O2", "effect": "TIGHTENED", "note": "PRECONDITION comment on Confirm Application tests is now required (not just recommended)"},
+        {"constraint_id": "T5", "effect": "TIGHTENED", "note": "All static test data (names, PAN, DOB, email, address) must be declared as variables in variables.robot and used consistently"}
+      ]
+    }
+  ],
+  "blocking_dependencies": [
+    {"blocker": "T2", "blocked": "T3",  "tension_id": "TN1"},
+    {"blocker": "T2", "blocked": "T5",  "tension_id": "TN1"},
+    {"blocker": "S2", "blocked": "T7",  "tension_id": "TN2"},
+    {"blocker": "T3", "blocked": "B1",  "tension_id": "TN1"}
+  ],
+  "anchors": {
+    "recommended_option": "B",
+    "binding_constraint": {
+      "required_truth_id": "RT-1",
+      "reason": "Without a working wizard navigation helper that can reach any page in the flow (login → dashboard → create app → traverse preceding wizard pages), no test from RT-2 through RT-7 can execute at all. RT-1 is hardest to close (requires new keyword infrastructure spanning auth, dashboard, and 10-page wizard traversal), and closing it immediately unblocks all other RTs.",
+      "dependency_chain": ["RT-2", "RT-3", "RT-4", "RT-5", "RT-6", "RT-7"]
+    },
+    "tension_validation": [
+      {"tension_id": "TN1", "status": "CONFIRMED", "by_option": "B"},
+      {"tension_id": "TN2", "status": "CONFIRMED", "by_option": "B"},
+      {"tension_id": "TN3", "status": "CONFIRMED", "by_option": "B"},
+      {"tension_id": "TN4", "status": "CONFIRMED", "by_option": "B"}
+    ],
+    "required_truths": [
+      {
+        "id": "RT-1",
+        "status": "SATISFIED",
+        "priority": "binding",
+        "maps_to": ["T2", "T7", "S1", "S2", "O1"],
+        "evidence": [
+          {"id": "E1-1", "type": "file_exists", "path": "resources/ApplicationCreationFlowPage.robot", "status": "VERIFIED"},
+          {"id": "E1-2", "type": "content_match", "path": "resources/ApplicationCreationFlowPage.robot", "pattern": "Create Application And Navigate To Student Details", "status": "VERIFIED"},
+          {"id": "E1-3", "type": "content_match", "path": "variables/variables.robot", "pattern": "APP_CREATION_MOBILE", "status": "VERIFIED"}
+        ]
+      },
+      {
+        "id": "RT-2",
+        "status": "SATISFIED",
+        "maps_to": ["B2", "T1", "U1", "U3"],
+        "evidence": [
+          {"id": "E2-1", "type": "file_exists", "path": "resources/StudentDetailsPage.robot", "status": "VERIFIED"},
+          {"id": "E2-2", "type": "file_exists", "path": "tests/student_details_tests.robot", "status": "VERIFIED"},
+          {"id": "E2-3", "type": "content_match", "path": "resources/StudentDetailsPage.robot", "pattern": "student-details-title", "status": "VERIFIED"}
+        ]
+      },
+      {
+        "id": "RT-3",
+        "status": "SATISFIED",
+        "maps_to": ["B1", "T1", "U2", "U3", "U4"],
+        "evidence": [
+          {"id": "E3-1", "type": "file_exists", "path": "resources/ChoosePlanPage.robot", "status": "VERIFIED"},
+          {"id": "E3-2", "type": "file_exists", "path": "tests/choose_plan_tests.robot", "status": "VERIFIED"},
+          {"id": "E3-3", "type": "content_match", "path": "tests/choose_plan_tests.robot", "pattern": "TC-6001", "status": "VERIFIED"}
+        ]
+      },
+      {
+        "id": "RT-4",
+        "status": "SATISFIED",
+        "maps_to": ["B1", "T1", "U1", "U2", "U3", "U4"],
+        "evidence": [
+          {"id": "E4-1", "type": "file_exists", "path": "resources/SelectApplicantPage.robot", "status": "VERIFIED"},
+          {"id": "E4-2", "type": "file_exists", "path": "tests/select_applicant_tests.robot", "status": "VERIFIED"},
+          {"id": "E4-3", "type": "content_match", "path": "tests/select_applicant_tests.robot", "pattern": "TC-7001", "status": "VERIFIED"}
+        ]
+      },
+      {
+        "id": "RT-5",
+        "status": "SATISFIED",
+        "maps_to": ["B2", "T1", "U1", "U3"],
+        "evidence": [
+          {"id": "E5-1", "type": "file_exists", "path": "resources/ApplicantBasicDetailsPage.robot", "status": "VERIFIED"},
+          {"id": "E5-2", "type": "file_exists", "path": "resources/OnboardingPage.robot", "status": "VERIFIED"},
+          {"id": "E5-3", "type": "file_exists", "path": "resources/ApplicantPersonalDetailsPage.robot", "status": "VERIFIED"},
+          {"id": "E5-4", "type": "file_exists", "path": "resources/ApplicantResidentialDetailsPage.robot", "status": "VERIFIED"},
+          {"id": "E5-5", "type": "file_exists", "path": "tests/applicant_journey_tests.robot", "status": "VERIFIED"}
+        ]
+      },
+      {
+        "id": "RT-6",
+        "status": "SATISFIED",
+        "maps_to": ["B1", "T1", "T4", "U1", "U2", "U3"],
+        "evidence": [
+          {"id": "E6-1", "type": "file_exists", "path": "resources/EmploymentTypePage.robot", "status": "VERIFIED"},
+          {"id": "E6-2", "type": "file_exists", "path": "resources/ApplicantEmploymentPage.robot", "status": "VERIFIED"},
+          {"id": "E6-3", "type": "content_match", "path": "resources/ApplicantEmploymentPage.robot", "pattern": "employer-name-input", "status": "VERIFIED"},
+          {"id": "E6-4", "type": "content_match", "path": "resources/ApplicantEmploymentPage.robot", "pattern": "business-name-input", "status": "VERIFIED"},
+          {"id": "E6-5", "type": "file_exists", "path": "tests/employment_tests.robot", "status": "VERIFIED"},
+          {"id": "E6-6", "type": "content_match", "path": "tests/employment_tests.robot", "pattern": "TC-12001", "status": "VERIFIED"}
+        ]
+      },
+      {
+        "id": "RT-7",
+        "status": "SATISFIED",
+        "maps_to": ["B1", "T1", "T5", "U1", "U3"],
+        "evidence": [
+          {"id": "E7-1", "type": "file_exists", "path": "resources/ConfirmApplicationPage.robot", "status": "VERIFIED"},
+          {"id": "E7-2", "type": "file_exists", "path": "tests/confirm_application_tests.robot", "status": "VERIFIED"},
+          {"id": "E7-3", "type": "content_match", "path": "tests/confirm_application_tests.robot", "pattern": "TC-13001", "status": "VERIFIED"},
+          {"id": "E7-4", "type": "content_match", "path": "resources/ConfirmApplicationPage.robot", "pattern": "confirm-application-form", "status": "VERIFIED"}
+        ]
+      },
+      {
+        "id": "RT-8",
+        "status": "SATISFIED",
+        "maps_to": ["T5", "S2", "O2"],
+        "evidence": [
+          {"id": "E8-1", "type": "content_match", "path": "variables/variables.robot", "pattern": "APP_CREATION_MOBILE", "status": "VERIFIED"},
+          {"id": "E8-2", "type": "content_match", "path": "variables/variables.robot", "pattern": "APP_STUDENT_FIRST_NAME", "status": "VERIFIED"},
+          {"id": "E8-3", "type": "content_match", "path": "variables/variables.robot", "pattern": "APP_PAN_NUMBER", "status": "VERIFIED"},
+          {"id": "E8-4", "type": "content_match", "path": "variables/variables.robot", "pattern": "APP_EMPLOYER_NAME", "status": "VERIFIED"}
+        ]
+      }
+    ]
+  },
+  "generation": {
+    "option": "B",
+    "timestamp": "2026-04-21T00:00:00Z",
+    "coverage": {
+      "constraints_addressed": 19,
+      "constraints_total": 19,
+      "percentage": 100
+    },
+    "artifacts": [
+      {"path": "variables/variables.robot", "type": "code", "satisfies": ["RT-8", "T5", "S2"], "status": "generated", "artifact_class": "substantive"},
+      {"path": "resources/ApplicationCreationFlowPage.robot", "type": "code", "satisfies": ["RT-1", "T2", "T7", "S1", "O1"], "status": "generated", "artifact_class": "substantive"},
+      {"path": "resources/StudentDetailsPage.robot", "type": "code", "satisfies": ["RT-2", "T1", "U1"], "status": "generated", "artifact_class": "substantive"},
+      {"path": "resources/ChoosePlanPage.robot", "type": "code", "satisfies": ["RT-3", "T1", "U2", "U3"], "status": "generated", "artifact_class": "substantive"},
+      {"path": "resources/SelectApplicantPage.robot", "type": "code", "satisfies": ["RT-4", "T1", "U1", "U4"], "status": "generated", "artifact_class": "substantive"},
+      {"path": "resources/ApplicantBasicDetailsPage.robot", "type": "code", "satisfies": ["RT-5", "T1", "U1"], "status": "generated", "artifact_class": "substantive"},
+      {"path": "resources/OnboardingPage.robot", "type": "code", "satisfies": ["RT-5", "T1", "U1"], "status": "generated", "artifact_class": "substantive"},
+      {"path": "resources/ApplicantPersonalDetailsPage.robot", "type": "code", "satisfies": ["RT-5", "T1", "U1"], "status": "generated", "artifact_class": "substantive"},
+      {"path": "resources/ApplicantResidentialDetailsPage.robot", "type": "code", "satisfies": ["RT-5", "T1", "U1"], "status": "generated", "artifact_class": "substantive"},
+      {"path": "resources/EmploymentTypePage.robot", "type": "code", "satisfies": ["RT-6", "T1", "U1"], "status": "generated", "artifact_class": "substantive"},
+      {"path": "resources/ApplicantEmploymentPage.robot", "type": "code", "satisfies": ["RT-6", "T1", "T4", "U1"], "status": "generated", "artifact_class": "substantive"},
+      {"path": "resources/ConfirmApplicationPage.robot", "type": "code", "satisfies": ["RT-7", "T1", "T5", "U1"], "status": "generated", "artifact_class": "substantive"},
+      {"path": "tests/student_details_tests.robot", "type": "test", "validates": ["RT-2", "B1", "B2", "T1", "U1"], "status": "generated", "artifact_class": "substantive"},
+      {"path": "tests/choose_plan_tests.robot", "type": "test", "validates": ["RT-3", "B1", "T1", "U2", "U3", "U4"], "status": "generated", "artifact_class": "substantive"},
+      {"path": "tests/select_applicant_tests.robot", "type": "test", "validates": ["RT-4", "B1", "T1", "U1", "U2", "U4"], "status": "generated", "artifact_class": "substantive"},
+      {"path": "tests/applicant_journey_tests.robot", "type": "test", "validates": ["RT-5", "B2", "T1", "U1", "U3"], "status": "generated", "artifact_class": "substantive"},
+      {"path": "tests/employment_tests.robot", "type": "test", "validates": ["RT-6", "B1", "T1", "T4", "U1"], "status": "generated", "artifact_class": "substantive"},
+      {"path": "tests/confirm_application_tests.robot", "type": "test", "validates": ["RT-7", "B1", "T1", "T5", "U1", "U4"], "status": "generated", "artifact_class": "substantive"},
+      {"path": "README.md", "type": "docs", "satisfies": ["O3"], "status": "generated", "artifact_class": "substantive"},
+      {"path": "CLAUDE.md", "type": "docs", "satisfies": ["O3", "O4"], "status": "generated", "artifact_class": "substantive"},
+      {"path": "jenkins.md", "type": "docs", "satisfies": ["O3"], "status": "generated", "artifact_class": "substantive"}
+    ]
+  },
+  "reversibility_log": [
+    {"action_step": 1, "description": "Create resources/ApplicationCreationFlowPage.robot with wizard navigation helper", "reversibility": "TWO_WAY"},
+    {"action_step": 2, "description": "Create 9 page resource files (StudentDetails through ConfirmApplication)", "reversibility": "TWO_WAY"},
+    {"action_step": 3, "description": "Create 7 test suite files (one per page/group)", "reversibility": "TWO_WAY"},
+    {"action_step": 4, "description": "Add APP_CREATION_MOBILE and wizard test data variables to variables/variables.robot", "reversibility": "TWO_WAY"},
+    {"action_step": 5, "description": "Update README.md, CLAUDE.md, jenkins.md, manifold files, xlsx", "reversibility": "TWO_WAY"}
+  ],
+  "iterations": [
+    {
+      "number": 1,
+      "phase": "constrain",
+      "timestamp": "2026-04-21T00:00:00Z",
+      "result": "Discovered 19 constraints across 5 categories, grounded in gqcustomer_frontend UAT branch (data-testid audit) and gq_customer_ui_automation Java page objects (TC-6001–TC-13020+). Pre-mortem pass completed.",
+      "constraints_added": 19,
+      "by_category": {"business": 4, "technical": 7, "user_experience": 4, "security": 2, "operational": 4}
+    },
+    {
+      "number": 2,
+      "phase": "tension",
+      "timestamp": "2026-04-22T00:00:00Z",
+      "result": "Found 4 tensions, all 4 resolved. Binding dependency chain: S2 → T7 → T2 → T3 → all tests. T2 identified as binding constraint for m3.",
+      "tensions_found": 4,
+      "tensions_resolved": 4,
+      "by_type": {"trade_offs": 2, "resource_tensions": 1, "hidden_dependencies": 1}
+    },
+    {
+      "number": 3,
+      "phase": "anchor",
+      "timestamp": "2026-04-22T00:00:00Z",
+      "result": "Derived 8 required truths. RT-1 (wizard navigation infrastructure) is binding constraint — blocks RT-2 through RT-7. Option B (page-per-suite) recommended. All 4 tensions confirmed by Option B.",
+      "required_truths": 8,
+      "by_status": {"SATISFIED": 0, "PARTIAL": 0, "NOT_SATISFIED": 8, "SPECIFICATION_READY": 0},
+      "solution_options": 3,
+      "selected_option": "Option B"
+    },
+    {
+      "number": 4,
+      "phase": "generate",
+      "timestamp": "2026-04-21T00:00:00Z",
+      "result": "Generated 21 artifacts: 12 resource files, 6 test suites, variables update, and 3 documentation files. All 8 required truths satisfied. 183 tests pass dry-run (0 failures, 7 pre-existing skips). Binding constraint RT-1 (ApplicationCreationFlowPage.robot) generated first.",
+      "artifacts_generated": 21,
+      "by_type": {"code": 12, "test": 6, "docs": 3},
+      "constraints_covered": 19,
+      "dry_run_result": "183 passed, 0 failed, 7 skipped"
+    },
+    {
+      "number": 5,
+      "phase": "verify",
+      "timestamp": "2026-04-22T00:00:00Z",
+      "result": "19/20 constraints SATISFIED, 1 PARTIAL (U1). 2 gaps found: G1 (O3 Allure labels — FIXED in session) + G2 (U1 error assertions on new pages — non-blocking, open). Binding constraint RT-1 verified SATISFIED. All 4 tension resolutions confirmed.",
+      "constraints_satisfied": 19,
+      "constraints_partial": 1,
+      "constraints_total": 20,
+      "gaps_found": 2,
+      "gaps_fixed_in_session": 1,
+      "gaps_open": 1
+    },
+    {
+      "number": 7,
+      "phase": "post-verify-personal-details-validation",
+      "timestamp": "2026-04-27T00:00:00Z",
+      "result": "Added gender/DOB/marital-status validation test cases to close G2 (U1 — non-blocking gap). 3 new keywords in ApplicantPersonalDetailsPage.robot: Gender Error Should Be Visible, DOB Error Should Be Visible, Marital Status Error Should Be Visible. 2 new variables: ${PD_GENDER_ERROR} (data-testid='gender-error'), ${PD_MARITAL_STATUS_ERROR} (data-testid='marital-status-error'). 3 new negative test cases in personal_details_tests.robot: TC-10N-08 (no gender), TC-10N-09 (no DOB), TC-10N-10 (no marital status). personal_details count: 15 → 18. Total suite: 320 → 323 tests. G2 closed; U1 status: PARTIAL → SATISFIED.",
+      "modified_files": [
+        "resources/ApplicantPersonalDetailsPage.robot",
+        "tests/application_creation_flow/personal_details_tests.robot",
+        "CLAUDE.md",
+        "README.md",
+        "jenkins.md",
+        ".manifold/application-creation-flow.verify.json"
+      ],
+      "new_tests": 3,
+      "test_count_before": 320,
+      "test_count_after": 323,
+      "new_tcs": ["TC-10N-08", "TC-10N-09", "TC-10N-10"],
+      "gap_closed": "G2"
+    },
+    {
+      "number": 6,
+      "phase": "post-verify-student-details-fixes",
+      "timestamp": "2026-04-25T00:00:00Z",
+      "result": "Multiple fixes to StudentDetailsPage.robot and student_details_tests.robot. (1) react-select portal rendering: all GILE dropdowns (institute/location/board/academic-year/class) now use keyboard navigation (container click + Sleep 500ms + ArrowDown + Enter) instead of CSS descendant selectors that cannot reach portalled menus. Institute uses async search pattern (type + Sleep 2s + ArrowDown + Enter). (2) Strict mode fix: institute input selector narrowed from [data-testid='institute-id-react-select'] input to input[role='combobox'] to avoid matching hidden input[name='institute_id']. (3) TC-5027 fix: /student-details has no back button — replaced ${SD_BACK_BUTTON} with ${SD_CLOSE_BUTTON} = css=[data-testid='close-button']; test renamed to 'Close Button Navigates To Dashboard'. (4) Keyword disambiguation: 4 keywords renamed with 'Student' prefix (Student First Name Error Should Be Visible, Student Last Name Error Should Be Visible, Student Class Error Should Be Visible, Student Loan Amount Error Should Be Visible) to resolve conflict with identical names in ApplicantBasicDetailsPage.robot. (5) Added 14 new tests: TC-5022–5027 (GILE selection positive scenarios + close button navigation) and TC-5N-01–5N-08 (validation negative scenarios). Total: 21 → 35 tests.",
+      "modified_files": ["resources/StudentDetailsPage.robot", "tests/student_details_tests.robot"],
+      "fixes": [
+        "react-select portal rendering → keyboard navigation for all 5 GILE dropdowns",
+        "institute strict mode → input[role='combobox'] selector",
+        "back button absent → close button (data-testid='close-button')",
+        "keyword name conflict → Student prefix on 4 error keywords"
+      ],
+      "new_tests": 14,
+      "test_count_before": 21,
+      "test_count_after": 35,
+      "new_tcs": ["TC-5022", "TC-5023", "TC-5024", "TC-5025", "TC-5026", "TC-5027", "TC-5N-01", "TC-5N-02", "TC-5N-03", "TC-5N-04", "TC-5N-05", "TC-5N-06", "TC-5N-07", "TC-5N-08"]
+    }
+  ],
+  "convergence": {
+    "status": "CONVERGED",
+    "note": "G1 (blocking) fixed in verify session. G2 (non-blocking — U1 error assertions on new pages) is a known open item that does not block convergence."
+  },
+  "constraint_graph": {
+    "version": 1,
+    "nodes": {},
+    "edges": {
+      "dependencies": [],
+      "conflicts": [],
+      "satisfies": []
+    }
+  },
+  "gap_checklist_compliance": [
+    {"gap": "GAP-03", "status": "COMPLETED"},
+    {"gap": "GAP-09", "status": "SKIPPED", "skip_reason": "No crypto/auth attack surface — test suite consumes authenticated sessions, does not implement auth"},
+    {"gap": "GAP-10", "status": "SKIPPED", "skip_reason": "All pages require authentication — no unauthenticated endpoints in scope"},
+    {"gap": "GAP-11", "status": "SKIPPED", "skip_reason": "Test suite makes no direct external HTTP calls — uses Browser library through UAT"},
+    {"gap": "GAP-14", "status": "COMPLETED"},
+    {"gap": "GAP-17", "status": "SKIPPED", "skip_reason": "Each test suite uses a fresh browser context — no shared state between tests except for wizard state in localStorage (captured in T3)"}
+  ],
+  "draft_required_truths": [
+    {
+      "id": "DRT-1", "seed_from": ["T2"],
+      "draft_statement": "Create Application And Navigate To Student Details keyword exists",
+      "confidence": "high"
+    },
+    {
+      "id": "DRT-2", "seed_from": ["T4"],
+      "draft_statement": "Dual employment keyword groups exist in one resource file",
+      "confidence": "high"
+    },
+    {
+      "id": "DRT-3", "seed_from": ["B1", "B2"],
+      "draft_statement": "TC-ID mapping from Java TCs to Robot test names is maintained",
+      "confidence": "high"
+    },
+    {
+      "id": "DRT-4", "seed_from": ["T3", "TN1"],
+      "draft_statement": "Navigation uses Suite Setup (full path) + Test Setup (page nav within active session)",
+      "confidence": "high"
+    }
+  ]
+}
