@@ -1,11 +1,3 @@
-# Robot Framework results
-results/
-
-# Stray result files (produced by runs without --outputdir)
-output.xml
-report.html
-playwright-log.txt
-
 # Python
 __pycache__/
 *.py[cod]
@@ -16,19 +8,10 @@ __pycache__/
 dist/
 build/
 
-# Virtual environment
-venv/
-.venv/
-env/
-
 # IDE
 .idea/
-.vscode/
 *.swp
 *.swo
-
-# Claude / AI tool folders
-.code-review-graph/
 
 # macOS / Windows
 .DS_Store
