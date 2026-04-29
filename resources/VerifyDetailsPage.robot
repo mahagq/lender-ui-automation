@@ -14,7 +14,7 @@ Library    Browser
 
 *** Variables ***
 # Page sections
-${VD_ADDRESS_TITLE}         css=[data-testid='current-address-title']
+${VD_ADDRESS_TITLE}         xpath=//h3[normalize-space()='Residential details']
 ${VD_ADDR_LINE1}            css=[data-testid='addr-line-1-input']
 ${VD_RESIDENCE_RADIO_WRAP}  css=[data-testid='type-radio-container-1']
 ${VD_RESIDENCE_RADIO}       css=[data-testid='type-radio']
@@ -41,7 +41,7 @@ Residential Section Should Be Visible
 
 Residential Edit Button Should Be Visible
     [Documentation]    Verifies the "EDIT DETAILS" button for the residential section is visible.
-    Wait For Elements State    ${VD_EDIT_DETAILS}    visible    timeout=${TIMEOUT}
+    Wait For Elements State    ${VD_EDIT_DETAILS} >> nth=0    visible    timeout=${TIMEOUT}
 
 Employment Skip Button Should Be Visible
     [Documentation]    Verifies the skip button (to skip employment review) is visible.
@@ -160,4 +160,4 @@ Verify Details Annual Income Error Should Be Visible
 Verify Details URL Should Be Active
     [Documentation]    Asserts that the current URL is the verify-details page.
     ${url}=    Get Url
-    Should Contain    ${url}    /verify-details
+    Should Contain    ${url}    /renewal-details

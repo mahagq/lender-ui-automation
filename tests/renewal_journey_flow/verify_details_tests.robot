@@ -7,11 +7,13 @@ Documentation
 ...    skipping employment review, and confirming to submit.
 ...
 ...    Session model:
-...      Suite Setup    → Navigate To Verify Details Via Renewal
-...      Test Setup     → Navigate To Verify Details Via Renewal (re-traverses — no hard URL)
+...      Suite Setup    → Navigate To Verify Details Via Renewal (login once, create one application, land on /renewal-details)
+...      Test Setup     → Navigate To Verify Details Within Session (Go To /renewal-details — same app, no re-login)
 ...      Suite Teardown → Close Browser
 ...
-...    TC-VD25 (confirm and submit) runs LAST — advances application to submitted state.
+...    TC-VD09 runs 2nd-to-last — submits the shared application.
+...    TC-VD25 runs LAST with [Setup] Navigate To Verify Details New Application Within Session
+...    (creates one fresh application within the existing browser session, no re-login).
 
 Resource    ../../resources/ApplicationCreationFlowPage.robot
 Resource    ../../resources/WelcomeBackPage.robot
@@ -22,7 +24,7 @@ Variables   ../../variables/dynamic_variables.py
 
 Suite Setup     Navigate To Verify Details Via Renewal
 Suite Teardown  Close Browser
-Test Setup      Navigate To Verify Details Via Renewal
+Test Setup      Navigate To Verify Details Within Session
 Test Tags       renewal    verify-details    renewal-journey-flow    allure.label.epic:CP UI Automation    allure.label.feature:Renewal Journey Flow    allure.label.story:Verify Details
 
 *** Test Cases ***
@@ -59,13 +61,6 @@ TC-VD08 Skip Employment And Confirm Proceeds Successfully
     Click Skip Employment
     Employment Section Should Be Dismissed After Skip
     Consent And Confirm Button Should Be Visible
-
-TC-VD09 Skip Both Sections Then Confirm And Proceed Submits Application
-    [Tags]    skip-journey
-    [Documentation]    Skips employment review then confirms with consent — verifies successful submission.
-    Click Skip Employment
-    Click Confirm And Proceed
-    Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    Confirm Application Submitted Successfully
 
 # ── Edit Residential ────────────────────────────────────────────────────────────
 
@@ -188,8 +183,18 @@ TC-VD24 Confirm And Proceed Without Consent Shows Consent Error
     Click Confirm And Proceed Without Consent
     Verify Details Consent Error Should Be Visible
 
+TC-VD09 Skip Both Sections Then Confirm And Proceed Submits Application
+    [Tags]    skip-journey
+    [Documentation]    Skips employment review then confirms with consent — verifies successful submission.
+    ...    Runs 2nd-to-last: submits the shared application leaving it in a terminal state.
+    Click Skip Employment
+    Click Confirm And Proceed
+    Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    Confirm Application Submitted Successfully
+
 TC-VD25 Confirm And Proceed With Consent Submits Application
-    [Documentation]    Skips employment and confirms — runs LAST as it advances the wizard to submitted.
+    [Setup]    Navigate To Verify Details New Application Within Session
+    [Documentation]    Confirms with consent after creating a fresh application within the same session.
+    ...    Runs LAST — TC-VD09 submitted the shared app, so this test needs its own fresh application.
     Click Skip Employment
     Click Confirm And Proceed
     Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    Confirm Application Submitted Successfully

@@ -601,7 +601,38 @@ Navigate To Verify Details Via Renewal
     ...    Traverses through Welcome Back → clicks "CONTINUE WITH THESE DETAILS" → Verify Details.
     Navigate To Welcome Back Via Renewal
     Click    text=CONTINUE WITH THESE DETAILS
-    Wait For Elements State    css=[data-testid='current-address-title']    visible    timeout=${LONG_TIMEOUT}
+    Wait For Elements State    xpath=//h3[normalize-space()='Residential details']    visible    timeout=${LONG_TIMEOUT}
+
+Navigate To Welcome Back Within Session
+    [Documentation]
+    ...    Test Setup for renewal_journey_flow/welcome_back_tests.robot.
+    ...    Reuses the active browser session and SAME application — no new login, no new application.
+    Go To    ${BASE_URL}/renewal-confirmation
+    Wait For Elements State    text=CONTINUE WITH THESE DETAILS    visible    timeout=${LONG_TIMEOUT}
+
+Navigate To Verify Details Within Session
+    [Documentation]
+    ...    Test Setup for renewal_journey_flow/verify_details_tests.robot.
+    ...    Reuses the active browser session and SAME application — no new login, no new application.
+    Go To    ${BASE_URL}/renewal-details
+    Wait For Elements State    xpath=//h3[normalize-space()='Residential details']    visible    timeout=${LONG_TIMEOUT}
+
+Navigate To Verify Details New Application Within Session
+    [Documentation]
+    ...    Special Test Setup for TC-VD25 only.
+    ...    TC-VD09 submits the shared application; this creates a fresh renewal application
+    ...    within the existing browser session (no re-login) and traverses to /renewal-details.
+    Go To    ${BASE_URL}/my-applications
+    Wait For Elements State    ${DASHBOARD_TITLE}    visible    timeout=${TIMEOUT}
+    Click Create Application Button And Wait For Student Details
+    Wait For Elements State    ${SD_FORM}    visible    timeout=${TIMEOUT}
+    Fill Student Details With Stub Data
+    Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    Choose Plan URL Should Be Active
+    Click First Plan In List
+    Click Submit Plan Button
+    Wait For Elements State    text=CONTINUE WITH THESE DETAILS    visible    timeout=${LONG_TIMEOUT}
+    Click    text=CONTINUE WITH THESE DETAILS
+    Wait For Elements State    xpath=//h3[normalize-space()='Residential details']    visible    timeout=${LONG_TIMEOUT}
 
 Resume In Progress Application
     [Documentation]

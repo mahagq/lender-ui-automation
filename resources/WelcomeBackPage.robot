@@ -39,6 +39,9 @@ Click Continue With These Details
     Wait For Elements State    ${WB_CONTINUE_BUTTON}    visible    timeout=${LONG_TIMEOUT}
     Click    ${WB_CONTINUE_BUTTON}
 
+Verify Navigated To Verify Details
+    Wait For Elements State    xpath=//*[contains(text(),'Residential details')]    visible    timeout=${LONG_TIMEOUT}
+
 Click Change Applicant
     [Documentation]
     ...    Clicks "CHANGE APPLICANT DETAILS" or "Click to change applicant" link.
