@@ -1,7 +1,7 @@
 *** Settings ***
 Documentation
 ...    Independent test suite for the GQ Customer Portal Applicant Residential Details page (/applicant-residential-details).
-...    All tests are self-contained — no dependency on applicant_journey_tests.robot.
+...    Independent suite — no cross-file ordering dependencies.
 ...
 ...    Session model:
 ...      Suite Setup    → Navigate To Residential Details (full wizard traversal to /applicant-residential-details)

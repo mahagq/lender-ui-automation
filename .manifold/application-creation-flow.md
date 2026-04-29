@@ -335,9 +335,9 @@ Four pages with no Java test coverage are automated at B2 level (title visible, 
 3. **`resources/ApplicantPersonalDetailsPage.robot`** — keywords for `personal-details-title`, `pan-number-input`, `gender-react-select`, `year/month/day-react-select`, `marital-status-radio`, `email-input`, `consent-checkbox`, `proceed-button`, error testids
 4. **`resources/ApplicantResidentialDetailsPage.robot`** — keywords for `residential-details-title`, `addr-line-1-input`, `addr-line-2-input`, `pincode-input`, `city-input`, `state-react-select`, `type-radio`, `proceed-button`, error testids
 
-`tests/applicant_journey_tests.robot` covers these four pages in one suite file (grouped per TN2 — fewest suite files needed for pages with no Java TC baseline).
+Four separate suite files cover these pages (one per page, matching the page-per-suite pattern): `tests/application_creation_flow/applicant_basic_details_tests.robot`, `tests/application_creation_flow/onboarding_tests.robot`, `tests/application_creation_flow/personal_details_tests.robot`, `tests/application_creation_flow/residential_details_tests.robot`.
 
-**Gap:** All four resource files missing. `applicant_journey_tests.robot` does not exist.
+**Gap:** SATISFIED — all four resource files and four test suite files exist on disk.
 
 ---
 
@@ -464,12 +464,15 @@ Group early-flow pages into fewer suites: (StudentDetails + ChoosePlan), (Select
 | `resources/EmploymentTypePage.robot` | code | RT-6, T1, U1 |
 | `resources/ApplicantEmploymentPage.robot` | code | RT-6, T1, T4, U1 |
 | `resources/ConfirmApplicationPage.robot` | code | RT-7, T1, T5, U1 |
-| `tests/student_details_tests.robot` | test | RT-2, B1, B2 |
-| `tests/choose_plan_tests.robot` | test | RT-3, B1 |
-| `tests/select_applicant_tests.robot` | test | RT-4, B1 |
-| `tests/applicant_journey_tests.robot` | test | RT-5, B2 |
-| `tests/employment_tests.robot` | test | RT-6, B1, T4 |
-| `tests/confirm_application_tests.robot` | test | RT-7, B1, T5 |
+| `tests/application_creation_flow/student_details_tests.robot` | test | RT-2, B1, B2 |
+| `tests/application_creation_flow/choose_plan_tests.robot` | test | RT-3, B1 |
+| `tests/application_creation_flow/select_applicant_tests.robot` | test | RT-4, B1 |
+| `tests/application_creation_flow/applicant_basic_details_tests.robot` | test | RT-5, B2 |
+| `tests/application_creation_flow/onboarding_tests.robot` | test | RT-5, B2 |
+| `tests/application_creation_flow/personal_details_tests.robot` | test | RT-5, B2 |
+| `tests/application_creation_flow/residential_details_tests.robot` | test | RT-5, B2 |
+| `tests/application_creation_flow/employment_tests.robot` | test | RT-6, B1, T4 |
+| `tests/application_creation_flow/confirm_application_tests.robot` | test | RT-7, B1, T5 |
 | `README.md` (updated) | docs | O3 |
 | `CLAUDE.md` (updated) | docs | O3, O4 |
 | `jenkins.md` (updated) | docs | O3 |

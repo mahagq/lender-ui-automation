@@ -1,0 +1,173 @@
+{
+  "$schema": "https://raw.githubusercontent.com/dhanesh/manifold/main/install/manifold-structure.json",
+  "schema_version": 3,
+  "feature": "renewal-journey-flow",
+  "phase": "VERIFIED",
+  "domain": "software",
+  "created": "2026-04-29T00:00:00Z",
+  "constraints": {
+    "business": [
+      {"id": "B1", "type": "invariant", "source": "interview", "challenger": "stakeholder",
+       "description": "Renewal flow covers existing GQ customers returning to renew — Welcome Back pre-fill + Verify Details review must be tested end-to-end"},
+      {"id": "B2", "type": "goal", "source": "interview", "challenger": "stakeholder",
+       "description": "Student Details and Choose Plan pages are shared with application creation flow — renewal variants must use RENEWAL_MOBILE, not APP_CREATION_MOBILE"},
+      {"id": "B3", "type": "invariant", "source": "interview", "challenger": "technical-reality",
+       "description": "No changes to application creation flow resource files — renewal pages add WelcomeBackPage.robot and VerifyDetailsPage.robot only"}
+    ],
+    "technical": [
+      {"id": "T1", "type": "invariant", "source": "interview", "challenger": "technical-reality",
+       "description": "Browser Library (Playwright) exclusively — no SeleniumLibrary"},
+      {"id": "T2", "type": "invariant", "source": "interview", "challenger": "technical-reality",
+       "description": "data-testid locators exclusively; text= selectors permitted only where data-testid absent (Welcome Back continue/change buttons)"},
+      {"id": "T3", "type": "invariant", "source": "interview", "challenger": "technical-reality",
+       "description": "Each renewal suite uses 1 shared browser session: Suite Setup logs in once; Test Setup uses Go To /renewal-confirmation or /renewal-details (no re-login)"},
+      {"id": "T4", "type": "boundary", "source": "interview", "challenger": "technical-reality",
+       "description": "verify_details_tests.robot shares 1 application across tests; TC-VD09 (2nd-to-last) submits it; TC-VD25 (last) creates a fresh app within the same session"},
+      {"id": "T5", "type": "boundary", "source": "interview", "challenger": "technical-reality",
+       "description": "RENEWAL_MOBILE must be a pre-existing account on UAT with at least one prior application — cannot be auto-generated like APP_CREATION_MOBILE"}
+    ],
+    "user_experience": [
+      {"id": "U1", "type": "invariant", "source": "interview", "challenger": "stakeholder",
+       "description": "Verify Details tests cover skip, edit residential, edit employment, validation errors, and proceed (CONFIRM AND PROCEED) paths"},
+      {"id": "U2", "type": "goal", "source": "interview", "challenger": "stakeholder",
+       "description": "Welcome Back tests assert pre-fill accuracy (student name, course, institution) and both continue/change-applicant navigation paths"},
+      {"id": "U3", "type": "goal", "source": "interview", "challenger": "stakeholder",
+       "description": "Renewal Student Details and Choose Plan tests cover same functional scope as application creation equivalents but with RENEWAL_MOBILE context"}
+    ],
+    "security": [
+      {"id": "S1", "type": "invariant", "source": "interview", "challenger": "technical-reality",
+       "description": "Suite Setup abort-on-auth-failure mandatory — renewal tests must not silently proceed if login or renewal navigation fails"}
+    ],
+    "operational": [
+      {"id": "O1", "type": "invariant", "source": "interview", "challenger": "technical-reality",
+       "description": "RENEWAL_MOBILE must be set as env var before running renewal suites — no auto-generation; value must map to an ERP-registered account with prior application history"},
+      {"id": "O2", "type": "goal", "source": "interview", "challenger": "stakeholder",
+       "description": "All renewal tests tagged with 'renewal' + suite-specific tag (renewal-journey-flow, welcome-back, verify-details, etc.) for filtered runs"}
+    ]
+  },
+  "tensions": [
+    {
+      "id": "TN1",
+      "type": "hidden_dependency",
+      "between": ["T3", "T4"],
+      "status": "resolved",
+      "decision": "A",
+      "validation_criteria": [
+        "verify_details_tests.robot Suite Setup creates one shared application and navigates to /renewal-details",
+        "TC-VD01–VD08 use Test Setup Go To /renewal-details (shared app still open)",
+        "TC-VD09 uses [Setup] NONE and submits the shared application",
+        "TC-VD25 uses a fresh application created within the session — not affected by TC-VD09 submission"
+      ],
+      "propagation_effects": [
+        {"constraint_id": "T4", "effect": "TIGHTENED", "note": "TC-VD09 must remain 2nd-to-last; TC-VD25 must remain last — test order is load-bearing in verify_details_tests.robot"}
+      ]
+    },
+    {
+      "id": "TN2",
+      "type": "resource_tension",
+      "between": ["B2", "T5"],
+      "status": "resolved",
+      "decision": "A",
+      "validation_criteria": [
+        "student_details_tests.robot and choose_plan_tests.robot under renewal_journey_flow/ use RENEWAL_MOBILE variable",
+        "RENEWAL_MOBILE is documented as a required pre-existing account — env var, not auto-generated",
+        "Renewal suite Setup keywords navigate to /student-details via renewal path, not application creation path"
+      ],
+      "propagation_effects": [
+        {"constraint_id": "O1", "effect": "TIGHTENED", "note": "CI pipeline must inject RENEWAL_MOBILE before running renewal suites — failure to do so causes Suite Setup to fail with account-not-found error"}
+      ]
+    }
+  ],
+  "blocking_dependencies": [
+    {"blocker": "T5", "blocked": "T3", "tension_id": "TN2"},
+    {"blocker": "T3", "blocked": "T4", "tension_id": "TN1"}
+  ],
+  "anchors": {
+    "recommended_option": "A",
+    "binding_constraint": {
+      "required_truth_id": "RT-1",
+      "reason": "Without WelcomeBackPage.robot and VerifyDetailsPage.robot resource files, no Welcome Back or Verify Details test can execute. These are the net-new renewal-specific pages; StudentDetailsPage and ChoosePlanPage already exist from the application creation flow.",
+      "dependency_chain": ["RT-2", "RT-3", "RT-4"]
+    },
+    "tension_validation": [
+      {"tension_id": "TN1", "status": "CONFIRMED", "by_option": "A"},
+      {"tension_id": "TN2", "status": "CONFIRMED", "by_option": "A"}
+    ],
+    "required_truths": [
+      {
+        "id": "RT-1",
+        "status": "SATISFIED",
+        "priority": "binding",
+        "maps_to": ["T1", "T2", "T3", "S1"],
+        "evidence": [
+          {"id": "E1-1", "type": "file_exists", "path": "resources/WelcomeBackPage.robot", "status": "VERIFIED"},
+          {"id": "E1-2", "type": "file_exists", "path": "resources/VerifyDetailsPage.robot", "status": "VERIFIED"},
+          {"id": "E1-3", "type": "content_match", "path": "resources/WelcomeBackPage.robot", "pattern": "renewal-confirmation", "status": "VERIFIED"},
+          {"id": "E1-4", "type": "content_match", "path": "resources/VerifyDetailsPage.robot", "pattern": "renewal-details", "status": "VERIFIED"}
+        ]
+      },
+      {
+        "id": "RT-2",
+        "status": "SATISFIED",
+        "maps_to": ["B1", "U2", "T3"],
+        "evidence": [
+          {"id": "E2-1", "type": "file_exists", "path": "tests/renewal_journey_flow/welcome_back_tests.robot", "status": "VERIFIED"},
+          {"id": "E2-2", "type": "content_match", "path": "tests/renewal_journey_flow/welcome_back_tests.robot", "pattern": "TC-WB01", "status": "VERIFIED"},
+          {"id": "E2-3", "type": "content_match", "path": "tests/renewal_journey_flow/welcome_back_tests.robot", "pattern": "TC-WB06", "status": "VERIFIED"}
+        ]
+      },
+      {
+        "id": "RT-3",
+        "status": "SATISFIED",
+        "maps_to": ["B1", "U1", "T3", "T4"],
+        "evidence": [
+          {"id": "E3-1", "type": "file_exists", "path": "tests/renewal_journey_flow/verify_details_tests.robot", "status": "VERIFIED"},
+          {"id": "E3-2", "type": "content_match", "path": "tests/renewal_journey_flow/verify_details_tests.robot", "pattern": "TC-VD01", "status": "VERIFIED"},
+          {"id": "E3-3", "type": "content_match", "path": "tests/renewal_journey_flow/verify_details_tests.robot", "pattern": "TC-VD25", "status": "VERIFIED"},
+          {"id": "E3-4", "type": "content_match", "path": "resources/VerifyDetailsPage.robot", "pattern": "skip-button", "status": "VERIFIED"}
+        ]
+      },
+      {
+        "id": "RT-4",
+        "status": "SATISFIED",
+        "maps_to": ["B2", "U3", "T5"],
+        "evidence": [
+          {"id": "E4-1", "type": "file_exists", "path": "tests/renewal_journey_flow/student_details_tests.robot", "status": "VERIFIED"},
+          {"id": "E4-2", "type": "file_exists", "path": "tests/renewal_journey_flow/choose_plan_tests.robot", "status": "VERIFIED"},
+          {"id": "E4-3", "type": "content_match", "path": "tests/renewal_journey_flow/student_details_tests.robot", "pattern": "TC-R5001", "status": "VERIFIED"},
+          {"id": "E4-4", "type": "content_match", "path": "tests/renewal_journey_flow/choose_plan_tests.robot", "pattern": "TC-R6001", "status": "VERIFIED"}
+        ]
+      }
+    ]
+  },
+  "generation": {
+    "option": "A",
+    "timestamp": "2026-04-29T00:00:00Z",
+    "coverage": {
+      "constraints_addressed": 11,
+      "constraints_total": 11,
+      "percentage": 100
+    },
+    "artifacts": [
+      {"path": "resources/WelcomeBackPage.robot", "type": "code", "satisfies": ["RT-1", "T1", "T2"], "status": "verified", "artifact_class": "substantive"},
+      {"path": "resources/VerifyDetailsPage.robot", "type": "code", "satisfies": ["RT-1", "T1", "T2", "U1"], "status": "verified", "artifact_class": "substantive"},
+      {"path": "tests/renewal_journey_flow/welcome_back_tests.robot", "type": "test", "validates": ["RT-2", "B1", "U2"], "status": "verified", "artifact_class": "substantive"},
+      {"path": "tests/renewal_journey_flow/verify_details_tests.robot", "type": "test", "validates": ["RT-3", "B1", "U1", "T4"], "status": "verified", "artifact_class": "substantive"},
+      {"path": "tests/renewal_journey_flow/student_details_tests.robot", "type": "test", "validates": ["RT-4", "B2", "U3"], "status": "verified", "artifact_class": "substantive"},
+      {"path": "tests/renewal_journey_flow/choose_plan_tests.robot", "type": "test", "validates": ["RT-4", "B2", "U3"], "status": "verified", "artifact_class": "substantive"}
+    ]
+  },
+  "convergence": {
+    "status": "CONVERGED",
+    "note": "All 4 required truths satisfied. WelcomeBackPage.robot and VerifyDetailsPage.robot confirmed on disk. 46 renewal journey flow tests confirmed (TC-R5001–R5007, TC-R6001–R6008, TC-WB01–WB06, TC-VD01–VD25). No open gaps."
+  },
+  "constraint_graph": {
+    "version": 1,
+    "nodes": {},
+    "edges": {
+      "dependencies": [],
+      "conflicts": [],
+      "satisfies": []
+    }
+  }
+}

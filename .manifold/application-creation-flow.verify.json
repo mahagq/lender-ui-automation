@@ -255,16 +255,21 @@
       "constraint": "O3",
       "type": "INVARIANT",
       "severity": "blocking",
-      "issue": "All 6 wizard test suites missing Allure label tags — Allure Behaviors tab will NOT show the Epic/Feature/Story hierarchy documented in jenkins.md",
+      "status": "FIXED",
+      "fixed_in": "2026-04-22",
+      "issue": "All 6 wizard test suites were missing Allure label tags — Allure Behaviors tab would NOT show the Epic/Feature/Story hierarchy documented in jenkins.md",
+      "resolution": "Added allure.label.* tags (epic/feature/story) to all wizard test suite Test Tags lines. Paths updated 2026-04-29 to reflect tests/application_creation_flow/ restructure.",
       "affected_files": [
-        "tests/student_details_tests.robot",
-        "tests/choose_plan_tests.robot",
-        "tests/select_applicant_tests.robot",
-        "tests/applicant_journey_tests.robot",
-        "tests/employment_tests.robot",
-        "tests/confirm_application_tests.robot"
-      ],
-      "action": "Add allure.label.* tags to each suite's Test Tags line. Example for student_details_tests.robot: Test Tags  student-details  application-creation-flow  allure.label.epic:CP UI Automation  allure.label.feature:Application Creation Flow  allure.label.story:Student Details"
+        "tests/application_creation_flow/student_details_tests.robot",
+        "tests/application_creation_flow/choose_plan_tests.robot",
+        "tests/application_creation_flow/select_applicant_tests.robot",
+        "tests/application_creation_flow/applicant_basic_details_tests.robot",
+        "tests/application_creation_flow/onboarding_tests.robot",
+        "tests/application_creation_flow/personal_details_tests.robot",
+        "tests/application_creation_flow/residential_details_tests.robot",
+        "tests/application_creation_flow/employment_tests.robot",
+        "tests/application_creation_flow/confirm_application_tests.robot"
+      ]
     },
     {
       "id": "G2",
@@ -311,8 +316,7 @@
   },
 
   "convergence": {
-    "status": "IN_PROGRESS",
-    "blocking_gap": "G1 (O3 — Allure label tags missing)",
-    "non_blocking_gap": "G2 (U1 — FIXED 2026-04-27: personal details gender/DOB/marital-status validation tests added)"
+    "status": "CONVERGED",
+    "note": "G1 (O3 — Allure label tags) FIXED 2026-04-22. G2 (U1 — personal details validation tests) FIXED 2026-04-27. Both gaps closed. Paths updated 2026-04-29 to reflect tests/application_creation_flow/ restructure."
   }
 }

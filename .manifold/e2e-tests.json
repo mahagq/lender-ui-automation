@@ -1,0 +1,165 @@
+{
+  "$schema": "https://raw.githubusercontent.com/dhanesh/manifold/main/install/manifold-structure.json",
+  "schema_version": 3,
+  "feature": "e2e-tests",
+  "phase": "VERIFIED",
+  "domain": "software",
+  "created": "2026-04-29T00:00:00Z",
+  "constraints": {
+    "business": [
+      {"id": "B1", "type": "invariant", "source": "interview", "challenger": "stakeholder",
+       "description": "E2E tests must cover the full happy path from Login → Confirm & Submit — no partial flows"},
+      {"id": "B2", "type": "goal", "source": "interview", "challenger": "stakeholder",
+       "description": "Data-driven E2E (application creation + renewal) driven by Excel — application_data.xlsx and renewal_application_data.xlsx"},
+      {"id": "B3", "type": "invariant", "source": "interview", "challenger": "technical-reality",
+       "description": "E2E suites live exclusively in tests/e2e/ — no E2E logic in other test directories"}
+    ],
+    "technical": [
+      {"id": "T1", "type": "invariant", "source": "interview", "challenger": "technical-reality",
+       "description": "Browser Library (Playwright) exclusively — no SeleniumLibrary"},
+      {"id": "T2", "type": "invariant", "source": "interview", "challenger": "technical-reality",
+       "description": "E2E orchestration lives in E2EApplicationFlow.robot — Create Full Application and Create Full Renewal Application keywords"},
+      {"id": "T3", "type": "invariant", "source": "interview", "challenger": "technical-reality",
+       "description": "Data reading via ApplicationDataReader.py (libraries/) — reads application_data.xlsx and renewal_application_data.xlsx from data/"},
+      {"id": "T4", "type": "boundary", "source": "interview", "challenger": "technical-reality",
+       "description": "smoke_e2e_tests.robot runs a single fixed Salaried + Parent/Guardian happy path — no data file dependency; validates the canonical golden path"},
+      {"id": "T5", "type": "boundary", "source": "interview", "challenger": "technical-reality",
+       "description": "resume_journey_e2e_tests.robot uses RESUME_MOBILE — pre-existing account required; tests close browser at each wizard page and resume from that page (9 tests)"}
+    ],
+    "user_experience": [
+      {"id": "U1", "type": "invariant", "source": "interview", "challenger": "stakeholder",
+       "description": "E2E tests validate the complete user journey in sequence — no page skips or direct navigation shortcuts"},
+      {"id": "U2", "type": "goal", "source": "interview", "challenger": "stakeholder",
+       "description": "Data-driven tests cover multiple applicant types and employment variants from Excel rows"}
+    ],
+    "security": [
+      {"id": "S1", "type": "invariant", "source": "interview", "challenger": "technical-reality",
+       "description": "Each E2E suite opens a fresh browser context — no session reuse between E2E test runs"}
+    ],
+    "operational": [
+      {"id": "O1", "type": "invariant", "source": "interview", "challenger": "technical-reality",
+       "description": "E2E runs create real UAT application records — data cleanup awareness required; each full application creates one record"},
+      {"id": "O2", "type": "boundary", "source": "interview", "challenger": "stakeholder",
+       "description": "RESUME_MOBILE env var required for resume_journey_e2e_tests.robot — must map to a pre-existing UAT account"}
+    ]
+  },
+  "tensions": [
+    {
+      "id": "TN1",
+      "type": "trade_off",
+      "between": ["B2", "T4"],
+      "status": "resolved",
+      "decision": "A",
+      "validation_criteria": [
+        "smoke_e2e_tests.robot contains exactly 1 test with fixed static data (no Excel dependency)",
+        "e2e_create_application_tests.robot reads rows from application_data.xlsx via ApplicationDataReader.py",
+        "Both co-exist in tests/e2e/ without conflict"
+      ],
+      "propagation_effects": [
+        {"constraint_id": "T4", "effect": "LOOSENED", "note": "Smoke test provides a fast golden-path check independent of Excel file availability"}
+      ]
+    },
+    {
+      "id": "TN2",
+      "type": "hidden_dependency",
+      "between": ["T5", "O2"],
+      "status": "resolved",
+      "decision": "A",
+      "validation_criteria": [
+        "resume_journey_e2e_tests.robot Suite Setup validates RESUME_MOBILE is set before running",
+        "RESUME_MOBILE documented in CLAUDE.md as required env var for resume tests"
+      ],
+      "propagation_effects": [
+        {"constraint_id": "O2", "effect": "TIGHTENED", "note": "CI pipeline must inject RESUME_MOBILE before resume journey suite — missing var causes Suite Setup to fail"}
+      ]
+    }
+  ],
+  "blocking_dependencies": [
+    {"blocker": "T3", "blocked": "B2", "tension_id": "TN1"},
+    {"blocker": "T5", "blocked": "O2", "tension_id": "TN2"}
+  ],
+  "anchors": {
+    "recommended_option": "A",
+    "binding_constraint": {
+      "required_truth_id": "RT-1",
+      "reason": "E2EApplicationFlow.robot is the orchestration layer for both application creation and renewal E2E flows. Without it, neither data-driven E2E nor smoke tests can execute.",
+      "dependency_chain": ["RT-2", "RT-3", "RT-4"]
+    },
+    "tension_validation": [
+      {"tension_id": "TN1", "status": "CONFIRMED", "by_option": "A"},
+      {"tension_id": "TN2", "status": "CONFIRMED", "by_option": "A"}
+    ],
+    "required_truths": [
+      {
+        "id": "RT-1",
+        "status": "SATISFIED",
+        "priority": "binding",
+        "maps_to": ["T1", "T2", "S1"],
+        "evidence": [
+          {"id": "E1-1", "type": "file_exists", "path": "resources/E2EApplicationFlow.robot", "status": "VERIFIED"},
+          {"id": "E1-2", "type": "content_match", "path": "resources/E2EApplicationFlow.robot", "pattern": "Create Full Application", "status": "VERIFIED"},
+          {"id": "E1-3", "type": "file_exists", "path": "libraries/ApplicationDataReader.py", "status": "VERIFIED"}
+        ]
+      },
+      {
+        "id": "RT-2",
+        "status": "SATISFIED",
+        "maps_to": ["B1", "B2", "U1", "U2"],
+        "evidence": [
+          {"id": "E2-1", "type": "file_exists", "path": "tests/e2e/e2e_create_application_tests.robot", "status": "VERIFIED"},
+          {"id": "E2-2", "type": "file_exists", "path": "data/application_data.xlsx", "status": "VERIFIED"},
+          {"id": "E2-3", "type": "file_exists", "path": "tests/e2e/smoke_e2e_tests.robot", "status": "VERIFIED"}
+        ]
+      },
+      {
+        "id": "RT-3",
+        "status": "SATISFIED",
+        "maps_to": ["B1", "B2", "U1"],
+        "evidence": [
+          {"id": "E3-1", "type": "file_exists", "path": "tests/e2e/renewal_flow_e2e_tests.robot", "status": "VERIFIED"},
+          {"id": "E3-2", "type": "file_exists", "path": "data/renewal_application_data.xlsx", "status": "VERIFIED"}
+        ]
+      },
+      {
+        "id": "RT-4",
+        "status": "SATISFIED",
+        "maps_to": ["T5", "O2"],
+        "evidence": [
+          {"id": "E4-1", "type": "file_exists", "path": "tests/e2e/resume_journey_e2e_tests.robot", "status": "VERIFIED"}
+        ]
+      }
+    ]
+  },
+  "generation": {
+    "option": "A",
+    "timestamp": "2026-04-29T00:00:00Z",
+    "coverage": {
+      "constraints_addressed": 11,
+      "constraints_total": 11,
+      "percentage": 100
+    },
+    "artifacts": [
+      {"path": "resources/E2EApplicationFlow.robot", "type": "code", "satisfies": ["RT-1", "T2"], "status": "verified", "artifact_class": "substantive"},
+      {"path": "libraries/ApplicationDataReader.py", "type": "code", "satisfies": ["RT-1", "T3"], "status": "verified", "artifact_class": "substantive"},
+      {"path": "data/application_data.xlsx", "type": "data", "satisfies": ["RT-2", "B2"], "status": "verified", "artifact_class": "substantive"},
+      {"path": "data/renewal_application_data.xlsx", "type": "data", "satisfies": ["RT-3", "B2"], "status": "verified", "artifact_class": "substantive"},
+      {"path": "tests/e2e/e2e_create_application_tests.robot", "type": "test", "validates": ["RT-2", "B1", "B2", "U1", "U2"], "status": "verified", "artifact_class": "substantive"},
+      {"path": "tests/e2e/smoke_e2e_tests.robot", "type": "test", "validates": ["RT-2", "B1", "T4", "U1"], "status": "verified", "artifact_class": "substantive"},
+      {"path": "tests/e2e/renewal_flow_e2e_tests.robot", "type": "test", "validates": ["RT-3", "B1", "B2", "U1"], "status": "verified", "artifact_class": "substantive"},
+      {"path": "tests/e2e/resume_journey_e2e_tests.robot", "type": "test", "validates": ["RT-4", "T5", "U1"], "status": "verified", "artifact_class": "substantive"}
+    ]
+  },
+  "convergence": {
+    "status": "CONVERGED",
+    "note": "All 4 required truths satisfied. E2EApplicationFlow.robot, ApplicationDataReader.py, and all 4 E2E test suites confirmed on disk. Both data files (application_data.xlsx, renewal_application_data.xlsx) confirmed. No open gaps."
+  },
+  "constraint_graph": {
+    "version": 1,
+    "nodes": {},
+    "edges": {
+      "dependencies": [],
+      "conflicts": [],
+      "satisfies": []
+    }
+  }
+}

@@ -7,7 +7,7 @@ Documentation
 ...    Collects PAN number, gender (react-select), date of birth (year/month/day react-selects),
 ...    marital status (radio), email address, and consent.
 ...
-...    Session model (used within applicant_journey_tests.robot sequential flow):
+...    Session model (personal_details_tests.robot):
 ...      Visited after /onboarding is submitted.
 ...      Suite Teardown → Close Browser
 ...

@@ -1,7 +1,7 @@
 *** Settings ***
 Documentation
 ...    Independent test suite for the GQ Customer Portal Applicant Personal Details page (/applicant-personal-details).
-...    All tests are self-contained — no dependency on applicant_journey_tests.robot.
+...    Independent suite — no cross-file ordering dependencies.
 ...
 ...    Session model:
 ...      Suite Setup    → Navigate To Personal Details (full wizard traversal to /applicant-personal-details)

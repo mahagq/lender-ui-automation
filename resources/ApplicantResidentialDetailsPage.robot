@@ -7,7 +7,7 @@ Documentation
 ...    Collects current address (line 1, line 2, pincode — city/state auto-populate)
 ...    and residence type (Own / Rented / etc. radio options).
 ...
-...    Session model (used within applicant_journey_tests.robot sequential flow):
+...    Session model (residential_details_tests.robot):
 ...      Visited after /applicant-personal-details is submitted.
 ...      Suite Teardown → Close Browser
 ...

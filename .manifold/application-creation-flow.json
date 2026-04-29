@@ -141,7 +141,7 @@
         "maps_to": ["B2", "T1", "U1", "U3"],
         "evidence": [
           {"id": "E2-1", "type": "file_exists", "path": "resources/StudentDetailsPage.robot", "status": "VERIFIED"},
-          {"id": "E2-2", "type": "file_exists", "path": "tests/student_details_tests.robot", "status": "VERIFIED"},
+          {"id": "E2-2", "type": "file_exists", "path": "tests/application_creation_flow/student_details_tests.robot", "status": "VERIFIED"},
           {"id": "E2-3", "type": "content_match", "path": "resources/StudentDetailsPage.robot", "pattern": "student-details-title", "status": "VERIFIED"}
         ]
       },
@@ -151,8 +151,8 @@
         "maps_to": ["B1", "T1", "U2", "U3", "U4"],
         "evidence": [
           {"id": "E3-1", "type": "file_exists", "path": "resources/ChoosePlanPage.robot", "status": "VERIFIED"},
-          {"id": "E3-2", "type": "file_exists", "path": "tests/choose_plan_tests.robot", "status": "VERIFIED"},
-          {"id": "E3-3", "type": "content_match", "path": "tests/choose_plan_tests.robot", "pattern": "TC-6001", "status": "VERIFIED"}
+          {"id": "E3-2", "type": "file_exists", "path": "tests/application_creation_flow/choose_plan_tests.robot", "status": "VERIFIED"},
+          {"id": "E3-3", "type": "content_match", "path": "tests/application_creation_flow/choose_plan_tests.robot", "pattern": "TC-6001", "status": "VERIFIED"}
         ]
       },
       {
@@ -161,8 +161,8 @@
         "maps_to": ["B1", "T1", "U1", "U2", "U3", "U4"],
         "evidence": [
           {"id": "E4-1", "type": "file_exists", "path": "resources/SelectApplicantPage.robot", "status": "VERIFIED"},
-          {"id": "E4-2", "type": "file_exists", "path": "tests/select_applicant_tests.robot", "status": "VERIFIED"},
-          {"id": "E4-3", "type": "content_match", "path": "tests/select_applicant_tests.robot", "pattern": "TC-7001", "status": "VERIFIED"}
+          {"id": "E4-2", "type": "file_exists", "path": "tests/application_creation_flow/select_applicant_tests.robot", "status": "VERIFIED"},
+          {"id": "E4-3", "type": "content_match", "path": "tests/application_creation_flow/select_applicant_tests.robot", "pattern": "TC-7001", "status": "VERIFIED"}
         ]
       },
       {
@@ -174,7 +174,10 @@
           {"id": "E5-2", "type": "file_exists", "path": "resources/OnboardingPage.robot", "status": "VERIFIED"},
           {"id": "E5-3", "type": "file_exists", "path": "resources/ApplicantPersonalDetailsPage.robot", "status": "VERIFIED"},
           {"id": "E5-4", "type": "file_exists", "path": "resources/ApplicantResidentialDetailsPage.robot", "status": "VERIFIED"},
-          {"id": "E5-5", "type": "file_exists", "path": "tests/applicant_journey_tests.robot", "status": "VERIFIED"}
+          {"id": "E5-5", "type": "file_exists", "path": "tests/application_creation_flow/applicant_basic_details_tests.robot", "status": "VERIFIED"},
+          {"id": "E5-6", "type": "file_exists", "path": "tests/application_creation_flow/onboarding_tests.robot", "status": "VERIFIED"},
+          {"id": "E5-7", "type": "file_exists", "path": "tests/application_creation_flow/personal_details_tests.robot", "status": "VERIFIED"},
+          {"id": "E5-8", "type": "file_exists", "path": "tests/application_creation_flow/residential_details_tests.robot", "status": "VERIFIED"}
         ]
       },
       {
@@ -186,8 +189,8 @@
           {"id": "E6-2", "type": "file_exists", "path": "resources/ApplicantEmploymentPage.robot", "status": "VERIFIED"},
           {"id": "E6-3", "type": "content_match", "path": "resources/ApplicantEmploymentPage.robot", "pattern": "employer-name-input", "status": "VERIFIED"},
           {"id": "E6-4", "type": "content_match", "path": "resources/ApplicantEmploymentPage.robot", "pattern": "business-name-input", "status": "VERIFIED"},
-          {"id": "E6-5", "type": "file_exists", "path": "tests/employment_tests.robot", "status": "VERIFIED"},
-          {"id": "E6-6", "type": "content_match", "path": "tests/employment_tests.robot", "pattern": "TC-12001", "status": "VERIFIED"}
+          {"id": "E6-5", "type": "file_exists", "path": "tests/application_creation_flow/employment_tests.robot", "status": "VERIFIED"},
+          {"id": "E6-6", "type": "content_match", "path": "tests/application_creation_flow/employment_tests.robot", "pattern": "TC-12001", "status": "VERIFIED"}
         ]
       },
       {
@@ -196,8 +199,8 @@
         "maps_to": ["B1", "T1", "T5", "U1", "U3"],
         "evidence": [
           {"id": "E7-1", "type": "file_exists", "path": "resources/ConfirmApplicationPage.robot", "status": "VERIFIED"},
-          {"id": "E7-2", "type": "file_exists", "path": "tests/confirm_application_tests.robot", "status": "VERIFIED"},
-          {"id": "E7-3", "type": "content_match", "path": "tests/confirm_application_tests.robot", "pattern": "TC-13001", "status": "VERIFIED"},
+          {"id": "E7-2", "type": "file_exists", "path": "tests/application_creation_flow/confirm_application_tests.robot", "status": "VERIFIED"},
+          {"id": "E7-3", "type": "content_match", "path": "tests/application_creation_flow/confirm_application_tests.robot", "pattern": "TC-13001", "status": "VERIFIED"},
           {"id": "E7-4", "type": "content_match", "path": "resources/ConfirmApplicationPage.robot", "pattern": "confirm-application-form", "status": "VERIFIED"}
         ]
       },
@@ -235,12 +238,15 @@
       {"path": "resources/EmploymentTypePage.robot", "type": "code", "satisfies": ["RT-6", "T1", "U1"], "status": "generated", "artifact_class": "substantive"},
       {"path": "resources/ApplicantEmploymentPage.robot", "type": "code", "satisfies": ["RT-6", "T1", "T4", "U1"], "status": "generated", "artifact_class": "substantive"},
       {"path": "resources/ConfirmApplicationPage.robot", "type": "code", "satisfies": ["RT-7", "T1", "T5", "U1"], "status": "generated", "artifact_class": "substantive"},
-      {"path": "tests/student_details_tests.robot", "type": "test", "validates": ["RT-2", "B1", "B2", "T1", "U1"], "status": "generated", "artifact_class": "substantive"},
-      {"path": "tests/choose_plan_tests.robot", "type": "test", "validates": ["RT-3", "B1", "T1", "U2", "U3", "U4"], "status": "generated", "artifact_class": "substantive"},
-      {"path": "tests/select_applicant_tests.robot", "type": "test", "validates": ["RT-4", "B1", "T1", "U1", "U2", "U4"], "status": "generated", "artifact_class": "substantive"},
-      {"path": "tests/applicant_journey_tests.robot", "type": "test", "validates": ["RT-5", "B2", "T1", "U1", "U3"], "status": "generated", "artifact_class": "substantive"},
-      {"path": "tests/employment_tests.robot", "type": "test", "validates": ["RT-6", "B1", "T1", "T4", "U1"], "status": "generated", "artifact_class": "substantive"},
-      {"path": "tests/confirm_application_tests.robot", "type": "test", "validates": ["RT-7", "B1", "T1", "T5", "U1", "U4"], "status": "generated", "artifact_class": "substantive"},
+      {"path": "tests/application_creation_flow/student_details_tests.robot", "type": "test", "validates": ["RT-2", "B1", "B2", "T1", "U1"], "status": "generated", "artifact_class": "substantive"},
+      {"path": "tests/application_creation_flow/choose_plan_tests.robot", "type": "test", "validates": ["RT-3", "B1", "T1", "U2", "U3", "U4"], "status": "generated", "artifact_class": "substantive"},
+      {"path": "tests/application_creation_flow/select_applicant_tests.robot", "type": "test", "validates": ["RT-4", "B1", "T1", "U1", "U2", "U4"], "status": "generated", "artifact_class": "substantive"},
+      {"path": "tests/application_creation_flow/applicant_basic_details_tests.robot", "type": "test", "validates": ["RT-5", "B2", "T1", "U1"], "status": "generated", "artifact_class": "substantive"},
+      {"path": "tests/application_creation_flow/onboarding_tests.robot", "type": "test", "validates": ["RT-5", "B2", "T1", "U1"], "status": "generated", "artifact_class": "substantive"},
+      {"path": "tests/application_creation_flow/personal_details_tests.robot", "type": "test", "validates": ["RT-5", "B2", "T1", "U1", "U3"], "status": "generated", "artifact_class": "substantive"},
+      {"path": "tests/application_creation_flow/residential_details_tests.robot", "type": "test", "validates": ["RT-5", "B2", "T1", "U1"], "status": "generated", "artifact_class": "substantive"},
+      {"path": "tests/application_creation_flow/employment_tests.robot", "type": "test", "validates": ["RT-6", "B1", "T1", "T4", "U1"], "status": "generated", "artifact_class": "substantive"},
+      {"path": "tests/application_creation_flow/confirm_application_tests.robot", "type": "test", "validates": ["RT-7", "B1", "T1", "T5", "U1", "U4"], "status": "generated", "artifact_class": "substantive"},
       {"path": "README.md", "type": "docs", "satisfies": ["O3"], "status": "generated", "artifact_class": "substantive"},
       {"path": "CLAUDE.md", "type": "docs", "satisfies": ["O3", "O4"], "status": "generated", "artifact_class": "substantive"},
       {"path": "jenkins.md", "type": "docs", "satisfies": ["O3"], "status": "generated", "artifact_class": "substantive"}
@@ -327,7 +333,7 @@
       "phase": "post-verify-student-details-fixes",
       "timestamp": "2026-04-25T00:00:00Z",
       "result": "Multiple fixes to StudentDetailsPage.robot and student_details_tests.robot. (1) react-select portal rendering: all GILE dropdowns (institute/location/board/academic-year/class) now use keyboard navigation (container click + Sleep 500ms + ArrowDown + Enter) instead of CSS descendant selectors that cannot reach portalled menus. Institute uses async search pattern (type + Sleep 2s + ArrowDown + Enter). (2) Strict mode fix: institute input selector narrowed from [data-testid='institute-id-react-select'] input to input[role='combobox'] to avoid matching hidden input[name='institute_id']. (3) TC-5027 fix: /student-details has no back button — replaced ${SD_BACK_BUTTON} with ${SD_CLOSE_BUTTON} = css=[data-testid='close-button']; test renamed to 'Close Button Navigates To Dashboard'. (4) Keyword disambiguation: 4 keywords renamed with 'Student' prefix (Student First Name Error Should Be Visible, Student Last Name Error Should Be Visible, Student Class Error Should Be Visible, Student Loan Amount Error Should Be Visible) to resolve conflict with identical names in ApplicantBasicDetailsPage.robot. (5) Added 14 new tests: TC-5022–5027 (GILE selection positive scenarios + close button navigation) and TC-5N-01–5N-08 (validation negative scenarios). Total: 21 → 35 tests.",
-      "modified_files": ["resources/StudentDetailsPage.robot", "tests/student_details_tests.robot"],
+      "modified_files": ["resources/StudentDetailsPage.robot", "tests/application_creation_flow/student_details_tests.robot"],
       "fixes": [
         "react-select portal rendering → keyboard navigation for all 5 GILE dropdowns",
         "institute strict mode → input[role='combobox'] selector",
@@ -342,7 +348,7 @@
   ],
   "convergence": {
     "status": "CONVERGED",
-    "note": "G1 (blocking) fixed in verify session. G2 (non-blocking — U1 error assertions on new pages) is a known open item that does not block convergence."
+    "note": "G1 (blocking — Allure label tags) fixed in verify session. G2 (non-blocking — U1 error assertions) fixed 2026-04-27 (personal_details validation tests added). Both gaps closed. File paths updated 2026-04-29 to reflect tests/ → tests/application_creation_flow/ restructure and applicant_journey_tests.robot split into 4 files."
   },
   "constraint_graph": {
     "version": 1,
