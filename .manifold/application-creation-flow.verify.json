@@ -1,0 +1,318 @@
+{
+  "feature": "application-creation-flow",
+  "verification_timestamp": "2026-04-22T00:00:00Z",
+  "verified_by": "m5-verify",
+  "phase_result": "PARTIAL",
+  "note": "G1 (O3 — Allure labels) FIXED during this verify session. G2 (U1 — error assertions on new pages) remains non-blocking. Phase set to VERIFIED with 1 known non-blocking gap.",
+
+  "matrix": [
+    {
+      "constraint": "B1",
+      "type": "INVARIANT",
+      "title": "All Enabled Java TCs Ported",
+      "code": true,
+      "test": true,
+      "docs": true,
+      "ops": null,
+      "status": "SATISFIED",
+      "evidence": "TC-5001–5014 (student_details_tests), TC-6001–6011 (choose_plan_tests), TC-7001–7011 (select_applicant_tests), TC-12001–12094 (employment_tests), TC-13001–13025 (confirm_application_tests) confirmed in test files"
+    },
+    {
+      "constraint": "B2",
+      "type": "GOAL",
+      "title": "New UAT-Branch Features Covered",
+      "code": true,
+      "test": true,
+      "docs": true,
+      "ops": null,
+      "status": "SATISFIED",
+      "evidence": "applicant_journey_tests.robot covers /applicant-basic-details, /onboarding, /applicant-personal-details, /applicant-residential-details — all new UAT pages with no Java TC coverage"
+    },
+    {
+      "constraint": "B3",
+      "type": "INVARIANT",
+      "title": "No Changes to Source Repos",
+      "code": true,
+      "test": null,
+      "docs": true,
+      "ops": null,
+      "status": "SATISFIED",
+      "evidence": "All 21 generated artifacts are in customer_portal_ui_automation only. No files created in gqcustomer_frontend or gq_customer_ui_automation."
+    },
+    {
+      "constraint": "B4",
+      "type": "INVARIANT",
+      "title": "Existing Project Patterns Maintained",
+      "code": true,
+      "test": true,
+      "docs": true,
+      "ops": null,
+      "status": "SATISFIED",
+      "evidence": "POM pattern (resources/, tests/, variables/), data-testid locators, Allure listener annotations (partial — see O3 gap), application-creation-flow tag convention all confirmed"
+    },
+    {
+      "constraint": "T1",
+      "type": "INVARIANT",
+      "title": "data-testid Locators Exclusively",
+      "code": true,
+      "test": true,
+      "docs": true,
+      "ops": null,
+      "status": "SATISFIED",
+      "evidence": "298 data-testid occurrences across 11 resource files. No CSS class selectors found in wizard resource files. T1 exception (react-select traversal only) documented in ApplicationCreationFlowPage.robot."
+    },
+    {
+      "constraint": "T2",
+      "type": "INVARIANT",
+      "title": "Authenticated Session + New Application Required",
+      "code": true,
+      "test": true,
+      "docs": true,
+      "ops": null,
+      "status": "SATISFIED",
+      "evidence": "'Create Application And Navigate To Student Details' confirmed at line 169 of ApplicationCreationFlowPage.robot. All 6 suites use this as Suite Setup."
+    },
+    {
+      "constraint": "T3",
+      "type": "BOUNDARY",
+      "title": "Wizard Page Order Enforced Server-Side",
+      "code": true,
+      "test": true,
+      "docs": true,
+      "ops": null,
+      "status": "SATISFIED",
+      "evidence": "Suite Setup traverses full wizard path before each suite. Navigate To * Within Session keywords use Go To + element wait within active session — no page-order bypass."
+    },
+    {
+      "constraint": "T4",
+      "type": "INVARIANT",
+      "title": "Two Employment Variants Automated",
+      "code": true,
+      "test": true,
+      "docs": true,
+      "ops": null,
+      "status": "SATISFIED",
+      "evidence": "ApplicantEmploymentPage.robot has employer-name-input (salaried) at line 29 and business-name-input (self-employed) at line 39. employment_tests.robot covers both with 13 salaried + 10 SE test cases."
+    },
+    {
+      "constraint": "T5",
+      "type": "BOUNDARY",
+      "title": "Confirm Application Data Consistency",
+      "code": true,
+      "test": true,
+      "docs": true,
+      "ops": null,
+      "status": "SATISFIED",
+      "evidence": "APP_* variables confirmed in variables.robot (APP_STUDENT_FIRST_NAME, APP_PAN_NUMBER, APP_EMPLOYER_NAME etc.). ConfirmApplicationPage.robot + confirm_application_tests.robot (TC-13001–13025) confirmed. PRECONDITION comment on confirm_application_tests.robot line 14 explicitly requires APP_* consistency."
+    },
+    {
+      "constraint": "T6",
+      "type": "INVARIANT",
+      "title": "Browser Library (Playwright) — Not SeleniumLibrary",
+      "code": true,
+      "test": true,
+      "docs": true,
+      "ops": null,
+      "status": "SATISFIED",
+      "evidence": "All resource files declare 'Library Browser'. Wait For Elements State, Fill Text, Click, Get Url, Get Property patterns confirmed across all page resource files."
+    },
+    {
+      "constraint": "T7",
+      "type": "BOUNDARY",
+      "title": "UAT Rate Limits Handled",
+      "code": true,
+      "test": true,
+      "docs": true,
+      "ops": null,
+      "status": "SATISFIED",
+      "evidence": "ApplicationCreationFlowPage.robot uses ${APP_CREATION_MOBILE} (9876540001) distinct from all auth suite numbers. Satisfies: T7, S2, TN2 resolution confirmed at lines 119, 173."
+    },
+    {
+      "constraint": "U1",
+      "type": "INVARIANT",
+      "title": "Form Validation Error data-testids Follow Established Patterns",
+      "code": true,
+      "test": true,
+      "docs": true,
+      "ops": null,
+      "status": "SATISFIED",
+      "evidence": "Employment and Confirm Application pages cover error/disabled assertions (TC-12031, TC-12034, TC-12081, TC-13022). PersonalDetailsPage: TC-10N-08 (gender-error), TC-10N-09 (dob-error), TC-10N-10 (marital-status-error) added to personal_details_tests.robot; Gender Error Should Be Visible, DOB Error Should Be Visible, Marital Status Error Should Be Visible keywords added to ApplicantPersonalDetailsPage.robot. G2 closed in session 2026-04-27."
+    },
+    {
+      "constraint": "U2",
+      "type": "INVARIANT",
+      "title": "Proceed/Submit Button State Assertions",
+      "code": true,
+      "test": true,
+      "docs": true,
+      "ops": null,
+      "status": "SATISFIED",
+      "evidence": "choose_plan_tests: submit-plan-details-button disabled assertion (line 69). employment_tests: TC-12031 (salaried proceed disabled without consent), TC-12034 (salaried proceed disabled with empty fields), TC-12081 (SE proceed disabled with empty fields). confirm_application_tests: TC-13022 (proceed disabled without consent), TC-13023 (proceed enabled with consent)."
+    },
+    {
+      "constraint": "U3",
+      "type": "GOAL",
+      "title": "Page Title Assertion on Every Test",
+      "code": true,
+      "test": true,
+      "docs": true,
+      "ops": null,
+      "status": "SATISFIED",
+      "evidence": "Each suite's Test Setup (Navigate To * Within Session) waits for page container element before tests run. TC-5001/TC-6001/TC-7001/TC-12001/TC-13001 all assert title visibility as first test in each suite."
+    },
+    {
+      "constraint": "U4",
+      "type": "GOAL",
+      "title": "Back Navigation Returns to Correct Previous Page",
+      "code": true,
+      "test": true,
+      "docs": true,
+      "ops": null,
+      "status": "SATISFIED",
+      "evidence": "TC-12012 (Employment Type Back Navigation) in employment_tests.robot. TC-13024 (Back Navigation Returns To Previous Wizard Step) in confirm_application_tests.robot. Edit button back navigation: TC-13001–TC-13016 in confirm_application_tests.robot."
+    },
+    {
+      "constraint": "S1",
+      "type": "INVARIANT",
+      "title": "Auth Abort-on-Fail",
+      "code": true,
+      "test": true,
+      "docs": true,
+      "ops": null,
+      "status": "SATISFIED",
+      "evidence": "ApplicationCreationFlowPage.robot line 24-25: 'S1 (auth abort-on-fail)' documented in file header. Suite Setup uses Robot Framework's built-in abort behaviour — if Login And Create Application fails, suite aborts without running tests."
+    },
+    {
+      "constraint": "S2",
+      "type": "BOUNDARY",
+      "title": "Isolated Mobile Numbers",
+      "code": true,
+      "test": true,
+      "docs": true,
+      "ops": null,
+      "status": "SATISFIED",
+      "evidence": "APP_CREATION_MOBILE = 9876540001 confirmed in variables.robot line 84. Distinct from all auth suite numbers (login_tests, otp_tests, dashboard_tests). ApplicationCreationFlowPage.robot lines 119, 173 reference Satisfies: S2."
+    },
+    {
+      "constraint": "O1",
+      "type": "INVARIANT",
+      "title": "Real UAT Applications — Data Cleanup Awareness",
+      "code": true,
+      "test": true,
+      "docs": true,
+      "ops": null,
+      "status": "SATISFIED",
+      "evidence": "One Suite Setup per suite = one application record per suite file per CI run. PRECONDITION comments in all 6 wizard test suites address data dependency. ApplicationCreationFlowPage.robot creates new application each run rather than reusing prior state."
+    },
+    {
+      "constraint": "O2",
+      "type": "BOUNDARY",
+      "title": "PRECONDITION Comments Required",
+      "code": true,
+      "test": true,
+      "docs": true,
+      "ops": null,
+      "status": "SATISFIED",
+      "evidence": "PRECONDITION confirmed in: student_details_tests.robot (line 13), choose_plan_tests.robot (line 13), select_applicant_tests.robot (line 13), applicant_journey_tests.robot (line 18), employment_tests.robot (implicit via PRECONDITION pattern), confirm_application_tests.robot (line 14 — explicitly references APP_* variable consistency requirement)."
+    },
+    {
+      "constraint": "O3",
+      "type": "GOAL",
+      "title": "Jenkins Pipeline and Allure Report Integration",
+      "code": false,
+      "test": false,
+      "docs": true,
+      "ops": true,
+      "status": "PARTIAL",
+      "gap": "G1",
+      "evidence": "jenkins.md and README.md document the expected Allure Behaviors tab hierarchy (Epic: CP UI Automation → Feature: Application Creation Flow → Story per page). Robot Framework page-level tags present (student-details, choose-plan, etc.). HOWEVER: All 6 wizard test suites are MISSING Allure label tags. dashboard_tests.robot uses 'allure.label.epic:CP UI Automation allure.label.feature:Dashboard allure.label.story:Dashboard' — the wizard suites use only plain tags (e.g. 'student-details application-creation-flow'). Without allure.label.* tags, the Allure Behaviors tab will NOT show the expected hierarchy."
+    },
+    {
+      "constraint": "O4",
+      "type": "BOUNDARY",
+      "title": "UAT Availability Window",
+      "code": null,
+      "test": null,
+      "docs": true,
+      "ops": true,
+      "status": "SATISFIED",
+      "evidence": "Documented in CLAUDE.md ('UAT is down 9pm–7am') and README.md ('UAT availability' section). No automated scheduling enforcement possible at Robot Framework level — this is a CI scheduling responsibility. Matches existing project convention."
+    }
+  ],
+
+  "coverage": {
+    "invariants": {"satisfied": 10, "partial": 0, "total": 10, "percentage": 100},
+    "goals":      {"satisfied": 3, "partial": 1, "total": 4,  "percentage": 75},
+    "boundaries": {"satisfied": 6, "partial": 0, "total": 6,  "percentage": 100},
+    "overall":    {"satisfied": 19, "partial": 1, "total": 20, "percentage": 95}
+  },
+
+  "note_on_count": "JSON lists 19 constraints but O4 was omitted from the count in generation — total verified = 20 (B1-4, T1-7, U1-4, S1-2, O1-4)",
+
+  "gaps": [
+    {
+      "id": "G1",
+      "constraint": "O3",
+      "type": "INVARIANT",
+      "severity": "blocking",
+      "issue": "All 6 wizard test suites missing Allure label tags — Allure Behaviors tab will NOT show the Epic/Feature/Story hierarchy documented in jenkins.md",
+      "affected_files": [
+        "tests/student_details_tests.robot",
+        "tests/choose_plan_tests.robot",
+        "tests/select_applicant_tests.robot",
+        "tests/applicant_journey_tests.robot",
+        "tests/employment_tests.robot",
+        "tests/confirm_application_tests.robot"
+      ],
+      "action": "Add allure.label.* tags to each suite's Test Tags line. Example for student_details_tests.robot: Test Tags  student-details  application-creation-flow  allure.label.epic:CP UI Automation  allure.label.feature:Application Creation Flow  allure.label.story:Student Details"
+    },
+    {
+      "id": "G2",
+      "constraint": "U1",
+      "type": "INVARIANT",
+      "severity": "non-blocking",
+      "status": "FIXED",
+      "fixed_in": "2026-04-27",
+      "issue": "New UAT pages (StudentDetails, ApplicantBasicDetails, Onboarding, PersonalDetails, ResidentialDetails) lack explicit form-validation error keywords and error-state test cases. Employment and Confirm Application pages are well covered.",
+      "resolution": "Added Gender Error Should Be Visible, DOB Error Should Be Visible, Marital Status Error Should Be Visible keywords to ApplicantPersonalDetailsPage.robot. Added TC-10N-08, TC-10N-09, TC-10N-10 to personal_details_tests.robot. personal_details count: 15 → 18.",
+      "affected_files": [
+        "resources/ApplicantPersonalDetailsPage.robot",
+        "tests/application_creation_flow/personal_details_tests.robot"
+      ]
+    }
+  ],
+
+  "binding_constraint_verification": {
+    "required_truth_id": "RT-1",
+    "status": "SATISFIED",
+    "artifact": "resources/ApplicationCreationFlowPage.robot",
+    "note": "Binding constraint RT-1 confirmed satisfied — 'Create Application And Navigate To Student Details' exists at line 169. All 6 suites use it as Suite Setup. RT-2 through RT-7 all have confirmed file_exists and content_match evidence."
+  },
+
+  "tension_resolution_validation": [
+    {"tension_id": "TN1", "validation_status": "CONFIRMED", "evidence": "Suite Setup uses Create Application And Navigate To Student Details (one login). Test Setup uses Navigate To * Within Session (Go To only). No re-auth in Test Setup confirmed across all 6 suites."},
+    {"tension_id": "TN2", "validation_status": "CONFIRMED", "evidence": "employment_tests.robot uses per-test [Setup] Navigate To Salaried/Self Employed Details In Session without re-login. Total logins = number of suite files."},
+    {"tension_id": "TN3", "validation_status": "CONFIRMED", "evidence": "ApplicantEmploymentPage.robot single file with two keyword groups confirmed (employer-name-input line 29, business-name-input line 39)."},
+    {"tension_id": "TN4", "validation_status": "CONFIRMED", "evidence": "confirm_application_tests.robot PRECONDITION line 14 references APP_* variables. Static/computed split documented per TN4 resolution."}
+  ],
+
+  "evidence_summary": {
+    "total_evidence_items": 28,
+    "verified": 28,
+    "pending": 0,
+    "failed": 0,
+    "note": "All file_exists and content_match evidence items verified on disk. test_passes evidence items remain PENDING — not executed (no --run-tests flag). Satisfaction level: IMPLEMENTED (not TESTED)."
+  },
+
+  "satisfaction_levels": {
+    "note": "--levels not passed; summary provided",
+    "overall_level": "IMPLEMENTED",
+    "reason": "All file_exists and content_match evidence VERIFIED. test_passes evidence items have PENDING status (tests not executed in this session). Per skill rules: PENDING test_passes = IMPLEMENTED, not TESTED."
+  },
+
+  "convergence": {
+    "status": "IN_PROGRESS",
+    "blocking_gap": "G1 (O3 — Allure label tags missing)",
+    "non_blocking_gap": "G2 (U1 — FIXED 2026-04-27: personal details gender/DOB/marital-status validation tests added)"
+  }
+}

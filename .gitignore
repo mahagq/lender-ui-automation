@@ -3,12 +3,8 @@ results/
 
 # Stray result files (produced by runs without --outputdir)
 output.xml
-log.html
 report.html
 playwright-log.txt
-
-# Recordings
-recordings/
 
 # Python
 __pycache__/
@@ -25,9 +21,6 @@ venv/
 .venv/
 env/
 
-# Node.js
-node_modules/
-
 # IDE
 .idea/
 .vscode/
@@ -35,8 +28,6 @@ node_modules/
 *.swo
 
 # Claude / AI tool folders
-.claude/
-.manifold/
 .code-review-graph/
 
 # macOS / Windows
