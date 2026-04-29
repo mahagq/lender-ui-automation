@@ -7,7 +7,7 @@ Documentation
 ...    The Onboarding page shows informational content about the GrayQuest loan process.
 ...    The applicant clicks Proceed to continue to /applicant-personal-details.
 ...
-...    Session model (used within applicant_journey_tests.robot sequential flow):
+...    Session model (onboarding_tests.robot):
 ...      Visited after /applicant-basic-details is submitted.
 ...      Suite Teardown → Close Browser
 ...

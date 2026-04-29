@@ -217,7 +217,7 @@ Navigate To Select Applicant
 
 Navigate To Applicant Basic Details
     [Documentation]
-    ...    Suite Setup for applicant_journey_tests.robot (basic details section).
+    ...    Suite Setup for applicant_basic_details_tests.robot.
     ...    Traverses through student-details, choose-plan, and select-applicant to reach /applicant-basic-details.
     ...    Satisfies: RT-1, RT-5
     Navigate To Select Applicant
@@ -229,7 +229,7 @@ Navigate To Applicant Basic Details
 
 Navigate To Onboarding
     [Documentation]
-    ...    Suite Setup for the Onboarding section in applicant_journey_tests.robot.
+    ...    Suite Setup for onboarding_tests.robot.
     ...    Fills basic details and proceeds to /onboarding.
     ...    Satisfies: RT-1, RT-5
     Navigate To Applicant Basic Details
@@ -246,7 +246,7 @@ Navigate To Onboarding
 
 Navigate To Personal Details
     [Documentation]
-    ...    Suite Setup for the Personal Details section in applicant_journey_tests.robot.
+    ...    Suite Setup for personal_details_tests.robot.
     ...    Clicks Proceed on Onboarding to reach /applicant-personal-details.
     ...    Satisfies: RT-1, RT-5
     Navigate To Onboarding
@@ -256,7 +256,7 @@ Navigate To Personal Details
 
 Navigate To Residential Details
     [Documentation]
-    ...    Suite Setup for the Residential Details section in applicant_journey_tests.robot.
+    ...    Suite Setup for residential_details_tests.robot.
     ...    Fills personal details with stub data and proceeds to /applicant-residential-details.
     ...    Satisfies: RT-1, RT-5
     Navigate To Personal Details
@@ -370,20 +370,20 @@ Navigate To Select Applicant Within Session
 
 Navigate To Basic Details Within Session
     [Documentation]
-    ...    Test Setup for applicant_journey_tests.robot (basic details section).
+    ...    Test Setup for applicant_basic_details_tests.robot.
     Go To    ${BASE_URL}${URL_BASIC_DETAILS}
     Wait For Elements State    css=[data-testid='applicant-basic-details-title']    visible    timeout=${TIMEOUT}
 
 Navigate To Personal Details Within Session
     [Documentation]
-    ...    Test Setup for personal details validation tests in applicant_journey_tests.robot.
+    ...    Test Setup for personal_details_tests.robot.
     ...    Hard-navigates to /applicant-personal-details within the active wizard session.
     Go To    ${BASE_URL}${URL_PERSONAL_DETAILS}
     Wait For Elements State    css=[data-testid='personal-details-title']    visible    timeout=${TIMEOUT}
 
 Navigate To Residential Details Within Session
     [Documentation]
-    ...    Test Setup for residential details validation tests in applicant_journey_tests.robot.
+    ...    Test Setup for residential_details_tests.robot.
     ...    Hard-navigates to /applicant-residential-details within the active wizard session.
     Go To    ${BASE_URL}${URL_RESIDENTIAL_DETAILS}
     Wait For Elements State    css=[data-testid='residential-details-title']    visible    timeout=${TIMEOUT}

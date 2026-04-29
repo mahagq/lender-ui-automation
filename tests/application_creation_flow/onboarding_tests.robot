@@ -1,7 +1,7 @@
 *** Settings ***
 Documentation
 ...    Independent test suite for the GQ Customer Portal Onboarding page (/onboarding).
-...    All tests are self-contained — no dependency on applicant_journey_tests.robot.
+...    Independent suite — no cross-file ordering dependencies.
 ...
 ...    Session model:
 ...      Suite Setup    → Navigate To Onboarding (full wizard traversal to /onboarding)

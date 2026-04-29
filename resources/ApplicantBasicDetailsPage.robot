@@ -7,9 +7,9 @@ Documentation
 ...    Collects the applicant's first name, last name, and consent.
 ...    This page applies to both Parent/Guardian and Student applicant types.
 ...
-...    Session model (used within applicant_journey_tests.robot sequential flow):
+...    Session model (applicant_basic_details_tests.robot):
 ...      Suite Setup   → Navigate To Applicant Basic Details (ApplicationCreationFlowPage.robot)
-...      Test Teardown → NONE (shared session — sequential journey tests)
+...      Test Teardown → NONE (shared session)
 ...      Suite Teardown → Close Browser
 ...
 ...    Satisfies: RT-5 (basic details keywords + locators), T1 (data-testid locators only)
