@@ -1,0 +1,22 @@
+[
+  {
+    "name": "Product Defects",
+    "matchedStatuses": ["failed"],
+    "messageRegex": ".*AssertionError.*|.*AssertionFailure.*|.*ElementNotFound.*|.*TimeoutError.*|.*TimeoutException.*|.*StrictModeViolation.*|.*Error.*expected.*|.*Should.*"
+  },
+  {
+    "name": "Test Infrastructure Defects",
+    "matchedStatuses": ["broken"],
+    "messageRegex": ".*"
+  },
+  {
+    "name": "Skipped Tests",
+    "matchedStatuses": ["skipped"],
+    "messageRegex": ".*"
+  },
+  {
+    "name": "Passed Tests",
+    "matchedStatuses": ["passed"],
+    "messageRegex": ".*"
+  }
+]
