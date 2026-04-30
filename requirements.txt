@@ -1,4 +1,5 @@
 robotframework
 robotframework-browser
+rfbrowser init
 allure-robotframework
 openpyxl
