@@ -9,7 +9,7 @@ Documentation
 ...    Fixed stub data from APP_* variables in variables.robot.
 ...
 ...    Run:
-...      ./venv/bin/robot --outputdir results/ tests/e2e/smoke_e2e_tests.robot
+...      ./env/bin/robot --outputdir results/ tests/e2e/smoke_e2e_tests.robot
 ...
 ...    Tags: e2e, smoke
 
