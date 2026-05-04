@@ -8,15 +8,40 @@ __pycache__/
 dist/
 build/
 
-# IDE
-.idea/
-*.swp
-*.swo
+# Virtual env
+env/
+venv/
 
-# macOS / Windows
+# Node
+node_modules/
+
+# Test results
+results/
+allure-results/
+log.html
+report.html
+output.xml
+playwright-log.txt
+browser/
+
+# Logs
+*.log
+
+# IDE / tools
+.vscode/
+.idea/
+.claude/
+.code-review-graph/
+.manifold/
+
+# OS
 .DS_Store
 Thumbs.db
 
-# Environment variables
+# Env files
 .env
 .env.*
+
+# Optional
+recordings/
+data/

@@ -1,1 +1,0 @@
-{"uuid": "f8afa9c5-9dfc-4933-a8b4-108944a60e96", "children": ["4a120275-e9e6-4dcb-84f2-c102a49bfd05"], "afters": [{"name": "Browser.Close Context", "status": "passed", "statusDetails": {}, "attachments": [{"name": "Keyword Log", "source": "81ac6987-98ab-4f24-846e-520181a3b2d0-attachment.html", "type": "text/html"}], "stop": 1776680501248}]}
