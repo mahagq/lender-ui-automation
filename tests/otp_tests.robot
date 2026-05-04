@@ -235,8 +235,7 @@ TC-316 Back Button Then Re-Login Navigates To OTP Page
     [Setup]    Navigate To OTP Page    ${DASHBOARD_MOBILE}
     Click Back Button
     Wait For Elements State    ${LOGIN_FORM}    visible    timeout=${TIMEOUT}
-    Submit Login Form    ${DASHBOARD_MOBILE}
-    Wait For OTP Page
+    Submit Login Form And Wait For OTP Page    ${DASHBOARD_MOBILE}
 
 TC-311 OTP Not Received
     [Documentation]

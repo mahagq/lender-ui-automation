@@ -6,8 +6,9 @@ Documentation
 ...    Supports:
 ...      - Viewing pre-filled details
 ...      - Editing residential section (address, residence type)
-...      - Editing employment section (business fields)
-...      - Skipping employment review via skip-button
+...      - Editing employment section via multi-step flow:
+...          1. Employment Type Selection (salaried / self-employed cards)
+...          2. Salaried form (employer-name, net-monthly-salary) or SE form (business fields)
 ...      - Confirming and proceeding to application submission
 
 Library    Browser
@@ -15,19 +16,22 @@ Library    Browser
 *** Variables ***
 # Page sections
 ${VD_ADDRESS_TITLE}         xpath=//h3[normalize-space()='Residential details']
+${VD_EMPLOYMENT_TITLE}      xpath=//h3[normalize-space()='Employment details']
 ${VD_ADDR_LINE1}            css=[data-testid='addr-line-1-input']
 ${VD_RESIDENCE_RADIO_WRAP}  css=[data-testid='type-radio-container-1']
 ${VD_RESIDENCE_RADIO}       css=[data-testid='type-radio']
-${VD_SKIP_BUTTON}           css=[data-testid='skip-button']
-${VD_BUSINESS_NAME}         css=[data-testid='business-name-input']
-${VD_ANNUAL_INCOME}         css=[data-testid='business-annual-income-input']
-${VD_YEARS_IN_BUSINESS}     css=[data-testid='years-of-current-business-input']
-${VD_BUSINESS_DESC}         css=[data-testid='business-description-input']
 ${VD_CONSENT}               css=[data-testid='consent-checkbox']
 ${VD_CONFIRM_BUTTON}        text=CONFIRM AND PROCEED
 ${VD_PROCEED_BUTTON}        css=[data-testid='proceed-button']
 ${VD_EDIT_DETAILS}          text=EDIT DETAILS
-${VD_BACK_BUTTON}           text=BACK
+${VD_BACK_BUTTON}           role=button[name=BACK]
+
+# Employment type selection cards
+${VD_SALARIED_CARD}         css=[data-testid='salaried']
+${VD_SELF_EMPLOYED_CARD}    css=[data-testid='self-employed']
+
+# Submit button in employment edit sub-forms
+${VD_SUBMIT_BUTTON}         role=button[name=SUBMIT]
 
 *** Keywords ***
 Verify Details Page Should Be Visible
@@ -36,63 +40,45 @@ Verify Details Page Should Be Visible
     Wait For Elements State    ${VD_ADDRESS_TITLE}    visible    timeout=${LONG_TIMEOUT}
 
 Residential Section Should Be Visible
-    [Documentation]    Verifies residential address title and address line 1 are visible.
+    [Documentation]    Verifies residential address title is visible.
     Wait For Elements State    ${VD_ADDRESS_TITLE}    visible    timeout=${TIMEOUT}
 
 Residential Edit Button Should Be Visible
-    [Documentation]    Verifies the "EDIT DETAILS" button for the residential section is visible.
+    [Documentation]    Verifies the first "EDIT DETAILS" button (residential) is visible.
     Wait For Elements State    ${VD_EDIT_DETAILS} >> nth=0    visible    timeout=${TIMEOUT}
 
-Employment Skip Button Should Be Visible
-    [Documentation]    Verifies the skip button (to skip employment review) is visible.
-    Wait For Elements State    ${VD_SKIP_BUTTON}    visible    timeout=${TIMEOUT}
-
 Employment Edit Button Should Be Visible
-    [Documentation]    Verifies the "EDIT DETAILS" button for the employment section is visible.
+    [Documentation]    Verifies the second "EDIT DETAILS" button (employment) is visible.
     ${count}=    Get Element Count    ${VD_EDIT_DETAILS}
     Should Be True    ${count} >= 2    msg=Expected at least 2 EDIT DETAILS buttons (residential + employment)
 
-Consent And Confirm Button Should Be Visible
-    [Documentation]    Verifies consent checkbox and CONFIRM AND PROCEED button are visible.
-    Wait For Elements State    ${VD_CONSENT}    visible    timeout=${TIMEOUT}
-    Wait For Elements State    ${VD_CONFIRM_BUTTON}    visible    timeout=${TIMEOUT}
-
-# ── Skip Journey ────────────────────────────────────────────────────────────────
-
-Click Skip Employment
-    [Documentation]    Clicks the skip button to dismiss the employment review section.
-    Wait For Elements State    ${VD_SKIP_BUTTON}    visible    timeout=${TIMEOUT}
-    Click    ${VD_SKIP_BUTTON}
-
-Employment Section Should Be Dismissed After Skip
-    [Documentation]    After clicking skip, the skip button should no longer be visible.
-    Wait For Elements State    ${VD_SKIP_BUTTON}    hidden    timeout=${TIMEOUT}
+# ── Confirm flow ────────────────────────────────────────────────────────────────
 
 Click Confirm And Proceed
-    [Documentation]    Checks consent and clicks CONFIRM AND PROCEED.
-    ${checked}=    Get Property    ${VD_CONSENT}    checked
-    IF    not ${checked}
-        Click    ${VD_CONSENT}
-    END
+    [Documentation]    Clicks CONFIRM AND PROCEED on /renewal-details, then handles consent + PROCEED on /confirm-application.
     Click    ${VD_CONFIRM_BUTTON}
+    Wait For Elements State    css=[data-testid='consent-checkbox']    visible    timeout=${LONG_TIMEOUT}
+    ${checked}=    Get Property    css=[data-testid='consent-checkbox']    checked
+    IF    not ${checked}
+        Click    css=[data-testid='consent-checkbox']
+    END
+    Click    css=[data-testid='proceed-button']
 
 Click Confirm And Proceed Without Consent
-    [Documentation]    Clicks CONFIRM AND PROCEED without checking consent (negative test).
-    ${checked}=    Get Property    ${VD_CONSENT}    checked
-    IF    ${checked}
-        Click    ${VD_CONSENT}
-    END
+    [Documentation]    Clicks CONFIRM AND PROCEED then lands on /confirm-application without checking consent.
     Click    ${VD_CONFIRM_BUTTON}
+    Wait For Elements State    css=[data-testid='proceed-button']    visible    timeout=${LONG_TIMEOUT}
 
 Verify Details Consent Error Should Be Visible
-    [Documentation]    Verifies a consent-related error message is shown on the Verify Details screen.
-    Wait For Elements State    css=[data-testid='consent-checkbox-error']    visible    timeout=${TIMEOUT}
+    [Documentation]    Verifies PROCEED button is disabled when consent is not checked on /confirm-application.
+    ${disabled}=    Get Property    css=[data-testid='proceed-button']    disabled
+    Should Be True    ${disabled}    msg=PROCEED button must be disabled when consent is not checked
 
 # ── Edit Residential ────────────────────────────────────────────────────────────
 
 Click Edit Residential Details
-    [Documentation]    Clicks the first "EDIT DETAILS" button to open the residential edit form.
-    Wait For Elements State    ${VD_EDIT_DETAILS}    visible    timeout=${TIMEOUT}
+    [Documentation]    Clicks the first "EDIT DETAILS" button (nth=0) to open the residential edit form.
+    Wait For Elements State    ${VD_EDIT_DETAILS} >> nth=0    visible    timeout=${TIMEOUT}
     Click    ${VD_EDIT_DETAILS} >> nth=0
 
 Residential Edit Form Should Be Visible
@@ -105,9 +91,23 @@ Fill Verify Details Address Line 1
     Fill Text    ${VD_ADDR_LINE1}    ${address}
 
 Click Residence Type Radio In Edit Form
-    [Documentation]    Clicks the first residence type radio option in the residential edit form.
-    Wait For Elements State    ${VD_RESIDENCE_RADIO}    visible    timeout=${TIMEOUT}
+    [Documentation]    Clicks the first residence type radio option (Rented) in the residential edit form.
+    Wait For Elements State    ${VD_RESIDENCE_RADIO} >> nth=0    visible    timeout=${TIMEOUT}
     Click    ${VD_RESIDENCE_RADIO} >> nth=0
+
+Click Self Owned Residence Type
+    [Documentation]    Clicks the Self Owned radio option (nth=1) in the residential edit form.
+    Wait For Elements State    ${VD_RESIDENCE_RADIO} >> nth=1    visible    timeout=${TIMEOUT}
+    Click    ${VD_RESIDENCE_RADIO} >> nth=1
+
+Click Other Residence Type
+    [Documentation]    Clicks the Other radio option (nth=2) in the residential edit form.
+    Wait For Elements State    ${VD_RESIDENCE_RADIO} >> nth=2    visible    timeout=${TIMEOUT}
+    Click    ${VD_RESIDENCE_RADIO} >> nth=2
+
+Submit Residential Edit
+    [Documentation]    Clicks the SUBMIT button in the residential edit form.
+    Click    ${VD_PROCEED_BUTTON}
 
 Verify Details Address Line 1 Error Should Be Visible
     [Documentation]    Verifies address line 1 validation error is shown in the residential edit form.
@@ -118,44 +118,113 @@ Verify Details Pincode Error Should Be Visible
     Wait For Elements State    css=[data-testid='pincode-input-error']    visible    timeout=${TIMEOUT}
 
 Click Back From Edit
-    [Documentation]    Clicks BACK to return to the Verify Details screen without saving.
+    [Documentation]    Clicks BACK to return without saving (works from residential form, employment type selection, salaried form, and SE form).
     Wait For Elements State    ${VD_BACK_BUTTON}    visible    timeout=${TIMEOUT}
     Click    ${VD_BACK_BUTTON}
 
-# ── Edit Employment ─────────────────────────────────────────────────────────────
+# ── Edit Employment — Type Selection ────────────────────────────────────────────
 
 Click Edit Employment Details
-    [Documentation]    Clicks the second "EDIT DETAILS" button to open the employment edit form.
+    [Documentation]    Clicks the second "EDIT DETAILS" button (nth=1) to open employment type selection.
     @{edit_buttons}=    Get Elements    ${VD_EDIT_DETAILS}
     Click    ${edit_buttons}[1]
 
-Employment Edit Form Should Be Visible
-    [Documentation]    Verifies business name input is visible after clicking Edit on employment.
-    Wait For Elements State    ${VD_BUSINESS_NAME}    visible    timeout=${TIMEOUT}
+Employment Type Selection Should Be Visible
+    [Documentation]    Verifies salaried and self-employed option cards are visible on type selection screen.
+    Wait For Elements State    ${VD_SALARIED_CARD}       visible    timeout=${TIMEOUT}
+    Wait For Elements State    ${VD_SELF_EMPLOYED_CARD}  visible    timeout=${TIMEOUT}
 
-Fill Verify Business Name
+Click Salaried Option
+    [Documentation]    Clicks the Salaried card in the employment type selection screen.
+    Click    ${VD_SALARIED_CARD}
+
+Click Self Employed Option
+    [Documentation]    Clicks the Self-Employed card in the employment type selection screen.
+    Click    ${VD_SELF_EMPLOYED_CARD}
+
+# ── Edit Employment — Salaried Sub-form ─────────────────────────────────────────
+
+Salaried Fields Should Be Visible
+    [Documentation]    Verifies employer name and monthly salary inputs are visible in the salaried form.
+    Wait For Elements State    css=[data-testid='employer-name-input']       visible    timeout=${TIMEOUT}
+    Wait For Elements State    css=[data-testid='net-monthly-salary-input']  visible    timeout=${TIMEOUT}
+
+Fill VD Employer Name
     [Arguments]    ${name}
-    Fill Text    ${VD_BUSINESS_NAME}    ${name}
+    Fill Text    css=[data-testid='employer-name-input']    ${name}
 
-Fill Verify Annual Income
+Fill VD Monthly Salary
+    [Arguments]    ${salary}
+    Fill Text    css=[data-testid='net-monthly-salary-input']    ${salary}
+
+Submit Employment Edit
+    [Documentation]    Clicks the SUBMIT button inside employment edit sub-forms.
+    Click    ${VD_SUBMIT_BUTTON}
+
+Employer Name Error Should Be Visible In VD
+    Wait For Elements State    css=[data-testid='employer-name-input-error']    visible    timeout=${TIMEOUT}
+
+Monthly Salary Error Should Be Visible In VD
+    Wait For Elements State    css=[data-testid='net-monthly-salary-input-error']    visible    timeout=${TIMEOUT}
+
+# ── Edit Employment — Self-Employed Sub-form ─────────────────────────────────────
+
+Self Employed Fields Should Be Visible
+    [Documentation]    Verifies all business fields are visible in the self-employed form.
+    Wait For Elements State    css=[data-testid='business-name-input']                visible    timeout=${TIMEOUT}
+    Wait For Elements State    css=[data-testid='business-annual-income-input']       visible    timeout=${TIMEOUT}
+    Wait For Elements State    css=[data-testid='years-of-current-business-input']    visible    timeout=${TIMEOUT}
+    Wait For Elements State    css=[data-testid='business-description-input']         visible    timeout=${TIMEOUT}
+
+Fill VD Business Name
+    [Arguments]    ${name}
+    Fill Text    css=[data-testid='business-name-input']    ${name}
+
+Fill VD Annual Income
     [Arguments]    ${income}
-    Fill Text    ${VD_ANNUAL_INCOME}    ${income}
+    Fill Text    css=[data-testid='business-annual-income-input']    ${income}
 
-Fill Verify Years In Business
+Fill VD Years In Business
     [Arguments]    ${years}
-    Fill Text    ${VD_YEARS_IN_BUSINESS}    ${years}
+    Fill Text    css=[data-testid='years-of-current-business-input']    ${years}
 
-Fill Verify Business Description
+Fill VD Business Description
     [Arguments]    ${desc}
-    Fill Text    ${VD_BUSINESS_DESC}    ${desc}
+    Fill Text    css=[data-testid='business-description-input']    ${desc}
 
-Verify Details Business Name Error Should Be Visible
-    [Documentation]    Verifies business name validation error is shown in the employment edit form.
+Business Name Error Should Be Visible In VD
     Wait For Elements State    css=[data-testid='business-name-input-error']    visible    timeout=${TIMEOUT}
 
-Verify Details Annual Income Error Should Be Visible
-    [Documentation]    Verifies annual income validation error is shown in the employment edit form.
+Annual Income Error Should Be Visible In VD
     Wait For Elements State    css=[data-testid='business-annual-income-input-error']    visible    timeout=${TIMEOUT}
+
+Years In Business Error Should Be Visible In VD
+    Wait For Elements State    css=[data-testid='years-of-current-business-input-error']    visible    timeout=${TIMEOUT}
+
+# ── Employment section display ───────────────────────────────────────────────────
+
+Employment Section Should Be Visible
+    [Documentation]    Verifies the Employment details section heading is visible on Verify Details.
+    Wait For Elements State    ${VD_EMPLOYMENT_TITLE}    visible    timeout=${TIMEOUT}
+
+# ── Confirm Application page assertion ───────────────────────────────────────────
+
+Confirm Application Page Should Be Visible
+    [Documentation]    Verifies URL reached /confirm-application and consent checkbox is visible.
+    ${url}=    Get Url
+    Should Contain    ${url}    /confirm-application
+    Wait For Elements State    css=[data-testid='consent-checkbox']    visible    timeout=${TIMEOUT}
+
+Confirm Application Proceed Button Should Be Enabled With Consent
+    [Documentation]    Checks consent on /confirm-application and verifies PROCEED becomes enabled.
+    ${checked}=    Get Property    css=[data-testid='consent-checkbox']    checked
+    IF    not ${checked}
+        Click    css=[data-testid='consent-checkbox']
+    END
+    ${disabled}=    Get Property    css=[data-testid='proceed-button']    disabled
+    Should Be True    not ${disabled}    msg=PROCEED button must be enabled after checking consent
+
+# ── URL assertion ────────────────────────────────────────────────────────────────
 
 Verify Details URL Should Be Active
     [Documentation]    Asserts that the current URL is the verify-details page.

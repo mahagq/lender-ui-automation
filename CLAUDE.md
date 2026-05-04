@@ -129,7 +129,7 @@ tests/                     — Test suites (import resources and variables)
     student_details_tests.robot            — Renewal: Student Details (7 tests, TC-R5001–TC-R5007; RENEWAL_MOBILE)
     choose_plan_tests.robot                — Renewal: Choose Plan (8 tests, TC-R6001–TC-R6008; RENEWAL_MOBILE)
     welcome_back_tests.robot               — Renewal: Welcome Back pre-fill screen (6 tests; TC-WB01–WB06; 1 application per suite, Test Setup uses Go To /renewal-confirmation)
-    verify_details_tests.robot             — Renewal: Verify Details — skip, edit residential, edit employment, validations, proceed (25 tests; TC-VD01–VD25; 1 shared application + 1 for TC-VD25; Test Setup uses Go To /renewal-details; TC-VD09 2nd-to-last submits shared app; TC-VD25 last creates fresh app within session)
+    verify_details_tests.robot             — Renewal: Verify Details — edit residential (Rented/Self Owned/Other), edit employment (salaried/SE), validations, proceed (27 tests; TC-VD01–VD27; 1 shared application + 1 for TC-VD25; Test Setup uses Go To /renewal-details; TC-VD09 2nd-to-last submits shared app; TC-VD25 last creates fresh app within session; consent is on /confirm-application not /renewal-details)
   application_creation_flow/
     student_details_tests.robot            — 40 student details tests (TC-5001–TC-5027, TC-5N-01–TC-5N-13)
     choose_plan_tests.robot                — 18 choose plan tests (TC-6001–TC-6018)
@@ -264,11 +264,18 @@ All locators use `data-testid` CSS selectors exclusively — CSS class names use
 | Welcome Back change applicant | `text=CHANGE APPLICANT DETAILS` |
 | Verify Details address title | `xpath=//h3[normalize-space()='Residential details']` |
 | Verify Details addr line 1 | `css=[data-testid='addr-line-1-input']` |
-| Verify Details skip button | `css=[data-testid='skip-button']` |
-| Verify Details confirm button | `text=CONFIRM AND PROCEED` |
+| Verify Details confirm button | `text=CONFIRM AND PROCEED` (on /renewal-details; navigates to /confirm-application) |
+| Verify Details residence type radios | `css=[data-testid='type-radio']` — nth=0 Rented, nth=1 Self Owned, nth=2 Other |
+| Verify Details residential submit | `css=[data-testid='proceed-button']` (in residential edit form) |
+| Verify Details salaried card | `css=[data-testid='salaried']` |
+| Verify Details SE card | `css=[data-testid='self-employed']` |
+| Verify Details employer name | `css=[data-testid='employer-name-input']` |
+| Verify Details monthly salary | `css=[data-testid='net-monthly-salary-input']` |
 | Verify Details business name | `css=[data-testid='business-name-input']` |
 | Verify Details annual income | `css=[data-testid='business-annual-income-input']` |
 | Verify Details years in business | `css=[data-testid='years-of-current-business-input']` |
+| Confirm Application consent | `css=[data-testid='consent-checkbox']` (on /confirm-application, NOT /renewal-details) |
+| Confirm Application proceed | `css=[data-testid='proceed-button']` (on /confirm-application; disabled without consent) |
 
 ## Exact Validation Error Strings
 
@@ -284,7 +291,7 @@ Tests assert these exact strings — do not paraphrase:
 | Short OTP (< 4 digits) | `otp-input-error` | `OTP number must contain 4 digits` |
 | Non-numeric OTP | `otp-input-error` | `Only numeric values allowed` |
 | Wrong OTP | URL stays on `/verify` (primary); toast `text=Incorrect OTP` (secondary — non-blocking, may be absent if verifyOtpPost rate-limited) |
-| Verify Details no consent | `consent-checkbox-error` | `Please accept Terms and Conditions` (Verify Details screen) |
+| Verify Details no consent | proceed-button `disabled` property on /confirm-application (no error element — button is disabled) |
 | Verify Details empty addr line 1 | `addr-line-1-input-error` | shown in residential edit form |
 | Verify Details invalid pincode | `pincode-input-error` | shown in residential edit form |
 | Verify Details empty business name | `business-name-input-error` | shown in employment edit form |
