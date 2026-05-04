@@ -1,0 +1,6 @@
+{
+    "python.defaultInterpreterPath": "${workspaceFolder}/env/bin/python",
+    "robot.language-server.python": "${workspaceFolder}/env/bin/python",
+    "robot.python.executable": "${workspaceFolder}/env/bin/python",
+    "robot.language-server.args": []
+}

@@ -150,6 +150,24 @@ Click Back Button
     ...    Satisfies: TC-3001, TC-3008
     Click    ${BACK_BUTTON}
 
+Submit Login Form And Wait For OTP Page
+    [Documentation]
+    ...    Submits the login form for the given mobile and waits for the OTP page.
+    ...    Handles checkMobilePost rate limit: if OTP form is not visible within LONG_TIMEOUT,
+    ...    sleeps RATE_LIMIT_WAIT and retries once (mid-session — no context close).
+    ...    Use instead of bare Submit Login Form + Wait For OTP Page when the mobile was
+    ...    already used recently (e.g. TC-316 back-button re-login flow).
+    [Arguments]    ${mobile}
+    Submit Login Form    ${mobile}
+    ${otp_loaded}=    Run Keyword And Return Status
+    ...    Wait For Elements State    ${OTP_FORM}    visible    timeout=${LONG_TIMEOUT}
+    IF    not ${otp_loaded}
+        Log    Rate limit detected — waiting ${RATE_LIMIT_WAIT} then retrying.    console=True
+        Sleep    ${RATE_LIMIT_WAIT}
+        Submit Login Form    ${mobile}
+        Wait For OTP Page
+    END
+
 Get OTP Page Title
     [Documentation]    Returns the form title text on the OTP page ("Enter 4 Digit OTP").
     Wait For Elements State    ${OTP_PAGE_TITLE}    visible    timeout=${LONG_TIMEOUT}
