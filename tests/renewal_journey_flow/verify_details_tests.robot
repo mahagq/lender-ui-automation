@@ -40,11 +40,17 @@ TC-VD01 Verify Details Page Is Visible
     [Tags]    smoke
     Verify Details Page Should Be Visible
 
+TC-VD28 Verify Details URL Is Correct
+    Verify Details URL Should Be Active
+
 TC-VD02 Residential Section Title And Address Are Visible
     Residential Section Should Be Visible
 
 TC-VD03 Residential Edit Details Button Is Visible
     Residential Edit Button Should Be Visible
+
+TC-VD29 Employment Section Is Visible
+    Employment Section Should Be Visible
 
 TC-VD04 Employment Type Selection Has Salaried And Self-Employed Options
     [Documentation]    Opens employment type selection and verifies both options are present.
@@ -190,6 +196,28 @@ TC-VD23 Back From Salaried Fields Returns To Employment Type Selection
     Click Back From Edit
     Employment Type Selection Should Be Visible
 
+TC-VD30 Full Back Chain From Salaried Form Returns To Verify Details
+    [Tags]    edit-employment
+    [Documentation]    Salaried form → BACK → type selection → BACK → Verify Details (chained back navigation).
+    Click Edit Employment Details
+    Employment Type Selection Should Be Visible
+    Click Salaried Option
+    Salaried Fields Should Be Visible
+    Click Back From Edit
+    Employment Type Selection Should Be Visible
+    Click Back From Edit
+    Verify Details Page Should Be Visible
+
+TC-VD33 Salaried Employer Name Filled Empty Salary Shows Salary Error
+    [Tags]    edit-employment    negative
+    [Documentation]    Fills employer name only, leaves salary empty — net-monthly-salary-input-error expected.
+    Click Edit Employment Details
+    Click Salaried Option
+    Salaried Fields Should Be Visible
+    Fill VD Employer Name    ${APP_EMPLOYER_NAME}
+    Submit Employment Edit
+    Monthly Salary Error Should Be Visible In VD
+
 # ── Edit Employment — Self-Employed Sub-form ─────────────────────────────────────
 
 TC-VD17 Self Employed Employment Edit Fill And Submit Returns To Verify Details
@@ -234,7 +262,42 @@ TC-VD22 Back From Employment Type Selection Returns To Verify Details
     Click Back From Edit
     Verify Details Page Should Be Visible
 
+TC-VD31 Full Back Chain From Self Employed Form Returns To Verify Details
+    [Tags]    edit-employment
+    [Documentation]    SE form → BACK → type selection → BACK → Verify Details (chained back navigation).
+    Click Edit Employment Details
+    Employment Type Selection Should Be Visible
+    Click Self Employed Option
+    Self Employed Fields Should Be Visible
+    Click Back From Edit
+    Employment Type Selection Should Be Visible
+    Click Back From Edit
+    Verify Details Page Should Be Visible
+
+TC-VD32 SE Alphabets In Years Of Business Shows Error
+    [Tags]    edit-employment    negative
+    [Documentation]    Fills years in business with alphabets — years-of-current-business-input-error expected.
+    Click Edit Employment Details
+    Click Self Employed Option
+    Self Employed Fields Should Be Visible
+    Fill VD Business Name           ${APP_BUSINESS_NAME}
+    Fill VD Annual Income           ${APP_BUSINESS_INCOME}
+    Fill VD Years In Business       abcdef
+    Fill VD Business Description    ${APP_BUSINESS_DESC}
+    Submit Employment Edit
+    Years In Business Error Should Be Visible In VD
+
 # ── Proceed ─────────────────────────────────────────────────────────────────────
+
+TC-VD34 Confirm Application Page Visible After Clicking Confirm And Proceed
+    [Documentation]    Clicking CONFIRM AND PROCEED navigates to /confirm-application with consent checkbox visible.
+    Click Confirm And Proceed Without Consent
+    Confirm Application Page Should Be Visible
+
+TC-VD35 Proceed Button Enabled After Checking Consent On Confirm Application
+    [Documentation]    On /confirm-application, checking consent enables the PROCEED button.
+    Click Confirm And Proceed Without Consent
+    Confirm Application Proceed Button Should Be Enabled With Consent
 
 TC-VD24 Confirm And Proceed Without Consent Proceed Button Is Disabled
     [Tags]    negative

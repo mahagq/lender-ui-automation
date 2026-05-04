@@ -16,6 +16,7 @@ Library    Browser
 *** Variables ***
 # Page sections
 ${VD_ADDRESS_TITLE}         xpath=//h3[normalize-space()='Residential details']
+${VD_EMPLOYMENT_TITLE}      xpath=//h3[normalize-space()='Employment details']
 ${VD_ADDR_LINE1}            css=[data-testid='addr-line-1-input']
 ${VD_RESIDENCE_RADIO_WRAP}  css=[data-testid='type-radio-container-1']
 ${VD_RESIDENCE_RADIO}       css=[data-testid='type-radio']
@@ -196,6 +197,32 @@ Business Name Error Should Be Visible In VD
 
 Annual Income Error Should Be Visible In VD
     Wait For Elements State    css=[data-testid='business-annual-income-input-error']    visible    timeout=${TIMEOUT}
+
+Years In Business Error Should Be Visible In VD
+    Wait For Elements State    css=[data-testid='years-of-current-business-input-error']    visible    timeout=${TIMEOUT}
+
+# ── Employment section display ───────────────────────────────────────────────────
+
+Employment Section Should Be Visible
+    [Documentation]    Verifies the Employment details section heading is visible on Verify Details.
+    Wait For Elements State    ${VD_EMPLOYMENT_TITLE}    visible    timeout=${TIMEOUT}
+
+# ── Confirm Application page assertion ───────────────────────────────────────────
+
+Confirm Application Page Should Be Visible
+    [Documentation]    Verifies URL reached /confirm-application and consent checkbox is visible.
+    ${url}=    Get Url
+    Should Contain    ${url}    /confirm-application
+    Wait For Elements State    css=[data-testid='consent-checkbox']    visible    timeout=${TIMEOUT}
+
+Confirm Application Proceed Button Should Be Enabled With Consent
+    [Documentation]    Checks consent on /confirm-application and verifies PROCEED becomes enabled.
+    ${checked}=    Get Property    css=[data-testid='consent-checkbox']    checked
+    IF    not ${checked}
+        Click    css=[data-testid='consent-checkbox']
+    END
+    ${disabled}=    Get Property    css=[data-testid='proceed-button']    disabled
+    Should Be True    not ${disabled}    msg=PROCEED button must be enabled after checking consent
 
 # ── URL assertion ────────────────────────────────────────────────────────────────
 
