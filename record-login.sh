@@ -31,11 +31,27 @@ npx playwright codegen \
 if [ -f "$OUTPUT_FILE" ]; then
   echo ""
   echo "Recording saved to: $OUTPUT_FILE"
-  echo "To replay headless:  node replay.js $OUTPUT_FILE"
-  echo "To replay headed:    node replay-headed.js $OUTPUT_FILE"
-  echo ""
-  echo "Parameterize with env vars after recording:"
-  echo "  MOBILE=9876543210 OTP=9999 node $OUTPUT_FILE"
+
+  DOCS_FILE="${RECORDING_DIR}/${FLOW}_${TIMESTAMP}_flow.md"
+  echo "Generating flow documentation..."
+  node scripts/generate-flow-docs.js "$OUTPUT_FILE" "$DOCS_FILE" "$FLOW"
+
+  if [ -f "$DOCS_FILE" ]; then
+    echo ""
+    echo "───────────────────────────────────────────────────"
+    echo "  Flow doc:  $DOCS_FILE"
+    echo "  Recording: $OUTPUT_FILE"
+    echo "───────────────────────────────────────────────────"
+    echo ""
+    echo "Next steps:"
+    echo "  1. Review the flow doc: open $DOCS_FILE"
+    echo "  2. Share the doc path with Claude to generate RF automation"
+    echo "  3. Replay headless: node replay.js $OUTPUT_FILE"
+    echo "  4. Replay headed:   node replay-headed.js $OUTPUT_FILE"
+  else
+    echo "Warning: doc generation failed — check scripts/generate-flow-docs.js"
+    echo "To replay: node replay.js $OUTPUT_FILE"
+  fi
 else
   echo "No recording was saved."
 fi
