@@ -42,6 +42,5 @@ Thumbs.db
 .env
 .env.*
 
-# Optional
+# Recordings (local dev artifacts)
 recordings/
-data/
