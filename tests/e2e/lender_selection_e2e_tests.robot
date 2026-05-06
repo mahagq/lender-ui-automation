@@ -14,6 +14,7 @@ Resource     ../../resources/LenderSelectionPage.robot
 Resource     ../../resources/OKYCPage.robot
 Resource     ../../resources/BankStatementPage.robot
 Resource     ../../variables/variables.robot
+Variables    ../../variables/dynamic_variables.py
 
 Test Tags        lender-selection-e2e    regression
 ...    allure.label.epic:CP UI Automation

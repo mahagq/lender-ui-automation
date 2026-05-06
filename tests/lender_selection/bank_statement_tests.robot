@@ -9,6 +9,7 @@ Library      Browser
 Resource     ../../resources/ApplicationCreationFlowPage.robot
 Resource     ../../resources/BankStatementPage.robot
 Resource     ../../variables/variables.robot
+Variables    ../../variables/dynamic_variables.py
 
 Suite Setup      Navigate To Bank Statement Via BRE Rejection
 Suite Teardown   Close Browser

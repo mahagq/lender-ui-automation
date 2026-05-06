@@ -10,6 +10,7 @@ Documentation
 Library      Browser
 Resource     ../../resources/ApplicationCreationFlowPage.robot
 Resource     ../../variables/variables.robot
+Variables    ../../variables/dynamic_variables.py
 
 Suite Setup      Navigate To Lender Selection New App
 Suite Teardown   Run Keyword If Test Failed    Close Browser
