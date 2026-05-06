@@ -61,6 +61,7 @@ Enter OTP
     ...    Field accepts 4-digit numeric input (maxLength=4, inputMode='numeric').
     ...    Satisfies: T1 (data-testid locator), T5 (4-digit field constraint from source)
     [Arguments]    ${otp_value}
+    Wait For Elements State    ${OTP_INPUT}    visible    timeout=${LONG_TIMEOUT}
     Fill Text    ${OTP_INPUT}    ${otp_value}
 
 Click Verify OTP Button

@@ -16,13 +16,15 @@ Library     ../../libraries/ApplicationDataReader.py
 Resource    ../../resources/E2EApplicationFlow.robot
 Resource    ../../variables/variables.robot
 
-Test Tags   e2e    renewal    robot:skip
+Test Tags   e2e    renewal
 
 *** Test Cases ***
 Create Renewal Applications From Excel
     [Documentation]
     ...    Reads every row from data/renewal_application_data.xlsx and creates
-    ...    one full renewal application per row using ${RENEWAL_MOBILE}.
+    ...    one full renewal application per row.
+    ...    If the row has a non-empty 'mobile' column, that mobile is used for login.
+    ...    Otherwise falls back to ${RENEWAL_MOBILE}.
     ${rows}=    Read Application Data    data/renewal_application_data.xlsx
     FOR    ${row}    IN    @{rows}
         TRY
@@ -38,6 +40,8 @@ Create Renewal Applications From Excel
             ...    ${row}[student_id]
             ...    ${row}[loan_amount]
             ...    ${row}[referral_code]
+            ...    ${row}[mobile]
+            Run Keyword And Ignore Error    Close Browser
         EXCEPT    message=*    type=GLOB
             Run Keyword And Ignore Error    Close Browser
             CONTINUE

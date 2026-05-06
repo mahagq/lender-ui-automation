@@ -21,6 +21,10 @@ Library     Browser
 Resource    ApplicationCreationFlowPage.robot
 
 *** Keywords ***
+Renewal Details URL Should Be Visible
+    ${url}=    Get Url
+    Should Contain    ${url}    /renewal-details
+
 Resolve Mobile Number
     [Documentation]
     ...    Returns ${mobile} as-is if it is a non-empty string.
@@ -36,17 +40,25 @@ Resolve Mobile Number
 
 Select Option By Text In React Select
     [Documentation]
-    ...    Clicks a react-select container (located by data-testid) to open the dropdown,
-    ...    waits for options to render, then clicks the matching option by exact text.
-    ...    T1 exception: uses .react-select__option (stable react-select library class).
-    ...    Only one react-select portal is open at a time, so option scoping is unambiguous.
-    ...    Waits for the combobox to be enabled before clicking — dependent dropdowns (e.g. Location
-    ...    after Institute) are disabled while the upstream API call is in flight.
+    ...    Opens a react-select dropdown and selects an option.
+    ...    If option_text is non-empty: types to filter (searchable selects), then clicks first
+    ...    option whose text contains option_text (Playwright text= does substring match).
+    ...    Handles both exact values and partial/malformed values (e.g. '-2023' matches '2022-2023').
+    ...    If option_text is empty: opens dropdown then ArrowDown+Enter → first available option.
+    ...    Scrolls element into view first to avoid out-of-viewport click failures.
+    ...    Waits for combobox enabled — dependent dropdowns are disabled while upstream API is in flight.
     [Arguments]    ${testid}    ${option_text}
     Wait For Elements State    css=[data-testid='${testid}'] input[role='combobox']    enabled    timeout=${LONG_TIMEOUT}
+    Evaluate JavaScript    css=[data-testid='${testid}']    (el) => el.scrollIntoView({block: 'center', behavior: 'instant'})
+    Sleep    300ms
     Click    css=[data-testid='${testid}']
-    Wait For Elements State    css=.react-select__option    visible    timeout=${LONG_TIMEOUT}
-    Click    css=.react-select__option >> text="${option_text}"
+    Wait For Elements State    role=option >> nth=0    visible    timeout=${LONG_TIMEOUT}
+    IF    '${option_text}' != ''
+        Click    role=option >> text=${option_text}
+    ELSE
+        Keyboard Key    press    ArrowDown
+        Keyboard Key    press    Enter
+    END
 
 Create Full Application
     [Documentation]
@@ -112,22 +124,9 @@ Create Full Application
     Wait For Elements State    ${SD_FORM}    visible    timeout=${TIMEOUT}
     # Institute: async search — type term then select first result
     Search And Select First Option In React Select    institute-id-react-select    ${institute_search}
-    # Location, course, academic year: exact text when provided, first option when empty
-    IF    '${location}' != ''
-        Select Option By Text In React Select    location-id-react-select    ${location}
-    ELSE
-        Select First Option In React Select    location-id-react-select
-    END
-    IF    '${course}' != ''
-        Select Option By Text In React Select    board-id-react-select    ${course}
-    ELSE
-        Select First Option In React Select    board-id-react-select
-    END
-    IF    '${academic_year}' != ''
-        Select Option By Text In React Select    academic-year-id-react-select    ${academic_year}
-    ELSE
-        Select First Option In React Select    academic-year-id-react-select
-    END
+    Select Option By Text In React Select    location-id-react-select    ${location}
+    Select Option By Text In React Select    board-id-react-select    ${course}
+    Select Option By Text In React Select    academic-year-id-react-select    ${academic_year}
     # Personal details section appears after GILE dropdowns are filled
     Wait For Elements State    ${SD_FIRST_NAME}    visible    timeout=${LONG_TIMEOUT}
     Fill Text    ${SD_FIRST_NAME}    ${student_first_name}
@@ -135,12 +134,7 @@ Create Full Application
     # Admission type: click by visible text ("New Admission" / "Existing Student")
     Click    text=${admission_type}
     Sleep    500ms
-    # Class dropdown: exact text when provided, first option when empty
-    IF    '${class}' != ''
-        Select Option By Text In React Select    class-id-react-select    ${class}
-    ELSE
-        Select First Option In React Select    class-id-react-select
-    END
+    Select Option By Text In React Select    class-id-react-select    ${class}
     Fill Text    ${SD_STUDENT_ID}    ${student_id}
     Fill Text    ${SD_LOAN_AMOUNT}    ${loan_amount}
     Wait For Elements State    ${SD_SHOW_PLANS_BUTTON}    visible    timeout=${LONG_TIMEOUT}
@@ -150,6 +144,13 @@ Create Full Application
     # ── Step 4: Choose Plan ───────────────────────────────────────────────────────
     Click First Plan In List
     Click Submit Plan Button
+    # Existing accounts with prior applications land on /renewal-confirmation (Welcome Back).
+    # Clicking CHANGE APPLICANT DETAILS returns to /select-applicant (standard ACF flow).
+    ${on_welcome_back}=    Run Keyword And Return Status
+    ...    Wait For Elements State    text=CHANGE APPLICANT DETAILS    visible    timeout=5s
+    IF    ${on_welcome_back}
+        Click    text=CHANGE APPLICANT DETAILS
+    END
     Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    Select Applicant URL Should Be Active
 
     # ── Step 5: Select Applicant ──────────────────────────────────────────────────
@@ -269,9 +270,11 @@ Create Full Renewal Application
     ...    ${institute_search}    ${location}    ${course}    ${academic_year}
     ...    ${student_first_name}    ${student_last_name}    ${admission_type}
     ...    ${class}    ${student_id}    ${loan_amount}    ${referral_code}
+    ...    ${mobile}=${EMPTY}
 
-    # ── Step 1: Login with RENEWAL_MOBILE ───────────────────────────────────────
-    Login And Create Renewal Application
+    # ── Step 1: Login ────────────────────────────────────────────────────────────
+    ${resolved_mobile}=    Set Variable If    '${mobile}'.strip() != ''    ${mobile}    ${RENEWAL_MOBILE}
+    Login And Create Renewal Application    ${resolved_mobile}
 
     # ── Step 2: Student Details ──────────────────────────────────────────────────
     Wait For Elements State    ${SD_FORM}    visible    timeout=${TIMEOUT}
@@ -298,24 +301,79 @@ Create Full Renewal Application
     # ── Step 4: Welcome Back screen ──────────────────────────────────────────────
     Wait For Elements State    text=CONTINUE WITH THESE DETAILS    visible    timeout=${LONG_TIMEOUT}
     Click    text=CONTINUE WITH THESE DETAILS
+    Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    Renewal Details URL Should Be Visible
 
-    # ── Step 5: Verify Details — skip employment, confirm ────────────────────────
-    Wait For Elements State    css=[data-testid='current-address-title']    visible    timeout=${LONG_TIMEOUT}
-    ${has_skip}=    Run Keyword And Return Status
-    ...    Wait For Elements State    css=[data-testid='skip-button']    visible    timeout=4s
-    IF    ${has_skip}
-        Click    css=[data-testid='skip-button']
-    END
-    IF    '${referral_code}'.strip() != ''
-        Fill Text    css=[placeholder='Enter Referral Code']    ${referral_code}
-        Click    text=PROCEED
-        Sleep    1s
-    END
-    ${consent_checked}=    Get Property    css=[data-testid='consent-checkbox']    checked
-    IF    not ${consent_checked}
-        Click    css=[data-testid='consent-checkbox']
-    END
+    # ── Step 5: Verify Details — confirm ─────────────────────────────────────────
+    Wait For Elements State    text=CONFIRM AND PROCEED    visible    timeout=${LONG_TIMEOUT}
     Click    text=CONFIRM AND PROCEED
+    Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    Confirm Application URL Should Be Active
 
-    # ── Step 6: Assert Success ────────────────────────────────────────────────────
-    Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    Confirm Application Submitted Successfully
+    # ── Step 6: Confirm Application ──────────────────────────────────────────────
+    Wait For Elements State    ${CA_FORM}    visible    timeout=${TIMEOUT}
+    ${popup_visible}=    Run Keyword And Return Status
+    ...    Wait For Elements State    ${RC_SKIP_BUTTON}    visible    timeout=5s
+    IF    ${popup_visible}
+        IF    '${referral_code}'.strip() != ''
+            Fill Text    css=[placeholder='Enter Referral Code']    ${referral_code}
+            Click    ${RC_PROCEED_BUTTON}
+            Sleep    1s
+        ELSE
+            Click    ${RC_SKIP_BUTTON}
+        END
+    END
+    Check Confirm Application Consent
+    Click Confirm Application Proceed
+
+    # ── Step 7: Assert Success ────────────────────────────────────────────────────
+    Wait Until Keyword Succeeds    60s    500ms    Confirm Application Submitted Successfully
+
+Create Full Application With Lender Assignment
+    [Documentation]
+    ...    Full E2E: Login → 13-step wizard → confirm submit → lender selection → BRE decision → KYC or Bank Statement.
+    ...    Uses APP_* stub data for all wizard fields.
+    ...    ${plan_index}: reserved — always selects Plan 1 (first available). Pass plan_index=2 for future use when Create Full Application supports plan selection by index.
+    ...    ${lender_decision}: APPROVED → asserts /okyc/; REJECTED → asserts /bank-statement/.
+    ...    Teardown: caller test must call Run Keyword And Ignore Error    Close Browser.
+    [Arguments]
+    ...    ${student_first_name}    ${student_last_name}    ${loan_amount}
+    ...    ${applicant_first_name}    ${applicant_last_name}    ${pan_number}
+    ...    ${dob_year}    ${dob_month}    ${dob_day}
+    ...    ${email}    ${address_line1}    ${address_line2}    ${pincode}
+    ...    ${employer_name}    ${monthly_salary}
+    ...    ${plan_index}=1    ${lender_decision}=APPROVED
+    Log    plan_index=${plan_index} (reserved — Plan 1 always selected; extend Create Full Application to support plan_index when needed)    level=DEBUG
+    Create Full Application
+    ...    ${EMPTY}    ${APP_INSTITUTE_SEARCH}    ${EMPTY}    ${EMPTY}    ${EMPTY}
+    ...    ${student_first_name}    ${student_last_name}    New Admission    ${EMPTY}    SD12345
+    ...    ${loan_amount}    Parent/Guardian    ${applicant_first_name}    ${applicant_last_name}
+    ...    ${pan_number}    Male    ${dob_year}    ${dob_month}    ${dob_day}
+    ...    Unmarried    ${email}    ${address_line1}    ${address_line2}    ${pincode}
+    ...    Rented    Salaried    ${employer_name}    ${monthly_salary}
+    ...    ${EMPTY}    ${EMPTY}    ${EMPTY}    ${EMPTY}    ${EMPTY}
+    Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    Lender Selection URL Should Be Active
+    Mock BRE Assign Lender    ${lender_decision}
+    Lender Selection Page Should Be Visible
+    Check KFS Consent
+    Click First Available Continue Button
+    Wait For Bureau Decision
+    Unroute BRE Mock
+
+Create Full Renewal Application With Lender Assignment
+    [Documentation]
+    ...    Full E2E renewal: Login (RENEWAL_MOBILE) → renewal wizard → confirm → lender selection → BRE decision.
+    ...    ${plan_index}: reserved — always selects Plan 1. Extend Create Full Renewal Application to support plan selection by index when needed.
+    ...    ${lender_decision}: APPROVED → asserts /okyc/; REJECTED → asserts /bank-statement/.
+    ...    Teardown: caller test must call Run Keyword And Ignore Error    Close Browser.
+    [Arguments]    ${plan_index}=1    ${lender_decision}=APPROVED
+    Log    plan_index=${plan_index} (reserved — Plan 1 always selected)    level=DEBUG
+    Create Full Renewal Application
+    ...    ${APP_INSTITUTE_SEARCH}    ${EMPTY}    ${EMPTY}    ${EMPTY}
+    ...    ${APP_STUDENT_FIRST_NAME}    ${APP_STUDENT_LAST_NAME}    New Admission
+    ...    ${EMPTY}    SD12345    ${APP_LOAN_AMOUNT}    ${EMPTY}
+    Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    Lender Selection URL Should Be Active
+    Mock BRE Assign Lender    ${lender_decision}
+    Lender Selection Page Should Be Visible
+    Check KFS Consent
+    Click First Available Continue Button
+    Wait For Bureau Decision
+    Unroute BRE Mock

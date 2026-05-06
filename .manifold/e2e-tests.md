@@ -2,13 +2,14 @@
 
 ## Outcome
 
-Automate end-to-end journeys covering the full Customer Portal flow in Robot Framework + Playwright. Four E2E suites live exclusively in `tests/e2e/`: data-driven application creation (Excel), data-driven renewal (Excel), single-fixture smoke test, and resume-at-every-page journey. Orchestration lives in `resources/E2EApplicationFlow.robot`; data reading via `libraries/ApplicationDataReader.py`.
+Automate end-to-end journeys covering the full Customer Portal flow in Robot Framework + Playwright. Five E2E suites live exclusively in `tests/e2e/`: data-driven application creation (Excel), data-driven renewal (Excel), single-fixture smoke test, resume-at-every-page journey, and lender selection with BRE bureau flow. Orchestration lives in `resources/E2EApplicationFlow.robot`; data reading via `libraries/ApplicationDataReader.py`.
 
 **Suites in scope:**
 - `tests/e2e/e2e_create_application_tests.robot` — data-driven full E2E: Login → Confirm & Submit (application_data.xlsx)
 - `tests/e2e/smoke_e2e_tests.robot` — single fixed Salaried + Parent/Guardian happy path
 - `tests/e2e/resume_journey_e2e_tests.robot` — close at each wizard page and resume (9 tests, RESUME_MOBILE)
 - `tests/e2e/renewal_flow_e2e_tests.robot` — data-driven renewal E2E: Welcome Back → Verify Details (renewal_application_data.xlsx)
+- `tests/e2e/lender_selection_e2e_tests.robot` — 4 E2E lender selection tests (TC-LS-E01–E04; new+renewal × APPROVED+REJECTED; BRE mocked)
 
 ---
 
@@ -183,6 +184,7 @@ Both `data/application_data.xlsx` and `libraries/ApplicationDataReader.py` confi
 - `smoke_e2e_tests.robot` — single static happy path
 - `renewal_flow_e2e_tests.robot` — data-driven renewal
 - `resume_journey_e2e_tests.robot` — resume-at-every-page
+- `lender_selection_e2e_tests.robot` — lender selection BRE bureau flow (new+renewal × APPROVED+REJECTED)
 - All in `tests/e2e/`
 - Orchestration in `resources/E2EApplicationFlow.robot`
 - Data in `libraries/ApplicationDataReader.py` + `data/*.xlsx`
@@ -208,6 +210,10 @@ Both `data/application_data.xlsx` and `libraries/ApplicationDataReader.py` confi
 | `tests/e2e/smoke_e2e_tests.robot` | test | RT-2, B1, T4, U1 |
 | `tests/e2e/renewal_flow_e2e_tests.robot` | test | RT-3, B1, B2, U1 |
 | `tests/e2e/resume_journey_e2e_tests.robot` | test | RT-4, T5, U1 |
+| `tests/e2e/lender_selection_e2e_tests.robot` | test | RT-2, RT-3, B1, B3, U1 |
+| `resources/LenderSelectionPage.robot` | code | RT-2, T2 |
+| `resources/OKYCPage.robot` | code | RT-2 |
+| `resources/BankStatementPage.robot` | code | RT-2 |
 
 ⚡ = Binding constraint artifacts
 

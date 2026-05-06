@@ -365,3 +365,101 @@ TC-5N-13 Alphabets In Loan Amount Show Loan Amount Error
     Fill Loan Amount    abcde
     Click Show Plans Button
     Student Loan Amount Error Should Be Visible
+
+# ===========================================================================
+# Extra SCENARIOS 
+# ===========================================================================
+
+GILE Location Resets When Institute Is Changed
+    [Documentation]
+    ...    Verifies that changing the institute selection resets the location dropdown
+    ...    (i.e. location selection is cleared and dropdown goes back to placeholder state).
+    Select GILE Institute
+    Select GILE Location
+    ${location}=    Get Selected GILE Location
+    Should Not Be Empty    ${location}    msg=Precondition failed: location should be selected
+    Select Different GILE Institute
+    ${location_after}=    Get Selected GILE Location
+    Should Be Empty    ${location_after}    msg=Location should be reset after changing institute
+
+GILE Board Resets When Location Is Changed
+    [Documentation]
+    ...    Verifies that changing the location selection resets the board dropdown
+    ...    (i.e. board selection is cleared and dropdown goes back to placeholder state).
+    Select GILE Institute
+    Select GILE Location
+    Select GILE Board
+    ${board}=    Get Selected GILE Board
+    Should Not Be Empty    ${board}    msg=Precondition failed: board should be selected
+    Select Different GILE Location
+    ${board_after}=    Get Selected GILE Board
+    Should Be Empty    ${board_after}    msg=Board should be reset after changing location
+
+Academic Year Dropdown Shows Default Placeholder
+    [Documentation]
+    ...    Verifies that the academic year dropdown shows the default placeholder text
+    ...    before any selection is made, and that it is selectable after institute, location, and board are selected.
+    Select GILE Institute
+    Select GILE Location
+    Select GILE Board
+    Academic Year Dropdown Should Show Placeholder
+    Select GILE Academic Year
+    GILE Academic Year Dropdown Should Be Visible
+
+Loan Amount Negative Value Shows Error
+    [Documentation]
+    ...    Verifies that entering a negative value in the loan amount field shows a validation error.
+    ...    Satisfies: TC-5N-14
+    [Setup]    Navigate To Student Details With GILE Filled
+    Fill First Name    ${APP_STUDENT_FIRST_NAME}
+    Fill Last Name    ${APP_STUDENT_LAST_NAME}
+    Select GILE Class
+    Fill Loan Amount    -50000
+    Click Show Plans Button
+    Student Loan Amount Error Should Be Visible
+
+Loan Amount Accepts Decimal Values Shows Error
+    [Documentation]
+    ...    Verifies that entering a decimal value in the loan amount field shows a validation error.
+    ...    Satisfies: TC-5N-15
+    [Setup]    Navigate To Student Details With GILE Filled
+    Fill First Name    ${APP_STUDENT_FIRST_NAME}
+    Fill Last Name    ${APP_STUDENT_LAST_NAME}
+    Select GILE Class
+    Fill Loan Amount    50000.75
+    Click Show Plans Button
+    Student Loan Amount Error Should Be Visible
+
+Loan Amount With Leading Zeros Shows Error
+    [Documentation]
+    ...    Verifies that entering a loan amount with leading zeros shows a validation error.
+    ...    Satisfies: TC-5N-16
+    [Setup]    Navigate To Student Details With GILE Filled
+    Fill First Name    ${APP_STUDENT_FIRST_NAME}
+    Fill Last Name    ${APP_STUDENT_LAST_NAME}
+    Select GILE Class
+    Fill Loan Amount    00050000
+    Click Show Plans Button
+    Student Loan Amount Error Should Be Visible
+
+Error Messages Disappear After Correct Input Is Entered
+    [Documentation]
+    ...    Verifies that after triggering validation errors, correcting the input removes the error messages.
+    ...    Satisfies: TC-5N-17
+    [Setup]    Navigate To Student Details With GILE Filled
+    Click Show Plans Button
+    Student First Name Error Should Be Visible
+    Student Last Name Error Should Be Visible
+    Student Class Error Should Be Visible
+    Student Loan Amount Error Should Be Visible
+    Fill First Name    ${APP_STUDENT_FIRST_NAME}
+    Fill Last Name    ${APP_STUDENT_LAST_NAME}
+    Select GILE Class
+    Fill Loan Amount    ${APP_LOAN_AMOUNT}
+    Click Show Plans Button
+    Student First Name Error Should Not Be Visible
+    Student Last Name Error Should Not Be Visible
+    Student Class Error Should Not Be Visible
+    Student Loan Amount Error Should Not Be Visible
+
+

@@ -9,9 +9,9 @@ Documentation
 ...    navigates through all preceding wizard steps to reach the target page.
 ...    Traversal helpers use stub data from variables.robot (APP_* variables).
 ...
-...    NOTE: react-select traversal uses .react-select__option (react-select library class,
-...    not CSS Modules — stable across builds). This is an approved exception to the
-...    data-testid-only rule (T1) for Suite Setup navigation helpers ONLY.
+...    NOTE: react-select traversal uses role=option (ARIA role, stable across builds and
+...    react-select versions — works with both v4 class-based and v5 Emotion CSS naming).
+...    This is an approved exception to the data-testid-only rule (T1) for traversal helpers ONLY.
 ...    All test assertions in page resource files use data-testid exclusively.
 ...
 ...    Session model (TN1 + TN2 resolutions):
@@ -38,6 +38,9 @@ Resource    ApplicantResidentialDetailsPage.robot
 Resource    EmploymentTypePage.robot
 Resource    ApplicantEmploymentPage.robot
 Resource    ConfirmApplicationPage.robot
+Resource    LenderSelectionPage.robot
+Resource    OKYCPage.robot
+Resource    BankStatementPage.robot
 
 *** Variables ***
 # Wizard page URL fragments — used by Test Setup Go To calls in each test suite
@@ -436,7 +439,7 @@ Search And Select First Option In React Select
     [Arguments]    ${testid}    ${search_term}
     Click    css=[data-testid='${testid}'] input[role='combobox']
     Type Text    css=[data-testid='${testid}'] input[role='combobox']    ${search_term}
-    Sleep    2s    # Wait for async API search results to load
+    Wait For Elements State    role=option >> nth=0    visible    timeout=${LONG_TIMEOUT}
     Keyboard Key    press    ArrowDown
     Keyboard Key    press    Enter
 
@@ -540,20 +543,21 @@ Fill Residential Details With Stub Data
 
 Login And Create Renewal Application
     [Documentation]
-    ...    Logs in with ${RENEWAL_MOBILE} (existing account with prior applications).
+    ...    Logs in with ${mobile} (defaults to ${RENEWAL_MOBILE}) — existing account with prior applications.
     ...    Clicks the header "Create new application" button.
     ...    If "Before you proceed" dialog appears, clicks CREATE NEW APPLICATION.
     ...    Leaves browser on /student-details ready for renewal suite traversal.
+    [Arguments]    ${mobile}=${RENEWAL_MOBILE}
     New Browser    ${BROWSER}    headless=${HEADLESS}
     Open Login Page
-    Submit Login Form    ${RENEWAL_MOBILE}
+    Submit Login Form    ${mobile}
     ${otp_loaded}=    Run Keyword And Return Status
     ...    Wait For Elements State    ${OTP_FORM}    visible    timeout=${LONG_TIMEOUT}
     IF    not ${otp_loaded}
         Log    Rate limit detected — waiting ${RATE_LIMIT_WAIT} then retrying.    console=True
         Go To    ${BASE_URL}
         Sleep    ${RATE_LIMIT_WAIT}
-        Submit Login Form    ${RENEWAL_MOBILE}
+        Submit Login Form    ${mobile}
         Wait For Elements State    ${OTP_FORM}    visible    timeout=${LONG_TIMEOUT}
     END
     Submit OTP Form    ${TEST_OTP}
@@ -619,8 +623,8 @@ Navigate To Verify Details Within Session
 
 Navigate To Verify Details New Application Within Session
     [Documentation]
-    ...    Special Test Setup for TC-VD25 only.
-    ...    TC-VD09 submits the shared application; this creates a fresh renewal application
+    ...    Special Test Setup for TC-VD62 only.
+    ...    TC-VD61 navigates shared application to /confirm-application; this creates a fresh renewal application
     ...    within the existing browser session (no re-login) and traverses to /renewal-details.
     Go To    ${BASE_URL}/my-applications
     Wait For Elements State    ${DASHBOARD_TITLE}    visible    timeout=${TIMEOUT}
@@ -647,3 +651,174 @@ Resume In Progress Application
     Click    ${CREATE_APP_BUTTON}
     Wait For Elements State    css=[role='dialog']    visible    timeout=${LONG_TIMEOUT}
     Click    css=[role='dialog'] >> text=CONTINUE EXISTING APPLICATION
+
+# ════════════════════════════════════════════════════════════════════════════════
+# Lender Selection Suite Setup keywords
+# These keywords create a fresh application, submit it, wait for the lender
+# selection page, and capture the dynamic app_id / app_code as suite variables.
+# ════════════════════════════════════════════════════════════════════════════════
+
+Navigate To Lender Selection New App
+    [Documentation]
+    ...    Suite Setup for lender selection new-application suites.
+    ...    Logs in with APP_CREATION_MOBILE, creates application, fills wizard with stub data,
+    ...    submits on confirm page, waits for /application-loader/{id}, and captures
+    ...    LENDER_APP_ID as a suite variable.
+    Navigate To Confirm Application
+    Handle Referral Code Popup If Present
+    ${consent_checked}=    Get Property    css=[data-testid='consent-checkbox']    checked
+    IF    not ${consent_checked}
+        Click    css=[data-testid='consent-checkbox']
+    END
+    Click    css=[data-testid='proceed-button']
+    Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    Lender Selection URL Should Be Active
+    ${app_id}=    Extract App ID From Current URL
+    Set Suite Variable    ${LENDER_APP_ID}    ${app_id}
+    Lender Selection Page Should Be Visible
+
+Navigate To Lender Selection New App Within Session
+    [Documentation]
+    ...    Creates a fresh new application within the existing browser session (no re-login).
+    ...    Used by TC-LS-N12 Setup to get a clean lender selection state for the approval test.
+    ...    Mirrors Navigate To Verify Details New Application Within Session (TC-VD25 pattern).
+    ...    Overwrites LENDER_APP_ID suite variable with the new application's id.
+    Go To    ${BASE_URL}/my-applications
+    Wait For Elements State    ${DASHBOARD_TITLE}    visible    timeout=${TIMEOUT}
+    Click Create Application Button And Wait For Student Details
+    Wait For Elements State    ${SD_FORM}    visible    timeout=${TIMEOUT}
+    Fill Student Details With Stub Data
+    Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    Choose Plan URL Should Be Active
+    Click First Plan In List
+    Click Submit Plan Button
+    Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    Select Applicant URL Should Be Active
+    Wait For Elements State    ${SA_PARENT_OPTION}    visible    timeout=${TIMEOUT}
+    Click    ${SA_PARENT_OPTION}
+    Wait For Elements State    ${SA_SUBMIT_BUTTON}    visible    timeout=${TIMEOUT}
+    Click    ${SA_SUBMIT_BUTTON}
+    Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    Basic Details URL Should Be Active
+    Wait For Elements State    ${BD_FIRST_NAME}    visible    timeout=${TIMEOUT}
+    Fill Text    ${BD_FIRST_NAME}    ${APP_FIRST_NAME}
+    Fill Text    ${BD_LAST_NAME}    ${APP_LAST_NAME}
+    ${checked}=    Get Property    ${BD_CONSENT}    checked
+    IF    not ${checked}
+        Click    ${BD_CONSENT}
+    END
+    Click    ${BD_SUBMIT_BUTTON}
+    Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    Onboarding URL Should Be Active
+    Wait For Elements State    ${OB_INFO_ONE}    visible    timeout=${TIMEOUT}
+    Click    ${OB_PROCEED_BUTTON}
+    Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    Personal Details URL Should Be Active
+    Fill Personal Details With Stub Data
+    Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    Residential Details URL Should Be Active
+    Fill Residential Details With Stub Data
+    Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    Employment Type URL Should Be Active
+    Navigate To Salaried Employment Details In Session
+    Wait For Elements State    ${SED_EMPLOYER_NAME}    visible    timeout=${TIMEOUT}
+    Fill Text    ${SED_EMPLOYER_NAME}    ${APP_EMPLOYER_NAME}
+    Fill Text    ${SED_SALARY}    ${APP_MONTHLY_SALARY}
+    Click    ${SED_PROCEED_BUTTON}
+    Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    Confirm Application URL Should Be Active
+    Wait For Elements State    ${CA_FORM}    visible    timeout=${TIMEOUT}
+    Handle Referral Code Popup If Present
+    ${consent_checked}=    Get Property    css=[data-testid='consent-checkbox']    checked
+    IF    not ${consent_checked}
+        Click    css=[data-testid='consent-checkbox']
+    END
+    Click    css=[data-testid='proceed-button']
+    Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    Lender Selection URL Should Be Active
+    ${app_id}=    Extract App ID From Current URL
+    Set Suite Variable    ${LENDER_APP_ID}    ${app_id}
+    Lender Selection Page Should Be Visible
+
+Navigate To Lender Selection Renewal App
+    [Documentation]
+    ...    Suite Setup for lender selection renewal-application suites.
+    ...    Logs in with RENEWAL_MOBILE, creates renewal application, fills student details,
+    ...    selects plan, confirms via Welcome Back, submits on Verify Details confirm page,
+    ...    waits for /application-loader/{id}, and captures LENDER_RENEWAL_APP_ID.
+    Login And Create Renewal Application
+    Wait For Elements State    ${SD_FORM}    visible    timeout=${TIMEOUT}
+    Fill Student Details With Stub Data
+    Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    Choose Plan URL Should Be Active
+    Click First Plan In List
+    Click Submit Plan Button
+    Wait For Elements State    text=CONTINUE WITH THESE DETAILS    visible    timeout=${LONG_TIMEOUT}
+    Click    text=CONTINUE WITH THESE DETAILS
+    Wait For Elements State    css=[data-testid='current-address-title']    visible    timeout=${LONG_TIMEOUT}
+    ${has_skip}=    Run Keyword And Return Status
+    ...    Wait For Elements State    css=[data-testid='skip-button']    visible    timeout=4s
+    IF    ${has_skip}
+        Click    css=[data-testid='skip-button']
+    END
+    ${consent_checked}=    Get Property    css=[data-testid='consent-checkbox']    checked
+    IF    not ${consent_checked}
+        Click    css=[data-testid='consent-checkbox']
+    END
+    Click    text=CONFIRM AND PROCEED
+    Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    Lender Selection URL Should Be Active
+    ${app_id}=    Extract App ID From Current URL
+    Set Suite Variable    ${LENDER_RENEWAL_APP_ID}    ${app_id}
+    Lender Selection Page Should Be Visible
+
+Navigate To Lender Selection Renewal App Within Session
+    [Documentation]
+    ...    Creates a fresh renewal application within the existing browser session (no re-login).
+    ...    Used by TC-LS-R06 Setup to get a clean lender selection state for the approval test.
+    ...    Overwrites LENDER_RENEWAL_APP_ID suite variable with the new application's id.
+    Go To    ${BASE_URL}/my-applications
+    Wait For Elements State    ${DASHBOARD_TITLE}    visible    timeout=${TIMEOUT}
+    Click Create Application Button And Wait For Student Details
+    Wait For Elements State    ${SD_FORM}    visible    timeout=${TIMEOUT}
+    Fill Student Details With Stub Data
+    Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    Choose Plan URL Should Be Active
+    Click First Plan In List
+    Click Submit Plan Button
+    Wait For Elements State    text=CONTINUE WITH THESE DETAILS    visible    timeout=${LONG_TIMEOUT}
+    Click    text=CONTINUE WITH THESE DETAILS
+    Wait For Elements State    css=[data-testid='current-address-title']    visible    timeout=${LONG_TIMEOUT}
+    ${has_skip}=    Run Keyword And Return Status
+    ...    Wait For Elements State    css=[data-testid='skip-button']    visible    timeout=4s
+    IF    ${has_skip}
+        Click    css=[data-testid='skip-button']
+    END
+    ${consent_checked}=    Get Property    css=[data-testid='consent-checkbox']    checked
+    IF    not ${consent_checked}
+        Click    css=[data-testid='consent-checkbox']
+    END
+    Click    text=CONFIRM AND PROCEED
+    Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    Lender Selection URL Should Be Active
+    ${app_id}=    Extract App ID From Current URL
+    Set Suite Variable    ${LENDER_RENEWAL_APP_ID}    ${app_id}
+    Lender Selection Page Should Be Visible
+
+Navigate To Bank Statement Via BRE Rejection
+    [Documentation]
+    ...    Suite Setup for bank_statement_tests.robot.
+    ...    Creates a fresh new application, submits it, mocks BRE REJECTED, triggers lender
+    ...    assignment, waits for redirect to /bank-statement/{code}, captures BS_APP_CODE.
+    Navigate To Confirm Application
+    Handle Referral Code Popup If Present
+    ${consent_checked}=    Get Property    css=[data-testid='consent-checkbox']    checked
+    IF    not ${consent_checked}
+        Click    css=[data-testid='consent-checkbox']
+    END
+    Click    css=[data-testid='proceed-button']
+    Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    Lender Selection URL Should Be Active
+    Mock BRE Assign Lender    REJECTED
+    Lender Selection Page Should Be Visible
+    Check KFS Consent
+    Click First Available Continue Button
+    Wait For Bureau Decision
+    ${url}=    Get Url
+    ${on_bank}=    Run Keyword And Return Status    Should Contain    ${url}    /bank-statement/
+    IF    not ${on_bank}
+        Click View Available Financing
+        Check KFS Consent
+        Click First Available Continue Button
+        Wait For Bureau Decision
+        ${url}=    Get Url
+    END
+    Should Contain    ${url}    /bank-statement/
+    ${app_code}=    Extract App Code From Bank Statement URL
+    Set Suite Variable    ${BS_APP_CODE}    ${app_code}
+    Unroute BRE Mock

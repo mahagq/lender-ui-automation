@@ -28,7 +28,7 @@ Fall back to Grep/Glob/Read **only** when the graph returns no result.
 
 ## Overview
 
-Robot Framework UI automation suite for the GQ Customer Portal. Covers the login left component, login form, OTP verification flow, bypass authentication, dashboard, the full Application Creation Flow wizard (10 pages: `/student-details` → `/confirm-application`), and Renewal Journey Flow (Welcome Back + Verify Details) — targeting UAT: `https://customer.uat.graydev.in/`. Uses the **Browser library (Playwright)** — not SeleniumLibrary.
+Robot Framework UI automation suite for the GQ Customer Portal. Covers the login left component, login form, OTP verification flow, bypass authentication, dashboard, the full Application Creation Flow wizard (10 pages: `/student-details` → `/confirm-application`), Renewal Journey Flow (Welcome Back + Verify Details), and Lender Selection Bureau Flow (lender assignment, BRE mocking, KYC redirect, bank statement upload) — targeting UAT: `https://customer.uat.graydev.in/`. Uses the **Browser library (Playwright)** — not SeleniumLibrary.
 
 ## Commands
 
@@ -61,6 +61,12 @@ Robot Framework UI automation suite for the GQ Customer Portal. Covers the login
 ./venv/bin/robot --outputdir results/ tests/renewal_journey_flow/choose_plan_tests.robot
 ./venv/bin/robot --outputdir results/ tests/renewal_journey_flow/welcome_back_tests.robot
 ./venv/bin/robot --outputdir results/ tests/renewal_journey_flow/verify_details_tests.robot
+# Lender Selection suites (requires BRE API mocking via Browser Library Route Fulfilled):
+./venv/bin/robot --outputdir results/ tests/lender_selection/lender_bureau_flow_tests.robot
+./venv/bin/robot --outputdir results/ tests/lender_selection/new_application_lender_selection_tests.robot
+./venv/bin/robot --outputdir results/ tests/lender_selection/renewal_application_lender_selection_tests.robot
+./venv/bin/robot --outputdir results/ tests/lender_selection/bank_statement_tests.robot
+./venv/bin/robot --outputdir results/ tests/e2e/lender_selection_e2e_tests.robot
 # Application Creation Flow suites (APP_CREATION_MOBILE auto-generated fresh each run — do NOT set via env var):
 ./venv/bin/robot --outputdir results/ tests/application_creation_flow/student_details_tests.robot
 ./venv/bin/robot --outputdir results/ tests/application_creation_flow/choose_plan_tests.robot
@@ -89,6 +95,13 @@ Robot Framework UI automation suite for the GQ Customer Portal. Covers the login
 ./venv/bin/robot --outputdir results/ --include skip-journey tests/renewal_journey_flow/verify_details_tests.robot    # skip employment tests
 ./venv/bin/robot --outputdir results/ --include edit-residential tests/renewal_journey_flow/verify_details_tests.robot # edit residential tests
 ./venv/bin/robot --outputdir results/ --include edit-employment tests/renewal_journey_flow/verify_details_tests.robot  # edit employment tests
+./venv/bin/robot --outputdir results/ --include lender-selection tests/              # all lender selection tests
+./venv/bin/robot --outputdir results/ --include lender-selection-new tests/          # new app lender selection
+./venv/bin/robot --outputdir results/ --include lender-selection-renewal tests/      # renewal lender selection
+./venv/bin/robot --outputdir results/ --include bank-statement tests/                # bank statement tests
+./venv/bin/robot --outputdir results/ --include lender-selection-e2e tests/          # lender selection E2E
+./venv/bin/robot --outputdir results/ --include smoke tests/                         # smoke tests (includes TC_LENDER_01/02)
+./venv/bin/robot --outputdir results/ --include partial tests/                       # partial tests (TC_LENDER_03/04)
 ```
 
 ### Dry run (syntax check, no browser)
@@ -125,11 +138,17 @@ tests/                     — Test suites (import resources and variables)
     smoke_e2e_tests.robot                  — Single fixed happy-path E2E (Salaried + Parent/Guardian; 1 test)
     resume_journey_e2e_tests.robot         — Resume-at-every-page: 9 tests closing at each wizard page and resuming (RESUME_MOBILE)
     renewal_flow_e2e_tests.robot           — Data-driven renewal E2E (existing account; Welcome Back → Verify Details; driven by renewal_application_data.xlsx)
+    lender_selection_e2e_tests.robot            — 4 E2E lender selection tests (TC-LS-E01–E04; new+renewal × APPROVED+REJECTED)
   renewal_journey_flow/
     student_details_tests.robot            — Renewal: Student Details (7 tests, TC-R5001–TC-R5007; RENEWAL_MOBILE)
     choose_plan_tests.robot                — Renewal: Choose Plan (8 tests, TC-R6001–TC-R6008; RENEWAL_MOBILE)
-    welcome_back_tests.robot               — Renewal: Welcome Back pre-fill screen (6 tests; TC-WB01–WB06; 1 application per suite, Test Setup uses Go To /renewal-confirmation)
-    verify_details_tests.robot             — Renewal: Verify Details — edit residential (Rented/Self Owned/Other), edit employment (salaried/SE), validations, proceed (27 tests; TC-VD01–VD27; 1 shared application + 1 for TC-VD25; Test Setup uses Go To /renewal-details; TC-VD09 2nd-to-last submits shared app; TC-VD25 last creates fresh app within session; consent is on /confirm-application not /renewal-details)
+    welcome_back_tests.robot               — Renewal: Welcome Back pre-fill screen (13 tests; TC-WB01–WB13; 1 application per suite, Test Setup uses Go To /renewal-confirmation)
+    verify_details_tests.robot             — Renewal: Verify Details — edit residential (Rented/Self Owned/Other), edit employment (salaried/SE), validations, proceed (62 tests; TC-VD01–VD62; 1 shared application + 1 for TC-VD62; Test Setup uses Go To /renewal-details; TC-VD61 navigates shared app to /confirm-application without submitting; TC-VD62 last creates fresh app within session and submits; consent is on /confirm-application not /renewal-details)
+  lender_selection/
+    lender_bureau_flow_tests.robot              — 4 core bureau flow tests (TC_LENDER_01–04; smoke+regression+partial; BRE mocked)
+    new_application_lender_selection_tests.robot — 12 UI tests for new app lender selection (TC-LS-N01–N12)
+    renewal_application_lender_selection_tests.robot — 6 UI tests for renewal lender selection (TC-LS-R01–R06)
+    bank_statement_tests.robot                  — 6 bank statement journey tests (TC-BS-01–06; robot:skip until testids confirmed)
   application_creation_flow/
     student_details_tests.robot            — 40 student details tests (TC-5001–TC-5027, TC-5N-01–TC-5N-13)
     choose_plan_tests.robot                — 18 choose plan tests (TC-6001–TC-6018)
@@ -162,6 +181,9 @@ resources/                 — Page Object keyword libraries (no variable import
   WelcomeBackPage.robot              — Keywords + locators for renewal Welcome Back pre-fill screen
   VerifyDetailsPage.robot            — Keywords + locators for renewal Verify Details review screen
   E2EApplicationFlow.robot           — E2E orchestration: Create Full Application + Create Full Renewal Application
+  LenderSelectionPage.robot          — Keywords + locators for /application-loader/{app_id} (lender selection + BRE mocking)
+  OKYCPage.robot                     — Keywords for /okyc/{app_id} (KYC page URL assertion)
+  BankStatementPage.robot            — Keywords for bank statement journey (stub; PENDING TESTID)
 
 variables/
   variables.robot           — All variables: BASE_URL, timeouts, test data, browser settings, APP_* wizard data
@@ -240,6 +262,30 @@ Each wizard test suite uses a **single shared browser session** using `${APP_CRE
 
 **`employment_tests.robot`** covers both Salaried and Self-Employed variants in one file. Per-test `[Setup]` navigates back to `/select-employment` and selects the desired variant.
 
+## Lender Selection Session Model
+
+Lender selection tests are split across **4 files**, each with a Suite Setup that creates a fresh application:
+
+| File | Suite Setup | Key variable |
+|------|-------------|-------------|
+| `lender_bureau_flow_tests.robot` | `Navigate To Lender Selection New App` | `${LENDER_APP_ID}` |
+| `new_application_lender_selection_tests.robot` | `Navigate To Lender Selection New App` | `${LENDER_APP_ID}` |
+| `renewal_application_lender_selection_tests.robot` | `Navigate To Lender Selection Renewal App` | `${LENDER_RENEWAL_APP_ID}` |
+| `bank_statement_tests.robot` | `Navigate To Bank Statement Via BRE Rejection` | `${BS_APP_CODE}` |
+
+**Common session model (all lender selection files):**
+- `Suite Setup` — opens browser, creates fresh application, navigates to lender selection or bank statement page, captures dynamic `{app_id}` or `{app_code}` via `Extract App ID From Current URL` / `Extract App Code From Bank Statement URL`.
+- `Test Setup` — `Navigate To Lender Selection Within Session ${LENDER_APP_ID}`: hard-navigates to `/application-loader/{app_id}`. No new login.
+- `Test Teardown` — NONE (shared session preserved), except state-advancing tests which use `[Teardown] Unroute BRE Mock`.
+- `Suite Teardown` — `Close Browser`.
+
+**State-advancing tests (BRE mock tests) run LAST:**
+- TC-LS-N11, TC-LS-R05: `[Setup] NONE` — use Suite Setup app, mock REJECTED.
+- TC-LS-N12, TC-LS-R06: `[Setup] Navigate To Lender Selection New/Renewal App Within Session` — fresh app in same browser session.
+- TC_LENDER_03, TC_LENDER_04: `[Teardown] Run Keywords    Unroute BRE Mock    AND    Run Keyword And Ignore Error    Close Browser` (partial tests).
+
+**BRE API mocking:** `Mock BRE Assign Lender    APPROVED|REJECTED` in `LenderSelectionPage.robot` uses `Evaluate JavaScript` to override `window.fetch`, intercepting `/v2/credit-engine/assign-lender` and `/v2/credit-engine/assign-lender/fetch` calls (Browser library v19 has no `Route Fulfilled`). Always call `Unroute BRE Mock` in test teardown to restore original `window.fetch`.
+
 ## Locators
 
 All locators use `data-testid` CSS selectors exclusively — CSS class names use CSS Modules (hashed, unstable). Never use CSS class selectors or absolute XPath.
@@ -264,9 +310,14 @@ All locators use `data-testid` CSS selectors exclusively — CSS class names use
 | Welcome Back change applicant | `text=CHANGE APPLICANT DETAILS` |
 | Verify Details address title | `xpath=//h3[normalize-space()='Residential details']` |
 | Verify Details addr line 1 | `css=[data-testid='addr-line-1-input']` |
+| Verify Details addr line 2 | `css=[data-testid='addr-line-2-input']` |
+| Verify Details current address title | `css=[data-testid='current-address-title']` |
+| Verify Details residence type title | `css=[data-testid='residence-type-title']` |
+| Verify Details back button | `role=button[name=BACK]` |
 | Verify Details confirm button | `text=CONFIRM AND PROCEED` (on /renewal-details; navigates to /confirm-application) |
 | Verify Details residence type radios | `css=[data-testid='type-radio']` — nth=0 Rented, nth=1 Self Owned, nth=2 Other |
 | Verify Details residential submit | `css=[data-testid='proceed-button']` (in residential edit form) |
+| Verify Details employment type title | `xpath=//label[contains(normalize-space(),'Salaried or Self-Employed')]` |
 | Verify Details salaried card | `css=[data-testid='salaried']` |
 | Verify Details SE card | `css=[data-testid='self-employed']` |
 | Verify Details employer name | `css=[data-testid='employer-name-input']` |
@@ -274,6 +325,8 @@ All locators use `data-testid` CSS selectors exclusively — CSS class names use
 | Verify Details business name | `css=[data-testid='business-name-input']` |
 | Verify Details annual income | `css=[data-testid='business-annual-income-input']` |
 | Verify Details years in business | `css=[data-testid='years-of-current-business-input']` |
+| Verify Details business description | `css=[data-testid='business-description-input']` |
+| Verify Details employment submit | `css=button:has-text("SUBMIT")` |
 | Confirm Application consent | `css=[data-testid='consent-checkbox']` (on /confirm-application, NOT /renewal-details) |
 | Confirm Application proceed | `css=[data-testid='proceed-button']` (on /confirm-application; disabled without consent) |
 
@@ -293,9 +346,14 @@ Tests assert these exact strings — do not paraphrase:
 | Wrong OTP | URL stays on `/verify` (primary); toast `text=Incorrect OTP` (secondary — non-blocking, may be absent if verifyOtpPost rate-limited) |
 | Verify Details no consent | proceed-button `disabled` property on /confirm-application (no error element — button is disabled) |
 | Verify Details empty addr line 1 | `addr-line-1-input-error` | shown in residential edit form |
+| Verify Details empty addr line 2 | `addr-line-2-input-error` | shown in residential edit form |
 | Verify Details invalid pincode | `pincode-input-error` | shown in residential edit form |
 | Verify Details empty business name | `business-name-input-error` | shown in employment edit form |
 | Verify Details invalid annual income | `business-annual-income-input-error` | shown in employment edit form |
+| Verify Details invalid years in business | `years-of-current-business-input-error` | shown in employment edit form |
+| Verify Details empty business description | `business-description-input-error` | shown in employment edit form |
+| Verify Details empty employer name | `employer-name-input-error` | shown in salaried employment edit form |
+| Verify Details empty/invalid monthly salary | `net-monthly-salary-input-error` | shown in salaried employment edit form |
 
 ## Claude Working Rules (VERY IMPORTANT)
 
@@ -388,3 +446,10 @@ Do NOT complete a task and stop without checking whether each of these files nee
 | Confirm Application | `/confirm-application` |
 | Welcome Back (renewal) | `/renewal-confirmation` |
 | Verify Details (renewal) | `/renewal-details` |
+| Lender Selection | `/application-loader/{app_id}` |
+| Lender Selection Status | `/application-loader-status/{app_id}` |
+| Application Status | `/application-status/{app_id}` |
+| KYC (okyc) | `/okyc/{app_id}` |
+| Bank Statement Select Bank | `/bank-statement/{app_code}` |
+| Bank Statement Manual Upload | `/bank-statement-manual-upload/{app_code}` |
+| Bank Statement Status | `/bank-statement-status/{app_code}` |

@@ -12,12 +12,48 @@ Library    Browser
 # Welcome Back screen — pre-filled info
 ${WB_CONTINUE_BUTTON}       text=CONTINUE WITH THESE DETAILS
 ${WB_CHANGE_APPLICANT}      text=CHANGE APPLICANT DETAILS
-${WB_CHANGE_LINK}           text=Click to change applicant
+${WB_CHANGE_BUTTON}         text=Click to change applicant
+${WB_TITLE}                 xpath=//span[normalize-space()='Welcome']    
+${WB_SUBTITLE}              xpath=//p[contains(@class,'Subtitle')]
+${APPLICANT_NAME_LABEL}     xpath=//span[normalize-space()='Applicant Name']
+${PAN_NUMBER_LABEL}         xpath=//span[normalize-space()='PAN Number']
+${DOB_LABEL}                xpath=//span[normalize-space()='Date of Birth']
+${CHANGE_TEXT}              xpath=//p[contains(text(),'Click to change applicant name and PAN')]
 
 *** Keywords ***
 Welcome Back Screen Should Be Visible
     [Documentation]    Verifies the Welcome Back pre-fill screen is displayed after Choose Plan.
     Wait For Elements State    ${WB_CONTINUE_BUTTON}    visible    timeout=${LONG_TIMEOUT}
+
+Welcome Back Screen URL Should Be Correct
+    [Documentation]    Verifies the URL is correct for the Welcome Back screen.
+    ${url}=    Get Url
+    Should Contain    ${url}   /renewal-confirmation
+
+Welcome Back Heading Should Be Visible
+    [Documentation]    Verifies the main heading is visible on the Welcome Back screen.
+    Wait For Elements State    ${WB_TITLE}    visible    timeout=${TIMEOUT}
+
+Welcome Back Sub Heading Should Be Visible
+    [Documentation]    Verifies the sub-heading is visible on the Welcome Back screen.
+    Wait For Elements State    ${WB_SUBTITLE}    visible    timeout=${TIMEOUT}
+
+Applicant Name Field Should Be Visible
+    [Documentation]    Verifies the "Applicant Name" label is visible on the Welcome Back screen.
+    Wait For Elements State    ${APPLICANT_NAME_LABEL}    visible    timeout=${TIMEOUT}
+
+PAN Number Field Should Be Visible
+    [Documentation]    Verifies the "PAN Number" label is visible on the Welcome Back screen.
+    Wait For Elements State    ${PAN_NUMBER_LABEL}    visible    timeout=${TIMEOUT}
+
+Date of Birth Field Should Be Visible
+    [Documentation]    Verifies the "Date of Birth" label is visible on the Welcome Back screen.
+    Wait For Elements State    ${DOB_LABEL}    visible    timeout=${TIMEOUT}
+
+Click To Change Applicant Name And PAN Text Should Be Visible
+    [Documentation]    Verifies the "Click to change applicant name and PAN" instructional text is visible.
+    ${text}=    Get Text    ${CHANGE_TEXT}
+    Should Be Equal    ${text}    Click to change applicant name and PAN
 
 Pre Filled Applicant Details Should Be Visible
     [Documentation]    Verifies that pre-filled applicant name, DOB, and PAN are visible on screen.
@@ -30,9 +66,9 @@ Continue With These Details Button Should Be Visible
     [Documentation]    Verifies the "CONTINUE WITH THESE DETAILS" CTA is visible.
     Wait For Elements State    ${WB_CONTINUE_BUTTON}    visible    timeout=${LONG_TIMEOUT}
 
-Change Applicant Link Should Be Visible
-    [Documentation]    Verifies the "Click to change applicant" link is visible.
-    Wait For Elements State    ${WB_CHANGE_LINK}    visible    timeout=${LONG_TIMEOUT}
+Change Applicant Button Should Be Visible
+    [Documentation]    Verifies the "Click to change applicant" button is visible.
+    Wait For Elements State    ${WB_CHANGE_BUTTON}    visible    timeout=${LONG_TIMEOUT}
 
 Click Continue With These Details
     [Documentation]    Clicks "CONTINUE WITH THESE DETAILS" to proceed to the Verify Details screen.

@@ -1,7 +1,7 @@
 # Customer Portal UI Automation
 
 Robot Framework end-to-end test suite for the GQ Customer Portal.
-Covers the login left component, mobile number login form, OTP verification flow, bypass authentication, dashboard, full Application Creation Flow wizard (10 pages, TC-5001–TC-13025), E2E journeys (smoke, resume, renewal), and Renewal Journey Flow (screen-by-screen) — all targeting the UAT environment (`https://customer.uat.graydev.in`).
+Covers the login left component, mobile number login form, OTP verification flow, bypass authentication, dashboard, full Application Creation Flow wizard (10 pages, TC-5001–TC-13025), E2E journeys (smoke, resume, renewal, lender selection), Renewal Journey Flow (screen-by-screen), and Lender Selection Bureau Flow (BRE mocking, KYC redirect, bank statement upload) — all targeting the UAT environment (`https://customer.uat.graydev.in`).
 
 > **Test Cases:** See [`CP_UI_Automation_Test_Cases.xlsx`](./CP_UI_Automation_Test_Cases.xlsx) for the full test case list with descriptions, steps, and expected results.
 
@@ -28,12 +28,18 @@ customer_portal_ui_automation/
 │   │   ├── e2e_create_application_tests.robot    # Full E2E flow: Login → Confirm & Submit (data-driven via application_data.xlsx)
 │   │   ├── smoke_e2e_tests.robot                 # Single fixed happy-path E2E — Salaried Parent Guardian (1 test)
 │   │   ├── resume_journey_e2e_tests.robot        # Close-and-resume at every wizard page (9 tests; RESUME_MOBILE)
-│   │   └── renewal_flow_e2e_tests.robot          # Data-driven renewal E2E: nth application happy path (RENEWAL_MOBILE)
+│   │   ├── renewal_flow_e2e_tests.robot          # Data-driven renewal E2E: nth application happy path (RENEWAL_MOBILE)
+│   │   └── lender_selection_e2e_tests.robot      # Lender selection E2E: new+renewal × APPROVED+REJECTED (4 tests, TC-LS-E01–E04)
 │   ├── renewal_journey_flow/
 │   │   ├── student_details_tests.robot           # Renewal: /student-details — same UI as ACF (7 tests, TC-R5001–R5007)
 │   │   ├── choose_plan_tests.robot               # Renewal: /choose-plan — same UI as ACF (8 tests, TC-R6001–R6008)
 │   │   ├── welcome_back_tests.robot              # Renewal: Welcome Back screen (6 tests, TC-WB01–WB06)
 │   │   └── verify_details_tests.robot            # Renewal: Verify Details — edit/skip/confirm (25 tests, TC-VD01–VD25)
+│   ├── lender_selection/
+│   │   ├── lender_bureau_flow_tests.robot        # BRE bureau flow: 4 core scenarios (TC_LENDER_01–04; smoke+partial; BRE mocked)
+│   │   ├── new_application_lender_selection_tests.robot    # New app lender selection UI (12 tests, TC-LS-N01–N12)
+│   │   ├── renewal_application_lender_selection_tests.robot # Renewal lender selection UI (6 tests, TC-LS-R01–R06)
+│   │   └── bank_statement_tests.robot            # Bank statement journey (6 tests, robot:skip until testids confirmed)
 │   └── application_creation_flow/
 │       ├── student_details_tests.robot           # /student-details (40 tests, TC-5001–5N-13)
 │       ├── choose_plan_tests.robot               # /choose-plan (18 tests, TC-6001–6018)
@@ -52,7 +58,10 @@ customer_portal_ui_automation/
 │   ├── DashboardPage.robot                   # Page object keywords for /my-applications
 │   ├── InsuranceDashboardPage.robot          # Page object keywords for /my-applications#ins
 │   ├── ApplicationCreationFlowPage.robot     # Wizard navigation infrastructure + traversal helpers (incl. renewal keywords)
-│   ├── E2EApplicationFlow.robot              # High-level E2E keywords: Create Full Application, Create Full Renewal Application
+│   ├── E2EApplicationFlow.robot              # High-level E2E keywords: Create Full Application, Create Full Renewal Application, lender assignment variants
+│   ├── LenderSelectionPage.robot             # Page object keywords for /application-loader/{app_id} (lender selection + BRE mocking)
+│   ├── OKYCPage.robot                        # Page object keywords for /okyc/{app_id} (KYC URL assertion)
+│   ├── BankStatementPage.robot               # Page object keywords for bank statement journey (stub; PENDING TESTID)
 │   ├── StudentDetailsPage.robot              # Page object keywords for /student-details
 │   ├── ChoosePlanPage.robot                  # Page object keywords for /choose-plan
 │   ├── SelectApplicantPage.robot             # Page object keywords for /select-applicant
@@ -63,6 +72,7 @@ customer_portal_ui_automation/
 │   ├── EmploymentTypePage.robot              # Page object keywords for /select-employment
 │   ├── ApplicantEmploymentPage.robot         # Page object keywords for /applicant-employment-details
 │   ├── ConfirmApplicationPage.robot          # Page object keywords for /confirm-application
+│   ├── WelcomeBackPage.robot                 # Page object keywords for Welcome Back screen (renewal)
 │   ├── WelcomeBackPage.robot                 # Page object keywords for Welcome Back screen (renewal)
 │   └── VerifyDetailsPage.robot               # Page object keywords for Verify Details screen (renewal)
 ├── variables/
@@ -122,6 +132,13 @@ All dependencies live in the project virtualenv at `./venv/`.
 ./venv/bin/robot --outputdir results/ tests/renewal_journey_flow/welcome_back_tests.robot
 ./venv/bin/robot --outputdir results/ tests/renewal_journey_flow/verify_details_tests.robot
 
+# Lender Selection
+./venv/bin/robot --outputdir results/ tests/lender_selection/lender_bureau_flow_tests.robot
+./venv/bin/robot --outputdir results/ tests/lender_selection/new_application_lender_selection_tests.robot
+./venv/bin/robot --outputdir results/ tests/lender_selection/renewal_application_lender_selection_tests.robot
+./venv/bin/robot --outputdir results/ tests/lender_selection/bank_statement_tests.robot
+./venv/bin/robot --outputdir results/ tests/e2e/lender_selection_e2e_tests.robot
+
 # Application Creation Flow
 ./venv/bin/robot --outputdir results/ tests/application_creation_flow/student_details_tests.robot
 ./venv/bin/robot --outputdir results/ tests/application_creation_flow/choose_plan_tests.robot
@@ -153,6 +170,12 @@ All dependencies live in the project virtualenv at `./venv/`.
 ./venv/bin/robot --include skip-journey --outputdir results/ tests/renewal_journey_flow/verify_details_tests.robot
 ./venv/bin/robot --include edit-residential --outputdir results/ tests/renewal_journey_flow/verify_details_tests.robot
 ./venv/bin/robot --include edit-employment --outputdir results/ tests/renewal_journey_flow/verify_details_tests.robot
+./venv/bin/robot --include lender-selection --outputdir results/ tests/
+./venv/bin/robot --include lender-selection-new --outputdir results/ tests/
+./venv/bin/robot --include lender-selection-renewal --outputdir results/ tests/
+./venv/bin/robot --include bank-statement --outputdir results/ tests/
+./venv/bin/robot --include lender-selection-e2e --outputdir results/ tests/
+./venv/bin/robot --include partial --outputdir results/ tests/lender_selection/lender_bureau_flow_tests.robot
 ```
 
 ### Dry run (syntax check, no browser)
@@ -194,6 +217,11 @@ BYPASS_AUTH_MOBILE=<erp_mobile> ./venv/bin/robot --outputdir results/ tests/bypa
 | renewal_journey_flow/choose_plan_tests | 8 | /choose-plan (renewal) |
 | renewal_journey_flow/welcome_back_tests | 6 | Welcome Back screen |
 | renewal_journey_flow/verify_details_tests | 25 | Verify Details — edit, skip, confirm |
+| lender_selection/lender_bureau_flow_tests | 4 | /application-loader/{app_id} — BRE bureau scenarios |
+| lender_selection/new_application_lender_selection_tests | 12 | /application-loader/{app_id} — new app UI |
+| lender_selection/renewal_application_lender_selection_tests | 6 | /application-loader/{app_id} — renewal UI |
+| lender_selection/bank_statement_tests | 6 (all skipped) | /bank-statement/{app_code} |
+| e2e/lender_selection_e2e_tests | 4 | Full E2E: new+renewal × APPROVED+REJECTED |
 | application_creation_flow/student_details_tests | 40 | /student-details |
 | application_creation_flow/choose_plan_tests | 18 | /choose-plan |
 | application_creation_flow/select_applicant_tests | 19 | /select-applicant |
@@ -203,7 +231,7 @@ BYPASS_AUTH_MOBILE=<erp_mobile> ./venv/bin/robot --outputdir results/ tests/bypa
 | application_creation_flow/residential_details_tests | 12 | /applicant-residential-details |
 | application_creation_flow/employment_tests | 46 | /select-employment + /applicant-employment-details |
 | application_creation_flow/confirm_application_tests | 20 | /confirm-application |
-| **Total** | **381** (+ data-driven rows) | |
+| **Total** | **409** (+ data-driven rows; 6 skipped bank-statement) | |
 
 ---
 

@@ -144,3 +144,12 @@ ${APP_BUSINESS_NAME}          Test Business
 ${APP_BUSINESS_INCOME}        6000000
 ${APP_BUSINESS_YEARS}         05
 ${APP_BUSINESS_DESC}          Software consulting and services
+
+# Lender Selection journey URL fragments
+${URL_APPLICATION_LOADER}           /application-loader
+${URL_APPLICATION_LOADER_STATUS}    /application-loader-status
+${URL_APPLICATION_STATUS}           /application-status
+${URL_OKYC}                         /okyc
+${URL_BANK_STATEMENT}               /bank-statement
+${URL_BANK_STATEMENT_UPLOAD}        /bank-statement-manual-upload
+${URL_BANK_STATEMENT_STATUS}        /bank-statement-status

@@ -3,7 +3,7 @@
 ## Overview
 
 Jenkins pipeline for the GQ Customer Portal UI Automation suite.
-Runs Robot Framework + Playwright tests against UAT across **28 suite files** (381 tests + data-driven rows),
+Runs Robot Framework + Playwright tests against UAT across **33 suite files** (409 tests + data-driven rows; 6 skipped bank-statement stubs),
 generates an Allure report, uploads it to S3, and preserves history for trend graphs across builds.
 
 | Suite File | Tests | Account |
@@ -27,6 +27,11 @@ generates an Allure report, uploads it to S3, and preserves history for trend gr
 | renewal_journey_flow/choose_plan_tests | 8 | RENEWAL_MOBILE |
 | renewal_journey_flow/welcome_back_tests | 6 | RENEWAL_MOBILE |
 | renewal_journey_flow/verify_details_tests | 25 | RENEWAL_MOBILE |
+| lender_selection/lender_bureau_flow_tests | 4 | APP_CREATION_MOBILE (dynamic) |
+| lender_selection/new_application_lender_selection_tests | 12 | APP_CREATION_MOBILE (dynamic) |
+| lender_selection/renewal_application_lender_selection_tests | 6 | RENEWAL_MOBILE |
+| lender_selection/bank_statement_tests | 6 (skipped) | APP_CREATION_MOBILE (dynamic) |
+| e2e/lender_selection_e2e_tests | 4 | APP_CREATION_MOBILE + RENEWAL_MOBILE |
 | application_creation_flow/student_details_tests | 40 | APP_CREATION_MOBILE |
 | application_creation_flow/choose_plan_tests | 18 | APP_CREATION_MOBILE |
 | application_creation_flow/select_applicant_tests | 19 | APP_CREATION_MOBILE |
@@ -207,7 +212,7 @@ gq-qa-reports/
 | Tab | Content |
 |-----|---------|
 | **Overview** | Summary stats, trend graph, suite pass/fail blocks |
-| **Behaviors** | Epic: CP UI Automation → Feature: Authentication → Story: Login Left Component / Login / OTP Verification / Bypass Authentication; Feature: Dashboard → Story: Dashboard / Auto Debit / Payment Gateway / New User Empty States / Insurance Tab; Feature: Application Creation Flow → Story: Student Details / Choose Plan / Select Applicant / Applicant Basic Details / Onboarding / Applicant Personal Details / Applicant Residential Details / Employment / Confirm Application |
+| **Behaviors** | Epic: CP UI Automation → Feature: Authentication → Story: Login Left Component / Login / OTP Verification / Bypass Authentication; Feature: Dashboard → Story: Dashboard / Auto Debit / Payment Gateway / New User Empty States / Insurance Tab; Feature: Application Creation Flow → Story: Student Details / Choose Plan / Select Applicant / Applicant Basic Details / Onboarding / Applicant Personal Details / Applicant Residential Details / Employment / Confirm Application; Feature: Lender Selection Bureau Flow → Story: Bureau Flow; Feature: Lender Selection → Story: New Application Lender Selection / Renewal Application Lender Selection; Feature: Bank Statement Upload → Story: Bank Statement; Feature: Lender Selection E2E |
 | **Suites** | CP UI Automation [UAT] → Login Left Component Tests / Login Tests / Otp Tests / Bypass Auth Tests / Dashboard Tests / Dashboard Emi Tests / Dashboard Ad Tests / Dashboard Pg Tests / Dashboard New User Tests / Dashboard Ins Tests / Dashboard Ins New User Tests / Student Details Tests / Choose Plan Tests / Select Applicant Tests / Applicant Journey Tests / Onboarding Tests / Personal Details Tests / Residential Details Tests / Employment Tests / Confirm Application Tests |
 | **Categories** | Product Defects / Test Infrastructure Defects / Skipped Tests |
 | **Timeline** | Tests plotted by execution time |

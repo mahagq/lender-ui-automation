@@ -204,5 +204,4 @@ TC-13023 Proceed With Consent Submits Application
     Check Confirm Application Consent
     Proceed Button Should Be Enabled With Consent
     Click Confirm Application Proceed
-    Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms
-    ...    Confirm Application Submitted Successfully
+    Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    Confirm Application Submitted Successfully
