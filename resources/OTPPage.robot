@@ -96,8 +96,20 @@ Wait For Dashboard
     ...    Uses URL polling (every 500ms) rather than networkidle because React Router
     ...    performs a client-side pushState navigation after the verifyOtpPost response —
     ...    networkidle fires at API response time, before the URL update.
+    ...    Rate-limit recovery: if still on /verify after LONG_TIMEOUT, sleeps RATE_LIMIT_WAIT
+    ...    then re-submits OTP once (verifyOtpPost rate limit pattern).
     ...    Satisfies: U3 (URL redirect assertion after valid OTP)
-    Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    Dashboard URL Should Be Visible
+    ${redirected}=    Run Keyword And Return Status
+    ...    Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    Dashboard URL Should Be Visible
+    IF    not ${redirected}
+        ${url}=    Get Url
+        IF    '/verify' in '${url}'
+            Log    verifyOtpPost rate limit in Wait For Dashboard — waiting ${RATE_LIMIT_WAIT} then retrying.    console=True
+            Sleep    ${RATE_LIMIT_WAIT}
+            Submit OTP Form    ${TEST_OTP}
+        END
+        Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    Dashboard URL Should Be Visible
+    END
 
 Dashboard URL Should Be Visible
     [Documentation]    Helper — asserts the current URL contains /my-applications.

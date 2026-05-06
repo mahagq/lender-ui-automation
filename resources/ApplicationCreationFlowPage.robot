@@ -141,8 +141,17 @@ Login And Create Application
     IF    not ${redirected}
         Log    verifyOtpPost rate limit in App Creation Suite Setup — waiting ${RATE_LIMIT_WAIT} then retrying.    console=True
         Sleep    ${RATE_LIMIT_WAIT}
-        Enter OTP    ${TEST_OTP}
-        Click Verify OTP Button
+        ${url_after}=    Get Url
+        IF    '/my-applications' in '${url_after}'
+            # OTP succeeded during sleep — already on dashboard
+        ELSE IF    '/verify' in '${url_after}'
+            Enter OTP    ${TEST_OTP}
+            Click Verify OTP Button
+        ELSE
+            Submit Login Form    ${APP_CREATION_MOBILE}
+            Wait For Elements State    ${OTP_FORM}    visible    timeout=${LONG_TIMEOUT}
+            Submit OTP Form    ${TEST_OTP}
+        END
     END
     Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    Dashboard URL Should Be Visible
     Wait For Elements State    ${DASHBOARD_TITLE}    visible    timeout=${TIMEOUT}
@@ -565,8 +574,17 @@ Login And Create Renewal Application
     ...    Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    Dashboard URL Should Be Visible
     IF    not ${redirected}
         Sleep    ${RATE_LIMIT_WAIT}
-        Enter OTP    ${TEST_OTP}
-        Click Verify OTP Button
+        ${url_after}=    Get Url
+        IF    '/my-applications' in '${url_after}'
+            # OTP succeeded during sleep — already on dashboard
+        ELSE IF    '/verify' in '${url_after}'
+            Enter OTP    ${TEST_OTP}
+            Click Verify OTP Button
+        ELSE
+            Submit Login Form    ${mobile}
+            Wait For Elements State    ${OTP_FORM}    visible    timeout=${LONG_TIMEOUT}
+            Submit OTP Form    ${TEST_OTP}
+        END
     END
     Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    Dashboard URL Should Be Visible
     Wait For Elements State    ${DASHBOARD_TITLE}    visible    timeout=${TIMEOUT}

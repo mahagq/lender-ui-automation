@@ -11,5 +11,6 @@ dependencies = [
 dev = [
   "robotframework>=7.0",
   "robotframework-browser>=19.0.0",
-  "allure-robotframework>=2.13.0"
+  "allure-robotframework>=2.13.0",
+  "openpyxl>=3.1.0"
 ]

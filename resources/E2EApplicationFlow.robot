@@ -109,8 +109,19 @@ Create Full Application
     IF    not ${redirected}
         Log    verifyOtpPost rate limit — waiting ${RATE_LIMIT_WAIT} then retrying.    console=True
         Sleep    ${RATE_LIMIT_WAIT}
-        Enter OTP    ${TEST_OTP}
-        Click Verify OTP Button
+        ${url_after}=    Get Url
+        IF    '/my-applications' in '${url_after}'
+            # OTP succeeded during sleep — already on dashboard, do nothing
+        ELSE IF    '/verify' in '${url_after}'
+            # Still on OTP page — re-enter and submit
+            Enter OTP    ${TEST_OTP}
+            Click Verify OTP Button
+        ELSE
+            # Forced logout to / — re-login then OTP
+            Submit Login Form    ${resolved_mobile}
+            Wait For Elements State    ${OTP_FORM}    visible    timeout=${LONG_TIMEOUT}
+            Submit OTP Form    ${TEST_OTP}
+        END
     END
     Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    Dashboard URL Should Be Visible
     Wait For Elements State    ${DASHBOARD_TITLE}    visible    timeout=${TIMEOUT}
