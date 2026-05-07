@@ -38,6 +38,8 @@ Resource    ApplicantResidentialDetailsPage.robot
 Resource    EmploymentTypePage.robot
 Resource    ApplicantEmploymentPage.robot
 Resource    ConfirmApplicationPage.robot
+Resource    WelcomeBackPage.robot
+Resource    VerifyDetailsPage.robot
 Resource    LenderSelectionPage.robot
 Resource    OKYCPage.robot
 Resource    BankStatementPage.robot
@@ -109,6 +111,13 @@ ${SED_EMPLOYER_NAME}            css=[data-testid='employer-name-input']
 ${SED_SALARY}                   css=[data-testid='net-monthly-salary-input']
 ${SED_CONSENT}                  css=[data-testid='consent-checkbox']
 ${SED_PROCEED_BUTTON}           role=button[name=Proceed]
+
+# Self-Employed Details locators (traversal use)
+${SE_BUSINESS_NAME}             css=[data-testid='business-name-input']
+${SE_ANNUAL_INCOME}             css=[data-testid='business-annual-income-input']
+${SE_YEARS}                     css=[data-testid='years-of-current-business-input']
+${SE_DESCRIPTION}               css=[data-testid='business-description-input']
+${SE_PROCEED_BUTTON}            role=button[name=Proceed]
 
 # Confirm Application locators (traversal use)
 ${CA_FORM}                      css=[data-testid='confirm-application-form']
@@ -675,10 +684,12 @@ Resume In Progress Application Via EMI Card
     ...    Resumes an in-progress application by clicking the "Verify Now" (emi-card-action-button)
     ...    on the EMI tab card. Use this AFTER clicking Close on a wizard page (which redirects
     ...    to dashboard). Does NOT use the "Before you proceed" dialog.
+    ...    Uses nth=-1 (last matching button) to target the most recently created application
+    ...    when multiple emi-card-action-buttons are present (e.g. RENEWAL_MOBILE accounts).
     Wait For Elements State    ${EMI_TAB}    visible    timeout=${TIMEOUT}
     Click    ${EMI_TAB}
-    Wait For Elements State    css=[data-testid='emi-card-action-button']    visible    timeout=${LONG_TIMEOUT}
-    Click    css=[data-testid='emi-card-action-button']
+    Wait For Elements State    css=[data-testid='emi-card-action-button'] >> nth=0    visible    timeout=${LONG_TIMEOUT}
+    Click    css=[data-testid='emi-card-action-button'] >> nth=0
 
 Click Wizard Close Button
     [Documentation]
@@ -695,6 +706,20 @@ Create Application For Resume Tests
     ...    and lands on /student-details ready for TC-RE01.
     Login And Create Application
     Click Create Application Button And Wait For Student Details
+
+Create Application For Renewal Resume Tests
+    [Documentation]
+    ...    Suite Setup for resume_journey_renewal_e2e_tests.robot.
+    ...    Logs in with ${RENEWAL_MOBILE} (existing account with prior applications — required for
+    ...    renewal path), creates a new renewal application, and lands on /student-details ready for TC-RER01.
+    Login And Create Renewal Application
+
+Create Application For SE Resume Tests
+    [Documentation]
+    ...    Suite Setup for resume_journey_se_e2e_tests.robot.
+    ...    Logs in with ${APP_CREATION_MOBILE} (fresh account each run), creates a new application,
+    ...    and traverses all wizard steps to land on /select-employment ready for SE resume tests.
+    Navigate To Employment Type
 
 Fill Student Details Data
     [Documentation]
@@ -743,6 +768,29 @@ Select Salaried And Wait For Employment Details
     Wait For Elements State    ${ET_TITLE}    visible    timeout=${TIMEOUT}
     Click    ${ET_SALARIED_CARD}
     Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    Employment Details URL Should Be Active
+
+Select Self Employed And Wait For Employment Details
+    [Documentation]
+    ...    Clicks the Self-Employed card on /select-employment and waits for /applicant-employment-details.
+    ...    Used in SE resume journey tests to reach employment details without filling data.
+    Wait For Elements State    ${ET_TITLE}    visible    timeout=${TIMEOUT}
+    Click    ${ET_SELF_EMPLOYED_CARD}
+    Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    Employment Details URL Should Be Active
+
+Fill SE Employment Data And Proceed
+    [Documentation]
+    ...    Fills business name, annual income, years in business, business description on
+    ...    /applicant-employment-details (SE form) and proceeds to /confirm-application.
+    ...    Starts from /applicant-employment-details with SE form loaded.
+    ...    Dismisses referral code popup if present after landing on /confirm-application.
+    Wait For Elements State    ${SE_BUSINESS_NAME}    visible    timeout=${TIMEOUT}
+    Fill Text    ${SE_BUSINESS_NAME}    ${APP_BUSINESS_NAME}
+    Fill Text    ${SE_ANNUAL_INCOME}    ${APP_BUSINESS_INCOME}
+    Fill Text    ${SE_YEARS}    ${APP_BUSINESS_YEARS}
+    Fill Text    ${SE_DESCRIPTION}    ${APP_BUSINESS_DESC}
+    Click    ${SE_PROCEED_BUTTON}
+    Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    Confirm Application URL Should Be Active
+    Handle Referral Code Popup If Present
 
 Fill Salaried Employment Data And Proceed
     [Documentation]
