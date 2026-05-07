@@ -61,7 +61,7 @@ Robot Framework UI automation suite for the GQ Customer Portal. Covers the login
 ./venv/bin/robot --outputdir results/ tests/renewal_journey_flow/choose_plan_tests.robot
 ./venv/bin/robot --outputdir results/ tests/renewal_journey_flow/welcome_back_tests.robot
 ./venv/bin/robot --outputdir results/ tests/renewal_journey_flow/verify_details_tests.robot
-# Lender Selection suites (requires BRE API mocking via Browser Library Route Fulfilled):
+# Lender Selection suites (BRE API mocked via Evaluate JavaScript — Browser library v19 has no Route Fulfilled):
 ./venv/bin/robot --outputdir results/ tests/lender_selection/lender_bureau_flow_tests.robot
 ./venv/bin/robot --outputdir results/ tests/lender_selection/new_application_lender_selection_tests.robot
 ./venv/bin/robot --outputdir results/ tests/lender_selection/renewal_application_lender_selection_tests.robot
@@ -191,7 +191,7 @@ variables/
 results/                   — robot output (output.xml, log.html, report.html)
 ```
 
-**Key pattern:** Test files import resource files and the variables file. Resource files do NOT import variables — Robot Framework shares the variable scope from the suite, so resources access `${TIMEOUT}`, `${BASE_URL}`, etc. directly. No `*** Keywords ***` section in test files — all keywords live in resource files (Page Object Model).
+**Key pattern:** Test files import resource files and the variables file (`variables/variables.robot`). Lender selection test files additionally import `variables/dynamic_variables.py` directly (required for dynamic app ID generation). Resource files do NOT import variables — Robot Framework shares the variable scope from the suite, so resources access `${TIMEOUT}`, `${BASE_URL}`, etc. directly. No `*** Keywords ***` section in test files — all keywords live in resource files (Page Object Model).
 
 **ApplicationCreationFlowPage.robot exception:** This orchestrator file imports all wizard page resource files so its `Navigate To *` traversal keywords can call any page's URL helpers and locators. Test suites that import `ApplicationCreationFlowPage.robot` and a specific page file get deduplicated imports automatically.
 
@@ -200,7 +200,7 @@ results/                   — robot output (output.xml, log.html, report.html)
 - **Fixed OTP**: UAT uses OTP `9999` for all mobile numbers — no SMS dependency.
 - **Bypass Auth (TC-401, TC-403, TC-404 — all skipped)**: `/instant-eligibility?m=<mobile>` only redirects if the mobile is ERP-whitelisted (`bypassAuthPost` succeeds). Confirmed: neither `9876543210` nor `8108556708` works — `bypassAuthPost` rejects general OTP test accounts. TC-401 is tagged `robot:skip`. To enable: identify a UAT ERP-whitelisted mobile, set `BYPASS_AUTH_MOBILE` env var, and remove `robot:skip` from TC-401.
 - **checkMobilePost rate limit**: ~3 calls per ~60s per IP. `Navigate To OTP Page` auto-detects (OTP form not visible within `LONG_TIMEOUT`) and retries after `RATE_LIMIT_WAIT` (45s). Each OTP/login test uses a distinct mobile number to reduce collisions.
-- **verifyOtpPost rate limit**: Also applies per IP. Handled with a three-state page-check after `RATE_LIMIT_WAIT` sleep: (1) on `/my-applications` → OTP succeeded, skip retry; (2) on `/verify` → re-enter OTP; (3) on `/` → rate limit forced logout, re-submit login form then OTP. Applied in `Valid OTP Redirects To Dashboard`, `Login And Navigate To Dashboard`, and `Switch To Account`.
+- **verifyOtpPost rate limit**: Also applies per IP. Handled with a three-state page-check after `RATE_LIMIT_WAIT` sleep: (1) on `/my-applications` → OTP succeeded, skip retry; (2) on `/verify` → re-enter OTP; (3) on `/` → rate limit forced logout, re-submit login form then OTP. Applied in `Valid OTP Redirects To Dashboard`, `Login And Navigate To Dashboard`, `Switch To Account`, and `Wait For Dashboard` (auto-retries OTP once if still on `/verify` after `LONG_TIMEOUT`).
 - **Test order**: `Valid OTP Redirects To Dashboard` runs before `Wrong OTP Shows Incorrect OTP Toast` — a prior failed verifyOtpPost can trigger rate limiting that blocks the valid path.
 - **UAT availability**: UAT is **down 9pm–7am**. Live tests must run between 7am–9pm.
 

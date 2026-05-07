@@ -120,6 +120,7 @@ ${APP_LOAN_AMOUNT}            100000
 # Institute search term for async GILE institute dropdown (types this to trigger API search).
 # Use a term that returns at least one result on UAT. Override via APP_INSTITUTE_SEARCH env var.
 ${APP_INSTITUTE_SEARCH}       %{APP_INSTITUTE_SEARCH=Masira Darvesh}
+${APP_INSTITUTE_SEARCH_2}     %{APP_INSTITUTE_SEARCH_2=Podar International School}
 
 # Applicant (parent/guardian) details
 ${APP_FIRST_NAME}             MAMANI

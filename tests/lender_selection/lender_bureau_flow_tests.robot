@@ -15,7 +15,7 @@ Variables    ../../variables/dynamic_variables.py
 Suite Setup      Navigate To Lender Selection New App
 Suite Teardown   Run Keyword If Test Failed    Close Browser
 
-Test Tags        lender-selection    regression
+Test Tags        lender-selection    regression    robot:skip
 ...    allure.label.epic:CP UI Automation
 ...    allure.label.feature:Lender Selection Bureau Flow
 

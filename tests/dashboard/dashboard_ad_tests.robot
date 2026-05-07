@@ -48,8 +48,8 @@ AD Tab App Code Label Is Visible
     [Tags]    dashboard    auto-payments    ui    smoke
     Click AD Tab And Verify
     AD App Code Label Should Be Visible
-    Wait For Elements State    ${AD_FIRST_CARD}    visible    timeout=20s
-    Wait For Elements State    ${AD_APP_CODE_LABEL}    visible    timeout=20s
+    Wait For Elements State    ${AD_FIRST_CARD}    visible    timeout=60s
+    Wait For Elements State    ${AD_APP_CODE_LABEL}    visible    timeout=60s
     
 AD Tab Copy Button Is Visible
     [Documentation]

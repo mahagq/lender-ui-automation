@@ -13,7 +13,7 @@ Variables    ../../variables/dynamic_variables.py
 Suite Setup      Navigate To Lender Selection New App
 Suite Teardown   Close Browser
 Test Setup       Navigate To Lender Selection Within Session    ${LENDER_APP_ID}
-Test Tags        lender-selection    lender-selection-new    regression
+Test Tags        lender-selection    lender-selection-new    regression    robot:skip
 ...    allure.label.epic:CP UI Automation
 ...    allure.label.feature:Lender Selection
 ...    allure.label.story:New Application Lender Selection

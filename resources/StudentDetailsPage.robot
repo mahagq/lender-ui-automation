@@ -375,3 +375,60 @@ Navigate Back From Student Details
     ...    Satisfies: TC-5027
     Wait For Elements State    ${SD_CLOSE_BUTTON}    visible    timeout=${TIMEOUT}
     Click    ${SD_CLOSE_BUTTON}
+
+Get Selected GILE Location
+    [Documentation]    Gets the text of the selected location in the GILE location dropdown.
+    Wait For Elements State    ${SD_LOCATION_SELECT}    visible    timeout=${TIMEOUT}
+    Get Text    ${SD_LOCATION_SELECT}
+
+Select Different GILE Institute
+    [Documentation]
+    ...    Selects a different institute in the GILE institute dropdown to trigger a change
+    ...    event. Use Get Selected GILE Location keyword before and after to assert the
+    ...    location resets when the institute changes.
+    Wait For Elements State    ${SD_INSTITUTE_INPUT}    visible    timeout=${TIMEOUT}
+    Click    ${SD_INSTITUTE_INPUT}
+    Type Text    ${SD_INSTITUTE_INPUT}    ${APP_INSTITUTE_SEARCH_2}
+    Sleep    2s
+    Keyboard Key    press    ArrowDown
+    Keyboard Key    press    Enter
+
+Get Selected GILE Board
+    [Documentation]    Gets the text of the selected board in the GILE board dropdown.
+    Wait For Elements State    ${SD_BOARD_SELECT}    visible    timeout=${TIMEOUT}
+    Get Text    ${SD_BOARD_SELECT}
+
+Select Different GILE Location
+    [Documentation]
+    ...    Selects a different location in the GILE location dropdown to trigger a change
+    ...    event. Use Get Selected GILE Board keyword before and after to assert the
+    ...    board resets when the location changes.
+    Wait For Elements State    ${SD_LOCATION_SELECT}    visible    timeout=${TIMEOUT}
+    Click    ${SD_LOCATION_SELECT}
+    Sleep    500ms
+    Keyboard Key    press    ArrowDown
+    Keyboard Key    press    Enter
+
+Academic Year Dropdown Should Show Placeholder
+    [Documentation]
+    ...    Asserts the academic year dropdown shows the placeholder text "Select Academic Year"
+    ...    before any selection is made. Satisfies: TC-5N-09.
+    Wait For Elements State    ${SD_ACADEMIC_YEAR_SELECT}    visible    timeout=${TIMEOUT}
+    Get Text    ${SD_ACADEMIC_YEAR_SELECT} >> .react-select__placeholder
+    Should Be Equal    ${result}    Academic Year
+
+Student First Name Error Should Not Be Visible
+    [Documentation]    Asserts first-name-input-error is hidden. Satisfies: TC-5N-05, TC-5N-07.
+    Wait For Elements State    ${SD_FIRST_NAME_ERROR}    hidden    timeout=${TIMEOUT}
+
+Student Last Name Error Should Not Be Visible
+    [Documentation]    Asserts last-name-input-error is hidden. Satisfies: TC-5N-04, TC-5N-07.
+    Wait For Elements State    ${SD_LAST_NAME_ERROR}    hidden    timeout=${TIMEOUT}
+
+Student Class Error Should Not Be Visible
+    [Documentation]    Asserts class-id-react-select-error is hidden. Satisfies: TC-5N-04, TC-5N-07.
+    Wait For Elements State    ${SD_CLASS_ERROR}    hidden    timeout=${TIMEOUT}
+
+Student Loan Amount Error Should Not Be Visible
+    [Documentation]    Asserts loan-amount-input-error is hidden. Satisfies: TC-5N-05, TC-5N-08.
+    Wait For Elements State    ${SD_LOAN_AMOUNT_ERROR}    hidden    timeout=${TIMEOUT}

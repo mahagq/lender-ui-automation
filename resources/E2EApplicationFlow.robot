@@ -111,7 +111,7 @@ Create Full Application
         Sleep    ${RATE_LIMIT_WAIT}
         ${url_after}=    Get Url
         IF    '/my-applications' in '${url_after}'
-            # OTP succeeded during sleep — already on dashboard, do nothing
+            No Operation    # already on dashboard — OTP succeeded during sleep
         ELSE IF    '/verify' in '${url_after}'
             # Still on OTP page — re-enter and submit
             Enter OTP    ${TEST_OTP}

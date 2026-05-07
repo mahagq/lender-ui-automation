@@ -143,7 +143,7 @@ Login And Create Application
         Sleep    ${RATE_LIMIT_WAIT}
         ${url_after}=    Get Url
         IF    '/my-applications' in '${url_after}'
-            # OTP succeeded during sleep — already on dashboard
+            No Operation    # already on dashboard — OTP succeeded during sleep
         ELSE IF    '/verify' in '${url_after}'
             Enter OTP    ${TEST_OTP}
             Click Verify OTP Button
@@ -576,7 +576,7 @@ Login And Create Renewal Application
         Sleep    ${RATE_LIMIT_WAIT}
         ${url_after}=    Get Url
         IF    '/my-applications' in '${url_after}'
-            # OTP succeeded during sleep — already on dashboard
+            No Operation    # already on dashboard — OTP succeeded during sleep
         ELSE IF    '/verify' in '${url_after}'
             Enter OTP    ${TEST_OTP}
             Click Verify OTP Button

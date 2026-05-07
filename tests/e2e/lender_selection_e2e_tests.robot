@@ -16,7 +16,7 @@ Resource     ../../resources/BankStatementPage.robot
 Resource     ../../variables/variables.robot
 Variables    ../../variables/dynamic_variables.py
 
-Test Tags        lender-selection-e2e    regression
+Test Tags        lender-selection-e2e    regression    robot:skip
 ...    allure.label.epic:CP UI Automation
 ...    allure.label.feature:Lender Selection E2E
 

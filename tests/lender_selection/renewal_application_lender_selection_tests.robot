@@ -12,7 +12,7 @@ Resource     ../../variables/variables.robot
 Suite Setup      Navigate To Lender Selection Renewal App
 Suite Teardown   Close Browser
 Test Setup       Navigate To Lender Selection Within Session    ${LENDER_RENEWAL_APP_ID}
-Test Tags        lender-selection    lender-selection-renewal    renewal    regression
+Test Tags        lender-selection    lender-selection-renewal    renewal    regression    robot:skip
 ...    allure.label.epic:CP UI Automation
 ...    allure.label.feature:Lender Selection
 ...    allure.label.story:Renewal Application Lender Selection

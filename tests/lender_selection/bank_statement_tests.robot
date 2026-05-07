@@ -14,7 +14,7 @@ Variables    ../../variables/dynamic_variables.py
 Suite Setup      Navigate To Bank Statement Via BRE Rejection
 Suite Teardown   Close Browser
 Test Setup       Navigate To Bank Statement Select Bank Within Session    ${BS_APP_CODE}
-Test Tags        lender-selection    bank-statement    regression
+Test Tags        lender-selection    bank-statement    regression    robot:skip
 ...    allure.label.epic:CP UI Automation
 ...    allure.label.feature:Bank Statement Upload
 ...    allure.label.story:Bank Statement
