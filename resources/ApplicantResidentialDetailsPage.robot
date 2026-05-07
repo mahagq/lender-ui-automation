@@ -122,6 +122,11 @@ Click Residence Type Step Proceed
     Wait For Elements State    ${RD_RADIO_STEP_PROCEED}    visible    timeout=${TIMEOUT}
     Click    ${RD_RADIO_STEP_PROCEED}
 
+Click Close Button
+    [Documentation]    Clicks close-button on /applicant-residential-details and waits for dashboard URL.
+    Click    css=[data-testid='close-button']
+    Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    Dashboard URL Should Be Visible
+
 Residential Details URL Should Be Active
     [Documentation]    Helper — asserts the current URL contains /applicant-residential-details.
     ${url}=    Get Url

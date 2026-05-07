@@ -374,34 +374,42 @@ GILE Location Resets When Institute Is Changed
     [Documentation]
     ...    Verifies that changing the institute selection resets the location dropdown
     ...    (i.e. location selection is cleared and dropdown goes back to placeholder state).
-    [Tags]    robot:skip
     Select GILE Institute
     Select GILE Location
     ${location}=    Get Selected GILE Location
     Should Not Be Empty    ${location}    msg=Precondition failed: location should be selected
     Select Different GILE Institute
+
     ${location_after}=    Get Selected GILE Location
-    Should Be Empty    ${location_after}    msg=Location should be reset after changing institute
+
+    Should Be True
+    ...    '${location_after}' == '' or '${location_after}' == 'Select Location'
+    ...    msg=Location should be reset after changing institute
 
 GILE Board Resets When Location Is Changed
     [Documentation]
     ...    Verifies that changing the location selection resets the board dropdown
     ...    (i.e. board selection is cleared and dropdown goes back to placeholder state).
     [Tags]    robot:skip
-    Select GILE Institute
+    Select GILE Institute New
     Select GILE Location
     Select GILE Board
     ${board}=    Get Selected GILE Board
     Should Not Be Empty    ${board}    msg=Precondition failed: board should be selected
     Select Different GILE Location
     ${board_after}=    Get Selected GILE Board
-    Should Be Empty    ${board_after}    msg=Board should be reset after changing location
+
+    Should Be True
+    ...    '${board_after}' == '' or '${board_after}' == 'Select Board'
+    ...    msg=Board should be reset after changing location
+
+    Element Should Contain     ${SD_BOARD_SELECT}    Select Board
 
 Academic Year Dropdown Shows Default Placeholder
     [Documentation]
     ...    Verifies that the academic year dropdown shows the default placeholder text
     ...    before any selection is made, and that it is selectable after institute, location, and board are selected.
-    [Tags]    robot:skip
+    [Tags]    
     Select GILE Institute
     Select GILE Location
     Select GILE Board
@@ -449,7 +457,6 @@ Error Messages Disappear After Correct Input Is Entered
     [Documentation]
     ...    Verifies that after triggering validation errors, correcting the input removes the error messages.
     ...    Satisfies: TC-5N-17
-    [Tags]    robot:skip
     [Setup]    Navigate To Student Details With GILE Filled
     Click Show Plans Button
     Student First Name Error Should Be Visible

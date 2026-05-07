@@ -212,6 +212,11 @@ Click Self Employed Proceed
     Wait For Elements State    ${SE_PROCEED_BUTTON}    visible    timeout=${TIMEOUT}
     Click    ${SE_PROCEED_BUTTON}
 
+Click Close Button
+    [Documentation]    Clicks close-button on /applicant-employment-details and waits for dashboard URL.
+    Click    css=[data-testid='close-button']
+    Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    Dashboard URL Should Be Visible
+
 Employment Details URL Should Be Active
     [Documentation]    Helper — asserts the current URL contains /applicant-employment-details.
     ${url}=    Get Url

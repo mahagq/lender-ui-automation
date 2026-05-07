@@ -89,6 +89,11 @@ Self Employed Card Should Appear Selected
     Should Be True    'selected' in '${classes}' or 'active' in '${classes}' or True
     ...    Self Employed card selected state confirmed.
 
+Click Close Button
+    [Documentation]    Clicks close-button on /select-employment and waits for dashboard URL.
+    Click    css=[data-testid='close-button']
+    Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    Dashboard URL Should Be Visible
+
 Employment Type URL Should Be Active
     [Documentation]    Helper — asserts the current URL contains /select-employment.
     ${url}=    Get Url

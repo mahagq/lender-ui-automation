@@ -140,10 +140,11 @@ Navigate Back From Basic Details
 
 Click Close Button Basic Details
     [Documentation]
-    ...    Clicks the close-button on /applicant-basic-details to exit to dashboard.
+    ...    Clicks the close-button on /applicant-basic-details and waits for dashboard URL.
     ...    Satisfies: TC-8013
     Wait For Elements State    ${BD_CLOSE_BUTTON}    visible    timeout=${TIMEOUT}
     Click    ${BD_CLOSE_BUTTON}
+    Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    Dashboard URL Should Be Visible
 
 Resume Existing Application
     [Documentation]

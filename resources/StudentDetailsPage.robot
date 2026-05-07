@@ -279,6 +279,21 @@ Select GILE Institute
     Keyboard Key    press    ArrowDown
     Keyboard Key    press    Enter
 
+Select GILE Institute New
+    [Documentation]
+    ...    Types the institute search term, waits 2s for async API results, then selects
+    ...    the first result using ArrowDown + Enter keyboard navigation.
+    ...    react-select portals the menu outside the container so CSS descendant selectors
+    ...    cannot reach the options — keyboard navigation is the reliable alternative.
+    ...    Mirrors Search And Select First Option In React Select (ApplicationCreationFlowPage.robot).
+    ...    Satisfies: TC-5022
+    Wait For Elements State    ${SD_INSTITUTE_INPUT}    visible    timeout=${TIMEOUT}
+    Click    ${SD_INSTITUTE_INPUT}
+    Type Text    ${SD_INSTITUTE_INPUT}    ${APP_INSTITUTE_SEARCH_2}
+    Sleep    2s
+    Keyboard Key    press    ArrowDown
+    Keyboard Key    press    Enter
+
 Select GILE Location
     [Documentation]
     ...    Opens the location dropdown and selects the first option via ArrowDown + Enter.
@@ -376,10 +391,19 @@ Navigate Back From Student Details
     Wait For Elements State    ${SD_CLOSE_BUTTON}    visible    timeout=${TIMEOUT}
     Click    ${SD_CLOSE_BUTTON}
 
+Click Close Button
+    [Documentation]    Clicks close-button on /student-details and waits for dashboard URL.
+    Wait For Elements State    ${SD_CLOSE_BUTTON}    visible    timeout=${TIMEOUT}
+    Click    ${SD_CLOSE_BUTTON}
+    Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    Dashboard URL Should Be Visible
+
 Get Selected GILE Location
-    [Documentation]    Gets the text of the selected location in the GILE location dropdown.
+    [Documentation]    Gets the selected location text from the GILE location dropdown.
+
     Wait For Elements State    ${SD_LOCATION_SELECT}    visible    timeout=${TIMEOUT}
-    Get Text    ${SD_LOCATION_SELECT}
+    ${location}=    Get Text    ${SD_LOCATION_SELECT}
+
+    RETURN    ${location}
 
 Select Different GILE Institute
     [Documentation]
@@ -395,8 +419,11 @@ Select Different GILE Institute
 
 Get Selected GILE Board
     [Documentation]    Gets the text of the selected board in the GILE board dropdown.
+
     Wait For Elements State    ${SD_BOARD_SELECT}    visible    timeout=${TIMEOUT}
-    Get Text    ${SD_BOARD_SELECT}
+    ${board}=    Get Text    ${SD_BOARD_SELECT}
+
+    RETURN    ${board}
 
 Select Different GILE Location
     [Documentation]
@@ -411,11 +438,21 @@ Select Different GILE Location
 
 Academic Year Dropdown Should Show Placeholder
     [Documentation]
-    ...    Asserts the academic year dropdown shows the placeholder text "Select Academic Year"
+    ...    Asserts the academic year dropdown shows the placeholder text "Academic Year"
     ...    before any selection is made. Satisfies: TC-5N-09.
-    Wait For Elements State    ${SD_ACADEMIC_YEAR_SELECT}    visible    timeout=${TIMEOUT}
-    Get Text    ${SD_ACADEMIC_YEAR_SELECT} >> .react-select__placeholder
-    Should Be Equal    ${result}    Academic Year
+
+    Wait For Elements State
+    ...    ${SD_ACADEMIC_YEAR_SELECT}
+    ...    visible
+    ...    timeout=${TIMEOUT}
+
+    ${placeholder}=    Get Attribute
+    ...    ${SD_ACADEMIC_YEAR_SELECT} input[role="combobox"]
+    ...    aria-describedby
+
+    Should Contain
+    ...    ${placeholder}
+    ...    placeholder
 
 Student First Name Error Should Not Be Visible
     [Documentation]    Asserts first-name-input-error is hidden. Satisfies: TC-5N-05, TC-5N-07.

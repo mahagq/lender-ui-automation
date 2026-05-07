@@ -153,10 +153,11 @@ Navigate Back From Select Applicant
     Click    ${SA_BACK_BUTTON}
 
 Click Close Button
-    [Documentation]    Clicks the close-button on /select-applicant to navigate to the dashboard.
+    [Documentation]    Clicks the close-button on /select-applicant and waits for dashboard URL.
     ...    Satisfies: TC-7020
     Wait For Elements State    ${SA_CLOSE_BUTTON}    visible    timeout=${TIMEOUT}
     Click    ${SA_CLOSE_BUTTON}
+    Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    Dashboard URL Should Be Visible
 
 Dashboard URL Should Be Active
     [Documentation]    Helper — asserts the current URL contains /my-applications.

@@ -180,10 +180,11 @@ Click Back Button
 
 Click Close Button
     [Documentation]
-    ...    Clicks the close-button on the choose-plan page to navigate to the dashboard.
+    ...    Clicks the close-button on the choose-plan page and waits for dashboard URL.
     ...    Satisfies: TC-6017
     Wait For Elements State    ${CP_CLOSE_BUTTON}    visible    timeout=${TIMEOUT}
     Click    ${CP_CLOSE_BUTTON}
+    Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    Dashboard URL Should Be Visible
 
 Choose Plan URL Should Be Active
     [Documentation]    Helper — asserts the current URL contains /choose-plan.

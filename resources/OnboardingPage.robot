@@ -43,6 +43,7 @@ Click Onboarding Proceed
     [Documentation]
     ...    Clicks the proceed-button on the onboarding page to advance to /applicant-personal-details.
     ...    Satisfies: TC-9003, RT-5 (proceed)
+    Wait For Elements State    ${OB_INFO_ONE}    visible    timeout=${LONG_TIMEOUT}
     Wait For Elements State    ${OB_PROCEED_BUTTON}    visible    timeout=${TIMEOUT}
     Click    ${OB_PROCEED_BUTTON}
 
@@ -69,6 +70,11 @@ Navigate Back From Onboarding
     ...    Satisfies: TC-9N-01
     Wait For Elements State    ${OB_BACK_BUTTON}    visible    timeout=${TIMEOUT}
     Click    ${OB_BACK_BUTTON}
+
+Click Close Button
+    [Documentation]    Clicks close-button on /onboarding and waits for dashboard URL.
+    Click    css=[data-testid='close-button']
+    Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    Dashboard URL Should Be Visible
 
 Navigate To Onboarding Within Session
     [Documentation]

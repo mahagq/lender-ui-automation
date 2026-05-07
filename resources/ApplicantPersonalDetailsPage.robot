@@ -138,6 +138,11 @@ Force Click Personal Details Proceed
     Evaluate JavaScript    ${PD_PROCEED_BUTTON}    (element) => element.dispatchEvent(new MouseEvent('click', {bubbles: true, cancelable: true}))
     Sleep    500ms
 
+Click Close Button
+    [Documentation]    Clicks close-button on /applicant-personal-details and waits for dashboard URL.
+    Click    css=[data-testid='close-button']
+    Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    Dashboard URL Should Be Visible
+
 Personal Details URL Should Be Active
     [Documentation]    Helper — asserts the current URL contains /applicant-personal-details.
     ${url}=    Get Url

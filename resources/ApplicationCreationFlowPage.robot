@@ -670,6 +670,146 @@ Resume In Progress Application
     Wait For Elements State    css=[role='dialog']    visible    timeout=${LONG_TIMEOUT}
     Click    css=[role='dialog'] >> text=CONTINUE EXISTING APPLICATION
 
+Resume In Progress Application Via EMI Card
+    [Documentation]
+    ...    Resumes an in-progress application by clicking the "Verify Now" (emi-card-action-button)
+    ...    on the EMI tab card. Use this AFTER clicking Close on a wizard page (which redirects
+    ...    to dashboard). Does NOT use the "Before you proceed" dialog.
+    Wait For Elements State    ${EMI_TAB}    visible    timeout=${TIMEOUT}
+    Click    ${EMI_TAB}
+    Wait For Elements State    css=[data-testid='emi-card-action-button']    visible    timeout=${LONG_TIMEOUT}
+    Click    css=[data-testid='emi-card-action-button']
+
+Click Wizard Close Button
+    [Documentation]
+    ...    Generic close button for any wizard page — clicks data-testid='close-button' and
+    ...    waits for dashboard URL. Use in resume journey tests to avoid keyword name conflicts
+    ...    when multiple page resources define their own Click Close Button keywords.
+    Click    css=[data-testid='close-button']
+    Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    Dashboard URL Should Be Visible
+
+Create Application For Resume Tests
+    [Documentation]
+    ...    Suite Setup for resume_journey_e2e_tests.robot.
+    ...    Logs in with ${APP_CREATION_MOBILE} (fresh account each run), creates a new application,
+    ...    and lands on /student-details ready for TC-RE01.
+    Login And Create Application
+    Click Create Application Button And Wait For Student Details
+
+Fill Student Details Data
+    [Documentation]
+    ...    Fills all student details fields (GILE dropdowns + personal info + loan amount)
+    ...    WITHOUT clicking Show Plans. Use this when the test needs to close the wizard
+    ...    at /student-details (TC-RE01).
+    ...    Contrast with Fill Student Details With Stub Data which also clicks Show Plans.
+    Wait For Elements State    ${SD_FORM}    visible    timeout=${TIMEOUT}
+    Search And Select First Option In React Select    institute-id-react-select    ${APP_INSTITUTE_SEARCH}
+    Select First Option In React Select    location-id-react-select
+    Select First Option In React Select    board-id-react-select
+    Select First Option In React Select    academic-year-id-react-select
+    Wait For Elements State    ${SD_FIRST_NAME}    visible    timeout=${LONG_TIMEOUT}
+    Fill Text    ${SD_FIRST_NAME}    ${APP_STUDENT_FIRST_NAME}
+    Fill Text    ${SD_LAST_NAME}    ${APP_STUDENT_LAST_NAME}
+    Click    ${SD_STUDENT_TYPE_RADIO} >> nth=0
+    Click    css=[data-testid='class-id-react-select']
+    Sleep    500ms
+    Keyboard Key    press    ArrowDown
+    Keyboard Key    press    Enter
+    Fill Text    ${SD_STUDENT_ID}    SD12345
+    Fill Text    ${SD_LOAN_AMOUNT}    ${APP_LOAN_AMOUNT}
+
+Select Plan And Wait For Basic Details
+    [Documentation]
+    ...    Clicks the first plan, submits, and waits for the next wizard step.
+    ...    Fresh accounts skip /select-applicant and land on /applicant-basic-details directly.
+    ...    Handles both outcomes: /select-applicant (if shown) → submits parent option → basic-details,
+    ...    or /applicant-basic-details directly.
+    Click First Plan In List
+    Click    ${CP_SUBMIT_BUTTON}
+    ${on_sa}=    Run Keyword And Return Status
+    ...    Wait Until Keyword Succeeds    10s    500ms    Select Applicant URL Should Be Active
+    IF    ${on_sa}
+        Wait For Elements State    ${SA_PARENT_OPTION}    visible    timeout=${TIMEOUT}
+        Click    ${SA_PARENT_OPTION}
+        Wait For Elements State    ${SA_SUBMIT_BUTTON}    visible    timeout=${TIMEOUT}
+        Click    ${SA_SUBMIT_BUTTON}
+    END
+    Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    Basic Details URL Should Be Active
+
+Select Salaried And Wait For Employment Details
+    [Documentation]
+    ...    Clicks the Salaried card on /select-employment and waits for /applicant-employment-details.
+    ...    Used in resume journey TC-RE08 to reach employment details without filling data.
+    Wait For Elements State    ${ET_TITLE}    visible    timeout=${TIMEOUT}
+    Click    ${ET_SALARIED_CARD}
+    Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    Employment Details URL Should Be Active
+
+Fill Salaried Employment Data And Proceed
+    [Documentation]
+    ...    Fills employer name, monthly salary on /applicant-employment-details and proceeds
+    ...    — navigates to /confirm-application. Starts from /applicant-employment-details.
+    ...    Consent checkbox only appears when salary < 25000; checked conditionally if visible.
+    ...    Used in resume journey TC-RE09.
+    Wait For Elements State    ${SED_EMPLOYER_NAME}    visible    timeout=${TIMEOUT}
+    Fill Text    ${SED_EMPLOYER_NAME}    ${APP_EMPLOYER_NAME}
+    Fill Text    ${SED_SALARY}    ${APP_MONTHLY_SALARY}
+    ${consent_visible}=    Run Keyword And Return Status
+    ...    Wait For Elements State    ${SED_CONSENT}    visible    timeout=3s
+    IF    ${consent_visible}
+        ${checked}=    Get Property    ${SED_CONSENT}    checked
+        IF    not ${checked}
+            Click    ${SED_CONSENT}
+        END
+    END
+    Click    ${SED_PROCEED_BUTTON}
+    Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    Confirm Application URL Should Be Active
+    Handle Referral Code Popup If Present
+
+Select Parent Guardian And Submit
+    [Documentation]
+    ...    Selects the Parent/Guardian applicant option and submits — navigates to /applicant-basic-details.
+    ...    Used in resume journey TC-RE04 to advance from /select-applicant.
+    Wait For Elements State    ${SA_PARENT_OPTION}    visible    timeout=${TIMEOUT}
+    Click    ${SA_PARENT_OPTION}
+    Wait For Elements State    ${SA_SUBMIT_BUTTON}    visible    timeout=${TIMEOUT}
+    Click    ${SA_SUBMIT_BUTTON}
+    Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    Basic Details URL Should Be Active
+
+Fill And Submit Basic Details
+    [Documentation]
+    ...    Fills applicant basic details (first name, last name, consent) and submits
+    ...    — navigates to /onboarding. Used in resume journey TC-RE05.
+    Wait For Elements State    ${BD_FIRST_NAME}    visible    timeout=${TIMEOUT}
+    Fill Text    ${BD_FIRST_NAME}    ${APP_FIRST_NAME}
+    Fill Text    ${BD_LAST_NAME}    ${APP_LAST_NAME}
+    ${checked}=    Get Property    ${BD_CONSENT}    checked
+    IF    not ${checked}
+        Click    ${BD_CONSENT}
+    END
+    Click    ${BD_SUBMIT_BUTTON}
+    Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    Onboarding URL Should Be Active
+
+Fill And Submit Salaried Employment
+    [Documentation]
+    ...    Selects Salaried employment type, fills employer name + monthly salary, and proceeds
+    ...    — navigates to /confirm-application. Consent checkbox only appears when salary < 25000.
+    Wait For Elements State    ${ET_TITLE}    visible    timeout=${TIMEOUT}
+    Click    ${ET_SALARIED_CARD}
+    Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    Employment Details URL Should Be Active
+    Wait For Elements State    ${SED_EMPLOYER_NAME}    visible    timeout=${TIMEOUT}
+    Fill Text    ${SED_EMPLOYER_NAME}    ${APP_EMPLOYER_NAME}
+    Fill Text    ${SED_SALARY}    ${APP_MONTHLY_SALARY}
+    ${consent_visible}=    Run Keyword And Return Status
+    ...    Wait For Elements State    ${SED_CONSENT}    visible    timeout=3s
+    IF    ${consent_visible}
+        ${checked}=    Get Property    ${SED_CONSENT}    checked
+        IF    not ${checked}
+            Click    ${SED_CONSENT}
+        END
+    END
+    Click    ${SED_PROCEED_BUTTON}
+    Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    Confirm Application URL Should Be Active
+
 # ════════════════════════════════════════════════════════════════════════════════
 # Lender Selection Suite Setup keywords
 # These keywords create a fresh application, submit it, wait for the lender

@@ -197,6 +197,11 @@ Click Confirm Application Proceed
     Wait For Elements State    ${CA_PROCEED_BUTTON}    visible    timeout=${TIMEOUT}
     Click    ${CA_PROCEED_BUTTON}
 
+Click Close Button
+    [Documentation]    Clicks close-button on /confirm-application and waits for dashboard URL.
+    Click    css=[data-testid='close-button']
+    Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    Dashboard URL Should Be Visible
+
 Confirm Application URL Should Be Active
     [Documentation]    Helper — asserts the current URL contains /confirm-application.
     ${url}=    Get Url
