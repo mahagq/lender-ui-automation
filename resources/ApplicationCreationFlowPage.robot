@@ -125,15 +125,16 @@ ${CA_TITLE}                     css=[data-testid='confirm-application-title']
 
 *** Keywords ***
 Login And Create Application
+    [Arguments]    ${mobile}=${APP_CREATION_MOBILE}
     [Documentation]
     ...    Shared login step for all application-creation suite setups.
-    ...    Opens browser, logs in with ${APP_CREATION_MOBILE}, handles checkMobilePost and
-    ...    verifyOtpPost rate limits (same pattern as Login And Navigate To Dashboard).
+    ...    Opens browser, logs in with ${mobile} (defaults to ${APP_CREATION_MOBILE}), handles
+    ...    checkMobilePost and verifyOtpPost rate limits (same pattern as Login And Navigate To Dashboard).
     ...    Leaves browser on /my-applications (dashboard) after completion.
     ...    Satisfies: RT-1, T7, S2, TN2 resolution
     New Browser    ${BROWSER}    headless=${HEADLESS}
     Open Login Page
-    Submit Login Form    ${APP_CREATION_MOBILE}
+    Submit Login Form    ${mobile}
     ${otp_loaded}=    Run Keyword And Return Status
     ...    Wait For Elements State    ${OTP_FORM}    visible    timeout=${LONG_TIMEOUT}
     IF    not ${otp_loaded}
@@ -141,7 +142,7 @@ Login And Create Application
         Close Context
         Sleep    ${RATE_LIMIT_WAIT}
         Open Login Page
-        Submit Login Form    ${APP_CREATION_MOBILE}
+        Submit Login Form    ${mobile}
         Wait For OTP Page
     END
     Submit OTP Form    ${TEST_OTP}
@@ -157,7 +158,7 @@ Login And Create Application
             Enter OTP    ${TEST_OTP}
             Click Verify OTP Button
         ELSE
-            Submit Login Form    ${APP_CREATION_MOBILE}
+            Submit Login Form    ${mobile}
             Wait For Elements State    ${OTP_FORM}    visible    timeout=${LONG_TIMEOUT}
             Submit OTP Form    ${TEST_OTP}
         END
@@ -512,6 +513,11 @@ Click First Plan In List
     ...    Satisfies: RT-1 (traversal)
     Wait For Elements State    ${CP_PLAN_LIST}    visible    timeout=${LONG_TIMEOUT}
     Click    css=[data-testid='plan-list-container'] > div:first-child
+
+Click Plan In List By Index
+    [Arguments]    ${plan_index}=1
+    Wait For Elements State    ${CP_PLAN_LIST}    visible    timeout=${LONG_TIMEOUT}
+    Click    css=[data-testid='plan-list-container'] > div:nth-child(${plan_index})
 
 Fill Personal Details With Stub Data
     [Documentation]
@@ -883,10 +889,10 @@ Navigate To Lender Selection New App
     Lender Selection Page Should Be Visible
 
 Navigate To Lender Selection New App Within Session
+    [Arguments]    ${plan_index}=1
     [Documentation]
     ...    Creates a fresh new application within the existing browser session (no re-login).
-    ...    Used by TC-LS-N12 Setup to get a clean lender selection state for the approval test.
-    ...    Mirrors Navigate To Verify Details New Application Within Session (TC-VD25 pattern).
+    ...    Accepts plan_index (default 1) to select a specific plan from the plan list.
     ...    Overwrites LENDER_APP_ID suite variable with the new application's id.
     Go To    ${BASE_URL}/my-applications
     Wait For Elements State    ${DASHBOARD_TITLE}    visible    timeout=${TIMEOUT}
@@ -894,7 +900,7 @@ Navigate To Lender Selection New App Within Session
     Wait For Elements State    ${SD_FORM}    visible    timeout=${TIMEOUT}
     Fill Student Details With Stub Data
     Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    Choose Plan URL Should Be Active
-    Click First Plan In List
+    Click Plan In List By Index    ${plan_index}
     Click Submit Plan Button
     Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    Select Applicant URL Should Be Active
     Wait For Elements State    ${SA_PARENT_OPTION}    visible    timeout=${TIMEOUT}
@@ -936,6 +942,66 @@ Navigate To Lender Selection New App Within Session
     Set Suite Variable    ${LENDER_APP_ID}    ${app_id}
     Lender Selection Page Should Be Visible
 
+Login And Navigate To Lender Selection New App
+    [Arguments]    ${plan_index}=1    ${mobile}=${APP_CREATION_MOBILE}
+    [Documentation]
+    ...    Opens a fresh browser, logs in, creates a new application with the given plan index,
+    ...    and navigates to the lender selection page. Use as [Setup] for isolated browser-per-test runs.
+    Login And Create Application    ${mobile}
+    Navigate To Lender Selection New App Within Session    ${plan_index}
+
+Login And Submit New App
+    [Arguments]    ${plan_index}=1    ${mobile}=${APP_CREATION_MOBILE}
+    [Documentation]
+    ...    Opens a fresh browser, logs in, fills the wizard with the given plan index,
+    ...    and clicks proceed on confirm-application. Does NOT wait for lender selection.
+    ...    Use as [Setup] when the expected post-submit destination is not lender selection
+    ...    (e.g., plan_index=4 → all bureau lenders ineligible → direct /bank-statement/ redirect).
+    Login And Create Application    ${mobile}
+    Go To    ${BASE_URL}/my-applications
+    Wait For Elements State    ${DASHBOARD_TITLE}    visible    timeout=${TIMEOUT}
+    Click Create Application Button And Wait For Student Details
+    Wait For Elements State    ${SD_FORM}    visible    timeout=${TIMEOUT}
+    Fill Student Details With Stub Data
+    Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    Choose Plan URL Should Be Active
+    Click Plan In List By Index    ${plan_index}
+    Click Submit Plan Button
+    Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    Select Applicant URL Should Be Active
+    Wait For Elements State    ${SA_PARENT_OPTION}    visible    timeout=${TIMEOUT}
+    Click    ${SA_PARENT_OPTION}
+    Wait For Elements State    ${SA_SUBMIT_BUTTON}    visible    timeout=${TIMEOUT}
+    Click    ${SA_SUBMIT_BUTTON}
+    Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    Basic Details URL Should Be Active
+    Wait For Elements State    ${BD_FIRST_NAME}    visible    timeout=${TIMEOUT}
+    Fill Text    ${BD_FIRST_NAME}    ${APP_FIRST_NAME}
+    Fill Text    ${BD_LAST_NAME}    ${APP_LAST_NAME}
+    ${checked}=    Get Property    ${BD_CONSENT}    checked
+    IF    not ${checked}
+        Click    ${BD_CONSENT}
+    END
+    Click    ${BD_SUBMIT_BUTTON}
+    Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    Onboarding URL Should Be Active
+    Wait For Elements State    ${OB_INFO_ONE}    visible    timeout=${TIMEOUT}
+    Click    ${OB_PROCEED_BUTTON}
+    Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    Personal Details URL Should Be Active
+    Fill Personal Details With Stub Data
+    Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    Residential Details URL Should Be Active
+    Fill Residential Details With Stub Data
+    Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    Employment Type URL Should Be Active
+    Navigate To Salaried Employment Details In Session
+    Wait For Elements State    ${SED_EMPLOYER_NAME}    visible    timeout=${TIMEOUT}
+    Fill Text    ${SED_EMPLOYER_NAME}    ${APP_EMPLOYER_NAME}
+    Fill Text    ${SED_SALARY}    ${APP_MONTHLY_SALARY}
+    Click    ${SED_PROCEED_BUTTON}
+    Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    Confirm Application URL Should Be Active
+    Wait For Elements State    ${CA_FORM}    visible    timeout=${TIMEOUT}
+    Handle Referral Code Popup If Present
+    ${consent_checked}=    Get Property    css=[data-testid='consent-checkbox']    checked
+    IF    not ${consent_checked}
+        Click    css=[data-testid='consent-checkbox']
+    END
+    Click    css=[data-testid='proceed-button']
+
 Navigate To Lender Selection Renewal App
     [Documentation]
     ...    Suite Setup for lender selection renewal-application suites.
@@ -950,17 +1016,18 @@ Navigate To Lender Selection Renewal App
     Click Submit Plan Button
     Wait For Elements State    text=CONTINUE WITH THESE DETAILS    visible    timeout=${LONG_TIMEOUT}
     Click    text=CONTINUE WITH THESE DETAILS
-    Wait For Elements State    css=[data-testid='current-address-title']    visible    timeout=${LONG_TIMEOUT}
+    Wait For Elements State    xpath=//h3[normalize-space()='Residential details']    visible    timeout=${LONG_TIMEOUT}
     ${has_skip}=    Run Keyword And Return Status
     ...    Wait For Elements State    css=[data-testid='skip-button']    visible    timeout=4s
     IF    ${has_skip}
         Click    css=[data-testid='skip-button']
     END
-    ${consent_checked}=    Get Property    css=[data-testid='consent-checkbox']    checked
-    IF    not ${consent_checked}
-        Click    css=[data-testid='consent-checkbox']
-    END
     Click    text=CONFIRM AND PROCEED
+    Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    Confirm Application URL Should Be Active
+    Wait For Elements State    ${CA_FORM}    visible    timeout=${TIMEOUT}
+    Handle Referral Code Popup If Present
+    Check Confirm Application Consent
+    Click Confirm Application Proceed
     Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    Lender Selection URL Should Be Active
     ${app_id}=    Extract App ID From Current URL
     Set Suite Variable    ${LENDER_RENEWAL_APP_ID}    ${app_id}
@@ -981,17 +1048,18 @@ Navigate To Lender Selection Renewal App Within Session
     Click Submit Plan Button
     Wait For Elements State    text=CONTINUE WITH THESE DETAILS    visible    timeout=${LONG_TIMEOUT}
     Click    text=CONTINUE WITH THESE DETAILS
-    Wait For Elements State    css=[data-testid='current-address-title']    visible    timeout=${LONG_TIMEOUT}
+    Wait For Elements State    xpath=//h3[normalize-space()='Residential details']    visible    timeout=${LONG_TIMEOUT}
     ${has_skip}=    Run Keyword And Return Status
     ...    Wait For Elements State    css=[data-testid='skip-button']    visible    timeout=4s
     IF    ${has_skip}
         Click    css=[data-testid='skip-button']
     END
-    ${consent_checked}=    Get Property    css=[data-testid='consent-checkbox']    checked
-    IF    not ${consent_checked}
-        Click    css=[data-testid='consent-checkbox']
-    END
     Click    text=CONFIRM AND PROCEED
+    Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    Confirm Application URL Should Be Active
+    Wait For Elements State    ${CA_FORM}    visible    timeout=${TIMEOUT}
+    Handle Referral Code Popup If Present
+    Check Confirm Application Consent
+    Click Confirm Application Proceed
     Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    Lender Selection URL Should Be Active
     ${app_id}=    Extract App ID From Current URL
     Set Suite Variable    ${LENDER_RENEWAL_APP_ID}    ${app_id}
@@ -1010,16 +1078,16 @@ Navigate To Bank Statement Via BRE Rejection
     END
     Click    css=[data-testid='proceed-button']
     Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    Lender Selection URL Should Be Active
-    Mock BRE Assign Lender    REJECTED
+    # Mock BRE Assign Lender    REJECTED
     Lender Selection Page Should Be Visible
-    Check KFS Consent
+    Check KFS Consent If Present
     Click First Available Continue Button
     Wait For Bureau Decision
     ${url}=    Get Url
     ${on_bank}=    Run Keyword And Return Status    Should Contain    ${url}    /bank-statement/
     IF    not ${on_bank}
         Click View Available Financing
-        Check KFS Consent
+        Check KFS Consent If Present
         Click First Available Continue Button
         Wait For Bureau Decision
         ${url}=    Get Url
@@ -1027,4 +1095,20 @@ Navigate To Bank Statement Via BRE Rejection
     Should Contain    ${url}    /bank-statement/
     ${app_code}=    Extract App Code From Bank Statement URL
     Set Suite Variable    ${BS_APP_CODE}    ${app_code}
-    Unroute BRE Mock
+    # Unroute BRE Mock
+
+Navigate To Bank Statement Via Plan Two
+    [Documentation]
+    ...    Suite Setup for bank_statement_tests.robot (plan 2 path — no mock).
+    ...    Creates fresh app with plan 2 (BANK_STATEMENT_MOBILE), navigates to lender selection,
+    ...    selects first available lender. Real BRE with plan 2 redirects directly to /bank-statement/.
+    ...    Captures BS_APP_CODE from the redirect URL.
+    Login And Create Application    ${BANK_STATEMENT_MOBILE}
+    Navigate To Lender Selection New App Within Session    2
+    Lender Selection Page Should Be Visible
+    Check KFS Consent If Present
+    Click First Available Continue Button
+    Wait For Bureau Decision
+    Bank Statement URL Should Be Active
+    ${app_code}=    Extract App Code From Bank Statement URL
+    Set Suite Variable    ${BS_APP_CODE}    ${app_code}

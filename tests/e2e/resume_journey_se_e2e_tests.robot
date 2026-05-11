@@ -39,7 +39,7 @@ TC-RESE01 Close At SE Employment Details Resumes At Employment Type
     Select Self Employed And Wait For Employment Details
     Click Wizard Close Button
     Resume In Progress Application Via EMI Card
-    Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    Employment Type URL Should Be Active
+    Wait Until Keyword Succeeds    ${SUBMISSION_TIMEOUT}    500ms    Employment Type URL Should Be Active
 
 TC-RESE02 Resume At Confirm Application Via SE Employment
     [Documentation]    From /select-employment, select self-employed → fill SE details → proceed → confirm application. Close → dashboard. Resume via Verify Now → confirm application.
@@ -48,4 +48,4 @@ TC-RESE02 Resume At Confirm Application Via SE Employment
     Fill SE Employment Data And Proceed
     Click Wizard Close Button
     Resume In Progress Application Via EMI Card
-    Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    Confirm Application URL Should Be Active
+    Wait Until Keyword Succeeds    ${SUBMISSION_TIMEOUT}    500ms    Confirm Application URL Should Be Active

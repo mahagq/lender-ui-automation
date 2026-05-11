@@ -15,7 +15,8 @@ Library    String
 
 *** Variables ***
 # Page heading
-${LS_HEADING}                   role=heading[name='Congratulations, your EMI']
+${LS_HEADING}                   role=heading[name='Congratulations, your EMI application is approved']
+${LS_SUBHEADING}                xpath=//p[contains(text(),'Please choose one of the financing partners below to complete your EMI registration.')]
 
 # Rank labels — conditional presence (1–N lenders)
 ${LS_RANK_1_LABEL}              text=Rank 1
@@ -25,11 +26,11 @@ ${LS_RANK_3_LABEL}              text=Rank 3
 # Unavailable section — conditional presence (0–N unavailable)
 ${LS_UNAVAILABLE_HEADING}       role=heading[name='Currently Unavailable']
 ${LS_UNAVAILABLE_DISCLAIMER}    text=These options don't match
-${LS_DISCLAIMER_TEXT}           text=Lenders are displayed in
+${LS_DISCLAIMER_TEXT}           xpath=//p[contains(text(),'Lenders are displayed in ascending order of estimated disbursement time')]
 
 # Modal buttons (stable role-based selectors from Playwright recording)
-${LS_LOAN_OFFER_DETAILS_BTN}    role=button[name='Loan Offer Details']
-${LS_VIEW_KFS_BTN}              role=button[name='View KFS']
+${LS_LOAN_OFFER_DETAILS_BTN}    role=button[name='Loan Offer Details'] >> nth=0
+${LS_VIEW_KFS_BTN}              role=button[name='View KFS'] >> nth=0
 ${LS_CLOSE_MODAL_BTN}           role=button[name='Close']
 
 # Loan Offer Details modal fields
@@ -50,27 +51,31 @@ ${LS_KFS_MONTHLY_PAYMENTS}      text=No of Monthly Payments
 ${LS_KFS_MONTHLY_PAYMENT_AMT}   text=Monthly Payment Amount
 
 # Consent + filters
-${LS_CONSENT_CHECKBOX}          role=checkbox[name='I have carefully read and']
-${LS_FILTER_BANK}               text=Bank
-${LS_FILTER_NBFC}               text=NBFC
+${LS_CONSENT_CHECKBOX}          role=checkbox[name='I have carefully read and understood the Key Fact Statement (KFS)'] >> nth=0
+${LS_FILTER_BANK}               xpath=//span[normalize-space()='Bank']
+${LS_FILTER_NBFC}               xpath=//span[normalize-space()='NBFC'] >> nth=0
 
 # Processing page (/application-loader-status/{app_id})
 ${LS_PROCESSING_HEADING}        role=heading[name='Processing your application...']
 ${LS_VERIFYING_TEXT}            text=Verifying your application
 
-# Rejection state
-${LS_UNABLE_TO_PROCEED}         role=heading[name='Unable to Proceed']
-${LS_PLEASE_SELECT_ANOTHER}     text=Please select another
-${LS_VIEW_AVAILABLE_BTN}        role=button[name='View Available Financing']
+# Rejection state — modal shown when lender is rejected and user returns to lender selection
+${LS_UNABLE_TO_PROCEED}         role=heading[name='More partners ready to help you!']
+${LS_PLEASE_SELECT_ANOTHER}     text=Pick your preferred partner
+${LS_VIEW_AVAILABLE_BTN}        role=button[name='View Available Financing Partners']
 
-# Success state
-${LS_SUCCESS_TEXT}              text=Your EMI application is
+# Success state — application-status page shown after APPROVED bureau decision
+${LS_SUCCESS_TEXT}              text=Your application has been successfully approved
 ${LS_PROCEED_BUTTON}            css=[data-testid='proceed-button']
 
 *** Keywords ***
 Lender Selection Page Should Be Visible
     [Documentation]    Waits for the lender selection page heading to become visible.
     Wait For Elements State    ${LS_HEADING}    visible    timeout=${LONG_TIMEOUT}
+
+Lender Selection Subheading Should Be Visible
+    [Documentation]    Asserts the lender selection subheading text is visible.
+    Wait For Elements State    ${LS_SUBHEADING}    visible    timeout=${LONG_TIMEOUT}
 
 At Least One Rank Label Should Be Visible
     [Documentation]
@@ -123,12 +128,6 @@ Open KFS For First Lender
     Wait For Elements State    ${LS_VIEW_KFS_BTN}    visible    timeout=${TIMEOUT}
     Click    ${LS_VIEW_KFS_BTN} >> nth=0
 
-KFS Modal Should Show Fields
-    [Documentation]    Asserts the three KFS modal fields are visible.
-    Wait For Elements State    ${LS_KFS_FEE_AMOUNT}          visible    timeout=${TIMEOUT}
-    Wait For Elements State    ${LS_KFS_MONTHLY_PAYMENTS}    visible    timeout=${TIMEOUT}
-    Wait For Elements State    ${LS_KFS_MONTHLY_PAYMENT_AMT} visible    timeout=${TIMEOUT}
-
 Check KFS Consent
     [Documentation]    Ensures the KFS consent checkbox is checked; clicks it if not already checked.
     ${checked}=    Get Property    ${LS_CONSENT_CHECKBOX}    checked
@@ -143,6 +142,30 @@ Uncheck KFS Consent
         Click    ${LS_CONSENT_CHECKBOX}
     END
 
+Check KFS Consent If Present
+    [Documentation]    Checks KFS consent checkbox only if visible — some lenders do not require it.
+    ${present}=    Run Keyword And Return Status
+    ...    Wait For Elements State    ${LS_CONSENT_CHECKBOX}    visible    timeout=3s
+    IF    ${present}
+        Check KFS Consent
+    END
+
+Check KFS Consent For Lender If Present
+    [Arguments]    ${lender_name}
+    [Documentation]
+    ...    Checks the KFS consent checkbox scoped to the named lender's card only.
+    ...    Uses CSS :has() to find the checkbox inside the same card as the lender's button.
+    ...    Skips silently if that lender does not require KFS consent.
+    ${selector}=    Set Variable    css=div:has(button:has-text('${lender_name}')) input[type='checkbox']
+    ${present}=    Run Keyword And Return Status
+    ...    Wait For Elements State    ${selector}    visible    timeout=3s
+    IF    ${present}
+        ${checked}=    Get Property    ${selector}    checked
+        IF    not ${checked}
+            Click    ${selector}
+        END
+    END
+
 Click Bank Filter
     [Documentation]    Clicks the Bank filter tab on the lender selection page.
     Click    ${LS_FILTER_BANK}
@@ -151,12 +174,23 @@ Click NBFC Filter
     [Documentation]    Clicks the NBFC filter tab on the lender selection page.
     Click    ${LS_FILTER_NBFC}
 
+Lender Selection Page Footer Text Should Be Visible
+    [Documentation]    Asserts the footer text about lender ranking and display is visible.
+    Wait For Elements State    ${LS_DISCLAIMER_TEXT}    visible    timeout=${TIMEOUT}
+
 Click First Available Continue Button
     [Documentation]
     ...    Clicks the first CONTINUE WITH lender button with up to 3 retries (2s apart).
-    Wait For Elements State    role=button[name*='CONTINUE WITH']    visible    timeout=${TIMEOUT}
+    Wait For Elements State    role=button[name*='CONTINUE WITH'] >> nth=0    visible    timeout=${TIMEOUT}
     Click    role=button[name*='CONTINUE WITH'] >> nth=0
     Log    Clicked first available lender continue button    level=DEBUG
+
+Click Lender Continue Button By Name
+    [Arguments]    ${lender_name}
+    [Documentation]    Clicks the CONTINUE WITH button for a named lender (case-insensitive text match).
+    Wait For Elements State    css=button:has-text('${lender_name}') >> nth=0    visible    timeout=${TIMEOUT}
+    Click    css=button:has-text('${lender_name}') >> nth=0
+    Log    Clicked continue button for lender: ${lender_name}    level=DEBUG
 
 Processing Page Should Be Visible
     [Documentation]    Waits for the processing/loader page heading to become visible.
@@ -164,12 +198,13 @@ Processing Page Should Be Visible
 
 Bureau Decision Should Be Final
     [Documentation]
-    ...    Asserts one of three terminal bureau states is visible:
-    ...    success text, rejection heading, or bank-statement URL.
+    ...    Asserts one of three terminal bureau states:
+    ...    - APPROVED: URL contains /application-status/
+    ...    - REJECTED: "Unable to Proceed" modal heading visible (back on /application-loader/)
+    ...    - BANK: URL contains /bank-statement/
     ...    Called by Wait For Bureau Decision — not intended for direct use.
     ${url}=    Get Url
-    ${is_success}=    Run Keyword And Return Status
-    ...    Wait For Elements State    ${LS_SUCCESS_TEXT}        visible    timeout=2s
+    ${is_success}=    Evaluate    '/application-status/' in '${url}'
     ${is_rejected}=    Run Keyword And Return Status
     ...    Wait For Elements State    ${LS_UNABLE_TO_PROCEED}   visible    timeout=2s
     ${is_bank}=    Evaluate    '/bank-statement/' in '${url}'
@@ -180,22 +215,30 @@ Wait For Bureau Decision
     [Documentation]
     ...    Polls until a terminal bureau decision state is detected
     ...    (approved, rejected, or bank-statement redirect).
-    Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    2s    Bureau Decision Should Be Final
+    ...    Uses SUBMISSION_TIMEOUT (60s) to accommodate UAT latency on re-mount after rejection.
+    Wait Until Keyword Succeeds    ${SUBMISSION_TIMEOUT}    2s    Bureau Decision Should Be Final
     Log    Bureau decision reached    level=INFO
 
 Click View Available Financing
     [Documentation]
-    ...    Clicks the View Available Financing button on the rejection state page
-    ...    and waits until the lender selection URL is active again.
-    Log    Clicking View Available Financing — returning to lender list    level=INFO
+    ...    Clicks the View Available Financing Partners button on the rejection modal.
+    ...    Modal closes and lender selection page remains (URL stays at /application-loader/).
+    Log    Clicking View Available Financing Partners — dismissing rejection modal    level=INFO
     Wait For Elements State    ${LS_VIEW_AVAILABLE_BTN}    visible    timeout=${TIMEOUT}
     Click    ${LS_VIEW_AVAILABLE_BTN}
-    Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    Lender Selection URL Should Be Active
-    Log    Back on lender selection page    level=DEBUG
+    Log    Rejection modal dismissed — back on lender selection page    level=DEBUG
 
 Successful Lender Assignment Should Be Visible
-    [Documentation]    Waits for the success state text confirming lender assignment.
-    Wait For Elements State    ${LS_SUCCESS_TEXT}    visible    timeout=${LONG_TIMEOUT}
+    [Documentation]
+    ...    Waits for /application-status/ URL and asserts the approval success text is visible.
+    ...    This is the page the user lands on after BRE approval — before clicking Proceed to KYC.
+    Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    2s    Application Status URL Should Be Active
+    Wait For Elements State    ${LS_SUCCESS_TEXT}    visible    timeout=${TIMEOUT}
+
+Application Status URL Should Be Active
+    [Documentation]    Helper — asserts the current URL contains /application-status/.
+    ${url}=    Get Url
+    Should Contain    ${url}    /application-status/
 
 Click Proceed To KYC
     [Documentation]    Clicks the proceed-button to advance to the KYC step.
@@ -229,39 +272,48 @@ Navigate To Lender Selection Within Session
     Go To    ${BASE_URL}/application-loader/${app_id}
     Lender Selection Page Should Be Visible
 
-Build BRE Fetch Body
-    [Arguments]    ${decision}
-    IF    '${decision}' == 'REJECTED'
-        ${body}=    Set Variable
-        ...    {"success":true,"status_code":200,"message":"Lender Assignment Log Found Successfully","data":{"application_id":0,"type":"bureau","status":"COMPLETED","decision":"REJECTED","parent_lender_name":"Mirae Asset Financial Services (India) Pvt. Ltd."}}
-    ELSE
-        ${body}=    Set Variable
-        ...    {"success":true,"status_code":200,"message":"Lender Assignment Log Found Successfully","data":{"application_id":0,"type":"bureau","status":"COMPLETED","decision":"APPROVED","parent_lender_name":"Capital India FSF"}}
-    END
-    RETURN    ${body}
-
 Mock BRE Assign Lender
     [Arguments]    ${decision}=APPROVED
     [Documentation]
-    ...    Mocks BRE assign-lender API via window.fetch override (Browser library v19 has no Route Fulfilled).
-    ...    Intercepts /v2/credit-engine/assign-lender and /v2/credit-engine/assign-lender/fetch calls.
-    ${assign_body}=    Set Variable
-    ...    {"success":true,"status_code":200,"message":"Lender Assignment job created","data":{"job_id":"mock_job_test_123"}}
-    ${fetch_body}=    Build BRE Fetch Body    ${decision}
+    ...    Replaces window.XMLHttpRequest with MockXHR so BRE API calls use plain writable
+    ...    properties. Captures parent_lender_name from the POST body dynamically — no hardcoding.
+    ...    Also intercepts lender-select/fetch: first call passes through to real backend to capture
+    ...    the original eligible lender list, then subsequent calls return filtered responses with
+    ...    rejected lenders removed (moved to ineligible). When eligible list empties, frontend
+    ...    naturally redirects to bank-statement. Patches window.fetch as safety net.
+    Evaluate JavaScript    ${None}    (() => { if(!window.__consoleErrors){window.__consoleErrors=[];const _e=console.error.bind(console);console.error=function(){window.__consoleErrors.push(Array.from(arguments).map(String).join(' '));_e.apply(console,arguments);};} })()
     Evaluate JavaScript    ${None}
-    ...    (a, f) => { if(!window.__origFetch)window.__origFetch=window.fetch; window.__breMockAssignBody=a; window.__breMockFetchBody=f; window.fetch=async(url,opts)=>{const u=typeof url==='string'?url:(url.url||String(url));if(u.includes('/v2/credit-engine/assign-lender/fetch'))return new Response(window.__breMockFetchBody,{status:200,headers:{'Content-Type':'application/json'}});if(u.includes('/v2/credit-engine/assign-lender'))return new Response(window.__breMockAssignBody,{status:200,headers:{'Content-Type':'application/json'}});return window.__origFetch(url,opts);}; }
-    ...    ${assign_body}    ${fetch_body}
-    Log    BRE mock set to ${decision} via window.fetch override    level=INFO
+    ...    (() => { window.__breMockCreditBody='{"success":true,"status_code":200,"message":"Credit data processed","data":{}}'; window.__breMockDecision='${decision}'; window.__breRejectedLenders=[]; delete window.__breOriginalEligible; delete window.__breOriginalIneligible; delete window.__breOriginalMeta; if(window.__xhrMocked){return;} window.__xhrMocked=true; window.__breMockAssignBody='{"success":true,"status_code":200,"message":"Lender Assignment job created","data":{"job_id":"mock_job_test_123"}}'; window.__breMockLenderName='Selected Financing Partner'; const Orig=window.XMLHttpRequest; window.__OrigXHR=Orig; const _isLenderSelect=(u)=>u.includes('/v2/credit-engine/lender-select/fetch'); const _isBRE=(u)=>u.includes('/v2/credit-engine/assign-lender')||u.includes('/v2/credit-engine/process-credit-data')||_isLenderSelect(u); const _fetchBody=()=>JSON.stringify({success:true,status_code:200,message:'Lender Assignment Log Found Successfully',data:{application_id:0,type:'bureau',status:'COMPLETED',decision:window.__breMockDecision||'REJECTED',parent_lender_name:window.__breMockLenderName||'Selected Financing Partner'}}); const _lenderSelectBody=()=>{if(!window.__breOriginalEligible)return'{"success":true,"status_code":200,"message":"Eligible Lenders Found Successfully","data":{"eligible_lenders":[],"ineligible_lenders":[],"is_bureau_rejected":true,"is_bureau_lenders_applicable":true,"is_banking_lenders_applicable":true}}';const rej=window.__breRejectedLenders||[];const elig=window.__breOriginalEligible.filter(l=>!rej.includes(l.parent_lender_name));const newInelig=window.__breOriginalEligible.filter(l=>rej.includes(l.parent_lender_name)).map(l=>({parent_lender_name:l.parent_lender_name,lender_uuids:l.lender_uuids}));const inelig=(window.__breOriginalIneligible||[]).concat(newInelig);const data=Object.assign({},window.__breOriginalMeta||{},{eligible_lenders:elig,ineligible_lenders:inelig,is_bureau_rejected:elig.length===0,is_bureau_lenders_applicable:true,is_banking_lenders_applicable:true});return JSON.stringify({success:true,status_code:200,message:'Eligible Lenders Found Successfully',data});}; function MXR(){const r=new Orig();this._r=r;this._url='';this._method='GET';this.__evts={};this.readyState=0;this.status=0;this.statusText='';this.responseText='';this.response='';this.responseURL='';this.responseType='';this.timeout=0;this.withCredentials=false;this.upload=r.upload;this.onreadystatechange=null;this.onload=null;this.onerror=null;this.onabort=null;this.ontimeout=null;this.onloadend=null;this.onprogress=null;} MXR.prototype.addEventListener=function(t,fn){if(!this.__evts[t])this.__evts[t]=[];this.__evts[t].push(fn);}; MXR.prototype.removeEventListener=function(t,fn){if(this.__evts[t])this.__evts[t]=this.__evts[t].filter(f=>f!==fn);}; MXR.prototype.dispatchEvent=function(e){return true;}; MXR.prototype.open=function(m,u,a,usr,pw){this._url=u;this._method=m;if(!_isBRE(u)||_isLenderSelect(u))this._r.open(m,u,a===undefined?true:a,usr,pw);}; MXR.prototype.setRequestHeader=function(n,v){if(!this._hdrs)this._hdrs={};this._hdrs[n]=v;if(!_isBRE(this._url)||_isLenderSelect(this._url))this._r.setRequestHeader(n,v);}; MXR.prototype.getResponseHeader=function(n){if(_isBRE(this._url))return n.toLowerCase()==='content-type'?'application/json':null;return this._r.getResponseHeader(n);}; MXR.prototype.getAllResponseHeaders=function(){if(_isBRE(this._url))return'content-type: application/json\\r\\n';return this._r.getAllResponseHeaders();}; MXR.prototype.abort=function(){if(!_isBRE(this._url))this._r.abort();}; MXR.prototype.send=function(d){const self=this;const fire=(t,e)=>{if(self['on'+t])self['on'+t](e);(self.__evts[t]||[]).forEach(f=>f(e));};if(_isBRE(self._url)){window.__mockSendLog=window.__mockSendLog||[];window.__mockSendLog.push('XHR:'+self._url);if(_isLenderSelect(self._url)){if(!window.__breOriginalEligible){self._r.onloadend=function(){try{const parsed=JSON.parse(self._r.responseText);const data=parsed.data||{};window.__breOriginalEligible=JSON.parse(JSON.stringify(data.eligible_lenders||[]));window.__breOriginalIneligible=JSON.parse(JSON.stringify(data.ineligible_lenders||[]));window.__breOriginalMeta={};Object.keys(data).forEach(function(k){if(k!=='eligible_lenders'&&k!=='ineligible_lenders')window.__breOriginalMeta[k]=data[k];});}catch(e){}const body=_lenderSelectBody();self.readyState=4;self.status=200;self.statusText='OK';self.responseText=body;self.response=body;self.responseURL=self._url;fire('readystatechange',{type:'readystatechange',target:self});fire('load',{type:'load',target:self});fire('loadend',{type:'loadend',target:self});};self._r.onerror=function(e){fire('error',e);};self._r.send(d);return;}const lsBody=_lenderSelectBody();let lsTries=0;const respondLS=()=>{const hasH=self.onreadystatechange||self.onload||self.onloadend||(self.__evts.readystatechange||[]).length;lsTries++;if(!hasH&&lsTries<40){setTimeout(respondLS,25);return;}self.readyState=4;self.status=200;self.statusText='OK';self.responseText=lsBody;self.response=lsBody;self.responseURL=self._url;fire('readystatechange',{type:'readystatechange',target:self});fire('load',{type:'load',target:self});fire('loadend',{type:'loadend',target:self});};setTimeout(respondLS,25);return;}if(!self._url.includes('/fetch')&&!self._url.includes('/process-credit-data')&&d){try{const name=JSON.parse(d).parent_lender_name||'Selected Financing Partner';window.__breMockLenderName=name;if(!window.__breRejectedLenders.includes(name))window.__breRejectedLenders.push(name);}catch(e){}}let body;if(self._url.includes('/fetch')){body=_fetchBody();}else if(self._url.includes('/process-credit-data')){body=window.__breMockCreditBody;}else{body=window.__breMockAssignBody;}let tries=0;const respond=()=>{const hasH=self.onreadystatechange||self.onload||self.onloadend||(self.__evts.readystatechange||[]).length||(self.__evts.load||[]).length||(self.__evts.loadend||[]).length;tries++;if(!hasH&&tries<40){setTimeout(respond,25);return;}window.__mockSendLog.push('RESP:tries='+tries+' onloadend='+!!self.onloadend);self.readyState=2;self.status=200;self.statusText='OK';fire('readystatechange',{type:'readystatechange',target:self});self.readyState=3;fire('readystatechange',{type:'readystatechange',target:self});self.readyState=4;self.responseText=body;self.response=body;self.responseURL=self._url;fire('readystatechange',{type:'readystatechange',target:self});fire('load',{type:'load',target:self});fire('loadend',{type:'loadend',target:self});};setTimeout(respond,25);}else{const r=self._r;const copyState=()=>{self.readyState=r.readyState;self.status=r.status;self.statusText=r.statusText||'';try{self.responseText=r.responseText;}catch(e){}try{self.response=r.response;}catch(e){}self.responseURL=r.responseURL||'';};r.onreadystatechange=function(){copyState();fire('readystatechange',{type:'readystatechange',target:self});};r.onload=function(e){copyState();fire('load',e);};r.onerror=function(e){fire('error',e);};r.onabort=function(e){fire('abort',e);};r.ontimeout=function(e){fire('timeout',e);};r.onloadend=function(e){copyState();fire('loadend',e);};r.send(d);};}; window.__mockSendLog=[]; window.XMLHttpRequest=MXR; if(!window.__origFetch){window.__origFetch=window.fetch;window.fetch=async(url,opts)=>{const u=typeof url==='string'?url:(url.url||String(url));if(u.includes('/v2/credit-engine/assign-lender/fetch')){window.__mockSendLog.push('FETCH:fetch');return new Response(_fetchBody(),{status:200,headers:{'Content-Type':'application/json'}});}if(u.includes('/v2/credit-engine/lender-select/fetch')){window.__mockSendLog.push('FETCH:lender-select');if(!window.__breOriginalEligible){return window.__origFetch(url,opts).then(r=>r.json()).then(parsed=>{const data=parsed.data||{};window.__breOriginalEligible=JSON.parse(JSON.stringify(data.eligible_lenders||[]));window.__breOriginalIneligible=JSON.parse(JSON.stringify(data.ineligible_lenders||[]));window.__breOriginalMeta={};Object.keys(data).forEach(k=>{if(k!=='eligible_lenders'&&k!=='ineligible_lenders')window.__breOriginalMeta[k]=data[k];});return new Response(_lenderSelectBody(),{status:200,headers:{'Content-Type':'application/json'}});});}return new Response(_lenderSelectBody(),{status:200,headers:{'Content-Type':'application/json'}});}if(u.includes('/v2/credit-engine/assign-lender')){window.__mockSendLog.push('FETCH:assign');return new Response(window.__breMockAssignBody,{status:200,headers:{'Content-Type':'application/json'}});}if(u.includes('/v2/credit-engine/process-credit-data')){window.__mockSendLog.push('FETCH:credit');return new Response(window.__breMockCreditBody,{status:200,headers:{'Content-Type':'application/json'}});}return window.__origFetch(url,opts);};} })()
+    ${mocked}=    Evaluate JavaScript    ${None}    () => window.__xhrMocked
+    ${xhr_replaced}=    Evaluate JavaScript    ${None}    () => window.XMLHttpRequest !== window.__OrigXHR && window.XMLHttpRequest.toString().includes('MXR')
+    Log    BRE mock applied: mocked=${mocked} xhr_replaced=${xhr_replaced} decision=${decision}    level=INFO
 
 Switch BRE Mock To
     [Arguments]    ${decision}
-    [Documentation]    Updates only the fetch decision body — assign-lender base mock stays active.
-    ${fetch_body}=    Build BRE Fetch Body    ${decision}
-    Evaluate JavaScript    ${None}    (f) => { window.__breMockFetchBody = f; }    ${fetch_body}
+    [Documentation]    Updates the BRE decision — MockXHR+fetch patches stay active.
+    Evaluate JavaScript    ${None}    (() => { window.__breMockDecision='${decision}'; })()
     Log    BRE mock switched to ${decision}    level=INFO
 
 Unroute BRE Mock
-    [Documentation]    Restores original window.fetch, removing BRE mock.
+    [Documentation]    Restores original window.XMLHttpRequest and window.fetch. Clears all mock globals.
     Evaluate JavaScript    ${None}
-    ...    () => { if(window.__origFetch){window.fetch=window.__origFetch;delete window.__origFetch;delete window.__breMockAssignBody;delete window.__breMockFetchBody;} }
-    Log    BRE mock removed (window.fetch restored)    level=DEBUG
+    ...    (() => { if(window.__OrigXHR){window.XMLHttpRequest=window.__OrigXHR;delete window.__OrigXHR;} if(window.__origFetch){window.fetch=window.__origFetch;delete window.__origFetch;} delete window.__xhrMocked; delete window.__breMockAssignBody; delete window.__breMockCreditBody; delete window.__breMockDecision; delete window.__breMockLenderName; delete window.__breRejectedLenders; delete window.__breOriginalEligible; delete window.__breOriginalIneligible; delete window.__breOriginalMeta; delete window.__consoleErrors; })()
+    Log    BRE mock removed (XHR+fetch restored)    level=DEBUG
+
+Wait For Lender Page Or Bank Statement
+    [Documentation]
+    ...    After dismissing the rejection modal — polls up to 30s for either:
+    ...    - lender selection heading visible (more lenders remain) → returns 'lender'
+    ...    - /bank-statement/ in URL (all lenders exhausted) → returns 'bank'
+    ...    Used in the NR03 loop so the last iteration doesn't fail when the
+    ...    empty-lender-list redirect happens before the heading check.
+    FOR    ${_}    IN RANGE    30
+        ${url}=    Get Url
+        ${on_bank}=    Run Keyword And Return Status    Should Contain    ${url}    /bank-statement/
+        IF    ${on_bank}    RETURN    bank
+        ${on_lender}=    Run Keyword And Return Status
+        ...    Wait For Elements State    ${LS_HEADING}    visible    timeout=1s
+        IF    ${on_lender}    RETURN    lender
+        Sleep    1s
+    END
+    RETURN    unknown

@@ -2,6 +2,15 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## Custom Agents
+
+Project-level agents live in `.claude/agents/`. Use via `Agent` tool with `subagent_type`.
+
+| Agent | `subagent_type` | When to use |
+|-------|----------------|-------------|
+| UI Comprehensive Tester | `ui-comprehensive-tester` | After UI implementation — validates flows, forms, edge cases using Playwright/Puppeteer/Mobile MCP |
+| Ultrathink Debugger | `ultrathink-debugger` | Deep root-cause analysis for bugs, intermittent failures, env-specific issues (runs on Opus) |
+
 ## MCP Tools: code-review-graph
 
 **ALWAYS use code-review-graph tools BEFORE Grep/Glob/Read.** The graph is pre-indexed, token-efficient, and provides structural context (callers, dependents, test coverage) that file scanning cannot.
@@ -34,87 +43,87 @@ Robot Framework UI automation suite for the GQ Customer Portal. Covers the login
 
 ### Run all tests (default — excludes slow/resend tests)
 ```bash
-./venv/bin/robot --outputdir results/ tests/
+./env/bin/robot --outputdir results/ tests/
 ```
 
 ### Run a single test file
 ```bash
-./venv/bin/robot --outputdir results/ tests/login_left_component_tests.robot
-./venv/bin/robot --outputdir results/ tests/login_tests.robot
-./venv/bin/robot --outputdir results/ tests/otp_tests.robot
-./venv/bin/robot --outputdir results/ tests/bypass_auth_tests.robot
+./env/bin/robot --outputdir results/ tests/login_left_component_tests.robot
+./env/bin/robot --outputdir results/ tests/login_tests.robot
+./env/bin/robot --outputdir results/ tests/otp_tests.robot
+./env/bin/robot --outputdir results/ tests/bypass_auth_tests.robot
 # Dashboard suites:
-./venv/bin/robot --outputdir results/ tests/dashboard/dashboard_tests.robot
-./venv/bin/robot --outputdir results/ tests/dashboard/dashboard_emi_tests.robot
-./venv/bin/robot --outputdir results/ tests/dashboard/dashboard_ad_tests.robot
-./venv/bin/robot --outputdir results/ tests/dashboard/dashboard_pg_tests.robot
-./venv/bin/robot --outputdir results/ tests/dashboard/dashboard_ins_tests.robot
-./venv/bin/robot --outputdir results/ tests/dashboard/dashboard_ins_new_user_tests.robot
-./venv/bin/robot --outputdir results/ tests/dashboard/dashboard_new_user_tests.robot
+./env/bin/robot --outputdir results/ tests/dashboard/dashboard_tests.robot
+./env/bin/robot --outputdir results/ tests/dashboard/dashboard_emi_tests.robot
+./env/bin/robot --outputdir results/ tests/dashboard/dashboard_ad_tests.robot
+./env/bin/robot --outputdir results/ tests/dashboard/dashboard_pg_tests.robot
+./env/bin/robot --outputdir results/ tests/dashboard/dashboard_ins_tests.robot
+./env/bin/robot --outputdir results/ tests/dashboard/dashboard_ins_new_user_tests.robot
+./env/bin/robot --outputdir results/ tests/dashboard/dashboard_new_user_tests.robot
 # E2E:
-./venv/bin/robot --outputdir results/ tests/e2e/e2e_create_application_tests.robot
-./venv/bin/robot --outputdir results/ tests/e2e/smoke_e2e_tests.robot
-./venv/bin/robot --outputdir results/ tests/e2e/resume_journey_e2e_tests.robot
-./venv/bin/robot --outputdir results/ tests/e2e/renewal_flow_e2e_tests.robot
+./env/bin/robot --outputdir results/ tests/e2e/e2e_create_application_tests.robot
+./env/bin/robot --outputdir results/ tests/e2e/smoke_e2e_tests.robot
+./env/bin/robot --outputdir results/ tests/e2e/resume_journey_e2e_tests.robot
+./env/bin/robot --outputdir results/ tests/e2e/renewal_flow_e2e_tests.robot
 # Renewal Journey Flow (requires RENEWAL_MOBILE + RESUME_MOBILE registered on UAT):
-./venv/bin/robot --outputdir results/ tests/renewal_journey_flow/student_details_tests.robot
-./venv/bin/robot --outputdir results/ tests/renewal_journey_flow/choose_plan_tests.robot
-./venv/bin/robot --outputdir results/ tests/renewal_journey_flow/welcome_back_tests.robot
-./venv/bin/robot --outputdir results/ tests/renewal_journey_flow/verify_details_tests.robot
+./env/bin/robot --outputdir results/ tests/renewal_journey_flow/student_details_tests.robot
+./env/bin/robot --outputdir results/ tests/renewal_journey_flow/choose_plan_tests.robot
+./env/bin/robot --outputdir results/ tests/renewal_journey_flow/welcome_back_tests.robot
+./env/bin/robot --outputdir results/ tests/renewal_journey_flow/verify_details_tests.robot
 # Lender Selection suites (BRE API mocked via Evaluate JavaScript — Browser library v19 has no Route Fulfilled):
-./venv/bin/robot --outputdir results/ tests/lender_selection/lender_bureau_flow_tests.robot
-./venv/bin/robot --outputdir results/ tests/lender_selection/new_application_lender_selection_tests.robot
-./venv/bin/robot --outputdir results/ tests/lender_selection/renewal_application_lender_selection_tests.robot
-./venv/bin/robot --outputdir results/ tests/lender_selection/bank_statement_tests.robot
-./venv/bin/robot --outputdir results/ tests/e2e/lender_selection_e2e_tests.robot
+./env/bin/robot --outputdir results/ tests/lender_selection/lender_bureau_flow_tests.robot
+./env/bin/robot --outputdir results/ tests/lender_selection/new_application_lender_selection_tests.robot
+./env/bin/robot --outputdir results/ tests/lender_selection/renewal_application_lender_selection_tests.robot
+./env/bin/robot --outputdir results/ tests/lender_selection/bank_statement_tests.robot
+./env/bin/robot --outputdir results/ tests/e2e/lender_selection_e2e_tests.robot
 # Application Creation Flow suites (APP_CREATION_MOBILE auto-generated fresh each run — do NOT set via env var):
-./venv/bin/robot --outputdir results/ tests/application_creation_flow/student_details_tests.robot
-./venv/bin/robot --outputdir results/ tests/application_creation_flow/choose_plan_tests.robot
-./venv/bin/robot --outputdir results/ tests/application_creation_flow/select_applicant_tests.robot
-./venv/bin/robot --outputdir results/ tests/application_creation_flow/applicant_basic_details_tests.robot
-./venv/bin/robot --outputdir results/ tests/application_creation_flow/onboarding_tests.robot
-./venv/bin/robot --outputdir results/ tests/application_creation_flow/personal_details_tests.robot
-./venv/bin/robot --outputdir results/ tests/application_creation_flow/residential_details_tests.robot
-./venv/bin/robot --outputdir results/ tests/application_creation_flow/employment_tests.robot
-./venv/bin/robot --outputdir results/ tests/application_creation_flow/confirm_application_tests.robot
+./env/bin/robot --outputdir results/ tests/application_creation_flow/student_details_tests.robot
+./env/bin/robot --outputdir results/ tests/application_creation_flow/choose_plan_tests.robot
+./env/bin/robot --outputdir results/ tests/application_creation_flow/select_applicant_tests.robot
+./env/bin/robot --outputdir results/ tests/application_creation_flow/applicant_basic_details_tests.robot
+./env/bin/robot --outputdir results/ tests/application_creation_flow/onboarding_tests.robot
+./env/bin/robot --outputdir results/ tests/application_creation_flow/personal_details_tests.robot
+./env/bin/robot --outputdir results/ tests/application_creation_flow/residential_details_tests.robot
+./env/bin/robot --outputdir results/ tests/application_creation_flow/employment_tests.robot
+./env/bin/robot --outputdir results/ tests/application_creation_flow/confirm_application_tests.robot
 ```
 
 ### Run tests by tag
 ```bash
-./venv/bin/robot --outputdir results/ --include smoke tests/                    # smoke tests only
-./venv/bin/robot --outputdir results/ --include login tests/                    # login tests only
-./venv/bin/robot --outputdir results/ --include otp tests/                      # OTP tests only
-./venv/bin/robot --outputdir results/ --include bypass-auth tests/              # bypass auth tests only
-./venv/bin/robot --outputdir results/ --include dashboard tests/                # dashboard tests only
-./venv/bin/robot --outputdir results/ --include resend tests/otp_tests.robot    # ~3min resend test
-./venv/bin/robot --outputdir results/ --include application-creation-flow tests/  # all wizard tests
-./venv/bin/robot --outputdir results/ --include salaried tests/application_creation_flow/employment_tests.robot    # salaried only
-./venv/bin/robot --outputdir results/ --include self-employed tests/application_creation_flow/employment_tests.robot  # SE only
-./venv/bin/robot --outputdir results/ --include renewal tests/                                                     # all renewal tests
-./venv/bin/robot --outputdir results/ --include renewal-journey-flow tests/renewal_journey_flow/                   # renewal journey flow only
-./venv/bin/robot --outputdir results/ --include skip-journey tests/renewal_journey_flow/verify_details_tests.robot    # skip employment tests
-./venv/bin/robot --outputdir results/ --include edit-residential tests/renewal_journey_flow/verify_details_tests.robot # edit residential tests
-./venv/bin/robot --outputdir results/ --include edit-employment tests/renewal_journey_flow/verify_details_tests.robot  # edit employment tests
-./venv/bin/robot --outputdir results/ --include lender-selection tests/              # all lender selection tests
-./venv/bin/robot --outputdir results/ --include lender-selection-new tests/          # new app lender selection
-./venv/bin/robot --outputdir results/ --include lender-selection-renewal tests/      # renewal lender selection
-./venv/bin/robot --outputdir results/ --include bank-statement tests/                # bank statement tests
-./venv/bin/robot --outputdir results/ --include lender-selection-e2e tests/          # lender selection E2E
-./venv/bin/robot --outputdir results/ --include smoke tests/                         # smoke tests (includes TC_LENDER_01/02)
-./venv/bin/robot --outputdir results/ --include partial tests/                       # partial tests (TC_LENDER_03/04)
+./env/bin/robot --outputdir results/ --include smoke tests/                    # smoke tests only
+./env/bin/robot --outputdir results/ --include login tests/                    # login tests only
+./env/bin/robot --outputdir results/ --include otp tests/                      # OTP tests only
+./env/bin/robot --outputdir results/ --include bypass-auth tests/              # bypass auth tests only
+./env/bin/robot --outputdir results/ --include dashboard tests/                # dashboard tests only
+./env/bin/robot --outputdir results/ --include resend tests/otp_tests.robot    # ~3min resend test
+./env/bin/robot --outputdir results/ --include application-creation-flow tests/  # all wizard tests
+./env/bin/robot --outputdir results/ --include salaried tests/application_creation_flow/employment_tests.robot    # salaried only
+./env/bin/robot --outputdir results/ --include self-employed tests/application_creation_flow/employment_tests.robot  # SE only
+./env/bin/robot --outputdir results/ --include renewal tests/                                                     # all renewal tests
+./env/bin/robot --outputdir results/ --include renewal-journey-flow tests/renewal_journey_flow/                   # renewal journey flow only
+./env/bin/robot --outputdir results/ --include skip-journey tests/renewal_journey_flow/verify_details_tests.robot    # skip employment tests
+./env/bin/robot --outputdir results/ --include edit-residential tests/renewal_journey_flow/verify_details_tests.robot # edit residential tests
+./env/bin/robot --outputdir results/ --include edit-employment tests/renewal_journey_flow/verify_details_tests.robot  # edit employment tests
+./env/bin/robot --outputdir results/ --include lender-selection tests/              # all lender selection tests
+./env/bin/robot --outputdir results/ --include lender-selection-new tests/          # new app lender selection
+./env/bin/robot --outputdir results/ --include lender-selection-renewal tests/      # renewal lender selection
+./env/bin/robot --outputdir results/ --include bank-statement tests/                # bank statement tests
+./env/bin/robot --outputdir results/ --include lender-selection-e2e tests/          # lender selection E2E
+./env/bin/robot --outputdir results/ --include smoke tests/                         # smoke tests (includes TC_LENDER_01/02)
+./env/bin/robot --outputdir results/ --include partial tests/                       # partial tests (TC_LENDER_03/04)
 ```
 
 ### Dry run (syntax check, no browser)
 ```bash
-./venv/bin/robot --dryrun tests/
+./env/bin/robot --dryrun tests/
 ```
 
 ### Override base URL or mobile number
 ```bash
-./venv/bin/robot --variable BASE_URL:https://other-env.example.com --outputdir results/ tests/
-TEST_MOBILE=9999999999 ./venv/bin/robot --outputdir results/ tests/
+./env/bin/robot --variable BASE_URL:https://other-env.example.com --outputdir results/ tests/
+TEST_MOBILE=9999999999 ./env/bin/robot --outputdir results/ tests/
 # TC-401 bypass auth redirect test — requires an ERP-registered mobile (see Bypass Auth section):
-BYPASS_AUTH_MOBILE=<erp_mobile> ./venv/bin/robot --outputdir results/ tests/bypass_auth_tests.robot
+BYPASS_AUTH_MOBILE=<erp_mobile> ./env/bin/robot --outputdir results/ tests/bypass_auth_tests.robot
 ```
 
 ## Architecture
@@ -420,6 +429,7 @@ Whenever any change is made to the project — new test cases, new keywords, new
 * **CLAUDE.md** — update architecture, commands, session model, locator tables, or any section that reflects the changed area
 * **README.md** — update if the change affects setup, usage, or feature coverage
 * **jenkins.md** — update if the change affects CI/CD pipeline configuration or test execution
+* **`projectreview.md`** — update the relevant section(s) whenever any file, folder, keyword, test, variable, resource, or CI config changes; this file is the complete per-file reference for the project
 * **`.manifold/` files** — update any manifold constraint or artifact files that relate to the changed feature or flow
 * **Test case files** (`tests/` and subdirectories) — update existing test cases or add new ones to cover the changed functionality; ensure TC IDs, tags, and assertions stay consistent with the change
 

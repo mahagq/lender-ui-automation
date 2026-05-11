@@ -38,6 +38,7 @@ ${HEADLESS}               False
 # Timeouts
 ${TIMEOUT}                10s
 ${LONG_TIMEOUT}           30s
+${SUBMISSION_TIMEOUT}     60s
 ${RESEND_OTP_WAIT}        185s
 
 # Negative test data — invalid inputs for validation error tests

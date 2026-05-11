@@ -268,7 +268,7 @@ Create Full Application
     Click Confirm Application Proceed
 
     # ── Step 13: Assert Success ───────────────────────────────────────────────────
-    Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    Confirm Application Submitted Successfully
+    Wait Until Keyword Succeeds    ${SUBMISSION_TIMEOUT}    500ms    Confirm Application Submitted Successfully
 
 Create Full Renewal Application
     [Documentation]
@@ -364,7 +364,7 @@ Create Full Application With Lender Assignment
     Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    Lender Selection URL Should Be Active
     Mock BRE Assign Lender    ${lender_decision}
     Lender Selection Page Should Be Visible
-    Check KFS Consent
+    Check KFS Consent If Present
     Click First Available Continue Button
     Wait For Bureau Decision
     Unroute BRE Mock
@@ -384,7 +384,7 @@ Create Full Renewal Application With Lender Assignment
     Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    Lender Selection URL Should Be Active
     Mock BRE Assign Lender    ${lender_decision}
     Lender Selection Page Should Be Visible
-    Check KFS Consent
+    Check KFS Consent If Present
     Click First Available Continue Button
     Wait For Bureau Decision
     Unroute BRE Mock

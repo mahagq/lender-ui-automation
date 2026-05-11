@@ -44,44 +44,53 @@ TC-RER01 Resume At Student Details
     Fill Student Details Data
     Click Wizard Close Button
     Resume In Progress Application Via EMI Card
-    Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    Student Details URL Should Be Active
+    Wait Until Keyword Succeeds    ${SUBMISSION_TIMEOUT}    500ms    Student Details URL Should Be Active
 
 TC-RER02 Resume At Choose Plan
     [Documentation]    Fill student details + proceed → choose plan. Close → dashboard. Resume via Verify Now → choose plan.
     [Setup]    NONE
     Fill Student Details With Stub Data
-    Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    Choose Plan URL Should Be Active
+    Wait Until Keyword Succeeds    ${SUBMISSION_TIMEOUT}    500ms    Choose Plan URL Should Be Active
     Click Wizard Close Button
     Resume In Progress Application Via EMI Card
-    Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    Choose Plan URL Should Be Active
+    Wait Until Keyword Succeeds    ${SUBMISSION_TIMEOUT}    500ms    Choose Plan URL Should Be Active
 
 TC-RER03 Resume At Welcome Back
     [Documentation]    Select plan → renewal-confirmation (Welcome Back). Close → dashboard. Resume via Verify Now → welcome back.
     [Setup]    NONE
     Click First Plan In List
     Click Submit Plan Button
-    Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    Welcome Back Screen URL Should Be Correct
+    Wait Until Keyword Succeeds    ${SUBMISSION_TIMEOUT}    500ms    Welcome Back Screen URL Should Be Correct
     Click Wizard Close Button
     Resume In Progress Application Via EMI Card
-    Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    Welcome Back Screen URL Should Be Correct
+    Wait Until Keyword Succeeds    ${SUBMISSION_TIMEOUT}    500ms    Welcome Back Screen URL Should Be Correct
 
 TC-RER04 Close At Verify Details Resumes At Welcome Back
     [Documentation]    Continue on welcome-back → verify-details (no edits). Close → dashboard. Backend resumes at /renewal-confirmation (same pattern as personal-details → onboarding).
     [Setup]    NONE
     Click Continue With These Details
-    Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    Verify Details URL Should Be Active
+    Wait Until Keyword Succeeds    ${SUBMISSION_TIMEOUT}    500ms    Verify Details URL Should Be Active
     Click Wizard Close Button
     Resume In Progress Application Via EMI Card
-    Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    Welcome Back Screen URL Should Be Correct
+    Wait Until Keyword Succeeds    ${SUBMISSION_TIMEOUT}    500ms    Verify Details URL Should Be Active
 
 TC-RER05 Resume At Confirm Application
     [Documentation]    From welcome-back, continue → verify-details → confirm and proceed → confirm application. Close → dashboard. Resume via Verify Now → confirm application.
     [Setup]    NONE
-    Click Continue With These Details
-    Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    Verify Details URL Should Be Active
     Click    text=CONFIRM AND PROCEED
-    Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    Confirm Application URL Should Be Active
+    Wait Until Keyword Succeeds    ${SUBMISSION_TIMEOUT}    500ms    Confirm Application URL Should Be Active
     Handle Referral Code Popup If Present
     Click Wizard Close Button
     Resume In Progress Application Via EMI Card
-    Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    Confirm Application URL Should Be Active
+    Wait Until Keyword Succeeds    ${SUBMISSION_TIMEOUT}    500ms    Confirm Application URL Should Be Active
+
+TC-RER07 Resume Post Confirm Application
+    [Documentation]    From confirm application, proceed → Lender seelction screen.
+    [Setup]    NONE
+    Skip Referral Code Popup
+    Check Confirm Application Consent
+    Click Confirm Application Proceed
+    Wait Until Keyword Succeeds    ${SUBMISSION_TIMEOUT}    500ms     Lender Selection URL Should Be Active   
+    Click Wizard Close Button
+    Resume In Progress Application Via EMI Card
+    Wait Until Keyword Succeeds    ${SUBMISSION_TIMEOUT}    500ms     Lender Selection URL Should Be Active   

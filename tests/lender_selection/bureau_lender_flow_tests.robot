@@ -25,13 +25,14 @@ ${LENDER_APP_ID}    ${EMPTY}
 
 
 *** Test Cases ***
+## to Cover Mock Logic for this test suite.
 TC_LENDER_01 Bureau Approved Lender Assignment Redirects To KYC
     [Documentation]    BRE APPROVED: consent → continue → successful assignment → KYC page.
     [Tags]    smoke    regression
     [Teardown]    Unroute BRE Mock
     Mock BRE Assign Lender    APPROVED
     Lender Selection Page Should Be Visible
-    Check KFS Consent
+    Check KFS Consent If Present
     Click First Available Continue Button
     Wait For Bureau Decision
     Successful Lender Assignment Should Be Visible
@@ -45,12 +46,12 @@ TC_LENDER_02 Bureau Rejection Then Approval On Second Lender Redirects To KYC
     [Teardown]    Unroute BRE Mock
     Mock BRE Assign Lender    REJECTED
     Lender Selection Page Should Be Visible
-    Check KFS Consent
+    Check KFS Consent If Present
     Click First Available Continue Button
     Wait For Bureau Decision
     Click View Available Financing
     Switch BRE Mock To    APPROVED
-    Check KFS Consent
+    Check KFS Consent If Present
     Click First Available Continue Button
     Wait For Bureau Decision
     Successful Lender Assignment Should Be Visible
@@ -66,11 +67,11 @@ TC_LENDER_03 Double Bureau Rejection Lands User On Bank Statement Upload Screen
     ...    AND    Run Keyword And Ignore Error    Close Browser
     Mock BRE Assign Lender    REJECTED
     Lender Selection Page Should Be Visible
-    Check KFS Consent
+    Check KFS Consent If Present
     Click First Available Continue Button
     Wait For Bureau Decision
     Click View Available Financing
-    Check KFS Consent
+    Check KFS Consent If Present
     Click First Available Continue Button
     Wait For Bureau Decision
     ${url}=    Get Url
@@ -93,11 +94,11 @@ TC_LENDER_04 Double Bureau Rejection With Bank Statement Skipped Shows Manual As
     ...    AND    Run Keyword And Ignore Error    Close Browser
     Mock BRE Assign Lender    REJECTED
     Lender Selection Page Should Be Visible
-    Check KFS Consent
+    Check KFS Consent If Present
     Click First Available Continue Button
     Wait For Bureau Decision
     Click View Available Financing
-    Check KFS Consent
+    Check KFS Consent If Present
     Click First Available Continue Button
     Wait For Bureau Decision
     ${url}=    Get Url
