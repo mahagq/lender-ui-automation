@@ -137,7 +137,7 @@ tests/                     — Test suites (import resources and variables)
   login_left_component_tests.robot  — 9 left panel component tests (TC-101–TC-109)
   login_tests.robot                 — 23 login form tests (TC-201, TC-207–TC-228)
   otp_tests.robot                   — 18 OTP tests: 15 active, 3 skipped (TC-301–TC-318)
-  bypass_auth_tests.robot           — 4 bypass auth tests (2 skipped)
+  bypass_auth_tests.robot           — 4 bypass auth tests (3 skipped — TC-401, TC-403, TC-404)
   dashboard/
     dashboard_tests.robot             — 11 dashboard tests (2 skipped — TC-4004, TC-4005): header, create-app, insurance tab nav, logout
     dashboard_new_user_tests.robot    — 4 new-user empty state tests (TC-4047–TC-4050; DASHBOARD_NEW_MOBILE, independent)
@@ -151,7 +151,7 @@ tests/                     — Test suites (import resources and variables)
     smoke_e2e_tests.robot                  — Single fixed happy-path E2E (Salaried + Parent/Guardian; 1 test)
     resume_journey_e2e_tests.robot         — Resume-at-every-page: 9 tests closing at each wizard page and resuming (RESUME_MOBILE)
     renewal_flow_e2e_tests.robot           — Data-driven renewal E2E (existing account; Welcome Back → Verify Details; driven by renewal_application_data.xlsx)
-    lender_selection_e2e_tests.robot            — 4 E2E lender selection tests (TC-LS-E01–E04; new+renewal × APPROVED+REJECTED)
+    lender_selection_e2e_tests.robot            — 4 E2E lender selection tests (TC-LS-E01–E04; E01/E03 plan 1 + Western Capital lender → KYC; E02/E04 plan 2 → Bank Statement; real BRE)
   renewal_journey_flow/
     student_details_tests.robot            — Renewal: Student Details (7 tests, TC-R5001–TC-R5007; RENEWAL_MOBILE)
     choose_plan_tests.robot                — Renewal: Choose Plan (8 tests, TC-R6001–TC-R6008; RENEWAL_MOBILE)
@@ -163,16 +163,16 @@ tests/                     — Test suites (import resources and variables)
     bureau_lender_rejection_tests.robot         — 5 real BRE rejection tests (TC-LS-NR01–05; lender-rejection; each test owns fresh browser + app; plan-specific edge cases)
     bureau_lender_screen_UI_tests.robot         — 13 UI tests for new app lender selection (TC-LS-N00–N12; lender-selection-new; shared session)
     bureau_lender_flow_renewalapp_tests.robot   — 4 UI tests for renewal app lender selection (TC-LS-R01–R04; lender-selection-renewal; shared session)
-    bank_statement_tests.robot                  — 6 bank statement journey tests (TC-BS-01–06; robot:skip until testids confirmed)
+    bank_statement_tests.robot                  — 8 bank statement journey tests (TC-BS-01–TC-BS-08; TC-BS-01–TC-BS-07 active, TC-BS-08 robot:skip)
   application_creation_flow/
-    student_details_tests.robot            — 40 student details tests (TC-5001–TC-5027, TC-5N-01–TC-5N-13)
+    student_details_tests.robot            — 40 student details tests (TC-5001–TC-5027, TC-5N-01–TC-5N-13; 1 skipped — GILE Board Resets When Location Is Changed robot:skip)
     choose_plan_tests.robot                — 18 choose plan tests (TC-6001–TC-6018)
-    select_applicant_tests.robot           — 19 select applicant tests (TC-7001–TC-7020)
+    select_applicant_tests.robot           — 19 select applicant tests (TC-7001–TC-7020; 1 skipped — TC-7007 robot:skip)
     applicant_basic_details_tests.robot    — 23 applicant basic details tests (TC-8001–TC-8014-S, independent)
     onboarding_tests.robot                 — 7 onboarding tests (TC-9001–TC-9N-01, independent)
     personal_details_tests.robot           — 18 personal details tests (TC-10001–TC-10N-10, independent)
     residential_details_tests.robot        — 12 residential details tests (TC-11001–TC-11N-05, independent)
-    employment_tests.robot                 — 46 employment tests: 7 type + 13 salaried + 10 SE + 12 validation + misc (TC-12001–TC-12N-SE06)
+    employment_tests.robot                 — 46 employment tests: 7 type + 13 salaried + 10 SE + 12 validation + misc (TC-12001–TC-12N-SE06; 1 skipped — TC-12045 robot:skip; session conflict, run in isolation)
     confirm_application_tests.robot        — 20 confirm application tests (TC-13001–TC-13025)
 
 resources/                 — Page Object keyword libraries (no variable imports)
@@ -195,7 +195,7 @@ resources/                 — Page Object keyword libraries (no variable import
   ConfirmApplicationPage.robot       — Keywords + locators for /confirm-application
   WelcomeBackPage.robot              — Keywords + locators for renewal Welcome Back pre-fill screen
   VerifyDetailsPage.robot            — Keywords + locators for renewal Verify Details review screen
-  E2EApplicationFlow.robot           — E2E orchestration: Create Full Application + Create Full Renewal Application
+  E2EApplicationFlow.robot           — E2E orchestration: Create Full Application + Create Full Renewal Application + Create Full Application With Lender Assignment (plan_index + lender_name args; plan 1 uses Create Full Application, plan 2 uses Login And Navigate To Lender Selection New App) + Create Full Renewal Application With Lender Assignment (plan 1 uses Create Full Renewal Application, plan 2 uses Navigate To Lender Selection Renewal App); all lender assignment keywords use real BRE — no mock
   LenderSelectionPage.robot          — Keywords + locators for /application-loader/{app_id} (lender selection + BRE mocking)
   OKYCPage.robot                     — Keywords for /okyc/{app_id} (KYC page URL assertion)
   BankStatementPage.robot            — Keywords for bank statement journey (stub; PENDING TESTID)
@@ -306,7 +306,7 @@ Lender selection tests are split across **6 files**:
 - TC_LENDER_02: `[Setup] Navigate To Lender Selection Within Session` — reset, mock REJECTED then APPROVED.
 - TC_LENDER_03, TC_LENDER_04: `[Teardown] Run Keywords    Unroute BRE Mock    AND    Run Keyword And Ignore Error    Close Browser` (partial tests).
 
-**BRE API mocking:** `Mock BRE Assign Lender    APPROVED|REJECTED` in `LenderSelectionPage.robot` uses `Evaluate JavaScript` to override `window.fetch`, intercepting `/v2/credit-engine/assign-lender` and `/v2/credit-engine/assign-lender/fetch` calls. `Switch BRE Mock To    APPROVED|REJECTED` swaps the mock mid-test. Always call `Unroute BRE Mock` in teardown to restore original `window.fetch`.
+**BRE API mocking:** `Mock BRE Assign Lender    APPROVED|REJECTED` in `LenderSelectionPage.robot` uses `Evaluate JavaScript` to override `window.fetch`, intercepting `/v2/credit-engine/assign-lender` and `/v2/credit-engine/assign-lender/fetch` calls. `Switch BRE Mock To    APPROVED|REJECTED` swaps the mock mid-test. Always call `Unroute BRE Mock` in teardown to restore original `window.fetch`. Used only by `bureau_lender_flow_tests.robot` — `lender_selection_e2e_tests.robot` uses real BRE (no mock).
 
 ## Locators
 

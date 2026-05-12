@@ -1008,11 +1008,17 @@ Navigate To Lender Selection Renewal App
     ...    Logs in with RENEWAL_MOBILE, creates renewal application, fills student details,
     ...    selects plan, confirms via Welcome Back, submits on Verify Details confirm page,
     ...    waits for /application-loader/{id}, and captures LENDER_RENEWAL_APP_ID.
+    ...    ${plan_index}=1 uses Click First Plan In List; other values use Click Plan In List By Index.
+    [Arguments]    ${plan_index}=1
     Login And Create Renewal Application
     Wait For Elements State    ${SD_FORM}    visible    timeout=${TIMEOUT}
     Fill Student Details With Stub Data
     Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    Choose Plan URL Should Be Active
-    Click First Plan In List
+    IF    ${plan_index} == 1
+        Click First Plan In List
+    ELSE
+        Click Plan In List By Index    ${plan_index}
+    END
     Click Submit Plan Button
     Wait For Elements State    text=CONTINUE WITH THESE DETAILS    visible    timeout=${LONG_TIMEOUT}
     Click    text=CONTINUE WITH THESE DETAILS

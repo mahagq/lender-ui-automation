@@ -340,10 +340,10 @@ Create Full Renewal Application
 
 Create Full Application With Lender Assignment
     [Documentation]
-    ...    Full E2E: Login → 13-step wizard → confirm submit → lender selection → BRE decision → KYC or Bank Statement.
-    ...    Uses APP_* stub data for all wizard fields.
-    ...    ${plan_index}: reserved — always selects Plan 1 (first available). Pass plan_index=2 for future use when Create Full Application supports plan selection by index.
-    ...    ${lender_decision}: APPROVED → asserts /okyc/; REJECTED → asserts /bank-statement/.
+    ...    Full E2E: Login → wizard → confirm submit → lender selection → real BRE decision → KYC or Bank Statement.
+    ...    ${plan_index}=1 → uses Create Full Application (plan 1 via Click First Plan In List).
+    ...    ${plan_index}=2 → uses Login And Navigate To Lender Selection New App plan_index=2.
+    ...    ${lender_name}: if set, clicks that lender's continue button; else clicks first available.
     ...    Teardown: caller test must call Run Keyword And Ignore Error    Close Browser.
     [Arguments]
     ...    ${student_first_name}    ${student_last_name}    ${loan_amount}
@@ -351,40 +351,51 @@ Create Full Application With Lender Assignment
     ...    ${dob_year}    ${dob_month}    ${dob_day}
     ...    ${email}    ${address_line1}    ${address_line2}    ${pincode}
     ...    ${employer_name}    ${monthly_salary}
-    ...    ${plan_index}=1    ${lender_decision}=APPROVED
-    Log    plan_index=${plan_index} (reserved — Plan 1 always selected; extend Create Full Application to support plan_index when needed)    level=DEBUG
-    Create Full Application
-    ...    ${EMPTY}    ${APP_INSTITUTE_SEARCH}    ${EMPTY}    ${EMPTY}    ${EMPTY}
-    ...    ${student_first_name}    ${student_last_name}    New Admission    ${EMPTY}    SD12345
-    ...    ${loan_amount}    Parent/Guardian    ${applicant_first_name}    ${applicant_last_name}
-    ...    ${pan_number}    Male    ${dob_year}    ${dob_month}    ${dob_day}
-    ...    Unmarried    ${email}    ${address_line1}    ${address_line2}    ${pincode}
-    ...    Rented    Salaried    ${employer_name}    ${monthly_salary}
-    ...    ${EMPTY}    ${EMPTY}    ${EMPTY}    ${EMPTY}    ${EMPTY}
-    Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    Lender Selection URL Should Be Active
-    Mock BRE Assign Lender    ${lender_decision}
+    ...    ${plan_index}=1    ${lender_name}=${EMPTY}
+    IF    ${plan_index} == 1
+        Create Full Application
+        ...    ${EMPTY}    ${APP_INSTITUTE_SEARCH}    ${EMPTY}    ${EMPTY}    ${EMPTY}
+        ...    ${student_first_name}    ${student_last_name}    New Admission    ${EMPTY}    SD12345
+        ...    ${loan_amount}    Parent/Guardian    ${applicant_first_name}    ${applicant_last_name}
+        ...    ${pan_number}    Male    ${dob_year}    ${dob_month}    ${dob_day}
+        ...    Unmarried    ${email}    ${address_line1}    ${address_line2}    ${pincode}
+        ...    Rented    Salaried    ${employer_name}    ${monthly_salary}
+        ...    ${EMPTY}    ${EMPTY}    ${EMPTY}    ${EMPTY}    ${EMPTY}
+        Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    Lender Selection URL Should Be Active
+    ELSE
+        Login And Navigate To Lender Selection New App    plan_index=${plan_index}
+    END
     Lender Selection Page Should Be Visible
     Check KFS Consent If Present
-    Click First Available Continue Button
+    IF    '${lender_name}' != '${EMPTY}'
+        Click Lender Continue Button By Name    ${lender_name}
+    ELSE
+        Click First Available Continue Button
+    END
     Wait For Bureau Decision
-    Unroute BRE Mock
 
 Create Full Renewal Application With Lender Assignment
     [Documentation]
-    ...    Full E2E renewal: Login (RENEWAL_MOBILE) → renewal wizard → confirm → lender selection → BRE decision.
-    ...    ${plan_index}: reserved — always selects Plan 1. Extend Create Full Renewal Application to support plan selection by index when needed.
-    ...    ${lender_decision}: APPROVED → asserts /okyc/; REJECTED → asserts /bank-statement/.
+    ...    Full E2E renewal: Login (RENEWAL_MOBILE) → renewal wizard → confirm → lender selection → real BRE decision.
+    ...    ${plan_index}=1 → uses Create Full Renewal Application (plan 1 via Click First Plan In List).
+    ...    ${plan_index}=2 → uses Navigate To Lender Selection Renewal App plan_index=2.
+    ...    ${lender_name}: if set, clicks that lender's continue button; else clicks first available.
     ...    Teardown: caller test must call Run Keyword And Ignore Error    Close Browser.
-    [Arguments]    ${plan_index}=1    ${lender_decision}=APPROVED
-    Log    plan_index=${plan_index} (reserved — Plan 1 always selected)    level=DEBUG
-    Create Full Renewal Application
-    ...    ${APP_INSTITUTE_SEARCH}    ${EMPTY}    ${EMPTY}    ${EMPTY}
-    ...    ${APP_STUDENT_FIRST_NAME}    ${APP_STUDENT_LAST_NAME}    New Admission
-    ...    ${EMPTY}    SD12345    ${APP_LOAN_AMOUNT}    ${EMPTY}
-    Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    Lender Selection URL Should Be Active
-    Mock BRE Assign Lender    ${lender_decision}
+    [Arguments]    ${plan_index}=1    ${lender_name}=${EMPTY}
+    IF    ${plan_index} == 1
+        Create Full Renewal Application
+        ...    ${APP_INSTITUTE_SEARCH}    ${EMPTY}    ${EMPTY}    ${EMPTY}
+        ...    ${APP_STUDENT_FIRST_NAME}    ${APP_STUDENT_LAST_NAME}    New Admission
+        ...    ${EMPTY}    SD12345    ${APP_LOAN_AMOUNT}    ${EMPTY}
+        Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    Lender Selection URL Should Be Active
+    ELSE
+        Navigate To Lender Selection Renewal App    plan_index=${plan_index}
+    END
     Lender Selection Page Should Be Visible
     Check KFS Consent If Present
-    Click First Available Continue Button
+    IF    '${lender_name}' != '${EMPTY}'
+        Click Lender Continue Button By Name    ${lender_name}
+    ELSE
+        Click First Available Continue Button
+    END
     Wait For Bureau Decision
-    Unroute BRE Mock
