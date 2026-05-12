@@ -8,7 +8,7 @@ Documentation
 ...    Driven by data/renewal_application_data.xlsx — each row produces one full renewal run.
 ...
 ...    Run:
-...      ./venv/bin/robot --outputdir results/ tests/e2e/renewal_flow_e2e_tests.robot
+...      ./env/bin/robot --outputdir results/ tests/e2e/renewal_flow_e2e_tests.robot
 ...
 ...    Tags: e2e, renewal
 

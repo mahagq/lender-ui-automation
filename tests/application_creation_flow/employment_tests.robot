@@ -521,7 +521,7 @@ TC-12045 Salaried Employment Proceeds To Next Step
     ...    SESSION MODEL NOTE: This test requires /select-employment to be accessible.
     ...    TC-12092 (SE advance) runs before this in the suite and advances the wizard to
     ...    /confirm-application, making /select-employment inaccessible in the same session.
-    ...    Run this test in isolation: ./venv/bin/robot --test TC-12045 tests/application_creation_flow/employment_tests.robot
+    ...    Run this test in isolation: ./env/bin/robot --test TC-12045 tests/application_creation_flow/employment_tests.robot
     [Setup]    Navigate To Salaried Employment Details In Session
     [Tags]    salaried    slow    robot:skip
     Fill Employer Name    ${APP_EMPLOYER_NAME}

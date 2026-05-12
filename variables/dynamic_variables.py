@@ -18,7 +18,7 @@ BANK_STATEMENT_MOBILE — Fresh mobile for bank_statement_tests.robot suite setu
 
 Each new robot invocation (new Python process) generates new numbers.
 To override DASHBOARD_NEW_MOBILE for a specific suite run:
-    DASHBOARD_NEW_MOBILE=8123456789 ./venv/bin/robot tests/dashboard_tests.robot
+    DASHBOARD_NEW_MOBILE=8123456789 ./env/bin/robot tests/dashboard_tests.robot
 """
 
 import os

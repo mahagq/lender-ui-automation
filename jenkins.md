@@ -27,9 +27,11 @@ generates an Allure report, uploads it to S3, and preserves history for trend gr
 | renewal_journey_flow/choose_plan_tests | 8 | RENEWAL_MOBILE |
 | renewal_journey_flow/welcome_back_tests | 6 | RENEWAL_MOBILE |
 | renewal_journey_flow/verify_details_tests | 25 | RENEWAL_MOBILE |
-| lender_selection/lender_bureau_flow_tests | 4 | APP_CREATION_MOBILE (dynamic) |
-| lender_selection/new_application_lender_selection_tests | 12 | APP_CREATION_MOBILE (dynamic) |
-| lender_selection/renewal_application_lender_selection_tests | 6 | RENEWAL_MOBILE |
+| lender_selection/bureau_lender_flow_tests | 4 (robot:skip) | APP_CREATION_MOBILE (dynamic) |
+| lender_selection/bureau_lender_approval_tests | 1 | APP_CREATION_MOBILE (dynamic) |
+| lender_selection/bureau_lender_rejection_tests | 5 | LENDER_NR01–05_MOBILE (dynamic, per-test) |
+| lender_selection/bureau_lender_screen_UI_tests | 13 | APP_CREATION_MOBILE (dynamic) |
+| lender_selection/bureau_lender_flow_renewalapp_tests | 4 | RENEWAL_MOBILE |
 | lender_selection/bank_statement_tests | 6 (skipped) | APP_CREATION_MOBILE (dynamic) |
 | e2e/lender_selection_e2e_tests | 4 | APP_CREATION_MOBILE + RENEWAL_MOBILE |
 | application_creation_flow/student_details_tests | 40 | APP_CREATION_MOBILE |

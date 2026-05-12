@@ -70,10 +70,12 @@ Robot Framework UI automation suite for the GQ Customer Portal. Covers the login
 ./env/bin/robot --outputdir results/ tests/renewal_journey_flow/choose_plan_tests.robot
 ./env/bin/robot --outputdir results/ tests/renewal_journey_flow/welcome_back_tests.robot
 ./env/bin/robot --outputdir results/ tests/renewal_journey_flow/verify_details_tests.robot
-# Lender Selection suites (BRE API mocked via Evaluate JavaScript — Browser library v19 has no Route Fulfilled):
-./env/bin/robot --outputdir results/ tests/lender_selection/lender_bureau_flow_tests.robot
-./env/bin/robot --outputdir results/ tests/lender_selection/new_application_lender_selection_tests.robot
-./env/bin/robot --outputdir results/ tests/lender_selection/renewal_application_lender_selection_tests.robot
+# Lender Selection suites:
+./env/bin/robot --outputdir results/ tests/lender_selection/bureau_lender_flow_tests.robot
+./env/bin/robot --outputdir results/ tests/lender_selection/bureau_lender_approval_tests.robot
+./env/bin/robot --outputdir results/ tests/lender_selection/bureau_lender_rejection_tests.robot
+./env/bin/robot --outputdir results/ tests/lender_selection/bureau_lender_screen_UI_tests.robot
+./env/bin/robot --outputdir results/ tests/lender_selection/bureau_lender_flow_renewalapp_tests.robot
 ./env/bin/robot --outputdir results/ tests/lender_selection/bank_statement_tests.robot
 ./env/bin/robot --outputdir results/ tests/e2e/lender_selection_e2e_tests.robot
 # Application Creation Flow suites (APP_CREATION_MOBILE auto-generated fresh each run — do NOT set via env var):
@@ -105,8 +107,10 @@ Robot Framework UI automation suite for the GQ Customer Portal. Covers the login
 ./env/bin/robot --outputdir results/ --include edit-residential tests/renewal_journey_flow/verify_details_tests.robot # edit residential tests
 ./env/bin/robot --outputdir results/ --include edit-employment tests/renewal_journey_flow/verify_details_tests.robot  # edit employment tests
 ./env/bin/robot --outputdir results/ --include lender-selection tests/              # all lender selection tests
-./env/bin/robot --outputdir results/ --include lender-selection-new tests/          # new app lender selection
-./env/bin/robot --outputdir results/ --include lender-selection-renewal tests/      # renewal lender selection
+./env/bin/robot --outputdir results/ --include lender-selection-new tests/          # new app UI tests (bureau_lender_screen_UI_tests)
+./env/bin/robot --outputdir results/ --include lender-selection-renewal tests/      # renewal UI tests (bureau_lender_flow_renewalapp_tests)
+./env/bin/robot --outputdir results/ --include lender-approval tests/               # real BRE approval test (TC-LS-NA01)
+./env/bin/robot --outputdir results/ --include lender-rejection tests/              # real BRE rejection tests (TC-LS-NR01–05)
 ./env/bin/robot --outputdir results/ --include bank-statement tests/                # bank statement tests
 ./env/bin/robot --outputdir results/ --include lender-selection-e2e tests/          # lender selection E2E
 ./env/bin/robot --outputdir results/ --include smoke tests/                         # smoke tests (includes TC_LENDER_01/02)
@@ -154,9 +158,11 @@ tests/                     — Test suites (import resources and variables)
     welcome_back_tests.robot               — Renewal: Welcome Back pre-fill screen (13 tests; TC-WB01–WB13; 1 application per suite, Test Setup uses Go To /renewal-confirmation)
     verify_details_tests.robot             — Renewal: Verify Details — edit residential (Rented/Self Owned/Other), edit employment (salaried/SE), validations, proceed (62 tests; TC-VD01–VD62; 1 shared application + 1 for TC-VD62; Test Setup uses Go To /renewal-details; TC-VD61 navigates shared app to /confirm-application without submitting; TC-VD62 last creates fresh app within session and submits; consent is on /confirm-application not /renewal-details)
   lender_selection/
-    lender_bureau_flow_tests.robot              — 4 core bureau flow tests (TC_LENDER_01–04; smoke+regression+partial; BRE mocked)
-    new_application_lender_selection_tests.robot — 12 UI tests for new app lender selection (TC-LS-N01–N12)
-    renewal_application_lender_selection_tests.robot — 6 UI tests for renewal lender selection (TC-LS-R01–R06)
+    bureau_lender_flow_tests.robot              — 4 core BRE mocked bureau flow tests (TC_LENDER_01–04; smoke+regression+partial; robot:skip; BRE mocked via JS)
+    bureau_lender_approval_tests.robot          — 1 real BRE approval test (TC-LS-NA01; lender-approval; Western Capital → KYC)
+    bureau_lender_rejection_tests.robot         — 5 real BRE rejection tests (TC-LS-NR01–05; lender-rejection; each test owns fresh browser + app; plan-specific edge cases)
+    bureau_lender_screen_UI_tests.robot         — 13 UI tests for new app lender selection (TC-LS-N00–N12; lender-selection-new; shared session)
+    bureau_lender_flow_renewalapp_tests.robot   — 4 UI tests for renewal app lender selection (TC-LS-R01–R04; lender-selection-renewal; shared session)
     bank_statement_tests.robot                  — 6 bank statement journey tests (TC-BS-01–06; robot:skip until testids confirmed)
   application_creation_flow/
     student_details_tests.robot            — 40 student details tests (TC-5001–TC-5027, TC-5N-01–TC-5N-13)
@@ -273,27 +279,34 @@ Each wizard test suite uses a **single shared browser session** using `${APP_CRE
 
 ## Lender Selection Session Model
 
-Lender selection tests are split across **4 files**, each with a Suite Setup that creates a fresh application:
+Lender selection tests are split across **6 files**:
 
-| File | Suite Setup | Key variable |
-|------|-------------|-------------|
-| `lender_bureau_flow_tests.robot` | `Navigate To Lender Selection New App` | `${LENDER_APP_ID}` |
-| `new_application_lender_selection_tests.robot` | `Navigate To Lender Selection New App` | `${LENDER_APP_ID}` |
-| `renewal_application_lender_selection_tests.robot` | `Navigate To Lender Selection Renewal App` | `${LENDER_RENEWAL_APP_ID}` |
-| `bank_statement_tests.robot` | `Navigate To Bank Statement Via BRE Rejection` | `${BS_APP_CODE}` |
+| File | Suite Setup | Session model | Key variable |
+|------|-------------|---------------|-------------|
+| `bureau_lender_flow_tests.robot` | `Navigate To Lender Selection New App` | Shared session; state-advancing tests run last | `${LENDER_APP_ID}` |
+| `bureau_lender_approval_tests.robot` | `Navigate To Lender Selection New App` | Shared session; 1 test (real BRE) | `${LENDER_APP_ID}` |
+| `bureau_lender_rejection_tests.robot` | None (per-test `[Setup]`) | Each test owns fresh browser + app | `${LENDER_NR0N_MOBILE}` per test |
+| `bureau_lender_screen_UI_tests.robot` | `Navigate To Lender Selection New App` | Shared session; Test Setup resets to lender page | `${LENDER_APP_ID}` |
+| `bureau_lender_flow_renewalapp_tests.robot` | `Navigate To Lender Selection Renewal App` | Shared session; Test Setup resets to lender page | `${LENDER_RENEWAL_APP_ID}` |
+| `bank_statement_tests.robot` | `Navigate To Bank Statement Via BRE Rejection` | Shared session | `${BS_APP_CODE}` |
 
-**Common session model (all lender selection files):**
+**Common session model (shared-session files):**
 - `Suite Setup` — opens browser, creates fresh application, navigates to lender selection or bank statement page, captures dynamic `{app_id}` or `{app_code}` via `Extract App ID From Current URL` / `Extract App Code From Bank Statement URL`.
 - `Test Setup` — `Navigate To Lender Selection Within Session ${LENDER_APP_ID}`: hard-navigates to `/application-loader/{app_id}`. No new login.
 - `Test Teardown` — NONE (shared session preserved), except state-advancing tests which use `[Teardown] Unroute BRE Mock`.
 - `Suite Teardown` — `Close Browser`.
 
-**State-advancing tests (BRE mock tests) run LAST:**
-- TC-LS-N11, TC-LS-R05: `[Setup] NONE` — use Suite Setup app, mock REJECTED.
-- TC-LS-N12, TC-LS-R06: `[Setup] Navigate To Lender Selection New/Renewal App Within Session` — fresh app in same browser session.
+**bureau_lender_rejection_tests.robot** — isolated model:
+- Each test uses its own `[Setup] Login And Navigate To Lender Selection New App` with a unique `${LENDER_NR0N_MOBILE}` and plan index.
+- Each test uses `[Teardown] Close Browser` — no shared session.
+- TC-LS-NR05 uses `Login And Submit New App` (plan 4 — all bureau lenders ineligible, never reaches lender selection page).
+
+**State-advancing tests (BRE mock tests) in bureau_lender_flow_tests.robot run LAST:**
+- TC_LENDER_01: Suite Setup app, mock APPROVED → KYC.
+- TC_LENDER_02: `[Setup] Navigate To Lender Selection Within Session` — reset, mock REJECTED then APPROVED.
 - TC_LENDER_03, TC_LENDER_04: `[Teardown] Run Keywords    Unroute BRE Mock    AND    Run Keyword And Ignore Error    Close Browser` (partial tests).
 
-**BRE API mocking:** `Mock BRE Assign Lender    APPROVED|REJECTED` in `LenderSelectionPage.robot` uses `Evaluate JavaScript` to override `window.fetch`, intercepting `/v2/credit-engine/assign-lender` and `/v2/credit-engine/assign-lender/fetch` calls (Browser library v19 has no `Route Fulfilled`). Always call `Unroute BRE Mock` in test teardown to restore original `window.fetch`.
+**BRE API mocking:** `Mock BRE Assign Lender    APPROVED|REJECTED` in `LenderSelectionPage.robot` uses `Evaluate JavaScript` to override `window.fetch`, intercepting `/v2/credit-engine/assign-lender` and `/v2/credit-engine/assign-lender/fetch` calls. `Switch BRE Mock To    APPROVED|REJECTED` swaps the mock mid-test. Always call `Unroute BRE Mock` in teardown to restore original `window.fetch`.
 
 ## Locators
 

@@ -36,10 +36,12 @@ customer_portal_ui_automation/
 │   │   ├── welcome_back_tests.robot              # Renewal: Welcome Back screen (6 tests, TC-WB01–WB06)
 │   │   └── verify_details_tests.robot            # Renewal: Verify Details — edit/skip/confirm (25 tests, TC-VD01–VD25)
 │   ├── lender_selection/
-│   │   ├── lender_bureau_flow_tests.robot        # BRE bureau flow: 4 core scenarios (TC_LENDER_01–04; smoke+partial; BRE mocked)
-│   │   ├── new_application_lender_selection_tests.robot    # New app lender selection UI (12 tests, TC-LS-N01–N12)
-│   │   ├── renewal_application_lender_selection_tests.robot # Renewal lender selection UI (6 tests, TC-LS-R01–R06)
-│   │   └── bank_statement_tests.robot            # Bank statement journey (6 tests, robot:skip until testids confirmed)
+│   │   ├── bureau_lender_flow_tests.robot           # BRE mocked bureau flow: 4 core scenarios (TC_LENDER_01–04; smoke+partial; robot:skip)
+│   │   ├── bureau_lender_approval_tests.robot       # Real BRE approval: Western Capital → KYC (1 test, TC-LS-NA01; lender-approval)
+│   │   ├── bureau_lender_rejection_tests.robot      # Real BRE rejection: plan-specific edge cases (5 tests, TC-LS-NR01–05; lender-rejection; isolated sessions)
+│   │   ├── bureau_lender_screen_UI_tests.robot      # New app lender selection UI (13 tests, TC-LS-N00–N12; lender-selection-new)
+│   │   ├── bureau_lender_flow_renewalapp_tests.robot # Renewal lender selection UI (4 tests, TC-LS-R01–R04; lender-selection-renewal)
+│   │   └── bank_statement_tests.robot               # Bank statement journey (6 tests, robot:skip until testids confirmed)
 │   └── application_creation_flow/
 │       ├── student_details_tests.robot           # /student-details (40 tests, TC-5001–5N-13)
 │       ├── choose_plan_tests.robot               # /choose-plan (18 tests, TC-6001–6018)
@@ -90,7 +92,7 @@ customer_portal_ui_automation/
 - Browser (Playwright) library v19.9.0
 - Playwright browsers initialised (`rfbrowser init`)
 
-All dependencies live in the project virtualenv at `./venv/`.
+All dependencies live in the project virtualenv at `./env/`.
 
 ---
 
@@ -99,97 +101,101 @@ All dependencies live in the project virtualenv at `./venv/`.
 ### Run all suites
 
 ```bash
-./venv/bin/robot --outputdir results/ tests/
+./env/bin/robot --outputdir results/ tests/
 ```
 
 ### Run a single suite
 
 ```bash
 # Auth
-./venv/bin/robot --outputdir results/ tests/login_left_component_tests.robot
-./venv/bin/robot --outputdir results/ tests/login_tests.robot
-./venv/bin/robot --outputdir results/ tests/otp_tests.robot
-./venv/bin/robot --outputdir results/ tests/bypass_auth_tests.robot
+./env/bin/robot --outputdir results/ tests/login_left_component_tests.robot
+./env/bin/robot --outputdir results/ tests/login_tests.robot
+./env/bin/robot --outputdir results/ tests/otp_tests.robot
+./env/bin/robot --outputdir results/ tests/bypass_auth_tests.robot
 
 # Dashboard
-./venv/bin/robot --outputdir results/ tests/dashboard/dashboard_tests.robot
-./venv/bin/robot --outputdir results/ tests/dashboard/dashboard_emi_tests.robot
-./venv/bin/robot --outputdir results/ tests/dashboard/dashboard_ad_tests.robot
-./venv/bin/robot --outputdir results/ tests/dashboard/dashboard_pg_tests.robot
-./venv/bin/robot --outputdir results/ tests/dashboard/dashboard_new_user_tests.robot
-./venv/bin/robot --outputdir results/ tests/dashboard/dashboard_ins_tests.robot
-./venv/bin/robot --outputdir results/ tests/dashboard/dashboard_ins_new_user_tests.robot
+./env/bin/robot --outputdir results/ tests/dashboard/dashboard_tests.robot
+./env/bin/robot --outputdir results/ tests/dashboard/dashboard_emi_tests.robot
+./env/bin/robot --outputdir results/ tests/dashboard/dashboard_ad_tests.robot
+./env/bin/robot --outputdir results/ tests/dashboard/dashboard_pg_tests.robot
+./env/bin/robot --outputdir results/ tests/dashboard/dashboard_new_user_tests.robot
+./env/bin/robot --outputdir results/ tests/dashboard/dashboard_ins_tests.robot
+./env/bin/robot --outputdir results/ tests/dashboard/dashboard_ins_new_user_tests.robot
 
 # E2E
-./venv/bin/robot --outputdir results/ tests/e2e/e2e_create_application_tests.robot
-./venv/bin/robot --outputdir results/ tests/e2e/smoke_e2e_tests.robot
-./venv/bin/robot --outputdir results/ tests/e2e/resume_journey_e2e_tests.robot
-./venv/bin/robot --outputdir results/ tests/e2e/renewal_flow_e2e_tests.robot
+./env/bin/robot --outputdir results/ tests/e2e/e2e_create_application_tests.robot
+./env/bin/robot --outputdir results/ tests/e2e/smoke_e2e_tests.robot
+./env/bin/robot --outputdir results/ tests/e2e/resume_journey_e2e_tests.robot
+./env/bin/robot --outputdir results/ tests/e2e/renewal_flow_e2e_tests.robot
 
 # Renewal Journey Flow
-./venv/bin/robot --outputdir results/ tests/renewal_journey_flow/student_details_tests.robot
-./venv/bin/robot --outputdir results/ tests/renewal_journey_flow/choose_plan_tests.robot
-./venv/bin/robot --outputdir results/ tests/renewal_journey_flow/welcome_back_tests.robot
-./venv/bin/robot --outputdir results/ tests/renewal_journey_flow/verify_details_tests.robot
+./env/bin/robot --outputdir results/ tests/renewal_journey_flow/student_details_tests.robot
+./env/bin/robot --outputdir results/ tests/renewal_journey_flow/choose_plan_tests.robot
+./env/bin/robot --outputdir results/ tests/renewal_journey_flow/welcome_back_tests.robot
+./env/bin/robot --outputdir results/ tests/renewal_journey_flow/verify_details_tests.robot
 
 # Lender Selection
-./venv/bin/robot --outputdir results/ tests/lender_selection/lender_bureau_flow_tests.robot
-./venv/bin/robot --outputdir results/ tests/lender_selection/new_application_lender_selection_tests.robot
-./venv/bin/robot --outputdir results/ tests/lender_selection/renewal_application_lender_selection_tests.robot
-./venv/bin/robot --outputdir results/ tests/lender_selection/bank_statement_tests.robot
-./venv/bin/robot --outputdir results/ tests/e2e/lender_selection_e2e_tests.robot
+./env/bin/robot --outputdir results/ tests/lender_selection/bureau_lender_flow_tests.robot
+./env/bin/robot --outputdir results/ tests/lender_selection/bureau_lender_approval_tests.robot
+./env/bin/robot --outputdir results/ tests/lender_selection/bureau_lender_rejection_tests.robot
+./env/bin/robot --outputdir results/ tests/lender_selection/bureau_lender_screen_UI_tests.robot
+./env/bin/robot --outputdir results/ tests/lender_selection/bureau_lender_flow_renewalapp_tests.robot
+./env/bin/robot --outputdir results/ tests/lender_selection/bank_statement_tests.robot
+./env/bin/robot --outputdir results/ tests/e2e/lender_selection_e2e_tests.robot
 
 # Application Creation Flow
-./venv/bin/robot --outputdir results/ tests/application_creation_flow/student_details_tests.robot
-./venv/bin/robot --outputdir results/ tests/application_creation_flow/choose_plan_tests.robot
-./venv/bin/robot --outputdir results/ tests/application_creation_flow/select_applicant_tests.robot
-./venv/bin/robot --outputdir results/ tests/application_creation_flow/applicant_basic_details_tests.robot
-./venv/bin/robot --outputdir results/ tests/application_creation_flow/onboarding_tests.robot
-./venv/bin/robot --outputdir results/ tests/application_creation_flow/personal_details_tests.robot
-./venv/bin/robot --outputdir results/ tests/application_creation_flow/residential_details_tests.robot
-./venv/bin/robot --outputdir results/ tests/application_creation_flow/employment_tests.robot
-./venv/bin/robot --outputdir results/ tests/application_creation_flow/confirm_application_tests.robot
+./env/bin/robot --outputdir results/ tests/application_creation_flow/student_details_tests.robot
+./env/bin/robot --outputdir results/ tests/application_creation_flow/choose_plan_tests.robot
+./env/bin/robot --outputdir results/ tests/application_creation_flow/select_applicant_tests.robot
+./env/bin/robot --outputdir results/ tests/application_creation_flow/applicant_basic_details_tests.robot
+./env/bin/robot --outputdir results/ tests/application_creation_flow/onboarding_tests.robot
+./env/bin/robot --outputdir results/ tests/application_creation_flow/personal_details_tests.robot
+./env/bin/robot --outputdir results/ tests/application_creation_flow/residential_details_tests.robot
+./env/bin/robot --outputdir results/ tests/application_creation_flow/employment_tests.robot
+./env/bin/robot --outputdir results/ tests/application_creation_flow/confirm_application_tests.robot
 ```
 
 ### Run by tag
 
 ```bash
-./venv/bin/robot --include smoke --outputdir results/ tests/
-./venv/bin/robot --include login --outputdir results/ tests/
-./venv/bin/robot --include otp --outputdir results/ tests/
-./venv/bin/robot --include bypass-auth --outputdir results/ tests/
-./venv/bin/robot --include dashboard --outputdir results/ tests/
-./venv/bin/robot --include application-creation-flow --outputdir results/ tests/
-./venv/bin/robot --include negative --outputdir results/ tests/
-./venv/bin/robot --include salaried --outputdir results/ tests/application_creation_flow/employment_tests.robot
-./venv/bin/robot --include self-employed --outputdir results/ tests/application_creation_flow/employment_tests.robot
-./venv/bin/robot --include resend --outputdir results/ tests/otp_tests.robot    # ~3 min
-./venv/bin/robot --include e2e --outputdir results/ tests/e2e/
-./venv/bin/robot --include renewal --outputdir results/ tests/
-./venv/bin/robot --include renewal-journey-flow --outputdir results/ tests/renewal_journey_flow/
-./venv/bin/robot --include skip-journey --outputdir results/ tests/renewal_journey_flow/verify_details_tests.robot
-./venv/bin/robot --include edit-residential --outputdir results/ tests/renewal_journey_flow/verify_details_tests.robot
-./venv/bin/robot --include edit-employment --outputdir results/ tests/renewal_journey_flow/verify_details_tests.robot
-./venv/bin/robot --include lender-selection --outputdir results/ tests/
-./venv/bin/robot --include lender-selection-new --outputdir results/ tests/
-./venv/bin/robot --include lender-selection-renewal --outputdir results/ tests/
-./venv/bin/robot --include bank-statement --outputdir results/ tests/
-./venv/bin/robot --include lender-selection-e2e --outputdir results/ tests/
-./venv/bin/robot --include partial --outputdir results/ tests/lender_selection/lender_bureau_flow_tests.robot
+./env/bin/robot --include smoke --outputdir results/ tests/
+./env/bin/robot --include login --outputdir results/ tests/
+./env/bin/robot --include otp --outputdir results/ tests/
+./env/bin/robot --include bypass-auth --outputdir results/ tests/
+./env/bin/robot --include dashboard --outputdir results/ tests/
+./env/bin/robot --include application-creation-flow --outputdir results/ tests/
+./env/bin/robot --include negative --outputdir results/ tests/
+./env/bin/robot --include salaried --outputdir results/ tests/application_creation_flow/employment_tests.robot
+./env/bin/robot --include self-employed --outputdir results/ tests/application_creation_flow/employment_tests.robot
+./env/bin/robot --include resend --outputdir results/ tests/otp_tests.robot    # ~3 min
+./env/bin/robot --include e2e --outputdir results/ tests/e2e/
+./env/bin/robot --include renewal --outputdir results/ tests/
+./env/bin/robot --include renewal-journey-flow --outputdir results/ tests/renewal_journey_flow/
+./env/bin/robot --include skip-journey --outputdir results/ tests/renewal_journey_flow/verify_details_tests.robot
+./env/bin/robot --include edit-residential --outputdir results/ tests/renewal_journey_flow/verify_details_tests.robot
+./env/bin/robot --include edit-employment --outputdir results/ tests/renewal_journey_flow/verify_details_tests.robot
+./env/bin/robot --include lender-selection --outputdir results/ tests/
+./env/bin/robot --include lender-selection-new --outputdir results/ tests/
+./env/bin/robot --include lender-selection-renewal --outputdir results/ tests/
+./env/bin/robot --include lender-approval --outputdir results/ tests/
+./env/bin/robot --include lender-rejection --outputdir results/ tests/
+./env/bin/robot --include bank-statement --outputdir results/ tests/
+./env/bin/robot --include lender-selection-e2e --outputdir results/ tests/
+./env/bin/robot --include partial --outputdir results/ tests/lender_selection/bureau_lender_flow_tests.robot
 ```
 
 ### Dry run (syntax check, no browser)
 
 ```bash
-./venv/bin/robot --dryrun tests/
+./env/bin/robot --dryrun tests/
 ```
 
 ### Override base URL or mobile number
 
 ```bash
-./venv/bin/robot --variable BASE_URL:https://other-env.example.com --outputdir results/ tests/
-TEST_MOBILE=9999900000 ./venv/bin/robot --outputdir results/ tests/
-BYPASS_AUTH_MOBILE=<erp_mobile> ./venv/bin/robot --outputdir results/ tests/bypass_auth_tests.robot
+./env/bin/robot --variable BASE_URL:https://other-env.example.com --outputdir results/ tests/
+TEST_MOBILE=9999900000 ./env/bin/robot --outputdir results/ tests/
+BYPASS_AUTH_MOBILE=<erp_mobile> ./env/bin/robot --outputdir results/ tests/bypass_auth_tests.robot
 ```
 
 ---
@@ -217,9 +223,11 @@ BYPASS_AUTH_MOBILE=<erp_mobile> ./venv/bin/robot --outputdir results/ tests/bypa
 | renewal_journey_flow/choose_plan_tests | 8 | /choose-plan (renewal) |
 | renewal_journey_flow/welcome_back_tests | 6 | Welcome Back screen |
 | renewal_journey_flow/verify_details_tests | 25 | Verify Details — edit, skip, confirm |
-| lender_selection/lender_bureau_flow_tests | 4 | /application-loader/{app_id} — BRE bureau scenarios |
-| lender_selection/new_application_lender_selection_tests | 12 | /application-loader/{app_id} — new app UI |
-| lender_selection/renewal_application_lender_selection_tests | 6 | /application-loader/{app_id} — renewal UI |
+| lender_selection/bureau_lender_flow_tests | 4 | /application-loader/{app_id} — BRE mocked bureau scenarios (robot:skip) |
+| lender_selection/bureau_lender_approval_tests | 1 | /application-loader/{app_id} — real BRE approval → KYC |
+| lender_selection/bureau_lender_rejection_tests | 5 | /application-loader/{app_id} — real BRE rejection edge cases (isolated sessions) |
+| lender_selection/bureau_lender_screen_UI_tests | 13 | /application-loader/{app_id} — new app lender selection UI |
+| lender_selection/bureau_lender_flow_renewalapp_tests | 4 | /application-loader/{app_id} — renewal lender selection UI |
 | lender_selection/bank_statement_tests | 6 (all skipped) | /bank-statement/{app_code} |
 | e2e/lender_selection_e2e_tests | 4 | Full E2E: new+renewal × APPROVED+REJECTED |
 | application_creation_flow/student_details_tests | 40 | /student-details |
