@@ -48,10 +48,10 @@ Robot Framework UI automation suite for the GQ Customer Portal. Covers the login
 
 ### Run a single test file
 ```bash
-./env/bin/robot --outputdir results/ tests/login_left_component_tests.robot
-./env/bin/robot --outputdir results/ tests/login_tests.robot
-./env/bin/robot --outputdir results/ tests/otp_tests.robot
-./env/bin/robot --outputdir results/ tests/bypass_auth_tests.robot
+./env/bin/robot --outputdir results/ tests/login/login_left_component_tests.robot
+./env/bin/robot --outputdir results/ tests/login/login_tests.robot
+./env/bin/robot --outputdir results/ tests/login/otp_tests.robot
+./env/bin/robot --outputdir results/ tests/login/bypass_auth_tests.robot
 # Dashboard suites:
 ./env/bin/robot --outputdir results/ tests/dashboard/dashboard_tests.robot
 ./env/bin/robot --outputdir results/ tests/dashboard/dashboard_emi_tests.robot
@@ -97,7 +97,7 @@ Robot Framework UI automation suite for the GQ Customer Portal. Covers the login
 ./env/bin/robot --outputdir results/ --include otp tests/                      # OTP tests only
 ./env/bin/robot --outputdir results/ --include bypass-auth tests/              # bypass auth tests only
 ./env/bin/robot --outputdir results/ --include dashboard tests/                # dashboard tests only
-./env/bin/robot --outputdir results/ --include resend tests/otp_tests.robot    # ~3min resend test
+./env/bin/robot --outputdir results/ --include resend tests/login/otp_tests.robot    # ~3min resend test
 ./env/bin/robot --outputdir results/ --include application-creation-flow tests/  # all wizard tests
 ./env/bin/robot --outputdir results/ --include salaried tests/application_creation_flow/employment_tests.robot    # salaried only
 ./env/bin/robot --outputdir results/ --include self-employed tests/application_creation_flow/employment_tests.robot  # SE only
@@ -127,17 +127,18 @@ Robot Framework UI automation suite for the GQ Customer Portal. Covers the login
 ./env/bin/robot --variable BASE_URL:https://other-env.example.com --outputdir results/ tests/
 TEST_MOBILE=9999999999 ./env/bin/robot --outputdir results/ tests/
 # TC-401 bypass auth redirect test — requires an ERP-registered mobile (see Bypass Auth section):
-BYPASS_AUTH_MOBILE=<erp_mobile> ./env/bin/robot --outputdir results/ tests/bypass_auth_tests.robot
+BYPASS_AUTH_MOBILE=<erp_mobile> ./env/bin/robot --outputdir results/ tests/login/bypass_auth_tests.robot
 ```
 
 ## Architecture
 
 ```
 tests/                     — Test suites (import resources and variables)
-  login_left_component_tests.robot  — 9 left panel component tests (TC-101–TC-109)
-  login_tests.robot                 — 23 login form tests (TC-201, TC-207–TC-228)
-  otp_tests.robot                   — 18 OTP tests: 15 active, 3 skipped (TC-301–TC-318)
-  bypass_auth_tests.robot           — 4 bypass auth tests (3 skipped — TC-401, TC-403, TC-404)
+  login/
+    login_left_component_tests.robot  — 9 left panel component tests (TC-101–TC-109)
+    login_tests.robot                 — 23 login form tests (TC-201, TC-207–TC-228)
+    otp_tests.robot                   — 18 OTP tests: 15 active, 3 skipped (TC-301–TC-318)
+    bypass_auth_tests.robot           — 4 bypass auth tests (3 skipped — TC-401, TC-403, TC-404)
   dashboard/
     dashboard_tests.robot             — 11 dashboard tests (2 skipped — TC-4004, TC-4005): header, create-app, insurance tab nav, logout
     dashboard_new_user_tests.robot    — 4 new-user empty state tests (TC-4047–TC-4050; DASHBOARD_NEW_MOBILE, independent)

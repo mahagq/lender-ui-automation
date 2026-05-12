@@ -7,7 +7,7 @@ Documentation
 ...    No SMS dependency. Tests run reliably in CI without a gateway.
 ...    OTP timer: 180 seconds before the Resend OTP link becomes visible (T4 boundary).
 ...    Resend OTP test is tagged "slow" and "resend" — excluded from default CI runs (TN1 resolution).
-...    Run with: robot --include resend tests/otp_tests.robot
+...    Run with: robot --include resend tests/login/otp_tests.robot
 ...
 ...    Covers:
 ...      - Field visibility and editability
@@ -30,9 +30,9 @@ Documentation
 ...               O1 (dry-run safe), O2 (results output), TN1, TN2
 
 Library          Browser
-Resource         ../resources/LoginPage.robot
-Resource         ../resources/OTPPage.robot
-Resource         ../variables/variables.robot
+Resource         ../../resources/LoginPage.robot
+Resource         ../../resources/OTPPage.robot
+Resource         ../../variables/variables.robot
 
 Suite Setup      New Browser    ${BROWSER}    headless=${HEADLESS}
 Suite Teardown   Close Browser

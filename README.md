@@ -12,10 +12,11 @@ Covers the login left component, mobile number login form, OTP verification flow
 ```
 customer_portal_ui_automation/
 ├── tests/
-│   ├── login_left_component_tests.robot      # Left panel component tests (9 tests, TC-101–109)
-│   ├── login_tests.robot                     # Login form tests (23 tests, TC-201, TC-207–228)
-│   ├── otp_tests.robot                       # OTP verification tests (18 tests, 3 skipped, TC-301–318)
-│   ├── bypass_auth_tests.robot               # Bypass auth tests (4 tests, 3 skipped)
+│   ├── login/
+│   │   ├── login_left_component_tests.robot  # Left panel component tests (9 tests, TC-101–109)
+│   │   ├── login_tests.robot                 # Login form tests (23 tests, TC-201, TC-207–228)
+│   │   ├── otp_tests.robot                   # OTP verification tests (18 tests, 3 skipped, TC-301–318)
+│   │   └── bypass_auth_tests.robot           # Bypass auth tests (4 tests, 3 skipped)
 │   ├── dashboard/
 │   │   ├── dashboard_tests.robot             # Dashboard — header/create-app/insurance/logout (11 tests, 2 skipped)
 │   │   ├── dashboard_emi_tests.robot         # EMI tab tests (5 tests; DASHBOARD_MOBILE)
@@ -108,10 +109,10 @@ All dependencies live in the project virtualenv at `./env/`.
 
 ```bash
 # Auth
-./env/bin/robot --outputdir results/ tests/login_left_component_tests.robot
-./env/bin/robot --outputdir results/ tests/login_tests.robot
-./env/bin/robot --outputdir results/ tests/otp_tests.robot
-./env/bin/robot --outputdir results/ tests/bypass_auth_tests.robot
+./env/bin/robot --outputdir results/ tests/login/login_left_component_tests.robot
+./env/bin/robot --outputdir results/ tests/login/login_tests.robot
+./env/bin/robot --outputdir results/ tests/login/otp_tests.robot
+./env/bin/robot --outputdir results/ tests/login/bypass_auth_tests.robot
 
 # Dashboard
 ./env/bin/robot --outputdir results/ tests/dashboard/dashboard_tests.robot
@@ -167,7 +168,7 @@ All dependencies live in the project virtualenv at `./env/`.
 ./env/bin/robot --include negative --outputdir results/ tests/
 ./env/bin/robot --include salaried --outputdir results/ tests/application_creation_flow/employment_tests.robot
 ./env/bin/robot --include self-employed --outputdir results/ tests/application_creation_flow/employment_tests.robot
-./env/bin/robot --include resend --outputdir results/ tests/otp_tests.robot    # ~3 min
+./env/bin/robot --include resend --outputdir results/ tests/login/otp_tests.robot    # ~3 min
 ./env/bin/robot --include e2e --outputdir results/ tests/e2e/
 ./env/bin/robot --include renewal --outputdir results/ tests/
 ./env/bin/robot --include renewal-journey-flow --outputdir results/ tests/renewal_journey_flow/
@@ -195,7 +196,7 @@ All dependencies live in the project virtualenv at `./env/`.
 ```bash
 ./env/bin/robot --variable BASE_URL:https://other-env.example.com --outputdir results/ tests/
 TEST_MOBILE=9999900000 ./env/bin/robot --outputdir results/ tests/
-BYPASS_AUTH_MOBILE=<erp_mobile> ./env/bin/robot --outputdir results/ tests/bypass_auth_tests.robot
+BYPASS_AUTH_MOBILE=<erp_mobile> ./env/bin/robot --outputdir results/ tests/login/bypass_auth_tests.robot
 ```
 
 ---
@@ -204,10 +205,10 @@ BYPASS_AUTH_MOBILE=<erp_mobile> ./env/bin/robot --outputdir results/ tests/bypas
 
 | Suite File | Tests | Page(s) |
 |------------|-------|---------|
-| login_left_component_tests | 9 | Left panel |
-| login_tests | 23 | / (login form) |
-| otp_tests | 18 (3 skipped) | /verify |
-| bypass_auth_tests | 4 (3 skipped) | /instant-eligibility |
+| login/login_left_component_tests | 9 | Left panel |
+| login/login_tests | 23 | / (login form) |
+| login/otp_tests | 18 (3 skipped) | /verify |
+| login/bypass_auth_tests | 4 (3 skipped) | /instant-eligibility |
 | dashboard/dashboard_tests | 11 (2 skipped) | /my-applications |
 | dashboard/dashboard_emi_tests | 5 | /my-applications#emi |
 | dashboard/dashboard_ad_tests | 10 | /my-applications#ad |

@@ -8,10 +8,10 @@ generates an Allure report, uploads it to S3, and preserves history for trend gr
 
 | Suite File | Tests | Account |
 |------------|-------|---------|
-| login_left_component_tests | 9 | TEST_MOBILE |
-| login_tests | 23 | OTP_MOBILE_* / EXT_* |
-| otp_tests | 18 (3 skipped) | OTP_MOBILE_* / EXT_* |
-| bypass_auth_tests | 4 (3 skipped) | TEST_MOBILE |
+| login/login_left_component_tests | 9 | TEST_MOBILE |
+| login/login_tests | 23 | OTP_MOBILE_* / EXT_* |
+| login/otp_tests | 18 (3 skipped) | OTP_MOBILE_* / EXT_* |
+| login/bypass_auth_tests | 4 (3 skipped) | TEST_MOBILE |
 | dashboard/dashboard_tests | 11 (2 skipped) | DASHBOARD_MOBILE → NEW_USER_MOBILE |
 | dashboard/dashboard_emi_tests | 5 | DASHBOARD_MOBILE |
 | dashboard/dashboard_ad_tests | 10 | AD_MOBILE |

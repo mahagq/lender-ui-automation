@@ -16,8 +16,8 @@ Documentation
 ...    Satisfies: TC-401 to TC-404
 
 Library          Browser
-Resource         ../resources/BypassAuthPage.robot
-Resource         ../variables/variables.robot
+Resource         ../../resources/BypassAuthPage.robot
+Resource         ../../variables/variables.robot
 
 Suite Setup      New Browser    ${BROWSER}    headless=${HEADLESS}
 Suite Teardown   Close Browser

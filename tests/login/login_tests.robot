@@ -24,9 +24,9 @@ Documentation
 ...               S1 (credentials in variables file), O1 (dry-run safe), O2 (results output)
 
 Library          Browser
-Resource         ../resources/LoginPage.robot
-Resource         ../resources/OTPPage.robot
-Resource         ../variables/variables.robot
+Resource         ../../resources/LoginPage.robot
+Resource         ../../resources/OTPPage.robot
+Resource         ../../variables/variables.robot
 
 Suite Setup      New Browser    ${BROWSER}    headless=${HEADLESS}
 Suite Teardown   Close Browser

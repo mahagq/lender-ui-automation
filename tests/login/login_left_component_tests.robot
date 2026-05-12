@@ -20,9 +20,9 @@ Documentation
 ...    Satisfies: TC-101 to TC-109
 
 Library          Browser
-Resource         ../resources/LoginPage.robot
-Resource         ../resources/LoginLeftComponent.robot
-Resource         ../variables/variables.robot
+Resource         ../../resources/LoginPage.robot
+Resource         ../../resources/LoginLeftComponent.robot
+Resource         ../../variables/variables.robot
 
 Suite Setup      Open Left Component Page
 Suite Teardown   Close Browser
