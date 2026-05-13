@@ -89,6 +89,7 @@ Create Full Application
     # ── Resolve mobile ───────────────────────────────────────────────────────────
     ${resolved_mobile}=    Resolve Mobile Number    ${login_mobile}
     Log    Using mobile: ${resolved_mobile}    console=True
+    Set Suite Variable    ${LAST_USED_MOBILE}    ${resolved_mobile}
 
     # ── Step 1: Login ────────────────────────────────────────────────────────────
     New Browser    ${BROWSER}    headless=${HEADLESS}
@@ -399,3 +400,33 @@ Create Full Renewal Application With Lender Assignment
         Click First Available Continue Button
     END
     Wait For Bureau Decision
+
+Perform KYC Bypass Journey
+    [Documentation]
+    ...    Unified new/renewal E2E flow with DB-based KYC bypass.
+    ...    journey_type='new'     — full 13-step wizard (dynamic fresh mobile), plan 1, Western Capital.
+    ...    journey_type='renewal' — renewal flow (${RENEWAL_MOBILE} or override via mobile arg), plan 1, Western Capital.
+    ...    On landing at /okyc/{app_id}: runs Bypass KYC Via Database, reloads page, asserts /esign/{app_id}.
+    ...    Calling suite MUST import: LenderSelectionPage.robot, OKYCPage.robot, KycBypassDb library.
+    [Arguments]    ${journey_type}=new    ${mobile}=${EMPTY}    ${lender_name}=Western Capital
+
+    IF    '${journey_type}' == 'new'
+        Create Full Application With Lender Assignment
+        ...    ${APP_STUDENT_FIRST_NAME}    ${APP_STUDENT_LAST_NAME}    ${APP_LOAN_AMOUNT}
+        ...    ${APP_FIRST_NAME}    ${APP_LAST_NAME}    ${APP_PAN_NUMBER}
+        ...    ${APP_DOB_YEAR}    ${APP_DOB_MONTH}    ${APP_DOB_DAY}
+        ...    ${APP_EMAIL}    ${APP_ADDRESS_LINE1}    ${APP_ADDRESS_LINE2}    ${APP_PINCODE}
+        ...    ${APP_EMPLOYER_NAME}    ${APP_MONTHLY_SALARY}
+        ...    plan_index=1    lender_name=${lender_name}
+        ${active_mobile}=    Set Variable    ${LAST_USED_MOBILE}
+    ELSE
+        ${active_mobile}=    Set Variable If    '${mobile}'.strip() != ''    ${mobile}    ${RENEWAL_MOBILE}
+        Create Full Renewal Application With Lender Assignment    plan_index=1    lender_name=${lender_name}
+    END
+    Successful Lender Assignment Should Be Visible
+    Click Proceed To KYC
+    OKYC URL Should Be Active
+    ${app_id}=    Extract App ID From OKYC URL
+    Bypass KYC Via Database    ${active_mobile}    ${app_id}
+    Reload
+    Wait Until Keyword Succeeds    ${SUBMISSION_TIMEOUT}    500ms    Esign URL Should Be Active    ${app_id}

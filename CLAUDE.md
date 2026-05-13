@@ -82,6 +82,8 @@ Robot Framework UI automation suite for the GQ Customer Portal. Covers the login
 ./env/bin/robot --outputdir results/ tests/lender_selection/bureau_lender_flow_renewalapp_tests.robot
 ./env/bin/robot --outputdir results/ tests/lender_selection/bank_statement_tests.robot
 ./env/bin/robot --outputdir results/ tests/e2e/lender_selection_e2e_tests.robot
+# KYC Bypass E2E (requires .env.db with DB_HOST/DB_USER/DB_PASSWORD/DB_NAME):
+./env/bin/robot --outputdir results/ tests/e2e/kyc_bypass_e2e_tests.robot
 # Application Creation Flow suites (APP_CREATION_MOBILE auto-generated fresh each run — do NOT set via env var):
 ./env/bin/robot --outputdir results/ tests/application_creation_flow/student_details_tests.robot
 ./env/bin/robot --outputdir results/ tests/application_creation_flow/choose_plan_tests.robot
@@ -121,6 +123,7 @@ Robot Framework UI automation suite for the GQ Customer Portal. Covers the login
 ./env/bin/robot --outputdir results/ --include lender-rejection tests/              # real BRE rejection tests (TC-LS-NR01–05)
 ./env/bin/robot --outputdir results/ --include bank-statement tests/                # bank statement tests
 ./env/bin/robot --outputdir results/ --include lender-selection-e2e tests/          # lender selection E2E
+./env/bin/robot --outputdir results/ --include kyc-bypass tests/                    # KYC DB bypass E2E (TC-KYC-E01 new, TC-KYC-E02 renewal)
 ./env/bin/robot --outputdir results/ --include smoke tests/                         # smoke tests (includes TC_LENDER_01/02)
 ./env/bin/robot --outputdir results/ --include partial tests/                       # partial tests (TC_LENDER_03/04)
 ```
@@ -129,6 +132,17 @@ Robot Framework UI automation suite for the GQ Customer Portal. Covers the login
 ```bash
 ./env/bin/robot --dryrun tests/
 ```
+
+### KYC bypass DB credentials setup
+```bash
+cp .env.db.template .env.db
+# Fill in .env.db:
+# DB_HOST=sandbox-app-uat-mysql8.ctumc26e6kyn.ap-south-1.rds.amazonaws.com
+# DB_USER=...
+# DB_PASSWORD=...
+# DB_NAME=gq_migrate
+```
+In CI/CD (Jenkins): inject `DB_HOST`, `DB_USER`, `DB_PASSWORD`, `DB_NAME` as environment variables via `withCredentials`. `db_config.py` checks `.env.db` first; falls back to env vars if file absent.
 
 ### Override base URL or mobile number
 ```bash
@@ -142,6 +156,15 @@ BYPASS_AUTH_MOBILE=<erp_mobile> ./env/bin/robot --outputdir results/ tests/login
 
 ```
 tests/                     — Test suites (import resources and variables)
+  e2e/
+    e2e_create_application_tests.robot     — Data-driven full E2E application creation (Login → Confirm & Submit; driven by data/application_data.xlsx)
+    smoke_e2e_tests.robot                  — Single fixed happy-path E2E (Salaried + Parent/Guardian; 1 test)
+    resume_journey_e2e_tests.robot         — Resume-at-every-page: 10 tests (TC-RE01–TC-RE10) closing at each wizard page and resuming (RESUME_MOBILE)
+    resume_journey_renewal_e2e_tests.robot — Renewal resume: 6 tests (TC-RER01–TC-RER05, TC-RER07) closing/resuming at each renewal step (RENEWAL_MOBILE)
+    resume_journey_se_e2e_tests.robot      — SE resume: 2 tests (TC-RESE01–TC-RESE02) for self-employed employment variant (RESUME_MOBILE)
+    renewal_flow_e2e_tests.robot           — Data-driven renewal E2E (existing account; Welcome Back → Verify Details; driven by renewal_application_data.xlsx)
+    lender_selection_e2e_tests.robot       — 4 E2E lender selection tests (TC-LS-E01–E04; E01/E03 plan 1 + Western Capital lender → KYC; E02/E04 plan 2 → Bank Statement; real BRE)
+    kyc_bypass_e2e_tests.robot             — 2 KYC DB bypass E2E tests (TC-KYC-E01 new app, TC-KYC-E02 renewal; kyc-bypass tag)
   login/
     login_left_component_tests.robot  — 9 left panel component tests (TC-101–TC-109)
     login_tests.robot                 — 23 login form tests (TC-201, TC-207–TC-228)
@@ -159,12 +182,6 @@ tests/                     — Test suites (import resources and variables)
     dashboard_pg_tests.robot          — 21 PG/Transaction History tests (TC-4003, TC-4013–TC-4029, TC-4051, TC-4030–TC-4031; PG_MOBILE 7757855472, independent)
     dashboard_ins_tests.robot         — 11 insurance tab tests (TC-4101–TC-4111; INS_MOBILE 8668768645, independent)
     dashboard_ins_new_user_tests.robot — 4 insurance new-user tests (TC-4112–TC-4115; DASHBOARD_NEW_MOBILE, independent)
-  e2e/
-    e2e_create_application_tests.robot     — Data-driven full E2E application creation (Login → Confirm & Submit; driven by data/application_data.xlsx)
-    smoke_e2e_tests.robot                  — Single fixed happy-path E2E (Salaried + Parent/Guardian; 1 test)
-    resume_journey_e2e_tests.robot         — Resume-at-every-page: 9 tests closing at each wizard page and resuming (RESUME_MOBILE)
-    renewal_flow_e2e_tests.robot           — Data-driven renewal E2E (existing account; Welcome Back → Verify Details; driven by renewal_application_data.xlsx)
-    lender_selection_e2e_tests.robot            — 4 E2E lender selection tests (TC-LS-E01–E04; E01/E03 plan 1 + Western Capital lender → KYC; E02/E04 plan 2 → Bank Statement; real BRE)
   renewal_journey_flow/
     student_details_tests.robot            — Renewal: Student Details (7 tests, TC-R5001–TC-R5007; RENEWAL_MOBILE)
     choose_plan_tests.robot                — Renewal: Choose Plan (8 tests, TC-R6001–TC-R6008; RENEWAL_MOBILE)
@@ -178,15 +195,15 @@ tests/                     — Test suites (import resources and variables)
     bureau_lender_flow_renewalapp_tests.robot   — 4 UI tests for renewal app lender selection (TC-LS-R01–R04; lender-selection-renewal; shared session)
     bank_statement_tests.robot                  — 8 bank statement journey tests (TC-BS-01–TC-BS-08; TC-BS-01–TC-BS-07 active, TC-BS-08 robot:skip)
   application_creation_flow/
-    student_details_tests.robot            — 40 student details tests (TC-5001–TC-5027, TC-5N-01–TC-5N-13; 1 skipped — GILE Board Resets When Location Is Changed robot:skip)
+    student_details_tests.robot            — 47 student details tests (TC-5001–TC-5027, TC-5N-01–TC-5N-13, plus 7 unnumbered validation tests; 1 skipped — GILE Board Resets When Location Is Changed robot:skip)
     choose_plan_tests.robot                — 18 choose plan tests (TC-6001–TC-6018)
     select_applicant_tests.robot           — 19 select applicant tests (TC-7001–TC-7020; 1 skipped — TC-7007 robot:skip)
     applicant_basic_details_tests.robot    — 23 applicant basic details tests (TC-8001–TC-8014-S, independent)
     onboarding_tests.robot                 — 7 onboarding tests (TC-9001–TC-9N-01, independent)
     personal_details_tests.robot           — 18 personal details tests (TC-10001–TC-10N-10, independent)
-    residential_details_tests.robot        — 12 residential details tests (TC-11001–TC-11N-05, independent)
+    residential_details_tests.robot        — 13 residential details tests (TC-11001–TC-11N-05, independent)
     employment_tests.robot                 — 46 employment tests: 7 type + 13 salaried + 10 SE + 12 validation + misc (TC-12001–TC-12N-SE06; 1 skipped — TC-12045 robot:skip; session conflict, run in isolation)
-    confirm_application_tests.robot        — 20 confirm application tests (TC-13001–TC-13025)
+    confirm_application_tests.robot        — 24 confirm application tests (TC-13001–TC-13028)
 
 resources/                 — Page Object keyword libraries (no variable imports)
   RepaymentSchedulePage.robot        — Keywords + locators for /repayment/{app_id}
@@ -211,13 +228,21 @@ resources/                 — Page Object keyword libraries (no variable import
   ConfirmApplicationPage.robot       — Keywords + locators for /confirm-application
   WelcomeBackPage.robot              — Keywords + locators for renewal Welcome Back pre-fill screen
   VerifyDetailsPage.robot            — Keywords + locators for renewal Verify Details review screen
-  E2EApplicationFlow.robot           — E2E orchestration: Create Full Application + Create Full Renewal Application + Create Full Application With Lender Assignment (plan_index + lender_name args; plan 1 uses Create Full Application, plan 2 uses Login And Navigate To Lender Selection New App) + Create Full Renewal Application With Lender Assignment (plan 1 uses Create Full Renewal Application, plan 2 uses Navigate To Lender Selection Renewal App); all lender assignment keywords use real BRE — no mock
+  E2EApplicationFlow.robot           — E2E orchestration: Create Full Application (sets ${LAST_USED_MOBILE} suite var) + Create Full Renewal Application + Create Full Application With Lender Assignment + Create Full Renewal Application With Lender Assignment + Perform KYC Bypass Journey (journey_type=new|renewal; plan 1, Western Capital; runs Bypass KYC Via Database on /okyc/, reloads to /esign/); all lender assignment keywords use real BRE — no mock
   LenderSelectionPage.robot          — Keywords + locators for /application-loader/{app_id} (lender selection + BRE mocking)
-  OKYCPage.robot                     — Keywords for /okyc/{app_id} (KYC page URL assertion)
+  OKYCPage.robot                     — Keywords for /okyc/{app_id}: URL assertion, Extract App ID From OKYC URL, Esign URL Should Be Active
   BankStatementPage.robot            — Keywords for bank statement journey (stub; PENDING TESTID)
 
 variables/
   variables.robot           — All variables: BASE_URL, timeouts, test data, browser settings, APP_* wizard data
+
+libraries/                 — Python keyword libraries
+  ApplicationDataReader.py  — Reads application_data.xlsx for data-driven E2E tests
+  db_config.py              — Loads DB creds from .env.db (local) or env vars (CI); validates all required vars
+  kyc_bypass_db.py          — Robot keyword library: Bypass KYC Via Database — inserts mock KYC records into 4 tables
+
+.env.db.template           — Template for DB credentials (copy to .env.db, fill in, never commit)
+.env.db                    — Local DB credentials (gitignored via .env.*)
 
 results/                   — robot output (output.xml, log.html, report.html)
 ```

@@ -3,3 +3,5 @@ robotframework-browser
 rfbrowser init
 allure-robotframework
 openpyxl
+pymysql
+python-dotenv

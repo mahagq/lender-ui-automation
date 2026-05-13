@@ -3,7 +3,7 @@
 ## Overview
 
 Jenkins pipeline for the GQ Customer Portal UI Automation suite.
-Runs Robot Framework + Playwright tests against UAT across **33 suite files** (409 tests + data-driven rows; 6 skipped bank-statement stubs),
+Runs Robot Framework + Playwright tests against UAT across **41 suite files** (511 tests + data-driven rows; 17 skipped across login/dashboard/lender/acf/renewal),
 generates an Allure report, uploads it to S3, and preserves history for trend graphs across builds.
 
 | Suite File | Tests | Account |
@@ -21,31 +21,34 @@ generates an Allure report, uploads it to S3, and preserves history for trend gr
 | dashboard/dashboard_ins_new_user_tests | 4 | DASHBOARD_NEW_MOBILE |
 | e2e/e2e_create_application_tests | — (data-driven) | APP_CREATION_MOBILE / dynamic |
 | e2e/smoke_e2e_tests | 1 | dynamic (auto-generated mobile) |
-| e2e/resume_journey_e2e_tests | 9 | RESUME_MOBILE |
+| e2e/resume_journey_e2e_tests | 10 (TC-RE01–TC-RE10) | RESUME_MOBILE |
+| e2e/resume_journey_renewal_e2e_tests | 6 (TC-RER01–TC-RER07) | RENEWAL_MOBILE |
+| e2e/resume_journey_se_e2e_tests | 2 (TC-RESE01–TC-RESE02) | RESUME_MOBILE |
 | e2e/renewal_flow_e2e_tests | — (data-driven) | RENEWAL_MOBILE |
 | renewal_journey_flow/student_details_tests | 7 | RENEWAL_MOBILE |
 | renewal_journey_flow/choose_plan_tests | 8 | RENEWAL_MOBILE |
-| renewal_journey_flow/welcome_back_tests | 6 | RENEWAL_MOBILE |
-| renewal_journey_flow/verify_details_tests | 25 | RENEWAL_MOBILE |
+| renewal_journey_flow/welcome_back_tests | 13 (TC-WB01–WB13) | RENEWAL_MOBILE |
+| renewal_journey_flow/verify_details_tests | 62 (TC-VD01–VD62) | RENEWAL_MOBILE |
 | lender_selection/bureau_lender_flow_tests | 4 (robot:skip) | APP_CREATION_MOBILE (dynamic) |
 | lender_selection/bureau_lender_approval_tests | 1 | APP_CREATION_MOBILE (dynamic) |
 | lender_selection/bureau_lender_rejection_tests | 5 | LENDER_NR01–05_MOBILE (dynamic, per-test) |
 | lender_selection/bureau_lender_screen_UI_tests | 13 | APP_CREATION_MOBILE (dynamic) |
 | lender_selection/bureau_lender_flow_renewalapp_tests | 4 | RENEWAL_MOBILE |
-| lender_selection/bank_statement_tests | 6 (skipped) | APP_CREATION_MOBILE (dynamic) |
+| lender_selection/bank_statement_tests | 8 (1 skipped — TC-BS-08) | APP_CREATION_MOBILE (dynamic) |
 | e2e/lender_selection_e2e_tests | 4 | APP_CREATION_MOBILE + RENEWAL_MOBILE |
+| e2e/kyc_bypass_e2e_tests | 2 | dynamic (new) + RENEWAL_MOBILE (renewal) |
 | application_details/repayment_schedule_tests | 9 (1 skipped) | APP_DETAILS_MOBILE (9812345678) |
 | application_details/view_applicant_details_tests | 8 | APP_DETAILS_MOBILE (9812345678) |
 | application_details/upload_documents_tests | 6 | APP_DETAILS_MOBILE (9812345678) |
-| application_creation_flow/student_details_tests | 40 | APP_CREATION_MOBILE |
+| application_creation_flow/student_details_tests | 47 | APP_CREATION_MOBILE |
 | application_creation_flow/choose_plan_tests | 18 | APP_CREATION_MOBILE |
 | application_creation_flow/select_applicant_tests | 19 | APP_CREATION_MOBILE |
 | application_creation_flow/applicant_basic_details_tests | 23 | APP_CREATION_MOBILE |
 | application_creation_flow/onboarding_tests | 7 | APP_CREATION_MOBILE |
 | application_creation_flow/personal_details_tests | 18 | APP_CREATION_MOBILE |
-| application_creation_flow/residential_details_tests | 12 | APP_CREATION_MOBILE |
+| application_creation_flow/residential_details_tests | 13 | APP_CREATION_MOBILE |
 | application_creation_flow/employment_tests | 46 | APP_CREATION_MOBILE |
-| application_creation_flow/confirm_application_tests | 20 | APP_CREATION_MOBILE |
+| application_creation_flow/confirm_application_tests | 24 | APP_CREATION_MOBILE |
 
 ---
 
@@ -272,3 +275,4 @@ allure open results/allure-report
 | Allure CLI | Inside Docker image `cp-ui-automation:playwright` |
 | Env Var | `BYPASS_AUTH_MOBILE` — UAT mobile registered for ERP bypass auth (bypassAuthPost). TC-401 is currently tagged `robot:skip` — general OTP test accounts are not ERP-whitelisted. To enable: set this var to an ERP-whitelisted UAT mobile and remove `robot:skip`. |
 | Env Var | `APP_INSTITUTE_SEARCH` — search term used to trigger the async GILE institute dropdown API in Application Creation Flow suite setups. Defaults to `Sch`. Override if UAT data changes and `Sch` returns no results. |
+| Credential | `DB_HOST`, `DB_USER`, `DB_PASSWORD`, `DB_NAME` — UAT MySQL DB credentials for KYC bypass tests (`kyc_bypass_e2e_tests.robot`). Inject via `withCredentials([string(...)])`. `db_config.py` reads these env vars directly when `.env.db` is absent. |
