@@ -358,7 +358,7 @@ Create Full Application With Lender Assignment
         ...    ${student_first_name}    ${student_last_name}    New Admission    ${EMPTY}    SD12345
         ...    ${loan_amount}    Parent/Guardian    ${applicant_first_name}    ${applicant_last_name}
         ...    ${pan_number}    Male    ${dob_year}    ${dob_month}    ${dob_day}
-        ...    Unmarried    ${email}    ${address_line1}    ${address_line2}    ${pincode}
+        ...    Married    ${email}    ${address_line1}    ${address_line2}    ${pincode}
         ...    Rented    Salaried    ${employer_name}    ${monthly_salary}
         ...    ${EMPTY}    ${EMPTY}    ${EMPTY}    ${EMPTY}    ${EMPTY}
         Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    Lender Selection URL Should Be Active

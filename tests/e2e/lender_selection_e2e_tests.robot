@@ -33,6 +33,9 @@ TC-LS-E01 Full New Application Journey Lender Approved Reaches KYC
     ...    ${APP_EMAIL}    ${APP_ADDRESS_LINE1}    ${APP_ADDRESS_LINE2}    ${APP_PINCODE}
     ...    ${APP_EMPLOYER_NAME}    ${APP_MONTHLY_SALARY}
     ...    plan_index=1    lender_name=Western Capital
+    Wait For Bureau Decision
+    Successful Lender Assignment Should Be Visible
+    Click Proceed To KYC
     OKYC URL Should Be Active
 
 TC-LS-E02 Full New Application Journey Lender Rejected Reaches Bank Statement
@@ -46,6 +49,7 @@ TC-LS-E02 Full New Application Journey Lender Rejected Reaches Bank Statement
     ...    ${APP_EMAIL}    ${APP_ADDRESS_LINE1}    ${APP_ADDRESS_LINE2}    ${APP_PINCODE}
     ...    ${APP_EMPLOYER_NAME}    ${APP_MONTHLY_SALARY}
     ...    plan_index=2
+    Wait For Bureau Decision
     Bank Statement Select Bank URL Should Be Active
 
 TC-LS-E03 Full Renewal Journey Lender Approved Reaches KYC
@@ -54,6 +58,9 @@ TC-LS-E03 Full Renewal Journey Lender Approved Reaches KYC
     [Teardown]    Run Keyword And Ignore Error    Close Browser
     Create Full Renewal Application With Lender Assignment
     ...    plan_index=1    lender_name=Western Capital
+    Wait For Bureau Decision
+    Successful Lender Assignment Should Be Visible
+    Click Proceed To KYC
     OKYC URL Should Be Active
 
 TC-LS-E04 Full Renewal Journey Lender Rejected Reaches Bank Statement
@@ -62,4 +69,5 @@ TC-LS-E04 Full Renewal Journey Lender Rejected Reaches Bank Statement
     [Teardown]    Run Keyword And Ignore Error    Close Browser
     Create Full Renewal Application With Lender Assignment
     ...    plan_index=2
+    Wait For Bureau Decision
     Bank Statement Select Bank URL Should Be Active
