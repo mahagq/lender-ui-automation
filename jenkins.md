@@ -34,6 +34,9 @@ generates an Allure report, uploads it to S3, and preserves history for trend gr
 | lender_selection/bureau_lender_flow_renewalapp_tests | 4 | RENEWAL_MOBILE |
 | lender_selection/bank_statement_tests | 6 (skipped) | APP_CREATION_MOBILE (dynamic) |
 | e2e/lender_selection_e2e_tests | 4 | APP_CREATION_MOBILE + RENEWAL_MOBILE |
+| application_details/repayment_schedule_tests | 9 (1 skipped) | APP_DETAILS_MOBILE (9812345678) |
+| application_details/view_applicant_details_tests | 8 | APP_DETAILS_MOBILE (9812345678) |
+| application_details/upload_documents_tests | 6 | APP_DETAILS_MOBILE (9812345678) |
 | application_creation_flow/student_details_tests | 40 | APP_CREATION_MOBILE |
 | application_creation_flow/choose_plan_tests | 18 | APP_CREATION_MOBILE |
 | application_creation_flow/select_applicant_tests | 19 | APP_CREATION_MOBILE |

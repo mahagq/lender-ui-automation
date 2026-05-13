@@ -66,3 +66,12 @@ EMI Load More Button Is Visible
     [Tags]    dashboard    emi    ui    pagination
     Click EMI Tab And Verify
     Load More Button Should Be Visible
+
+EMI Load More Button Loads Previous Applications
+    [Documentation]
+    ...    TC-4047-LD: Clicking load-more-button should increase the number of visible EMI
+    ...    cards — confirming previous applications are appended to the list.
+    ...    Satisfies: TC-4047-LD, T1, U2
+    [Tags]    dashboard    emi    ui    pagination
+    Click EMI Tab And Verify
+    Load More Loads Additional EMI Cards

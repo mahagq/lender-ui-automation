@@ -1,7 +1,7 @@
 # Customer Portal UI Automation
 
 Robot Framework end-to-end test suite for the GQ Customer Portal.
-Covers the login left component, mobile number login form, OTP verification flow, bypass authentication, dashboard, full Application Creation Flow wizard (10 pages, TC-5001–TC-13025), E2E journeys (smoke, resume, renewal, lender selection), Renewal Journey Flow (screen-by-screen), and Lender Selection Bureau Flow (BRE mocking, KYC redirect, bank statement upload) — all targeting the UAT environment (`https://customer.uat.graydev.in`).
+Covers the login left component, mobile number login form, OTP verification flow, bypass authentication, dashboard, full Application Creation Flow wizard (10 pages, TC-5001–TC-13025), E2E journeys (smoke, resume, renewal, lender selection), Renewal Journey Flow (screen-by-screen), Lender Selection Bureau Flow (BRE mocking, KYC redirect, bank statement upload), and Application Details flows (Repayment Schedule, View Application Details, Upload Documents) — all targeting the UAT environment (`https://customer.uat.graydev.in`).
 
 > **Test Cases:** See [`CP_UI_Automation_Test_Cases.xlsx`](./CP_UI_Automation_Test_Cases.xlsx) for the full test case list with descriptions, steps, and expected results.
 
@@ -43,6 +43,10 @@ customer_portal_ui_automation/
 │   │   ├── bureau_lender_screen_UI_tests.robot      # New app lender selection UI (13 tests, TC-LS-N00–N12; lender-selection-new)
 │   │   ├── bureau_lender_flow_renewalapp_tests.robot # Renewal lender selection UI (4 tests, TC-LS-R01–R04; lender-selection-renewal)
 │   │   └── bank_statement_tests.robot               # Bank statement journey (6 tests, robot:skip until testids confirmed)
+│   ├── application_details/
+│   │   ├── repayment_schedule_tests.robot        # /repayment/{app_id} (9 tests, 1 skipped, TC-AD-RS-001–009)
+│   │   ├── view_applicant_details_tests.robot    # /application-details/{app_id} (8 tests, TC-AD-VA-001–008)
+│   │   └── upload_documents_tests.robot          # /dms/{app_id} (6 tests, TC-AD-UD-001–006)
 │   └── application_creation_flow/
 │       ├── student_details_tests.robot           # /student-details (40 tests, TC-5001–5N-13)
 │       ├── choose_plan_tests.robot               # /choose-plan (18 tests, TC-6001–6018)
@@ -76,8 +80,10 @@ customer_portal_ui_automation/
 │   ├── ApplicantEmploymentPage.robot         # Page object keywords for /applicant-employment-details
 │   ├── ConfirmApplicationPage.robot          # Page object keywords for /confirm-application
 │   ├── WelcomeBackPage.robot                 # Page object keywords for Welcome Back screen (renewal)
-│   ├── WelcomeBackPage.robot                 # Page object keywords for Welcome Back screen (renewal)
-│   └── VerifyDetailsPage.robot               # Page object keywords for Verify Details screen (renewal)
+│   ├── VerifyDetailsPage.robot               # Page object keywords for Verify Details screen (renewal)
+│   ├── RepaymentSchedulePage.robot           # Page object keywords for /repayment/{app_id}
+│   ├── ViewApplicantDetailsPage.robot        # Page object keywords for /application-details/{app_id}
+│   └── UploadDocumentsPage.robot             # Page object keywords for /dms/{app_id}
 ├── variables/
 │   └── variables.robot                       # All test configuration, test data, and APP_* wizard variables
 ├── CP_UI_Automation_Test_Cases.xlsx          # Full test case documentation
@@ -135,6 +141,11 @@ All dependencies live in the project virtualenv at `./env/`.
 ./env/bin/robot --outputdir results/ tests/renewal_journey_flow/welcome_back_tests.robot
 ./env/bin/robot --outputdir results/ tests/renewal_journey_flow/verify_details_tests.robot
 
+# Application Details
+./env/bin/robot --outputdir results/ tests/application_details/repayment_schedule_tests.robot
+./env/bin/robot --outputdir results/ tests/application_details/view_applicant_details_tests.robot
+./env/bin/robot --outputdir results/ tests/application_details/upload_documents_tests.robot
+
 # Lender Selection
 ./env/bin/robot --outputdir results/ tests/lender_selection/bureau_lender_flow_tests.robot
 ./env/bin/robot --outputdir results/ tests/lender_selection/bureau_lender_approval_tests.robot
@@ -183,6 +194,10 @@ All dependencies live in the project virtualenv at `./env/`.
 ./env/bin/robot --include bank-statement --outputdir results/ tests/
 ./env/bin/robot --include lender-selection-e2e --outputdir results/ tests/
 ./env/bin/robot --include partial --outputdir results/ tests/lender_selection/bureau_lender_flow_tests.robot
+./env/bin/robot --include application-details --outputdir results/ tests/          # all application details tests
+./env/bin/robot --include repayment-schedule --outputdir results/ tests/           # repayment schedule only
+./env/bin/robot --include view-applicant-details --outputdir results/ tests/       # view application details only
+./env/bin/robot --include upload-documents --outputdir results/ tests/             # upload documents only
 ```
 
 ### Dry run (syntax check, no browser)
@@ -231,6 +246,9 @@ BYPASS_AUTH_MOBILE=<erp_mobile> ./env/bin/robot --outputdir results/ tests/login
 | lender_selection/bureau_lender_flow_renewalapp_tests | 4 | /application-loader/{app_id} — renewal lender selection UI |
 | lender_selection/bank_statement_tests | 6 (all skipped) | /bank-statement/{app_code} |
 | e2e/lender_selection_e2e_tests | 4 | Full E2E: new+renewal × APPROVED+REJECTED |
+| application_details/repayment_schedule_tests | 9 (1 skipped) | /repayment/{app_id} |
+| application_details/view_applicant_details_tests | 8 | /application-details/{app_id} |
+| application_details/upload_documents_tests | 6 | /dms/{app_id} |
 | application_creation_flow/student_details_tests | 40 | /student-details |
 | application_creation_flow/choose_plan_tests | 18 | /choose-plan |
 | application_creation_flow/select_applicant_tests | 19 | /select-applicant |
@@ -240,7 +258,7 @@ BYPASS_AUTH_MOBILE=<erp_mobile> ./env/bin/robot --outputdir results/ tests/login
 | application_creation_flow/residential_details_tests | 12 | /applicant-residential-details |
 | application_creation_flow/employment_tests | 46 | /select-employment + /applicant-employment-details |
 | application_creation_flow/confirm_application_tests | 20 | /confirm-application |
-| **Total** | **409** (+ data-driven rows; 6 skipped bank-statement) | |
+| **Total** | **432** (+ data-driven rows; 6 skipped bank-statement, 1 skipped TC-AD-RS-008) | |
 
 ---
 

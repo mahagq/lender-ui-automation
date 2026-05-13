@@ -48,6 +48,10 @@ Robot Framework UI automation suite for the GQ Customer Portal. Covers the login
 
 ### Run a single test file
 ```bash
+# Application Details:
+./env/bin/robot --outputdir results/ tests/application_details/repayment_schedule_tests.robot
+./env/bin/robot --outputdir results/ tests/application_details/view_applicant_details_tests.robot
+./env/bin/robot --outputdir results/ tests/application_details/upload_documents_tests.robot
 ./env/bin/robot --outputdir results/ tests/login/login_left_component_tests.robot
 ./env/bin/robot --outputdir results/ tests/login/login_tests.robot
 ./env/bin/robot --outputdir results/ tests/login/otp_tests.robot
@@ -92,6 +96,10 @@ Robot Framework UI automation suite for the GQ Customer Portal. Covers the login
 
 ### Run tests by tag
 ```bash
+./env/bin/robot --outputdir results/ --include application-details tests/          # all application details tests
+./env/bin/robot --outputdir results/ --include repayment-schedule tests/           # repayment schedule tests only
+./env/bin/robot --outputdir results/ --include view-applicant-details tests/       # view applicant details tests only
+./env/bin/robot --outputdir results/ --include upload-documents tests/             # upload documents tests only
 ./env/bin/robot --outputdir results/ --include smoke tests/                    # smoke tests only
 ./env/bin/robot --outputdir results/ --include login tests/                    # login tests only
 ./env/bin/robot --outputdir results/ --include otp tests/                      # OTP tests only
@@ -139,6 +147,10 @@ tests/                     — Test suites (import resources and variables)
     login_tests.robot                 — 23 login form tests (TC-201, TC-207–TC-228)
     otp_tests.robot                   — 18 OTP tests: 15 active, 3 skipped (TC-301–TC-318)
     bypass_auth_tests.robot           — 4 bypass auth tests (3 skipped — TC-401, TC-403, TC-404)
+  application_details/
+    repayment_schedule_tests.robot    — 9 repayment schedule tests (TC-AD-RS-001–009; 1 skipped — TC-AD-RS-008; APP_DETAILS_MOBILE)
+    view_applicant_details_tests.robot — 8 view application details tests (TC-AD-VA-001–008; APP_DETAILS_MOBILE)
+    upload_documents_tests.robot      — 6 upload documents tests (TC-AD-UD-001–006; APP_DETAILS_MOBILE)
   dashboard/
     dashboard_tests.robot             — 11 dashboard tests (2 skipped — TC-4004, TC-4005): header, create-app, insurance tab nav, logout
     dashboard_new_user_tests.robot    — 4 new-user empty state tests (TC-4047–TC-4050; DASHBOARD_NEW_MOBILE, independent)
@@ -177,6 +189,9 @@ tests/                     — Test suites (import resources and variables)
     confirm_application_tests.robot        — 20 confirm application tests (TC-13001–TC-13025)
 
 resources/                 — Page Object keyword libraries (no variable imports)
+  RepaymentSchedulePage.robot        — Keywords + locators for /repayment/{app_id}
+  ViewApplicantDetailsPage.robot     — Keywords + locators for /application-details/{app_id}
+  UploadDocumentsPage.robot          — Keywords + locators for /dms/{app_id}
   LoginLeftComponent.robot           — Keywords + locators for left panel component
   LoginPage.robot                    — Keywords + locators for / (login form)
   OTPPage.robot                      — Keywords + locators for /verify (OTP form)
@@ -220,6 +235,26 @@ results/                   — robot output (output.xml, log.html, report.html)
 - **Test order**: `Valid OTP Redirects To Dashboard` runs before `Wrong OTP Shows Incorrect OTP Toast` — a prior failed verifyOtpPost can trigger rate limiting that blocks the valid path.
 - **UAT availability**: UAT is **down 9pm–7am**. Live tests must run between 7am–9pm.
 
+## Application Details Session Model
+
+All three application details suites use a **single shared browser session** with `${APP_DETAILS_MOBILE}` (9812345678):
+
+| File | TC IDs | Tests | Page |
+|------|--------|-------|------|
+| `repayment_schedule_tests.robot` | TC-AD-RS-001–009 | 9 (1 skipped — TC-AD-RS-008) | `/repayment/{app_id}` |
+| `view_applicant_details_tests.robot` | TC-AD-VA-001–008 | 8 | `/application-details/{app_id}` |
+| `upload_documents_tests.robot` | TC-AD-UD-001–006 | 6 | `/dms/{app_id}` |
+
+**Common session model (all three files):**
+- `Suite Setup` — `Login And Navigate To Dashboard As ${APP_DETAILS_MOBILE}` → click `emi-card-option-button` → navigate to target page → `Extract App ID From *URL` → `Set Suite Variable ${APP_ID}`.
+- `Test Setup` — hard-navigates to `${BASE_URL}/<path>/${APP_ID}`. No re-login.
+- `Test Teardown` — NONE (shared session preserved).
+- `Suite Teardown` — `Close Browser`.
+
+**TC-AD-RS-001/002 and TC-AD-VA-001/002/008 and TC-AD-UD-001/002** use `[Setup] Navigate To Dashboard` to test entry navigation from the EMI card menu.
+
+---
+
 ## Dashboard Session Model
 
 Dashboard tests are split across **6 independent files**, each with its own browser session:
@@ -244,6 +279,8 @@ Dashboard tests are split across **6 independent files**, each with its own brow
 - **TC-4009 (Logout) MUST remain the last test** — it destroys the shared session.
 - TC-4035 switches to `${NEW_USER_MOBILE}`; TC-4009 inherits.
 - TC-4032–TC-4033 (Insurance tab nav) run under DASHBOARD_MOBILE — no account switch needed.
+
+**Application Details files:** Use `Login And Navigate To Dashboard As ${APP_DETAILS_MOBILE}` (9812345678) — account with active EMI application that has repayment schedule, application details, and upload documents.
 
 **AD/PG files:** Use `Login And Navigate To Dashboard As ${mobile}` (parameterized keyword in `DashboardPage.robot`) — no `Switch To Account` calls anywhere in these files.
 
@@ -470,6 +507,9 @@ Do NOT complete a task and stop without checking whether each of these files nee
 | Confirm Application | `/confirm-application` |
 | Welcome Back (renewal) | `/renewal-confirmation` |
 | Verify Details (renewal) | `/renewal-details` |
+| Repayment Schedule | `/repayment/{app_id}` |
+| View Application Details | `/application-details/{app_id}` |
+| Upload Documents (DMS) | `/dms/{app_id}` |
 | Lender Selection | `/application-loader/{app_id}` |
 | Lender Selection Status | `/application-loader-status/{app_id}` |
 | Application Status | `/application-status/{app_id}` |

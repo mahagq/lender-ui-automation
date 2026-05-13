@@ -432,6 +432,25 @@ Load More Button Should Be Visible
     ...    Satisfies: TC-4046
     Wait For Elements State    ${LOAD_MORE_BUTTON}    visible    timeout=${TIMEOUT}
 
+Load More Loads Additional EMI Cards
+    [Documentation]
+    ...    Captures EMI card count before clicking load-more-button, clicks it,
+    ...    then asserts the count increases — confirming previous applications are loaded.
+    ...    PRECONDITION: ${DASHBOARD_MOBILE} must have enough applications to trigger pagination.
+    ...    Satisfies: TC-4047-LD
+    ${cards_before}=    Get Elements    ${EMI_CARDS}
+    ${count_before}=    Get Length    ${cards_before}
+    Click    ${LOAD_MORE_BUTTON}
+    Wait Until Keyword Succeeds    ${TIMEOUT}    500ms    EMI Card Count Should Exceed    ${count_before}
+
+EMI Card Count Should Exceed
+    [Documentation]    Helper — asserts current EMI card count exceeds the given baseline.
+    [Arguments]    ${baseline}
+    ${cards}=    Get Elements    ${EMI_CARDS}
+    ${count}=    Get Length    ${cards}
+    Should Be True    $count > $baseline
+    ...    Load more did not increase card count — expected > ${baseline}, got ${count}.
+
 AD Empty Alert Should Be Visible
     [Documentation]
     ...    Asserts the ARIA alert role element is visible on the Auto Payments tab

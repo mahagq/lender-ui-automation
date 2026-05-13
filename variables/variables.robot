@@ -86,6 +86,10 @@ ${AD_MOBILE}              8763694182
 # 7757855472 has transaction records so TC-4030/TC-4031 (download buttons) pass.
 ${PG_MOBILE}              7757855472
 
+# Application Details account — Suite Setup account for application_details test suites.
+# 9812345678 has active EMI application with repayment schedule, application details, and upload docs.
+${APP_DETAILS_MOBILE}     9812345678
+
 # Create-application button scenario mobiles (TC-4034/TC-4035 in dashboard_tests.robot)
 # TC-4034: runs under the already-logged-in DASHBOARD_MOBILE session — no Switch To Account.
 # TC-4035: switches to NEW_USER_MOBILE which has no applications → empty-state button visible.
