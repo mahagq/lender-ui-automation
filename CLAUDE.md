@@ -154,7 +154,7 @@ tests/                     — Test suites (import resources and variables)
   dashboard/
     dashboard_tests.robot             — 11 dashboard tests (2 skipped — TC-4004, TC-4005): header, create-app, insurance tab nav, logout
     dashboard_new_user_tests.robot    — 4 new-user empty state tests (TC-4047–TC-4050; DASHBOARD_NEW_MOBILE, independent)
-    dashboard_emi_tests.robot         — 5 EMI tab tests (TC-4001, TC-4011, TC-4044–TC-4046; DASHBOARD_MOBILE, independent)
+    dashboard_emi_tests.robot         — 6 EMI tab tests (TC-4001, TC-4011, TC-4044–TC-4046, TC-4047-LD; DASHBOARD_MOBILE, independent)
     dashboard_ad_tests.robot          — 10 AD tab tests (TC-4002, TC-4012, TC-4036–TC-4043; AD_MOBILE 8763694182, independent)
     dashboard_pg_tests.robot          — 21 PG/Transaction History tests (TC-4003, TC-4013–TC-4029, TC-4051, TC-4030–TC-4031; PG_MOBILE 7757855472, independent)
     dashboard_ins_tests.robot         — 11 insurance tab tests (TC-4101–TC-4111; INS_MOBILE 8668768645, independent)
@@ -263,7 +263,7 @@ Dashboard tests are split across **6 independent files**, each with its own brow
 |------|---------------------|-------|
 | `dashboard_tests.robot` | DASHBOARD_MOBILE → NEW_USER_MOBILE | TC-4004–4010, TC-4034, TC-4032–4033, TC-4035, TC-4009 |
 | `dashboard_new_user_tests.robot` | DASHBOARD_NEW_MOBILE | TC-4047–4050 |
-| `dashboard_emi_tests.robot` | DASHBOARD_MOBILE | TC-4001, TC-4011, TC-4044–4046 |
+| `dashboard_emi_tests.robot` | DASHBOARD_MOBILE | TC-4001, TC-4011, TC-4044–4046, TC-4047-LD |
 | `dashboard_ad_tests.robot` | AD_MOBILE (8763694182) | TC-4002, TC-4012, TC-4036–4043 |
 | `dashboard_pg_tests.robot` | PG_MOBILE (7757855472) | TC-4003, TC-4013–4029, TC-4051, TC-4030–4031 |
 | `dashboard_ins_tests.robot` | INS_MOBILE (8668768645) | TC-4101–4111 |

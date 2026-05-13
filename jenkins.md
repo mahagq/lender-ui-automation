@@ -13,7 +13,7 @@ generates an Allure report, uploads it to S3, and preserves history for trend gr
 | login/otp_tests | 18 (3 skipped) | OTP_MOBILE_* / EXT_* |
 | login/bypass_auth_tests | 4 (3 skipped) | TEST_MOBILE |
 | dashboard/dashboard_tests | 11 (2 skipped) | DASHBOARD_MOBILE → NEW_USER_MOBILE |
-| dashboard/dashboard_emi_tests | 5 | DASHBOARD_MOBILE |
+| dashboard/dashboard_emi_tests | 6 | DASHBOARD_MOBILE |
 | dashboard/dashboard_ad_tests | 10 | AD_MOBILE |
 | dashboard/dashboard_pg_tests | 21 | PG_MOBILE |
 | dashboard/dashboard_new_user_tests | 4 | DASHBOARD_NEW_MOBILE |

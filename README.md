@@ -19,7 +19,7 @@ customer_portal_ui_automation/
 │   │   └── bypass_auth_tests.robot           # Bypass auth tests (4 tests, 3 skipped)
 │   ├── dashboard/
 │   │   ├── dashboard_tests.robot             # Dashboard — header/create-app/insurance/logout (11 tests, 2 skipped)
-│   │   ├── dashboard_emi_tests.robot         # EMI tab tests (5 tests; DASHBOARD_MOBILE)
+│   │   ├── dashboard_emi_tests.robot         # EMI tab tests (6 tests; DASHBOARD_MOBILE)
 │   │   ├── dashboard_ad_tests.robot          # Auto Debit tab tests (10 tests; AD_MOBILE)
 │   │   ├── dashboard_pg_tests.robot          # Transaction History tab tests (21 tests; PG_MOBILE)
 │   │   ├── dashboard_new_user_tests.robot    # New-user empty state tests (4 tests; DASHBOARD_NEW_MOBILE)
@@ -225,7 +225,7 @@ BYPASS_AUTH_MOBILE=<erp_mobile> ./env/bin/robot --outputdir results/ tests/login
 | login/otp_tests | 18 (3 skipped) | /verify |
 | login/bypass_auth_tests | 4 (3 skipped) | /instant-eligibility |
 | dashboard/dashboard_tests | 11 (2 skipped) | /my-applications |
-| dashboard/dashboard_emi_tests | 5 | /my-applications#emi |
+| dashboard/dashboard_emi_tests | 6 | /my-applications#emi |
 | dashboard/dashboard_ad_tests | 10 | /my-applications#ad |
 | dashboard/dashboard_pg_tests | 21 | /my-applications#direct |
 | dashboard/dashboard_new_user_tests | 4 | /my-applications (new user) |
@@ -258,7 +258,7 @@ BYPASS_AUTH_MOBILE=<erp_mobile> ./env/bin/robot --outputdir results/ tests/login
 | application_creation_flow/residential_details_tests | 12 | /applicant-residential-details |
 | application_creation_flow/employment_tests | 46 | /select-employment + /applicant-employment-details |
 | application_creation_flow/confirm_application_tests | 20 | /confirm-application |
-| **Total** | **432** (+ data-driven rows; 6 skipped bank-statement, 1 skipped TC-AD-RS-008) | |
+| **Total** | **433** (+ data-driven rows; 6 skipped bank-statement, 1 skipped TC-AD-RS-008) | |
 
 ---
 
