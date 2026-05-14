@@ -37,7 +37,7 @@ Fall back to Grep/Glob/Read **only** when the graph returns no result.
 
 ## Overview
 
-Robot Framework UI automation suite for the GQ Customer Portal. Covers the login left component, login form, OTP verification flow, bypass authentication, dashboard, the full Application Creation Flow wizard (10 pages: `/student-details` → `/confirm-application`), Renewal Journey Flow (Welcome Back + Verify Details), and Lender Selection Bureau Flow (lender assignment, BRE mocking, KYC redirect, bank statement upload) — targeting UAT: `https://customer.uat.graydev.in/`. Uses the **Browser library (Playwright)** — not SeleniumLibrary.
+Robot Framework UI automation suite for the GQ Customer Portal. Covers the login left component, login form, OTP verification flow, bypass authentication, dashboard, the full Application Creation Flow wizard (10 pages: `/student-details` → `/confirm-application`), Renewal Journey Flow (Welcome Back + Verify Details), Lender Selection Bureau Flow (lender assignment, BRE mocking, KYC redirect, bank statement upload), and Agreement/Esign Flow (`/esign/{app_id}` → `/down-payment/{app_id}` or `/nach/{app_id}`) — targeting UAT: `https://customer.uat.graydev.in/`. Uses the **Browser library (Playwright)** — not SeleniumLibrary.
 
 ## Commands
 
@@ -47,86 +47,18 @@ Robot Framework UI automation suite for the GQ Customer Portal. Covers the login
 ```
 
 ### Run a single test file
-```bash
-# Application Details:
-./env/bin/robot --outputdir results/ tests/application_details/repayment_schedule_tests.robot
-./env/bin/robot --outputdir results/ tests/application_details/view_applicant_details_tests.robot
-./env/bin/robot --outputdir results/ tests/application_details/upload_documents_tests.robot
-./env/bin/robot --outputdir results/ tests/login/login_left_component_tests.robot
-./env/bin/robot --outputdir results/ tests/login/login_tests.robot
-./env/bin/robot --outputdir results/ tests/login/otp_tests.robot
-./env/bin/robot --outputdir results/ tests/login/bypass_auth_tests.robot
-# Dashboard suites:
-./env/bin/robot --outputdir results/ tests/dashboard/dashboard_tests.robot
-./env/bin/robot --outputdir results/ tests/dashboard/dashboard_emi_tests.robot
-./env/bin/robot --outputdir results/ tests/dashboard/dashboard_ad_tests.robot
-./env/bin/robot --outputdir results/ tests/dashboard/dashboard_pg_tests.robot
-./env/bin/robot --outputdir results/ tests/dashboard/dashboard_ins_tests.robot
-./env/bin/robot --outputdir results/ tests/dashboard/dashboard_ins_new_user_tests.robot
-./env/bin/robot --outputdir results/ tests/dashboard/dashboard_new_user_tests.robot
-# E2E:
-./env/bin/robot --outputdir results/ tests/e2e/e2e_create_application_tests.robot
-./env/bin/robot --outputdir results/ tests/e2e/smoke_e2e_tests.robot
-./env/bin/robot --outputdir results/ tests/e2e/resume_journey_e2e_tests.robot
-./env/bin/robot --outputdir results/ tests/e2e/renewal_flow_e2e_tests.robot
-# Renewal Journey Flow (requires RENEWAL_MOBILE + RESUME_MOBILE registered on UAT):
-./env/bin/robot --outputdir results/ tests/renewal_journey_flow/student_details_tests.robot
-./env/bin/robot --outputdir results/ tests/renewal_journey_flow/choose_plan_tests.robot
-./env/bin/robot --outputdir results/ tests/renewal_journey_flow/welcome_back_tests.robot
-./env/bin/robot --outputdir results/ tests/renewal_journey_flow/verify_details_tests.robot
-# Lender Selection suites:
-./env/bin/robot --outputdir results/ tests/lender_selection/bureau_lender_flow_tests.robot
-./env/bin/robot --outputdir results/ tests/lender_selection/bureau_lender_approval_tests.robot
-./env/bin/robot --outputdir results/ tests/lender_selection/bureau_lender_rejection_tests.robot
-./env/bin/robot --outputdir results/ tests/lender_selection/bureau_lender_screen_UI_tests.robot
-./env/bin/robot --outputdir results/ tests/lender_selection/bureau_lender_flow_renewalapp_tests.robot
-./env/bin/robot --outputdir results/ tests/lender_selection/bank_statement_tests.robot
-./env/bin/robot --outputdir results/ tests/e2e/lender_selection_e2e_tests.robot
-# KYC Bypass E2E (requires .env.db with DB_HOST/DB_USER/DB_PASSWORD/DB_NAME):
-./env/bin/robot --outputdir results/ tests/e2e/kyc_bypass_e2e_tests.robot
-# Application Creation Flow suites (APP_CREATION_MOBILE auto-generated fresh each run — do NOT set via env var):
-./env/bin/robot --outputdir results/ tests/application_creation_flow/student_details_tests.robot
-./env/bin/robot --outputdir results/ tests/application_creation_flow/choose_plan_tests.robot
-./env/bin/robot --outputdir results/ tests/application_creation_flow/select_applicant_tests.robot
-./env/bin/robot --outputdir results/ tests/application_creation_flow/applicant_basic_details_tests.robot
-./env/bin/robot --outputdir results/ tests/application_creation_flow/onboarding_tests.robot
-./env/bin/robot --outputdir results/ tests/application_creation_flow/personal_details_tests.robot
-./env/bin/robot --outputdir results/ tests/application_creation_flow/residential_details_tests.robot
-./env/bin/robot --outputdir results/ tests/application_creation_flow/employment_tests.robot
-./env/bin/robot --outputdir results/ tests/application_creation_flow/confirm_application_tests.robot
-```
+Pattern: `./env/bin/robot --outputdir results/ tests/<folder>/<file>.robot`
 
 ### Run tests by tag
 ```bash
-./env/bin/robot --outputdir results/ --include application-details tests/          # all application details tests
-./env/bin/robot --outputdir results/ --include repayment-schedule tests/           # repayment schedule tests only
-./env/bin/robot --outputdir results/ --include view-applicant-details tests/       # view applicant details tests only
-./env/bin/robot --outputdir results/ --include upload-documents tests/             # upload documents tests only
-./env/bin/robot --outputdir results/ --include smoke tests/                    # smoke tests only
-./env/bin/robot --outputdir results/ --include login tests/                    # login tests only
-./env/bin/robot --outputdir results/ --include otp tests/                      # OTP tests only
-./env/bin/robot --outputdir results/ --include bypass-auth tests/              # bypass auth tests only
-./env/bin/robot --outputdir results/ --include dashboard tests/                # dashboard tests only
+# Pattern: ./env/bin/robot --outputdir results/ --include <tag> tests/
+./env/bin/robot --outputdir results/ --include smoke tests/
+./env/bin/robot --outputdir results/ --include login tests/
 ./env/bin/robot --outputdir results/ --include resend tests/login/otp_tests.robot    # ~3min resend test
-./env/bin/robot --outputdir results/ --include application-creation-flow tests/  # all wizard tests
-./env/bin/robot --outputdir results/ --include salaried tests/application_creation_flow/employment_tests.robot    # salaried only
-./env/bin/robot --outputdir results/ --include self-employed tests/application_creation_flow/employment_tests.robot  # SE only
-./env/bin/robot --outputdir results/ --include renewal tests/                                                     # all renewal tests
-./env/bin/robot --outputdir results/ --include renewal-journey-flow tests/renewal_journey_flow/                   # renewal journey flow only
-./env/bin/robot --outputdir results/ --include skip-journey tests/renewal_journey_flow/verify_details_tests.robot    # skip employment tests
-./env/bin/robot --outputdir results/ --include edit-residential tests/renewal_journey_flow/verify_details_tests.robot # edit residential tests
-./env/bin/robot --outputdir results/ --include edit-employment tests/renewal_journey_flow/verify_details_tests.robot  # edit employment tests
-./env/bin/robot --outputdir results/ --include lender-selection tests/              # all lender selection tests
-./env/bin/robot --outputdir results/ --include lender-selection-new tests/          # new app UI tests (bureau_lender_screen_UI_tests)
-./env/bin/robot --outputdir results/ --include lender-selection-renewal tests/      # renewal UI tests (bureau_lender_flow_renewalapp_tests)
-./env/bin/robot --outputdir results/ --include lender-approval tests/               # real BRE approval test (TC-LS-NA01)
-./env/bin/robot --outputdir results/ --include lender-rejection tests/              # real BRE rejection tests (TC-LS-NR01–05)
-./env/bin/robot --outputdir results/ --include bank-statement tests/                # bank statement tests
-./env/bin/robot --outputdir results/ --include lender-selection-e2e tests/          # lender selection E2E
-./env/bin/robot --outputdir results/ --include kyc-bypass tests/                    # KYC DB bypass E2E (TC-KYC-E01 new, TC-KYC-E02 renewal)
-./env/bin/robot --outputdir results/ --include smoke tests/                         # smoke tests (includes TC_LENDER_01/02)
-./env/bin/robot --outputdir results/ --include partial tests/                       # partial tests (TC_LENDER_03/04)
+./env/bin/robot --outputdir results/ --include salaried tests/application_creation_flow/employment_tests.robot
 ```
+
+Tags: `smoke`, `login`, `otp`, `bypass-auth`, `dashboard`, `resend`, `application-details`, `repayment-schedule`, `view-applicant-details`, `upload-documents`, `application-creation-flow`, `salaried`, `self-employed`, `renewal`, `renewal-journey-flow`, `skip-journey`, `edit-residential`, `edit-employment`, `lender-selection`, `lender-selection-new`, `lender-selection-renewal`, `lender-approval`, `lender-rejection`, `bank-statement`, `lender-selection-e2e`, `kyc-bypass`, `partial`, `agreement`, `esign-redirect`
 
 ### Dry run (syntax check, no browser)
 ```bash
@@ -158,52 +90,55 @@ BYPASS_AUTH_MOBILE=<erp_mobile> ./env/bin/robot --outputdir results/ tests/login
 tests/                     — Test suites (import resources and variables)
   e2e/
     e2e_create_application_tests.robot     — Data-driven full E2E application creation (Login → Confirm & Submit; driven by data/application_data.xlsx)
-    smoke_e2e_tests.robot                  — Single fixed happy-path E2E (Salaried + Parent/Guardian; 1 test)
-    resume_journey_e2e_tests.robot         — Resume-at-every-page: 10 tests (TC-RE01–TC-RE10) closing at each wizard page and resuming (RESUME_MOBILE)
-    resume_journey_renewal_e2e_tests.robot — Renewal resume: 6 tests (TC-RER01–TC-RER05, TC-RER07) closing/resuming at each renewal step (RENEWAL_MOBILE)
-    resume_journey_se_e2e_tests.robot      — SE resume: 2 tests (TC-RESE01–TC-RESE02) for self-employed employment variant (RESUME_MOBILE)
+    smoke_e2e_tests.robot                  — Single fixed happy-path E2E (Salaried + Parent/Guardian)
+    resume_journey_e2e_tests.robot         — Resume-at-every-page: closes at each wizard page and resumes (RESUME_MOBILE)
+    resume_journey_renewal_e2e_tests.robot — Renewal resume: closes/resumes at each renewal step (RENEWAL_MOBILE)
+    resume_journey_se_e2e_tests.robot      — SE resume: self-employed employment variant (RESUME_MOBILE)
     renewal_flow_e2e_tests.robot           — Data-driven renewal E2E (existing account; Welcome Back → Verify Details; driven by renewal_application_data.xlsx)
-    lender_selection_e2e_tests.robot       — 4 E2E lender selection tests (TC-LS-E01–E04; E01/E03 plan 1 + Western Capital lender → KYC; E02/E04 plan 2 → Bank Statement; real BRE)
-    kyc_bypass_e2e_tests.robot             — 2 KYC DB bypass E2E tests (TC-KYC-E01 new app, TC-KYC-E02 renewal; kyc-bypass tag)
+    lender_selection_e2e_tests.robot       — E2E lender selection (plan 1 + Western Capital → KYC; plan 2 → Bank Statement; real BRE)
+    kyc_bypass_e2e_tests.robot             — KYC DB bypass E2E (new app + renewal; kyc-bypass tag)
+    esign_e2e_tests.robot                  — Agreement/Esign E2E (new + renewal; login → KYC bypass → /esign/)
   login/
-    login_left_component_tests.robot  — 9 left panel component tests (TC-101–TC-109)
-    login_tests.robot                 — 23 login form tests (TC-201, TC-207–TC-228)
-    otp_tests.robot                   — 18 OTP tests: 15 active, 3 skipped (TC-301–TC-318)
-    bypass_auth_tests.robot           — 4 bypass auth tests (3 skipped — TC-401, TC-403, TC-404)
+    login_left_component_tests.robot  — Left panel component tests
+    login_tests.robot                 — Login form tests
+    otp_tests.robot                   — OTP tests (includes skipped resend test)
+    bypass_auth_tests.robot           — Bypass auth tests (3 skipped — TC-401, TC-403, TC-404)
   application_details/
-    repayment_schedule_tests.robot    — 9 repayment schedule tests (TC-AD-RS-001–009; 1 skipped — TC-AD-RS-008; APP_DETAILS_MOBILE)
-    view_applicant_details_tests.robot — 8 view application details tests (TC-AD-VA-001–008; APP_DETAILS_MOBILE)
-    upload_documents_tests.robot      — 6 upload documents tests (TC-AD-UD-001–006; APP_DETAILS_MOBILE)
+    repayment_schedule_tests.robot    — Repayment schedule tests (APP_DETAILS_MOBILE)
+    view_applicant_details_tests.robot — View application details tests (APP_DETAILS_MOBILE)
+    upload_documents_tests.robot      — Upload documents tests (APP_DETAILS_MOBILE)
   dashboard/
-    dashboard_tests.robot             — 11 dashboard tests (2 skipped — TC-4004, TC-4005): header, create-app, insurance tab nav, logout
-    dashboard_new_user_tests.robot    — 4 new-user empty state tests (TC-4047–TC-4050; DASHBOARD_NEW_MOBILE, independent)
-    dashboard_emi_tests.robot         — 6 EMI tab tests (TC-4001, TC-4011, TC-4044–TC-4046, TC-4047-LD; DASHBOARD_MOBILE, independent)
-    dashboard_ad_tests.robot          — 10 AD tab tests (TC-4002, TC-4012, TC-4036–TC-4043; AD_MOBILE 8763694182, independent)
-    dashboard_pg_tests.robot          — 21 PG/Transaction History tests (TC-4003, TC-4013–TC-4029, TC-4051, TC-4030–TC-4031; PG_MOBILE 7757855472, independent)
-    dashboard_ins_tests.robot         — 11 insurance tab tests (TC-4101–TC-4111; INS_MOBILE 8668768645, independent)
-    dashboard_ins_new_user_tests.robot — 4 insurance new-user tests (TC-4112–TC-4115; DASHBOARD_NEW_MOBILE, independent)
+    dashboard_tests.robot             — Header, create-app, insurance tab nav, logout (TC-4009 logout MUST be last)
+    dashboard_new_user_tests.robot    — New-user empty state tests (DASHBOARD_NEW_MOBILE)
+    dashboard_emi_tests.robot         — EMI tab tests (DASHBOARD_MOBILE)
+    dashboard_ad_tests.robot          — AD tab tests (AD_MOBILE 8763694182)
+    dashboard_pg_tests.robot          — PG/Transaction History tests (PG_MOBILE 7757855472)
+    dashboard_ins_tests.robot         — Insurance tab tests (INS_MOBILE 8668768645)
+    dashboard_ins_new_user_tests.robot — Insurance new-user tests (DASHBOARD_NEW_MOBILE)
   renewal_journey_flow/
-    student_details_tests.robot            — Renewal: Student Details (7 tests, TC-R5001–TC-R5007; RENEWAL_MOBILE)
-    choose_plan_tests.robot                — Renewal: Choose Plan (8 tests, TC-R6001–TC-R6008; RENEWAL_MOBILE)
-    welcome_back_tests.robot               — Renewal: Welcome Back pre-fill screen (13 tests; TC-WB01–WB13; 1 application per suite, Test Setup uses Go To /renewal-confirmation)
-    verify_details_tests.robot             — Renewal: Verify Details — edit residential (Rented/Self Owned/Other), edit employment (salaried/SE), validations, proceed (62 tests; TC-VD01–VD62; 1 shared application + 1 for TC-VD62; Test Setup uses Go To /renewal-details; TC-VD61 navigates shared app to /confirm-application without submitting; TC-VD62 last creates fresh app within session and submits; consent is on /confirm-application not /renewal-details)
+    student_details_tests.robot       — Renewal: Student Details (RENEWAL_MOBILE)
+    choose_plan_tests.robot           — Renewal: Choose Plan (RENEWAL_MOBILE)
+    welcome_back_tests.robot          — Renewal: Welcome Back pre-fill screen (Test Setup uses Go To /renewal-confirmation)
+    verify_details_tests.robot        — Renewal: Verify Details — edit residential (Rented/Self Owned/Other), edit employment (salaried/SE), validations, proceed (Test Setup uses Go To /renewal-details; TC-VD61 navigates shared app to /confirm-application without submitting; TC-VD62 creates fresh app within session and submits; consent is on /confirm-application not /renewal-details)
   lender_selection/
-    bureau_lender_flow_tests.robot              — 4 core BRE mocked bureau flow tests (TC_LENDER_01–04; smoke+regression+partial; robot:skip; BRE mocked via JS)
-    bureau_lender_approval_tests.robot          — 1 real BRE approval test (TC-LS-NA01; lender-approval; Western Capital → KYC)
-    bureau_lender_rejection_tests.robot         — 5 real BRE rejection tests (TC-LS-NR01–05; lender-rejection; each test owns fresh browser + app; plan-specific edge cases)
-    bureau_lender_screen_UI_tests.robot         — 13 UI tests for new app lender selection (TC-LS-N00–N12; lender-selection-new; shared session)
-    bureau_lender_flow_renewalapp_tests.robot   — 4 UI tests for renewal app lender selection (TC-LS-R01–R04; lender-selection-renewal; shared session)
-    bank_statement_tests.robot                  — 8 bank statement journey tests (TC-BS-01–TC-BS-08; TC-BS-01–TC-BS-07 active, TC-BS-08 robot:skip)
+    bureau_lender_flow_tests.robot              — Core BRE mocked bureau flow tests (smoke+regression+partial; BRE mocked via JS)
+    bureau_lender_approval_tests.robot          — Real BRE approval test (Western Capital → KYC)
+    bureau_lender_rejection_tests.robot         — Real BRE rejection tests (each test owns fresh browser + app; plan-specific edge cases)
+    bureau_lender_screen_UI_tests.robot         — UI tests for new app lender selection (lender-selection-new; shared session)
+    bureau_lender_flow_renewalapp_tests.robot   — UI tests for renewal app lender selection (lender-selection-renewal; shared session)
+    bank_statement_tests.robot                  — Bank statement journey tests
+  agreement/
+    agreement_tests.robot                  — Agreement/Esign page tests (35 TCs; plan 1 suite setup; TC-AG-DP-001 plan 1 → /down-payment; TC-AG-NACH-001 plan 6 → /nach)
   application_creation_flow/
-    student_details_tests.robot            — 47 student details tests (TC-5001–TC-5027, TC-5N-01–TC-5N-13, plus 7 unnumbered validation tests; 1 skipped — GILE Board Resets When Location Is Changed robot:skip)
-    choose_plan_tests.robot                — 18 choose plan tests (TC-6001–TC-6018)
-    select_applicant_tests.robot           — 19 select applicant tests (TC-7001–TC-7020; 1 skipped — TC-7007 robot:skip)
-    applicant_basic_details_tests.robot    — 23 applicant basic details tests (TC-8001–TC-8014-S, independent)
-    onboarding_tests.robot                 — 7 onboarding tests (TC-9001–TC-9N-01, independent)
-    personal_details_tests.robot           — 18 personal details tests (TC-10001–TC-10N-10, independent)
-    residential_details_tests.robot        — 13 residential details tests (TC-11001–TC-11N-05, independent)
-    employment_tests.robot                 — 46 employment tests: 7 type + 13 salaried + 10 SE + 12 validation + misc (TC-12001–TC-12N-SE06; 1 skipped — TC-12045 robot:skip; session conflict, run in isolation)
-    confirm_application_tests.robot        — 24 confirm application tests (TC-13001–TC-13028)
+    student_details_tests.robot            — Student Details page tests
+    choose_plan_tests.robot                — Choose Plan page tests
+    select_applicant_tests.robot           — Select Applicant page tests
+    applicant_basic_details_tests.robot    — Applicant Basic Details page tests (independent)
+    onboarding_tests.robot                 — Onboarding page tests (independent)
+    personal_details_tests.robot           — Personal Details page tests (independent)
+    residential_details_tests.robot        — Residential Details page tests (independent)
+    employment_tests.robot                 — Employment tests: salaried + SE variants (robot:skip on TC-12045; session conflict, run in isolation)
+    confirm_application_tests.robot        — Confirm Application page tests
 
 resources/                 — Page Object keyword libraries (no variable imports)
   RepaymentSchedulePage.robot        — Keywords + locators for /repayment/{app_id}
@@ -228,9 +163,10 @@ resources/                 — Page Object keyword libraries (no variable import
   ConfirmApplicationPage.robot       — Keywords + locators for /confirm-application
   WelcomeBackPage.robot              — Keywords + locators for renewal Welcome Back pre-fill screen
   VerifyDetailsPage.robot            — Keywords + locators for renewal Verify Details review screen
-  E2EApplicationFlow.robot           — E2E orchestration: Create Full Application (sets ${LAST_USED_MOBILE} suite var) + Create Full Renewal Application + Create Full Application With Lender Assignment + Create Full Renewal Application With Lender Assignment + Perform KYC Bypass Journey (journey_type=new|renewal; plan 1, Western Capital; runs Bypass KYC Via Database on /okyc/, reloads to /esign/); all lender assignment keywords use real BRE — no mock
+  E2EApplicationFlow.robot           — E2E orchestration: Create Full Application (sets ${LAST_USED_MOBILE} suite var) + Create Full Renewal Application + Create Full Application With Lender Assignment + Create Full Renewal Application With Lender Assignment + Perform KYC Bypass Journey (journey_type=new|renewal; plan 1, Western Capital; runs Bypass KYC Via Database on /okyc/, reloads to /esign/) + Navigate To Esign New App (Suite Setup for agreement tests; sets ${ESIGN_APP_ID}) + Navigate To Esign Renewal App + Navigate To Esign New App With Plan (per-test setup; plan_index arg; sets ${NACH_APP_ID}); all lender assignment keywords use real BRE — no mock
   LenderSelectionPage.robot          — Keywords + locators for /application-loader/{app_id} (lender selection + BRE mocking)
   OKYCPage.robot                     — Keywords for /okyc/{app_id}: URL assertion, Extract App ID From OKYC URL, Esign URL Should Be Active
+  EsignPage.robot                    — Keywords + locators for /esign/{app_id} (agreement summary, consent, modal, signing); URL helpers for /down-payment/ and /nach/
   BankStatementPage.robot            — Keywords for bank statement journey (stub; PENDING TESTID)
 
 variables/
@@ -260,185 +196,103 @@ results/                   — robot output (output.xml, log.html, report.html)
 - **Test order**: `Valid OTP Redirects To Dashboard` runs before `Wrong OTP Shows Incorrect OTP Toast` — a prior failed verifyOtpPost can trigger rate limiting that blocks the valid path.
 - **UAT availability**: UAT is **down 9pm–7am**. Live tests must run between 7am–9pm.
 
+## Session Models
+
+**Common pattern (all suites):**
+- `Suite Setup` — opens browser, logs in, navigates to starting page, captures any dynamic IDs via `Set Suite Variable`
+- `Test Setup` — hard-navigates (`Go To`) to target URL. No re-login
+- `Test Teardown` — NONE (shared session preserved)
+- `Suite Teardown` — `Close Browser`
+
+Deviations per area documented below.
+
 ## Application Details Session Model
 
-All three application details suites use a **single shared browser session** with `${APP_DETAILS_MOBILE}` (9812345678):
+All three application details suites share one browser session with `${APP_DETAILS_MOBILE}` (9812345678). Suite Setup clicks `emi-card-option-button` → navigates to target page → `Extract App ID From *URL` → `Set Suite Variable ${APP_ID}`.
 
-| File | TC IDs | Tests | Page |
-|------|--------|-------|------|
-| `repayment_schedule_tests.robot` | TC-AD-RS-001–009 | 9 (1 skipped — TC-AD-RS-008) | `/repayment/{app_id}` |
-| `view_applicant_details_tests.robot` | TC-AD-VA-001–008 | 8 | `/application-details/{app_id}` |
-| `upload_documents_tests.robot` | TC-AD-UD-001–006 | 6 | `/dms/{app_id}` |
+| File | Page |
+|------|------|
+| `repayment_schedule_tests.robot` | `/repayment/{app_id}` |
+| `view_applicant_details_tests.robot` | `/application-details/{app_id}` |
+| `upload_documents_tests.robot` | `/dms/{app_id}` |
 
-**Common session model (all three files):**
-- `Suite Setup` — `Login And Navigate To Dashboard As ${APP_DETAILS_MOBILE}` → click `emi-card-option-button` → navigate to target page → `Extract App ID From *URL` → `Set Suite Variable ${APP_ID}`.
-- `Test Setup` — hard-navigates to `${BASE_URL}/<path>/${APP_ID}`. No re-login.
-- `Test Teardown` — NONE (shared session preserved).
-- `Suite Teardown` — `Close Browser`.
-
-**TC-AD-RS-001/002 and TC-AD-VA-001/002/008 and TC-AD-UD-001/002** use `[Setup] Navigate To Dashboard` to test entry navigation from the EMI card menu.
+TC-AD-RS-001/002, TC-AD-VA-001/002/008, and TC-AD-UD-001/002 use `[Setup] Navigate To Dashboard` to test entry navigation from the EMI card menu.
 
 ---
 
 ## Dashboard Session Model
 
-Dashboard tests are split across **6 independent files**, each with its own browser session:
+6 independent files, each with its own browser session:
 
-| File | Suite Setup account | Tests |
-|------|---------------------|-------|
-| `dashboard_tests.robot` | DASHBOARD_MOBILE → NEW_USER_MOBILE | TC-4004–4010, TC-4034, TC-4032–4033, TC-4035, TC-4009 |
-| `dashboard_new_user_tests.robot` | DASHBOARD_NEW_MOBILE | TC-4047–4050 |
-| `dashboard_emi_tests.robot` | DASHBOARD_MOBILE | TC-4001, TC-4011, TC-4044–4046, TC-4047-LD |
-| `dashboard_ad_tests.robot` | AD_MOBILE (8763694182) | TC-4002, TC-4012, TC-4036–4043 |
-| `dashboard_pg_tests.robot` | PG_MOBILE (7757855472) | TC-4003, TC-4013–4029, TC-4051, TC-4030–4031 |
-| `dashboard_ins_tests.robot` | INS_MOBILE (8668768645) | TC-4101–4111 |
-| `dashboard_ins_new_user_tests.robot` | DASHBOARD_NEW_MOBILE (dynamic) | TC-4112–4115 |
-
-**Common session model (all dashboard files):**
-- `Suite Setup` — opens browser, logs in with the file's account, reaches /my-applications.
-- `Test Setup` — `Navigate To Dashboard`: hard-navigates to /my-applications (resets state). No new login.
-- `Test Teardown` — NONE (shared session preserved).
-- `Suite Teardown` — `Close Browser`.
+| File | Suite Setup account |
+|------|---------------------|
+| `dashboard_tests.robot` | DASHBOARD_MOBILE → NEW_USER_MOBILE |
+| `dashboard_new_user_tests.robot` | DASHBOARD_NEW_MOBILE |
+| `dashboard_emi_tests.robot` | DASHBOARD_MOBILE |
+| `dashboard_ad_tests.robot` | AD_MOBILE (8763694182) |
+| `dashboard_pg_tests.robot` | PG_MOBILE (7757855472) |
+| `dashboard_ins_tests.robot` | INS_MOBILE (8668768645) |
+| `dashboard_ins_new_user_tests.robot` | DASHBOARD_NEW_MOBILE (dynamic) |
 
 **`dashboard_tests.robot` specific:**
 - **TC-4009 (Logout) MUST remain the last test** — it destroys the shared session.
 - TC-4035 switches to `${NEW_USER_MOBILE}`; TC-4009 inherits.
-- TC-4032–TC-4033 (Insurance tab nav) run under DASHBOARD_MOBILE — no account switch needed.
 
-**Application Details files:** Use `Login And Navigate To Dashboard As ${APP_DETAILS_MOBILE}` (9812345678) — account with active EMI application that has repayment schedule, application details, and upload documents.
-
-**AD/PG files:** Use `Login And Navigate To Dashboard As ${mobile}` (parameterized keyword in `DashboardPage.robot`) — no `Switch To Account` calls anywhere in these files.
-
-## Insurance Dashboard Session Model
-
-`dashboard_ins_tests.robot` uses a **single shared browser session** with `${INS_MOBILE}` (8668768645):
-- `Suite Setup` — `Login And Navigate To Insurance Tab`: logs in once, clicks Insurance tab, lands on `/my-applications#ins`.
-- `Test Setup` — `Navigate To Insurance Tab`: hard-navigates to `/my-applications` then clicks the Insurance tab.
-- `Test Teardown` — NONE (shared session preserved).
-- `Suite Teardown` — `Close Browser`.
-- **TC-4112** uses `[Setup] Navigate To Insurance Tab New User` which calls `Switch To Account ${DASHBOARD_NEW_MOBILE}`. TC-4113–TC-4115 inherit that session via the suite-level Test Setup.
+**`dashboard_ins_tests.robot`:** Suite Setup calls `Login And Navigate To Insurance Tab`. Test Setup navigates to `/my-applications` then clicks Insurance tab. TC-4112 uses `[Setup] Navigate To Insurance Tab New User` → `Switch To Account ${DASHBOARD_NEW_MOBILE}`; TC-4113–TC-4115 inherit that session.
 
 ## Application Creation Flow Session Model
 
-Each wizard test suite uses a **single shared browser session** using `${APP_CREATION_MOBILE}` (generated fresh per run by `variables/dynamic_variables.py` — never a static value):
-- `Suite Setup` — `Navigate To <Page>`: logs in once, creates new application, traverses all preceding wizard steps with stub data.
-- `Test Setup` — `Navigate To <Page> Within Session`: hard-navigates (`Go To`) to the target URL. No new login.
-- `Test Teardown` — NONE (shared session preserved).
-- `Suite Teardown` — `Close Browser`.
-- **Wizard-advancing tests (proceed/submit) run LAST** in each suite with `[Setup] NONE` to avoid resetting position.
+Each wizard suite uses `${APP_CREATION_MOBILE}` (generated fresh per run by `variables/dynamic_variables.py` — never a static value). Suite Setup traverses all preceding wizard steps with stub data. Wizard-advancing tests (proceed/submit) run **LAST** with `[Setup] NONE`.
 
 **Traversal stub data** uses `APP_*` variables from `variables.robot`:
-- `APP_CREATION_MOBILE` — always dynamic (timestamp-based, generated by `dynamic_variables.py`); env var override intentionally removed to prevent in-progress application accumulation across runs
 - react-select dropdowns: `Select First Option In React Select` helper (approved T1 exception for traversal only)
 - PAN lookup and pincode city/state API calls require `Sleep 2s` during traversal
 
-**E2E tests** live exclusively in `tests/e2e/`. All new end-to-end journey test files must be placed there. E2E suites are data-driven (Excel via `data/application_data.xlsx`) and cover full flows from Login → Confirm & Submit. They use `resources/E2EApplicationFlow.robot` and `libraries/ApplicationDataReader.py`.
+**`applicant_basic_details_tests.robot`:** TC-8014 uses `[Setup] NONE` (sequential after TC-8013); TC-8014-S is a standalone close+resume test.
 
-**`applicant_basic_details_tests.robot`** covers `/applicant-basic-details` only (TC-8001–TC-8014-S). Each test uses `[Setup] Navigate To Basic Details Within Session` except TC-8014 (`[Setup] NONE`, sequential after TC-8013) and TC-8014-S (standalone close+resume test).
+**`employment_tests.robot`:** Per-test `[Setup]` navigates back to `/select-employment` and selects the desired variant.
 
-**`onboarding_tests.robot`**, **`personal_details_tests.robot`**, **`residential_details_tests.robot`** are each fully independent suites with their own Suite Setup traversal — no cross-file ordering dependencies.
+**`onboarding_tests.robot`**, **`personal_details_tests.robot`**, **`residential_details_tests.robot`** — fully independent suites, no cross-file ordering dependencies.
 
-**`employment_tests.robot`** covers both Salaried and Self-Employed variants in one file. Per-test `[Setup]` navigates back to `/select-employment` and selects the desired variant.
+**E2E tests** live exclusively in `tests/e2e/`. Data-driven via `data/application_data.xlsx`, use `resources/E2EApplicationFlow.robot` and `libraries/ApplicationDataReader.py`.
 
 ## Lender Selection Session Model
 
-Lender selection tests are split across **6 files**:
-
 | File | Suite Setup | Session model | Key variable |
 |------|-------------|---------------|-------------|
-| `bureau_lender_flow_tests.robot` | `Navigate To Lender Selection New App` | Shared session; state-advancing tests run last | `${LENDER_APP_ID}` |
-| `bureau_lender_approval_tests.robot` | `Navigate To Lender Selection New App` | Shared session; 1 test (real BRE) | `${LENDER_APP_ID}` |
+| `bureau_lender_flow_tests.robot` | `Navigate To Lender Selection New App` | Shared; state-advancing tests run last | `${LENDER_APP_ID}` |
+| `bureau_lender_approval_tests.robot` | `Navigate To Lender Selection New App` | Shared; 1 test (real BRE) | `${LENDER_APP_ID}` |
 | `bureau_lender_rejection_tests.robot` | None (per-test `[Setup]`) | Each test owns fresh browser + app | `${LENDER_NR0N_MOBILE}` per test |
-| `bureau_lender_screen_UI_tests.robot` | `Navigate To Lender Selection New App` | Shared session; Test Setup resets to lender page | `${LENDER_APP_ID}` |
-| `bureau_lender_flow_renewalapp_tests.robot` | `Navigate To Lender Selection Renewal App` | Shared session; Test Setup resets to lender page | `${LENDER_RENEWAL_APP_ID}` |
-| `bank_statement_tests.robot` | `Navigate To Bank Statement Via BRE Rejection` | Shared session | `${BS_APP_CODE}` |
+| `bureau_lender_screen_UI_tests.robot` | `Navigate To Lender Selection New App` | Shared; Test Setup resets to lender page | `${LENDER_APP_ID}` |
+| `bureau_lender_flow_renewalapp_tests.robot` | `Navigate To Lender Selection Renewal App` | Shared; Test Setup resets to lender page | `${LENDER_RENEWAL_APP_ID}` |
+| `bank_statement_tests.robot` | `Navigate To Bank Statement Via BRE Rejection` | Shared | `${BS_APP_CODE}` |
 
-**Common session model (shared-session files):**
-- `Suite Setup` — opens browser, creates fresh application, navigates to lender selection or bank statement page, captures dynamic `{app_id}` or `{app_code}` via `Extract App ID From Current URL` / `Extract App Code From Bank Statement URL`.
-- `Test Setup` — `Navigate To Lender Selection Within Session ${LENDER_APP_ID}`: hard-navigates to `/application-loader/{app_id}`. No new login.
-- `Test Teardown` — NONE (shared session preserved), except state-advancing tests which use `[Teardown] Unroute BRE Mock`.
-- `Suite Teardown` — `Close Browser`.
+**bureau_lender_rejection_tests.robot** — isolated model: each test uses its own `[Setup] Login And Navigate To Lender Selection New App` with unique `${LENDER_NR0N_MOBILE}` and plan index; each test uses `[Teardown] Close Browser`. TC-LS-NR05 uses `Login And Submit New App` (plan 4 — all bureau lenders ineligible).
 
-**bureau_lender_rejection_tests.robot** — isolated model:
-- Each test uses its own `[Setup] Login And Navigate To Lender Selection New App` with a unique `${LENDER_NR0N_MOBILE}` and plan index.
-- Each test uses `[Teardown] Close Browser` — no shared session.
-- TC-LS-NR05 uses `Login And Submit New App` (plan 4 — all bureau lenders ineligible, never reaches lender selection page).
-
-**State-advancing tests (BRE mock tests) in bureau_lender_flow_tests.robot run LAST:**
+**State-advancing tests in bureau_lender_flow_tests.robot run LAST:**
 - TC_LENDER_01: Suite Setup app, mock APPROVED → KYC.
 - TC_LENDER_02: `[Setup] Navigate To Lender Selection Within Session` — reset, mock REJECTED then APPROVED.
 - TC_LENDER_03, TC_LENDER_04: `[Teardown] Run Keywords    Unroute BRE Mock    AND    Run Keyword And Ignore Error    Close Browser` (partial tests).
 
+## Agreement / Esign Session Model
+
+| File | Suite Setup | Session model | Key variable |
+|------|-------------|---------------|-------------|
+| `agreement_tests.robot` | `Navigate To Esign New App` | Shared (plan 1, fresh mobile); state-advancing tests run last | `${ESIGN_APP_ID}` |
+
+**TC-AG-030 and TC-AG-031 run LAST in shared session** — TC-AG-030 signs the agreement (navigates away from /esign/); TC-AG-031 uses `[Setup] NONE` and asserts the post-sign redirect URL.
+
+**TC-AG-033, TC-AG-DP-001 own browser sessions** — `[Setup] Navigate To Esign New App` opens a new browser; `[Teardown] Close Browser` closes it.
+
+**TC-AG-NACH-001** — `[Setup] Navigate To Esign New App With Plan    plan_index=6`; `[Teardown] Close Browser`. Uses plan 6 (no downpayment → /nach/ after esign). Sets `${NACH_APP_ID}`.
+
+**Post-esign URL logic:**
+- Plan 1 (has downpayment) → signing redirects to `/down-payment/{app_id}`
+- Plan 6 (no downpayment) → signing redirects to `/nach/{app_id}`
+
+---
+
 **BRE API mocking:** `Mock BRE Assign Lender    APPROVED|REJECTED` in `LenderSelectionPage.robot` uses `Evaluate JavaScript` to override `window.fetch`, intercepting `/v2/credit-engine/assign-lender` and `/v2/credit-engine/assign-lender/fetch` calls. `Switch BRE Mock To    APPROVED|REJECTED` swaps the mock mid-test. Always call `Unroute BRE Mock` in teardown to restore original `window.fetch`. Used only by `bureau_lender_flow_tests.robot` — `lender_selection_e2e_tests.robot` uses real BRE (no mock).
-
-## Locators
-
-All locators use `data-testid` CSS selectors exclusively — CSS class names use CSS Modules (hashed, unstable). Never use CSS class selectors or absolute XPath.
-
-| Element | Locator |
-|---------|---------|
-| Login form | `css=[data-testid='login-form']` |
-| Mobile input | `css=[data-testid='mobile-number-input']` |
-| Consent checkbox | `css=[data-testid='consent-checkbox']` |
-| Send OTP button | `css=[data-testid='send-otp-button']` |
-| OTP form | `css=[data-testid='verify-otp-form']` |
-| OTP input | `css=[data-testid='otp-input']` |
-| Verify OTP button | `css=[data-testid='verify-otp-button']` |
-| Resend OTP link | `css=[data-testid='resend-otp-link']` (visible only after 180s countdown) |
-| Dashboard title | `css=[data-testid='dashboard-title']` |
-| Profile button | `css=[data-testid='profile-button']` |
-| EMI tab | `css=[data-testid='emi-tab-navigation-button']` |
-| PG tab | `css=[data-testid='pg-tab-navigation-button']` |
-| Filter button | `css=[data-testid='filter-button']` |
-| Insurance tab | `css=[data-testid='ins-tab-navigation-button']` |
-| Welcome Back continue button | `text=CONTINUE WITH THESE DETAILS` |
-| Welcome Back change applicant | `text=CHANGE APPLICANT DETAILS` |
-| Verify Details address title | `xpath=//h3[normalize-space()='Residential details']` |
-| Verify Details addr line 1 | `css=[data-testid='addr-line-1-input']` |
-| Verify Details addr line 2 | `css=[data-testid='addr-line-2-input']` |
-| Verify Details current address title | `css=[data-testid='current-address-title']` |
-| Verify Details residence type title | `css=[data-testid='residence-type-title']` |
-| Verify Details back button | `role=button[name=BACK]` |
-| Verify Details confirm button | `text=CONFIRM AND PROCEED` (on /renewal-details; navigates to /confirm-application) |
-| Verify Details residence type radios | `css=[data-testid='type-radio']` — nth=0 Rented, nth=1 Self Owned, nth=2 Other |
-| Verify Details residential submit | `css=[data-testid='proceed-button']` (in residential edit form) |
-| Verify Details employment type title | `xpath=//label[contains(normalize-space(),'Salaried or Self-Employed')]` |
-| Verify Details salaried card | `css=[data-testid='salaried']` |
-| Verify Details SE card | `css=[data-testid='self-employed']` |
-| Verify Details employer name | `css=[data-testid='employer-name-input']` |
-| Verify Details monthly salary | `css=[data-testid='net-monthly-salary-input']` |
-| Verify Details business name | `css=[data-testid='business-name-input']` |
-| Verify Details annual income | `css=[data-testid='business-annual-income-input']` |
-| Verify Details years in business | `css=[data-testid='years-of-current-business-input']` |
-| Verify Details business description | `css=[data-testid='business-description-input']` |
-| Verify Details employment submit | `css=button:has-text("SUBMIT")` |
-| Confirm Application consent | `css=[data-testid='consent-checkbox']` (on /confirm-application, NOT /renewal-details) |
-| Confirm Application proceed | `css=[data-testid='proceed-button']` (on /confirm-application; disabled without consent) |
-
-## Exact Validation Error Strings
-
-Tests assert these exact strings — do not paraphrase:
-
-| Scenario | Error element | Message |
-|----------|--------------|---------|
-| Empty mobile | `mobile-number-input-error` | `Please enter your mobile number` |
-| Invalid mobile format | `mobile-number-input-error` | `Please enter valid mobile number` |
-| Short mobile (< 10 digits) | `mobile-number-input-error` | `Please enter valid mobile number` (regex fires before length) |
-| No consent | `consent-checkbox-error` | `Please accept Terms and Conditions` |
-| Empty OTP | `otp-input-error` | `Please enter 4 digit OTP` |
-| Short OTP (< 4 digits) | `otp-input-error` | `OTP number must contain 4 digits` |
-| Non-numeric OTP | `otp-input-error` | `Only numeric values allowed` |
-| Wrong OTP | URL stays on `/verify` (primary); toast `text=Incorrect OTP` (secondary — non-blocking, may be absent if verifyOtpPost rate-limited) |
-| Verify Details no consent | proceed-button `disabled` property on /confirm-application (no error element — button is disabled) |
-| Verify Details empty addr line 1 | `addr-line-1-input-error` | shown in residential edit form |
-| Verify Details empty addr line 2 | `addr-line-2-input-error` | shown in residential edit form |
-| Verify Details invalid pincode | `pincode-input-error` | shown in residential edit form |
-| Verify Details empty business name | `business-name-input-error` | shown in employment edit form |
-| Verify Details invalid annual income | `business-annual-income-input-error` | shown in employment edit form |
-| Verify Details invalid years in business | `years-of-current-business-input-error` | shown in employment edit form |
-| Verify Details empty business description | `business-description-input-error` | shown in employment edit form |
-| Verify Details empty employer name | `employer-name-input-error` | shown in salaried employment edit form |
-| Verify Details empty/invalid monthly salary | `net-monthly-salary-input-error` | shown in salaried employment edit form |
 
 ## Claude Working Rules (VERY IMPORTANT)
 
@@ -502,7 +356,7 @@ Whenever a new feature is given:
 
 Whenever any change is made to the project — new test cases, new keywords, new resources, new variables, structural changes, or bug fixes — **always update ALL relevant project files in the same session**:
 
-* **CLAUDE.md** — update architecture, commands, session model, locator tables, or any section that reflects the changed area
+* **CLAUDE.md** — update architecture, commands, session model, or any section that reflects the changed area
 * **README.md** — update if the change affects setup, usage, or feature coverage
 * **jenkins.md** — update if the change affects CI/CD pipeline configuration or test execution
 * **`projectreview.md`** — update the relevant section(s) whenever any file, folder, keyword, test, variable, resource, or CI config changes; this file is the complete per-file reference for the project
@@ -510,35 +364,3 @@ Whenever any change is made to the project — new test cases, new keywords, new
 * **Test case files** (`tests/` and subdirectories) — update existing test cases or add new ones to cover the changed functionality; ensure TC IDs, tags, and assertions stay consistent with the change
 
 Do NOT complete a task and stop without checking whether each of these files needs updating. Even small changes (e.g., a new test tag, a renamed keyword, a new mobile number) must be reflected in the relevant documentation and test files in the same response.
-
-## Routes
-
-| Page | URL path |
-|------|----------|
-| Login | `/` |
-| OTP verification | `/verify` |
-| Dashboard | `/my-applications` |
-| FAQ | `/faq` |
-| Bypass Auth | `/instant-eligibility` (with `?m=<mobile>` for tokenised ERP access) |
-| Student Details | `/student-details` |
-| Choose Plan | `/choose-plan` |
-| Select Applicant | `/select-applicant` |
-| Applicant Basic Details | `/applicant-basic-details` |
-| Onboarding | `/onboarding` |
-| Applicant Personal Details | `/applicant-personal-details` |
-| Applicant Residential Details | `/applicant-residential-details` |
-| Select Employment Type | `/select-employment` |
-| Applicant Employment Details | `/applicant-employment-details` (shared URL; form variant = salaried or self-employed) |
-| Confirm Application | `/confirm-application` |
-| Welcome Back (renewal) | `/renewal-confirmation` |
-| Verify Details (renewal) | `/renewal-details` |
-| Repayment Schedule | `/repayment/{app_id}` |
-| View Application Details | `/application-details/{app_id}` |
-| Upload Documents (DMS) | `/dms/{app_id}` |
-| Lender Selection | `/application-loader/{app_id}` |
-| Lender Selection Status | `/application-loader-status/{app_id}` |
-| Application Status | `/application-status/{app_id}` |
-| KYC (okyc) | `/okyc/{app_id}` |
-| Bank Statement Select Bank | `/bank-statement/{app_code}` |
-| Bank Statement Manual Upload | `/bank-statement-manual-upload/{app_code}` |
-| Bank Statement Status | `/bank-statement-status/{app_code}` |

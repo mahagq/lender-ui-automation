@@ -19,6 +19,7 @@ Documentation
 
 Library     Browser
 Resource    ApplicationCreationFlowPage.robot
+Resource    EsignPage.robot
 
 *** Keywords ***
 Renewal Details URL Should Be Visible
@@ -430,3 +431,45 @@ Perform KYC Bypass Journey
     Bypass KYC Via Database    ${active_mobile}    ${app_id}
     Reload
     Wait Until Keyword Succeeds    ${SUBMISSION_TIMEOUT}    500ms    Esign URL Should Be Active    ${app_id}
+
+Navigate To Esign New App
+    [Documentation]
+    ...    Suite Setup for agreement/esign tests — new application journey.
+    ...    Calls Perform KYC Bypass Journey (journey_type=new, plan 1, Western Capital),
+    ...    then extracts and stores the esign app ID as ${ESIGN_APP_ID} suite variable.
+    ...    Calling suite MUST import: LenderSelectionPage.robot, OKYCPage.robot, KycBypassDb library.
+    Perform KYC Bypass Journey    journey_type=new
+    ${app_id}=    Extract App ID From Esign URL
+    Set Suite Variable    ${ESIGN_APP_ID}    ${app_id}
+
+Navigate To Esign Renewal App
+    [Documentation]
+    ...    Suite Setup for agreement/esign tests — renewal application journey.
+    ...    Uses ${RENEWAL_MOBILE}. Calls Perform KYC Bypass Journey (journey_type=renewal),
+    ...    then extracts and stores the esign app ID as ${ESIGN_APP_ID} suite variable.
+    ...    Calling suite MUST import: LenderSelectionPage.robot, OKYCPage.robot, KycBypassDb library.
+    Perform KYC Bypass Journey    journey_type=renewal
+    ${app_id}=    Extract App ID From Esign URL
+    Set Suite Variable    ${ESIGN_APP_ID}    ${app_id}
+
+Navigate To Esign New App With Plan
+    [Documentation]
+    ...    Per-test Setup keyword — opens a fresh browser, creates a new application with the given
+    ...    plan_index, selects Western Capital, bypasses KYC via DB, and lands on /esign/{app_id}.
+    ...    Stores the esign app ID as ${NACH_APP_ID} suite variable (named for plan 6 NACH use-case).
+    ...    plan_index=1 → /down-payment after esign; plan_index=6 → /nach after esign.
+    ...    Calling suite MUST import: LenderSelectionPage.robot, OKYCPage.robot, KycBypassDb library.
+    [Arguments]    ${plan_index}=6
+    Login And Navigate To Lender Selection New App    plan_index=${plan_index}
+    Check KFS Consent If Present
+    Click Lender Continue Button By Name    Western Capital
+    Wait For Bureau Decision
+    Successful Lender Assignment Should Be Visible
+    Click Proceed To KYC
+    OKYC URL Should Be Active
+    ${app_id}=    Extract App ID From OKYC URL
+    Bypass KYC Via Database    ${APP_CREATION_MOBILE}    ${app_id}
+    Reload
+    Wait Until Keyword Succeeds    ${SUBMISSION_TIMEOUT}    500ms    Esign URL Should Be Active    ${app_id}
+    ${esign_app_id}=    Extract App ID From Esign URL
+    Set Suite Variable    ${NACH_APP_ID}    ${esign_app_id}
