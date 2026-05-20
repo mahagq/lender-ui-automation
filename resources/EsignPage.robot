@@ -74,6 +74,11 @@ Extract App ID From Esign URL
     ${app_id}=    Evaluate    '${url}'.split('/esign/')[-1].split('?')[0].rstrip('/')
     RETURN    ${app_id}
 
+Extract App ID From Down Payment URL
+    ${url}=    Get Url
+    ${app_id}=    Evaluate    '${url}'.split('/down-payment/')[-1].split('?')[0].rstrip('/')
+    RETURN    ${app_id}
+
 Down Payment URL Should Be Active
     [Arguments]    ${app_id}
     ${url}=    Get Url

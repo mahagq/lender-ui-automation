@@ -37,7 +37,7 @@ Fall back to Grep/Glob/Read **only** when the graph returns no result.
 
 ## Overview
 
-Robot Framework UI automation suite for the GQ Customer Portal. Covers the login left component, login form, OTP verification flow, bypass authentication, dashboard, the full Application Creation Flow wizard (10 pages: `/student-details` → `/confirm-application`), Renewal Journey Flow (Welcome Back + Verify Details), Lender Selection Bureau Flow (lender assignment, BRE mocking, KYC redirect, bank statement upload), and Agreement/Esign Flow (`/esign/{app_id}` → `/down-payment/{app_id}` or `/nach/{app_id}`) — targeting UAT: `https://customer.uat.graydev.in/`. Uses the **Browser library (Playwright)** — not SeleniumLibrary.
+Robot Framework UI automation suite for the GQ Customer Portal. Covers the login left component, login form, OTP verification flow, bypass authentication, dashboard, the full Application Creation Flow wizard (10 pages: `/student-details` → `/confirm-application`), Renewal Journey Flow (Welcome Back + Verify Details), Lender Selection Bureau Flow (lender assignment, BRE mocking, KYC redirect, bank statement upload), Agreement/Esign Flow (`/esign/{app_id}` → `/down-payment/{app_id}` or `/nach/{app_id}`), and Downpayment Flow (`/down-payment/{app_id}` Steps 1/5/6 + `/down-payment-status/{app_id}`) — targeting UAT: `https://customer.uat.graydev.in/`. Uses the **Browser library (Playwright)** — not SeleniumLibrary.
 
 ## Commands
 
@@ -58,7 +58,19 @@ Pattern: `./env/bin/robot --outputdir results/ tests/<folder>/<file>.robot`
 ./env/bin/robot --outputdir results/ --include salaried tests/application_creation_flow/employment_tests.robot
 ```
 
-Tags: `smoke`, `login`, `otp`, `bypass-auth`, `dashboard`, `resend`, `application-details`, `repayment-schedule`, `view-applicant-details`, `upload-documents`, `application-creation-flow`, `salaried`, `self-employed`, `renewal`, `renewal-journey-flow`, `skip-journey`, `edit-residential`, `edit-employment`, `lender-selection`, `lender-selection-new`, `lender-selection-renewal`, `lender-approval`, `lender-rejection`, `bank-statement`, `lender-selection-e2e`, `kyc-bypass`, `partial`, `agreement`, `esign-redirect`
+Tags: `smoke`, `login`, `otp`, `bypass-auth`, `dashboard`, `resend`, `application-details`, `repayment-schedule`, `view-applicant-details`, `upload-documents`, `application-creation-flow`, `salaried`, `self-employed`, `renewal`, `renewal-journey-flow`, `skip-journey`, `edit-residential`, `edit-employment`, `lender-selection`, `lender-selection-new`, `lender-selection-renewal`, `lender-approval`, `lender-rejection`, `bank-statement`, `lender-selection-e2e`, `kyc-bypass`, `partial`, `agreement`, `esign-redirect`, `down-payment`, `change-plan`
+
+### Run downpayment tests
+```bash
+# All flows (A+B+C+E+F shared session)
+./env/bin/robot --outputdir results/ tests/downpayment/down_payment_tests.robot
+
+# By flow tag
+./env/bin/robot --outputdir results/ --include down-payment tests/downpayment/
+
+# Flow D only (change plan — requires GILE-configured app)
+./env/bin/robot --outputdir results/ --include change-plan tests/downpayment/down_payment_change_plan_tests.robot
+```
 
 ### Dry run (syntax check, no browser)
 ```bash
@@ -129,6 +141,9 @@ tests/                     — Test suites (import resources and variables)
     bank_statement_tests.robot                  — Bank statement journey tests
   agreement/
     agreement_tests.robot                  — Agreement/Esign page tests (35 TCs; plan 1 suite setup; TC-AG-DP-001 plan 1 → /down-payment; TC-AG-NACH-001 plan 6 → /nach)
+  downpayment/
+    down_payment_tests.robot               — Downpayment Flows A+B+C+E+F (51 TCs shared session; Razorpay test mode; Flow E+F run LAST; sets ${DP_APP_ID})
+    down_payment_change_plan_tests.robot   — Downpayment Flow D: Change Plan Steps 2→3→4 (34 TCs; own browser session; Thakkar International Academy — GILE EMI_PLAN_CHANGE=true)
   application_creation_flow/
     student_details_tests.robot            — Student Details page tests
     choose_plan_tests.robot                — Choose Plan page tests
@@ -163,10 +178,11 @@ resources/                 — Page Object keyword libraries (no variable import
   ConfirmApplicationPage.robot       — Keywords + locators for /confirm-application
   WelcomeBackPage.robot              — Keywords + locators for renewal Welcome Back pre-fill screen
   VerifyDetailsPage.robot            — Keywords + locators for renewal Verify Details review screen
-  E2EApplicationFlow.robot           — E2E orchestration: Create Full Application (sets ${LAST_USED_MOBILE} suite var) + Create Full Renewal Application + Create Full Application With Lender Assignment + Create Full Renewal Application With Lender Assignment + Perform KYC Bypass Journey (journey_type=new|renewal; plan 1, Western Capital; runs Bypass KYC Via Database on /okyc/, reloads to /esign/) + Navigate To Esign New App (Suite Setup for agreement tests; sets ${ESIGN_APP_ID}) + Navigate To Esign Renewal App + Navigate To Esign New App With Plan (per-test setup; plan_index arg; sets ${NACH_APP_ID}); all lender assignment keywords use real BRE — no mock
+  E2EApplicationFlow.robot           — E2E orchestration: Create Full Application (sets ${LAST_USED_MOBILE} suite var) + Create Full Renewal Application + Create Full Application With Lender Assignment (optional institute_search arg, default ${APP_INSTITUTE_SEARCH}) + Create Full Renewal Application With Lender Assignment + Perform KYC Bypass Journey (journey_type=new|renewal; plan 1, Western Capital; runs Bypass KYC Via Database on /okyc/, reloads to /esign/) + Navigate To Esign New App (Suite Setup for agreement tests; sets ${ESIGN_APP_ID}) + Navigate To Esign Renewal App + Navigate To Esign New App With Plan (per-test setup; plan_index arg; sets ${NACH_APP_ID}) + Navigate To Down Payment New App (Suite Setup for downpayment tests; full journey login→wizard→BRE→KYC bypass→esign→sign→/down-payment/; sets ${ESIGN_APP_ID} and ${DP_APP_ID}) + Navigate To Down Payment Change Plan App (Suite Setup for change plan tests; uses Thakkar International Academy; sets ${ESIGN_APP_ID} and ${DP_CHANGE_APP_ID}); all lender assignment keywords use real BRE — no mock
   LenderSelectionPage.robot          — Keywords + locators for /application-loader/{app_id} (lender selection + BRE mocking)
   OKYCPage.robot                     — Keywords for /okyc/{app_id}: URL assertion, Extract App ID From OKYC URL, Esign URL Should Be Active
-  EsignPage.robot                    — Keywords + locators for /esign/{app_id} (agreement summary, consent, modal, signing); URL helpers for /down-payment/ and /nach/
+  EsignPage.robot                    — Keywords + locators for /esign/{app_id} (agreement summary, consent, modal, signing); URL helpers for /down-payment/ and /nach/; Extract App ID From Down Payment URL
+  DownPaymentPage.robot              — Keywords + locators for /down-payment/{app_id} (Steps 1/5/6) and /down-payment-status/{app_id}; variables: ${DP_ONLINE_PAYMENT} (data-testid='online_payment'), ${DP_STATUS_TITLE} (css=div[data-testid='title'] — scoped to success div, not next-step span); Razorpay iframe selectors (DP_RZ_*) confirmed from recording; Navigate To Step 6 Via Bank Transfer; Complete Razorpay Payment Via UPI; Close Razorpay Modal
   BankStatementPage.robot            — Keywords for bank statement journey (stub; PENDING TESTID)
 
 variables/
@@ -289,6 +305,26 @@ Each wizard suite uses `${APP_CREATION_MOBILE}` (generated fresh per run by `var
 **Post-esign URL logic:**
 - Plan 1 (has downpayment) → signing redirects to `/down-payment/{app_id}`
 - Plan 6 (no downpayment) → signing redirects to `/nach/{app_id}`
+
+## Down Payment Session Model
+
+| File | Suite Setup | Session model | Key variable |
+|------|-------------|---------------|-------------|
+| `down_payment_tests.robot` | `Navigate To Down Payment New App` | Shared (plan 1, fresh mobile); Flows A+B+C share default Test Setup; Flow E+F run LAST | `${DP_APP_ID}` |
+| `down_payment_change_plan_tests.robot` | `Navigate To Down Payment Change Plan App` | Own browser session; Flow D only | `${DP_CHANGE_APP_ID}` |
+
+**Flow ordering in `down_payment_tests.robot`:**
+- Flow A (TC-DP-001–009): Step 1 SelectedPlan UI. Default Test Setup: `Go To /down-payment/${DP_APP_ID}` + `Down Payment Page Should Be Visible`.
+- Flow B (TC-DP-011–020): Step 5 DownPaymentMethod UI. Test Setup: `Go To /down-payment/${DP_APP_ID}#5` + `Down Payment Step 5 Should Be Visible`.
+- Flow C (TC-DP-031–040): Step 6 VirtualAccountBankDetails. Test Setup: `Navigate To Step 6 Via Bank Transfer` (navigates through Step 5 → selects Bank Transfer → submits → waits for Step 6).
+- Flow E (TC-DP-RZ-001–005): Razorpay test mode via UPI `success@razorpay`. Runs **LAST** — creates real DB entries in `razorpay_order_details`, `gq_internal_payment_transaction_logs`, `customer_tracker`. TC-DP-RZ-001 opens modal (`[Setup] Go To #5 + Step5 Visible`), RZ-002/003/004/005 all use `[Setup: NONE]` — modal stays open through the chain. RZ-004 completes payment; iframe auto-closes after redirect to /down-payment-status/.
+- Flow F (TC-DP-STATUS-001–014): `/down-payment-status/{app_id}` page. `[Setup] NONE` — inherits browser state from Flow E redirect. **Must run together with Flow E** (use `--include down-payment-razorpay --include down-payment-status`).
+
+**Razorpay iframe selectors:** All `DP_RZ_*` selectors confirmed from Playwright recording `login_20260518_174915.js`. UPI tab: `iframe >>> [data-testid='upi']`; input: `iframe >>> [placeholder='example@okhdfcbank']`; submit: `iframe >>> [data-testid='vpa-submit']`; fee confirm: `iframe >>> [data-testid='fee-bearer-cta']`; payment status: `iframe >>> [data-testid='payment-status-heading']`.
+
+**Step 6 navigation:** Step 6 requires `location.state.smartCollectSelected=true` (React Router state). Direct URL navigation to `#6` will render empty. Always use `Navigate To Step 6 Via Bank Transfer` keyword which goes through Step 5 programmatically.
+
+**Flow D (Change Plan):** Institute: **Thakkar International Academy** (GILE `EMI_PLAN_CHANGE=true`). Suite Setup: `Navigate To Down Payment Change Plan App` — fresh login → full wizard → Western Capital → KYC bypass → esign → sign → `/down-payment/` → sets `${DP_CHANGE_APP_ID}`. Test Setup: `Go To /down-payment/${DP_CHANGE_APP_ID}` + `Down Payment Page Should Be Visible`. Covers Step 1 (change plan card visible), Step 2 (NewPlanList — `new-plan-list-title`, `css=[data-testid^='0-']` first plan, `proceed-button`), Step 3 (ConfirmNewPlan — `confirm-new-plan-title`, `view-agreement-button`, `agreement-preview-proceed-button`, `consent-checkbox`, `confirm-new-plan-button`), Step 4 (ConfirmNewPlanSuccess — `plan-details-title`, `emi-amount-value`, `emi-count-value`, `total-loan-amount`, `apr-value`, `proceed-to-next-button`, `close-button`). Step 4 tests state-advancing — TC-DP-D-025 changes plan in DB; TC-DP-D-026–034 use `[Setup: NONE]`.
 
 ---
 

@@ -164,22 +164,29 @@ Create Full Application
     IF    ${on_welcome_back}
         Click    text=CHANGE APPLICANT DETAILS
     END
-    Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    Select Applicant URL Should Be Active
-
-    # ── Step 5: Select Applicant ──────────────────────────────────────────────────
-    Wait For Elements State    ${SA_PARENT_OPTION}    visible    timeout=${TIMEOUT}
-    IF    '${applicant_type}' == 'Student+Parent/Guardian'
-        Select Student Option
-        Select Parent Guardian Option
-    ELSE IF    '${applicant_type}' == 'Student'
-        Select Student Option
-        Check Age Eligibility Checkbox
-        Check Salary Eligibility Checkbox
-    ELSE
-        Select Parent Guardian Option
+    # Some GILE configs skip /select-applicant and land directly on /applicant-basic-details
+    ${on_select}=    Run Keyword And Return Status
+    ...    Wait Until Keyword Succeeds    10s    500ms    Select Applicant URL Should Be Active
+    IF    not ${on_select}
+        Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    Basic Details URL Should Be Active
     END
-    Click Submit Applicant Type Button
-    Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    Basic Details URL Should Be Active
+
+    # ── Step 5: Select Applicant (skipped when GILE pre-configures applicant type) ──
+    IF    ${on_select}
+        Wait For Elements State    ${SA_PARENT_OPTION}    visible    timeout=${TIMEOUT}
+        IF    '${applicant_type}' == 'Student+Parent/Guardian'
+            Select Student Option
+            Select Parent Guardian Option
+        ELSE IF    '${applicant_type}' == 'Student'
+            Select Student Option
+            Check Age Eligibility Checkbox
+            Check Salary Eligibility Checkbox
+        ELSE
+            Select Parent Guardian Option
+        END
+        Click Submit Applicant Type Button
+        Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    Basic Details URL Should Be Active
+    END
 
     # ── Step 6: Applicant Basic Details ──────────────────────────────────────────
     Wait For Elements State    ${BD_FIRST_NAME}    visible    timeout=${TIMEOUT}
@@ -353,10 +360,10 @@ Create Full Application With Lender Assignment
     ...    ${dob_year}    ${dob_month}    ${dob_day}
     ...    ${email}    ${address_line1}    ${address_line2}    ${pincode}
     ...    ${employer_name}    ${monthly_salary}
-    ...    ${plan_index}=1    ${lender_name}=${EMPTY}
+    ...    ${plan_index}=1    ${lender_name}=${EMPTY}    ${institute_search}=${APP_INSTITUTE_SEARCH}
     IF    ${plan_index} == 1
         Create Full Application
-        ...    ${EMPTY}    ${APP_INSTITUTE_SEARCH}    ${EMPTY}    ${EMPTY}    ${EMPTY}
+        ...    ${EMPTY}    ${institute_search}    ${EMPTY}    ${EMPTY}    ${EMPTY}
         ...    ${student_first_name}    ${student_last_name}    New Admission    ${EMPTY}    SD12345
         ...    ${loan_amount}    Parent/Guardian    ${applicant_first_name}    ${applicant_last_name}
         ...    ${pan_number}    Male    ${dob_year}    ${dob_month}    ${dob_day}
@@ -442,6 +449,22 @@ Navigate To Esign New App
     ${app_id}=    Extract App ID From Esign URL
     Set Suite Variable    ${ESIGN_APP_ID}    ${app_id}
 
+Navigate To Down Payment New App
+    [Documentation]
+    ...    Suite Setup for downpayment tests — new application journey.
+    ...    Full path: login (fresh dynamic mobile) → wizard (plan 1) → Western Capital (real BRE)
+    ...    → KYC DB bypass → /okyc/ → reload to /esign/ → sign agreement → /down-payment/{app_id}.
+    ...    Extracts and stores app ID as ${DP_APP_ID} suite variable.
+    ...    Calling suite MUST import: LenderSelectionPage.robot, OKYCPage.robot, EsignPage.robot,
+    ...    DownPaymentPage.robot, KycBypassDb library.
+    Perform KYC Bypass Journey    journey_type=new
+    ${esign_app_id}=    Extract App ID From Esign URL
+    Set Suite Variable    ${ESIGN_APP_ID}    ${esign_app_id}
+    Accept Terms And Sign Agreement
+    Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    Down Payment URL Should Be Active    ${ESIGN_APP_ID}
+    ${dp_app_id}=    Extract App ID From Down Payment URL
+    Set Suite Variable    ${DP_APP_ID}    ${dp_app_id}
+
 Navigate To Esign Renewal App
     [Documentation]
     ...    Suite Setup for agreement/esign tests — renewal application journey.
@@ -451,6 +474,35 @@ Navigate To Esign Renewal App
     Perform KYC Bypass Journey    journey_type=renewal
     ${app_id}=    Extract App ID From Esign URL
     Set Suite Variable    ${ESIGN_APP_ID}    ${app_id}
+
+Navigate To Down Payment Change Plan App
+    [Documentation]
+    ...    Suite Setup for change plan tests — Thakkar International Academy (EMI_PLAN_CHANGE=true).
+    ...    Full path: login (fresh dynamic mobile) → wizard → Western Capital (real BRE)
+    ...    → KYC DB bypass → /okyc/ → reload to /esign/ → sign → /down-payment/{app_id}.
+    ...    Sets ${DP_CHANGE_APP_ID} suite variable. Change plan card is visible on landing.
+    ...    Calling suite MUST import: LenderSelectionPage.robot, OKYCPage.robot, EsignPage.robot,
+    ...    DownPaymentPage.robot, KycBypassDb library.
+    Create Full Application With Lender Assignment
+    ...    ${APP_STUDENT_FIRST_NAME}    ${APP_STUDENT_LAST_NAME}    ${APP_LOAN_AMOUNT}
+    ...    ${APP_FIRST_NAME}    ${APP_LAST_NAME}    ${APP_PAN_NUMBER}
+    ...    ${APP_DOB_YEAR}    ${APP_DOB_MONTH}    ${APP_DOB_DAY}
+    ...    ${APP_EMAIL}    ${APP_ADDRESS_LINE1}    ${APP_ADDRESS_LINE2}    ${APP_PINCODE}
+    ...    ${APP_EMPLOYER_NAME}    ${APP_MONTHLY_SALARY}
+    ...    plan_index=1    lender_name=Western Capital    institute_search=Thakkar International Academy
+    Successful Lender Assignment Should Be Visible
+    Click Proceed To KYC
+    OKYC URL Should Be Active
+    ${app_id}=    Extract App ID From OKYC URL
+    Bypass KYC Via Database    ${LAST_USED_MOBILE}    ${app_id}
+    Reload
+    Wait Until Keyword Succeeds    ${SUBMISSION_TIMEOUT}    500ms    Esign URL Should Be Active    ${app_id}
+    ${esign_app_id}=    Extract App ID From Esign URL
+    Set Suite Variable    ${ESIGN_APP_ID}    ${esign_app_id}
+    Accept Terms And Sign Agreement
+    Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    Down Payment URL Should Be Active    ${ESIGN_APP_ID}
+    ${dp_change_app_id}=    Extract App ID From Down Payment URL
+    Set Suite Variable    ${DP_CHANGE_APP_ID}    ${dp_change_app_id}
 
 Navigate To Esign New App With Plan
     [Documentation]
