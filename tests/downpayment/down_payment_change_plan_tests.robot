@@ -296,3 +296,12 @@ TC-DP-D-034 Close Button Is Visible On Step 4
     [Tags]    change-plan-step4
     [Setup]    NONE
     Wait For Elements State    ${DP_CP_CLOSE_BTN}    visible    timeout=${TIMEOUT}
+
+TC-DP-D-035 Proceed To Next Button Navigates To NACH Step
+    [Documentation]
+    ...    State-advancing. Clicks proceed-to-next-button on Step 4.
+    ...    Asserts URL contains /nach/{app_id} — navigates to NACH EMI setup step.
+    [Tags]    change-plan-step4
+    [Setup]    NONE
+    Click    ${DP_CP_PROCEED_NEXT_BTN}
+    Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    Nach URL Should Be Active    ${DP_CHANGE_APP_ID}

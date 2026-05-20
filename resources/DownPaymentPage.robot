@@ -59,6 +59,11 @@ ${DP_STATUS_NACH}               css=[data-testid='nach']
 ${DP_STATUS_SELFIE}             css=[data-testid='selfie']
 ${DP_STATUS_FINAL_BTN}          css=[data-testid='complete-the-final-steps-button']
 
+# Change Plan — Lower EMI flow (Step 1) — ${DP_LOWER_EMI_APP_ID} app only (Ashvini Varhade)
+# TBD — update all DP_LE_* locators from Playwright recording once available
+${DP_LE_CARD}                   css=[data-testid='lower-emi-flow-card']
+${DP_LE_CARD_TYPE}              css=[data-testid='lower-emi-type']
+
 # Change Plan — Step 2 (NewPlanList) — ${DP_CHANGE_APP_ID} app only (GILE EMI_PLAN_CHANGE=true)
 ${DP_CP_PLAN_LIST_TITLE}        css=[data-testid='new-plan-list-title']
 ${DP_CP_FIRST_PLAN}             css=[data-testid^='0-']
@@ -172,6 +177,32 @@ Navigate To Change Plan Step 4
     ...    Goes through Step 3: checks consent, clicks confirm-new-plan-button → Step 4.
     ...    State-advancing — changes plan in DB. Call once per suite run.
     Navigate To Change Plan Step 3
+    Check Checkbox    ${DP_CP_CONSENT_CB}
+    Click    ${DP_CP_CONFIRM_BTN}
+    Down Payment Change Plan Step 4 Should Be Visible
+
+# ── Lower EMI Change Plan step navigation helpers ────────────────────────────
+
+Navigate To Lower EMI Change Plan Step 2
+    [Documentation]    Goes to Step 1 for lower EMI app, clicks lower-emi-flow-card, waits for Step 2.
+    Go To    ${BASE_URL}/down-payment/${DP_LOWER_EMI_APP_ID}
+    Down Payment Page Should Be Visible
+    Click    ${DP_LE_CARD}
+    Down Payment Change Plan Step 2 Should Be Visible
+
+Navigate To Lower EMI Change Plan Step 3
+    [Documentation]    Goes through Step 2: selects first plan, proceeds to Step 3.
+    Navigate To Lower EMI Change Plan Step 2
+    Click    ${DP_CP_FIRST_PLAN}
+    Wait For Elements State    ${DP_CP_PROCEED_BTN}    visible    timeout=${TIMEOUT}
+    Click    ${DP_CP_PROCEED_BTN}
+    Down Payment Change Plan Step 3 Should Be Visible
+
+Navigate To Lower EMI Change Plan Step 4
+    [Documentation]
+    ...    Goes through Step 3: checks consent, clicks confirm-new-plan-button → Step 4.
+    ...    State-advancing — changes plan in DB. Call once per suite run.
+    Navigate To Lower EMI Change Plan Step 3
     Check Checkbox    ${DP_CP_CONSENT_CB}
     Click    ${DP_CP_CONFIRM_BTN}
     Down Payment Change Plan Step 4 Should Be Visible

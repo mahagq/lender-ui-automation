@@ -504,6 +504,35 @@ Navigate To Down Payment Change Plan App
     ${dp_change_app_id}=    Extract App ID From Down Payment URL
     Set Suite Variable    ${DP_CHANGE_APP_ID}    ${dp_change_app_id}
 
+Navigate To Down Payment Lower EMI App
+    [Documentation]
+    ...    Suite Setup for lower EMI change plan tests — Ashvini Varhade (EMI_PLAN_CHANGE=true, plans with DP).
+    ...    Full path: login (fresh dynamic mobile) → wizard → Western Capital (real BRE)
+    ...    → KYC DB bypass → /okyc/ → reload to /esign/ → sign → /down-payment/{app_id}.
+    ...    Sets ${DP_LOWER_EMI_APP_ID} suite variable. Lower EMI change plan card visible on landing.
+    ...    Calling suite MUST import: LenderSelectionPage.robot, OKYCPage.robot, EsignPage.robot,
+    ...    DownPaymentPage.robot, KycBypassDb library.
+    Create Full Application With Lender Assignment
+    ...    ${APP_STUDENT_FIRST_NAME}    ${APP_STUDENT_LAST_NAME}    ${APP_LOAN_AMOUNT}
+    ...    ${APP_FIRST_NAME}    ${APP_LAST_NAME}    ${APP_PAN_NUMBER}
+    ...    ${APP_DOB_YEAR}    ${APP_DOB_MONTH}    ${APP_DOB_DAY}
+    ...    ${APP_EMAIL}    ${APP_ADDRESS_LINE1}    ${APP_ADDRESS_LINE2}    ${APP_PINCODE}
+    ...    ${APP_EMPLOYER_NAME}    ${APP_MONTHLY_SALARY}
+    ...    plan_index=1    lender_name=Western Capital    institute_search=Ashvini Varhade
+    Successful Lender Assignment Should Be Visible
+    Click Proceed To KYC
+    OKYC URL Should Be Active
+    ${app_id}=    Extract App ID From OKYC URL
+    Bypass KYC Via Database    ${LAST_USED_MOBILE}    ${app_id}
+    Reload
+    Wait Until Keyword Succeeds    ${SUBMISSION_TIMEOUT}    500ms    Esign URL Should Be Active    ${app_id}
+    ${esign_app_id}=    Extract App ID From Esign URL
+    Set Suite Variable    ${ESIGN_APP_ID}    ${esign_app_id}
+    Accept Terms And Sign Agreement
+    Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    Down Payment URL Should Be Active    ${ESIGN_APP_ID}
+    ${dp_lower_emi_app_id}=    Extract App ID From Down Payment URL
+    Set Suite Variable    ${DP_LOWER_EMI_APP_ID}    ${dp_lower_emi_app_id}
+
 Navigate To Esign New App With Plan
     [Documentation]
     ...    Per-test Setup keyword — opens a fresh browser, creates a new application with the given
