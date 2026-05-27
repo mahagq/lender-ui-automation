@@ -151,6 +151,12 @@ ${APP_BUSINESS_INCOME}        6000000
 ${APP_BUSINESS_YEARS}         05
 ${APP_BUSINESS_DESC}          Software consulting and services
 
+# Dynamic lender selection
+# Set LENDER_NAME env var to pick a specific lender by name (e.g. "Western Capital", "Prefr", "IDFC").
+# Leave blank to automatically click the first available lender on the page.
+# Can also be overridden per-row in application_data.xlsx via the lender_name column.
+${LENDER_NAME}                      %{LENDER_NAME=}
+
 # Lender Selection journey URL fragments
 ${URL_APPLICATION_LOADER}           /application-loader
 ${URL_APPLICATION_LOADER_STATUS}    /application-loader-status

@@ -1,14 +1,15 @@
 *** Settings ***
 Documentation
-...    End-to-end application creation test suite.
-...    Creates a complete GQ Customer Portal application from Login → Confirm & Submit.
+...    End-to-end application creation test suite — Login → Lender Selection.
+...    Creates a complete GQ Customer Portal application from Login all the way to Lender Selection.
 ...
-...    Driven by data/application_data.xlsx — each row produces one full application
-...    creation run.  Add rows to the Excel file to create N applications.
+...    Driven by data/application_data.xlsx — each row produces one full application run.
+...    Add rows to the Excel file to run N applications back-to-back.
 ...
-...    Leave the login_mobile column blank to auto-generate a random 10-digit mobile.
-...    Provide an existing account mobile to reuse that account (the "Create new application"
-...    button position adapts automatically — header for existing accounts, empty-state for new).
+...    Columns:
+...      login_mobile   — leave blank to auto-generate a random mobile each run
+...      lender_name    — leave blank to auto-select first available lender,
+...                       OR set to a lender name e.g. "Western Capital", "Prefr", "IDFC"
 ...
 ...    Run:
 ...      ./env/bin/robot --outputdir results/ tests/e2e/e2e_create_application_tests.robot
@@ -17,51 +18,52 @@ Documentation
 
 Library     ../../libraries/ApplicationDataReader.py
 Resource    ../../resources/E2EApplicationFlow.robot
+Resource    ../../resources/LenderSelectionPage.robot
 Resource    ../../variables/variables.robot
 
 Test Tags   e2e    application-creation-flow
 
 *** Test Cases ***
-Create Applications From Excel
-    [Documentation]    Reads every row from data/application_data.xlsx and creates
-    ...                one full application per row.
+Create Full Journey From Excel
+    [Documentation]
+    ...    Reads every row from data/application_data.xlsx and runs one complete journey per row.
+    ...    Each journey goes: Login → Wizard → Confirm → Lender Selection → KYC / Bank Statement.
+    ...    lender_name column controls which lender is selected (blank = first available).
     ${rows}=    Read Application Data    data/application_data.xlsx
     FOR    ${row}    IN    @{rows}
         TRY
-            Create Full Application
-            ...    ${row}[login_mobile]
-            ...    ${row}[institute_search]
-            ...    ${row}[location]
-            ...    ${row}[course]
-            ...    ${row}[academic_year]
-            ...    ${row}[student_first_name]
-            ...    ${row}[student_last_name]
-            ...    ${row}[admission_type]
-            ...    ${row}[class]
-            ...    ${row}[student_id]
-            ...    ${row}[loan_amount]
-            ...    ${row}[applicant_type]
-            ...    ${row}[applicant_first_name]
-            ...    ${row}[applicant_last_name]
-            ...    ${row}[pan_number]
-            ...    ${row}[gender]
-            ...    ${row}[dob_year]
-            ...    ${row}[dob_month]
-            ...    ${row}[dob_day]
-            ...    ${row}[marital_status]
-            ...    ${row}[email]
-            ...    ${row}[address_line1]
-            ...    ${row}[address_line2]
-            ...    ${row}[pincode]
-            ...    ${row}[residence_type]
-            ...    ${row}[employment_type]
-            ...    ${row}[employer_name]
-            ...    ${row}[monthly_salary]
-            ...    ${row}[business_name]
-            ...    ${row}[annual_income]
-            ...    ${row}[years_in_business]
-            ...    ${row}[business_description]
-            ...    ${row}[referral_code]
+            # Resolve lender — use row value if set, else fall back to global LENDER_NAME variable
+            ${row_lender}=    Set Variable    ${row}[lender_name]
+            ${lender}=    Set Variable If    '${row_lender}' != ''    ${row_lender}    ${LENDER_NAME}
+
+            Create Full Application With Lender Assignment
+            ...    student_first_name=${row}[student_first_name]
+            ...    student_last_name=${row}[student_last_name]
+            ...    loan_amount=${row}[loan_amount]
+            ...    applicant_first_name=${row}[applicant_first_name]
+            ...    applicant_last_name=${row}[applicant_last_name]
+            ...    pan_number=${row}[pan_number]
+            ...    dob_year=${row}[dob_year]
+            ...    dob_month=${row}[dob_month]
+            ...    dob_day=${row}[dob_day]
+            ...    email=${row}[email]
+            ...    address_line1=${row}[address_line1]
+            ...    address_line2=${row}[address_line2]
+            ...    pincode=${row}[pincode]
+            ...    employer_name=${row}[employer_name]
+            ...    monthly_salary=${row}[monthly_salary]
+            ...    plan_index=1
+            ...    lender_name=${lender}
+            ...    institute_search=${row}[institute_search]
+
+            Wait For Bureau Decision
+            ${url}=    Get Url
+            IF    '/application-status/' in '${url}'
+                Log    ✅ APPROVED — Lender: ${lender}    console=True
+            ELSE IF    '/bank-statement/' in '${url}'
+                Log    ℹ️ REJECTED → Bank Statement — Lender: ${lender}    console=True
+            END
+
             Run Keyword And Ignore Error    Close Browser
         EXCEPT    message=*    type=GLOB
             Run Keyword And Ignore Error    Close Browser
