@@ -38,7 +38,7 @@ ${HEADLESS}               False
 # Timeouts
 ${TIMEOUT}                10s
 ${LONG_TIMEOUT}           30s
-${SUBMISSION_TIMEOUT}     60s
+${SUBMISSION_TIMEOUT}     240s
 ${RESEND_OTP_WAIT}        185s
 
 # Negative test data — invalid inputs for validation error tests
@@ -119,19 +119,38 @@ ${RENEWAL_MOBILE}         %{RENEWAL_MOBILE=8108556708}
 ${RESUME_MOBILE}          %{RESUME_MOBILE=9876543210}
 
 # Student details stub data (used by traversal helpers in Suite Setups)
-${APP_STUDENT_FIRST_NAME}     Masira
-${APP_STUDENT_LAST_NAME}      Darvesh
-${APP_LOAN_AMOUNT}            100000
+${APP_STUDENT_FIRST_NAME}     Mahalakshmi   
+${APP_STUDENT_LAST_NAME}      Thevar
+${APP_LOAN_AMOUNT}            99999
 # Institute search term for async GILE institute dropdown (types this to trigger API search).
 # Use a term that returns at least one result on UAT. Override via APP_INSTITUTE_SEARCH env var.
 ${APP_INSTITUTE_SEARCH}       %{APP_INSTITUTE_SEARCH=Masira Darvesh}
-${APP_INSTITUTE_SEARCH_2}     %{APP_INSTITUTE_SEARCH_2=Oaksmith High School}    
+${APP_INSTITUTE_SEARCH_2}     %{APP_INSTITUTE_SEARCH_2=Oaksmith High School}
+
+# Ratnaafin-specific GILE institute set + plan.
+# Used automatically (only) when the selected lender name contains "Ratnaafin".
+# All other lenders keep the default Masira Darvesh institute + first-available plan.
+${APP_INSTITUTE_SEARCH_RATNAAFIN}    Oaksmith High School
+${APP_LOCATION_RATNAAFIN}            Mumbai
+${APP_BOARD_RATNAAFIN}               CBSE
+${APP_ACADEMIC_YEAR_RATNAAFIN}       2022-2023
+# Plan identifier shown on the plan card testid (index-planId), e.g. RCPL-dlg-prod-4.
+${APP_PLAN_ID_RATNAAFIN}             RCPL-dlg-prod-4
+
+# Mirae uses the default institute (Masira Darvesh) but a specific plan tag.
+${APP_PLAN_ID_MIRAE}                 Mirae-11-EMI-1dp - 0IRR - Signoff
+
+# KYC mode: False = DB bypass (default); True = wait for manual KYC entry in the browser.
+${MANUAL_KYC}                        ${False}
+# How long the manual-KYC wait polls for the /esign/ page before giving up.
+${MANUAL_KYC_TIMEOUT}                 900s
 
 # Applicant (parent/guardian) details
 ${APP_FIRST_NAME}             MAMANI
 ${APP_LAST_NAME}              DAS
 ${APP_PAN_NUMBER}             DDDPD1621M
 ${APP_EMAIL}                  testparent@example.com
+${APP_GENDER}                 MALE
 ${APP_DOB_YEAR}               1989
 ${APP_DOB_MONTH}              Apr
 ${APP_DOB_DAY}                13
@@ -155,7 +174,13 @@ ${APP_BUSINESS_DESC}          Software consulting and services
 # Set LENDER_NAME env var to pick a specific lender by name (e.g. "Western Capital", "Prefr", "IDFC").
 # Leave blank to automatically click the first available lender on the page.
 # Can also be overridden per-row in application_data.xlsx via the lender_name column.
-${LENDER_NAME}                      %{LENDER_NAME=}
+${LENDER_NAME}                      %{LENDER_NAME=Tata Capital Limited}
+
+# eNACH (mandate) account details — entered on the NACH page during final steps.
+# Auth method + authorization creds TBD (pending live page inspection).
+${NACH_ACCOUNT_NUMBER}              20058679507
+${NACH_IFSC}                        SBIN0002064
+${NACH_BANK_NAME}                   SBI
 
 # Lender Selection journey URL fragments
 ${URL_APPLICATION_LOADER}           /application-loader

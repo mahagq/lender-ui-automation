@@ -191,12 +191,12 @@ Click Create Application Button And Wait For Student Details
     # After clicking, a "Before you proceed" dialog may appear when an in-progress application
     # exists. The dialog (Radix UI, role='dialog') has a "+ CREATE NEW APPLICATION" button.
     ${dialog_appeared}=    Run Keyword And Return Status
-    ...    Wait For Elements State    css=[role='dialog']    visible    timeout=4s
+    ...    Wait For Elements State    css=[role='dialog']    visible    timeout=10s
     IF    ${dialog_appeared}
         Log    "Before you proceed" dialog detected — clicking Create New Application inside dialog.    console=True
         Click    css=[role='dialog'] >> text=CREATE NEW APPLICATION
     END
-    Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    Student Details URL Should Be Active
+    Wait Until Keyword Succeeds    60s    500ms    Student Details URL Should Be Active
     Wait For Elements State    ${SD_TITLE}    visible    timeout=${TIMEOUT}
 
 Create Application And Navigate To Student Details
@@ -519,6 +519,36 @@ Click Plan In List By Index
     Wait For Elements State    ${CP_PLAN_LIST}    visible    timeout=${LONG_TIMEOUT}
     Click    css=[data-testid='plan-list-container'] > div:nth-child(${plan_index})
 
+Select Plan By Identifier
+    [Documentation]
+    ...    Selects a specific plan card by its identifier (e.g. RCPL-dlg-prod-4).
+    ...    Tries: (1) data-testid contains match, (2) exact text match, (3) partial text match.
+    [Arguments]    ${plan_id}
+    Wait For Elements State    ${CP_PLAN_LIST}    visible    timeout=${LONG_TIMEOUT}
+    # Log available plans for debugging
+    ${plan_text}=    Get Text    ${CP_PLAN_LIST}
+    Log    Available plans on page:\n${plan_text}    console=True
+    # Click the plan card by searching for matching text via JavaScript (most robust approach).
+    ${plan_trimmed}=    Evaluate    '${plan_id}'.strip()
+    ${clicked}=    Evaluate JavaScript    ${None}
+    ...    (() => {
+    ...        const container = document.querySelector('[data-testid="plan-list-container"]');
+    ...        if (!container) return false;
+    ...        const cards = container.querySelectorAll('[data-testid]');
+    ...        for (const card of cards) {
+    ...            if (card.textContent.includes('${plan_trimmed}')) {
+    ...                card.click();
+    ...                return true;
+    ...            }
+    ...        }
+    ...        return false;
+    ...    })()
+    IF    not ${clicked}
+        Log    JS click failed for '${plan_trimmed}' — plan not found in list    level=WARN
+        Fail    Plan '${plan_trimmed}' not found in plan list
+    END
+    Log    ✅ Selected plan: ${plan_id}    console=True
+
 Fill Personal Details With Stub Data
     [Documentation]
     ...    Quick-fill personal details with APP_* stub variables.
@@ -526,9 +556,11 @@ Fill Personal Details With Stub Data
     ...    Satisfies: RT-1 (traversal)
     Wait For Elements State    ${PD_FORM}    visible    timeout=${TIMEOUT}
     Fill Text    ${PD_PAN_INPUT}    ${APP_PAN_NUMBER}
-    Sleep    2s    # Wait for PAN lookup to complete
-    # Gender — click Male radio button (value='MALE') to avoid strict mode on gender-react-select
-    Select Gender Male
+    Sleep    5s    # Wait for PAN lookup to complete (UAT can be slow)
+    # Gender — click radio by APP_GENDER variable (MALE or FEMALE)
+    ${gender_upper}=    Evaluate    '${APP_GENDER}'.upper()
+    Wait For Elements State    css=button[value='${gender_upper}']    visible    timeout=${LONG_TIMEOUT}
+    Click    css=button[value='${gender_upper}']
     # Date of birth — year/month/day react-selects (pinned to APP_DOB_* variables)
     Select Specific Option In React Select    year-react-select    ${APP_DOB_YEAR}
     Select Specific Option In React Select    month-react-select    ${APP_DOB_MONTH}

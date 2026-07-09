@@ -220,3 +220,39 @@ Click Esign Close Button
 Accept Terms And Sign Agreement
     Check Esign Consent
     Click    ${ESIGN_ACCEPT_TERMS_BTN}
+
+Complete Esign Step
+    [Documentation]
+    ...    Happy-path eSign action: waits for the agreement summary, ticks the single consent
+    ...    checkbox, then clicks Accept Terms & Conditions to sign. Handles optional Digio
+    ...    in-page signing modal (role='dialog') that appears for some lenders.
+    Esign Page Should Be Visible
+    Check Esign Consent
+    Wait For Elements State    ${ESIGN_ACCEPT_TERMS_BTN}    visible    timeout=${LONG_TIMEOUT}
+    Wait For Elements State    ${ESIGN_ACCEPT_TERMS_BTN}    enabled    timeout=${LONG_TIMEOUT}
+    Click    ${ESIGN_ACCEPT_TERMS_BTN}
+    Sleep    3s
+    # Check if a Digio signing modal/dialog appeared after clicking Accept Terms
+    ${digio_modal}=    Run Keyword And Return Status
+    ...    Wait For Elements State    css=[role='dialog']    visible    timeout=8s
+    IF    ${digio_modal}
+        Log    Digio signing modal detected — clicking sign/proceed button    console=True
+        ${has_sign}=    Run Keyword And Return Status
+        ...    Wait For Elements State    css=[role='dialog'] >> text=Sign    visible    timeout=5s
+        IF    ${has_sign}
+            Click    css=[role='dialog'] >> text=Sign
+        ELSE
+            Click    css=[role='dialog'] button >> nth=0
+        END
+        Sleep    3s
+    END
+    # Also check if a new Digio page opened
+    ${new_page}=    Run Keyword And Return Status
+    ...    Wait For Elements State    text=I Agree    visible    timeout=5s
+    IF    ${new_page}
+        Click    text=I Agree
+        Sleep    3s
+    END
+    Wait Until Keyword Succeeds    ${SUBMISSION_TIMEOUT}    1s    Signing Initiated Successfully
+    ${url}=    Get Url
+    Log    ✅ Esign complete — consent accepted, redirected to ${url}    console=True

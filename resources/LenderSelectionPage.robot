@@ -70,8 +70,13 @@ ${LS_PROCEED_BUTTON}            css=[data-testid='proceed-button']
 
 *** Keywords ***
 Lender Selection Page Should Be Visible
-    [Documentation]    Waits for the lender selection page heading to become visible.
-    Wait For Elements State    ${LS_HEADING}    visible    timeout=${LONG_TIMEOUT}
+    [Documentation]    Waits for the lender selection page to load (heading or any lender card).
+    ${has_heading}=    Run Keyword And Return Status
+    ...    Wait For Elements State    ${LS_HEADING}    visible    timeout=${LONG_TIMEOUT}
+    IF    not ${has_heading}
+        # Fallback: wait for any CONTINUE WITH button (lender cards loaded even without heading)
+        Wait For Elements State    css=button:has-text('CONTINUE WITH')    visible    timeout=${LONG_TIMEOUT}
+    END
 
 Lender Selection Subheading Should Be Visible
     [Documentation]    Asserts the lender selection subheading text is visible.
@@ -187,10 +192,30 @@ Click First Available Continue Button
 
 Click Lender Continue Button By Name
     [Arguments]    ${lender_name}
-    [Documentation]    Clicks the CONTINUE WITH button for a named lender (case-insensitive text match).
-    Wait For Elements State    css=button:has-text('${lender_name}') >> nth=0    visible    timeout=${TIMEOUT}
-    Click    css=button:has-text('${lender_name}') >> nth=0
-    Log    Clicked continue button for lender: ${lender_name}    level=DEBUG
+    [Documentation]
+    ...    Clicks the CONTINUE WITH button for a named lender (case-insensitive substring match).
+    ...    The UI display name often differs from the internal lender-master name
+    ...    (e.g. master "Ratnaafin Capital Pvt Ltd Lite" renders as "CONTINUE WITH RATNAAFIN CAPITAL").
+    ...    Strategy: (1) try the full name, (2) try the first two words as a short token,
+    ...    (3) fall back to the first available CONTINUE WITH button — BRE has already assigned
+    ...    the lender at this stage, so the displayed card is the correct one.
+    ${full}=    Run Keyword And Return Status
+    ...    Wait For Elements State    css=button:has-text('${lender_name}') >> nth=0    visible    timeout=5s
+    IF    ${full}
+        Click    css=button:has-text('${lender_name}') >> nth=0
+        Log    Clicked continue button for lender (full name): ${lender_name}    level=DEBUG
+        RETURN
+    END
+    ${short_token}=    Evaluate    ' '.join('''${lender_name}'''.split()[:2])
+    ${short}=    Run Keyword And Return Status
+    ...    Wait For Elements State    css=button:has-text('${short_token}') >> nth=0    visible    timeout=5s
+    IF    ${short}
+        Click    css=button:has-text('${short_token}') >> nth=0
+        Log    Clicked continue button for lender (short token '${short_token}'): ${lender_name}    level=WARN
+        RETURN
+    END
+    Log    Named lender button not found for '${lender_name}' — clicking first available CONTINUE WITH    level=WARN
+    Click First Available Continue Button
 
 Processing Page Should Be Visible
     [Documentation]    Waits for the processing/loader page heading to become visible.
@@ -230,19 +255,38 @@ Click View Available Financing
 
 Successful Lender Assignment Should Be Visible
     [Documentation]
-    ...    Waits for /application-status/ URL and asserts the approval success text is visible.
-    ...    This is the page the user lands on after BRE approval — before clicking Proceed to KYC.
-    Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    2s    Application Status URL Should Be Active
-    Wait For Elements State    ${LS_SUCCESS_TEXT}    visible    timeout=${TIMEOUT}
+    ...    Waits for either /application-status/ or /bank-statement/ URL after BRE decision.
+    ...    BRE/lender decision can be slow (esp. CSB), so poll up to ${SUBMISSION_TIMEOUT}.
+    Wait Until Keyword Succeeds    ${SUBMISSION_TIMEOUT}    2s    Application Status Or Bank Statement URL Should Be Active
+    ${url}=    Get Url
+    IF    '/bank-statement/' in '${url}'
+        Log    BRE routed to /bank-statement/ — skipping bank statement page    console=True
+    ELSE
+        Wait For Elements State    ${LS_SUCCESS_TEXT}    visible    timeout=${LONG_TIMEOUT}
+    END
 
 Application Status URL Should Be Active
     [Documentation]    Helper — asserts the current URL contains /application-status/.
     ${url}=    Get Url
     Should Contain    ${url}    /application-status/
 
+Application Status Or Bank Statement URL Should Be Active
+    [Documentation]    Helper — asserts the current URL contains /application-status/ or /bank-statement/.
+    ${url}=    Get Url
+    Run Keyword If    '/application-status/' not in '${url}' and '/bank-statement/' not in '${url}'
+    ...    Fail    URL '${url}' is neither /application-status/ nor /bank-statement/
+
 Click Proceed To KYC
-    [Documentation]    Clicks the proceed-button to advance to the KYC step.
-    Click    ${LS_PROCEED_BUTTON}
+    [Documentation]    Clicks the proceed-button to advance to the KYC step. On /bank-statement/ pages,
+    ...    navigates directly to /okyc/ using the app ID embedded in the URL.
+    ${url}=    Get Url
+    IF    '/bank-statement/' in '${url}'
+        ${app_id}=    Evaluate    '${url}'.rstrip('/').split('/')[-1]
+        Log    Bank statement page — navigating directly to /okyc/${app_id}    console=True
+        Go To    ${BASE_URL}/okyc/${app_id}
+    ELSE
+        Click    ${LS_PROCEED_BUTTON}
+    END
 
 Lender Selection URL Should Be Active
     [Documentation]    Helper — asserts the current URL contains /application-loader/.

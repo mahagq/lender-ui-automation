@@ -42,7 +42,10 @@ Open Login Page
     ...    for the login form to be visible. New Context isolates cookies and localStorage
     ...    so authenticated state from a previous test does not carry over.
     ...    Satisfies: B3 (UAT environment), U2 (wait before interacting)
-    New Context
+    # viewport=${None} makes the page use the full (maximised) window size instead of the
+    # default 1280x720, so the whole screen is used.
+    New Context    viewport=${None}
+    Set Browser Timeout    60s
     New Page    ${BASE_URL}
     Wait For Elements State    ${LOGIN_FORM}    visible    timeout=${TIMEOUT}
 
@@ -206,6 +209,7 @@ Open Login Page With Prefill
     ...    Satisfies: TC-225
     [Arguments]    ${mobile}
     New Context
+    Set Browser Timeout    60s
     New Page    ${BASE_URL}/?m=${mobile}
     Wait For Elements State    ${LOGIN_FORM}    visible    timeout=${TIMEOUT}
 

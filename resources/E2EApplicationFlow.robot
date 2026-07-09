@@ -20,6 +20,7 @@ Documentation
 Library     Browser
 Resource    ApplicationCreationFlowPage.robot
 Resource    EsignPage.robot
+Resource    DownPaymentPage.robot
 
 *** Keywords ***
 Renewal Details URL Should Be Visible
@@ -85,7 +86,7 @@ Create Full Application
     ...    ${pincode}    ${residence_type}    ${employment_type}
     ...    ${employer_name}    ${monthly_salary}
     ...    ${business_name}    ${annual_income}    ${years_in_business}    ${business_description}
-    ...    ${referral_code}
+    ...    ${referral_code}    ${plan_identifier}=${EMPTY}
 
     # ── Resolve mobile ───────────────────────────────────────────────────────────
     ${resolved_mobile}=    Resolve Mobile Number    ${login_mobile}
@@ -93,7 +94,7 @@ Create Full Application
     Set Suite Variable    ${LAST_USED_MOBILE}    ${resolved_mobile}
 
     # ── Step 1: Login ────────────────────────────────────────────────────────────
-    New Browser    ${BROWSER}    headless=${HEADLESS}
+    New Browser    ${BROWSER}    headless=${HEADLESS}    args=['--start-maximized']
     Open Login Page
     Submit Login Form    ${resolved_mobile}
     ${otp_loaded}=    Run Keyword And Return Status
@@ -155,7 +156,13 @@ Create Full Application
     Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    Choose Plan URL Should Be Active
 
     # ── Step 4: Choose Plan ───────────────────────────────────────────────────────
-    Click First Plan In List
+    # If a specific plan identifier is supplied (e.g. Ratnaafin's RCPL-dlg-prod-4),
+    # select that plan; otherwise fall back to the first available plan.
+    IF    '${plan_identifier}' != ''
+        Select Plan By Identifier    ${plan_identifier}
+    ELSE
+        Click First Plan In List
+    END
     Click Submit Plan Button
     # Existing accounts with prior applications land on /renewal-confirmation (Welcome Back).
     # Clicking CHANGE APPLICANT DETAILS returns to /select-applicant (standard ACF flow).
@@ -193,8 +200,7 @@ Create Full Application
     Fill Basic Details First Name    ${applicant_first_name}
     Fill Basic Details Last Name    ${applicant_last_name}
     Check Basic Details Consent
-    Click Submit Basic Details
-    Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    Onboarding URL Should Be Active
+    Submit Basic Details Until Onboarding
 
     # ── Step 7: Onboarding ───────────────────────────────────────────────────────
     Wait For Elements State    ${OB_INFO_ONE}    visible    timeout=${TIMEOUT}
@@ -361,27 +367,36 @@ Create Full Application With Lender Assignment
     ...    ${email}    ${address_line1}    ${address_line2}    ${pincode}
     ...    ${employer_name}    ${monthly_salary}
     ...    ${plan_index}=1    ${lender_name}=${EMPTY}    ${institute_search}=${APP_INSTITUTE_SEARCH}
+    ...    ${location}=${EMPTY}    ${board}=${EMPTY}    ${academic_year}=${EMPTY}    ${plan_identifier}=${EMPTY}
     IF    ${plan_index} == 1
         Create Full Application
-        ...    ${EMPTY}    ${institute_search}    ${EMPTY}    ${EMPTY}    ${EMPTY}
+        ...    ${EMPTY}    ${institute_search}    ${location}    ${board}    ${academic_year}
         ...    ${student_first_name}    ${student_last_name}    New Admission    ${EMPTY}    SD12345
         ...    ${loan_amount}    Parent/Guardian    ${applicant_first_name}    ${applicant_last_name}
         ...    ${pan_number}    Male    ${dob_year}    ${dob_month}    ${dob_day}
         ...    Married    ${email}    ${address_line1}    ${address_line2}    ${pincode}
         ...    Rented    Salaried    ${employer_name}    ${monthly_salary}
-        ...    ${EMPTY}    ${EMPTY}    ${EMPTY}    ${EMPTY}    ${EMPTY}
+        ...    ${EMPTY}    ${EMPTY}    ${EMPTY}    ${EMPTY}    ${EMPTY}    ${plan_identifier}
         Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    Lender Selection URL Should Be Active
     ELSE
         Login And Navigate To Lender Selection New App    plan_index=${plan_index}
     END
-    Lender Selection Page Should Be Visible
-    Check KFS Consent If Present
-    IF    '${lender_name}' != '${EMPTY}'
-        Click Lender Continue Button By Name    ${lender_name}
+    # Check if BRE already auto-assigned and moved past lender selection
+    Sleep    2s
+    ${cur_url}=    Get Url
+    ${already_past}=    Evaluate    '/application-status/' in '${cur_url}' or '/bank-statement/' in '${cur_url}'
+    IF    not ${already_past}
+        Lender Selection Page Should Be Visible
+        Check KFS Consent If Present
+        IF    '${lender_name}' != '${EMPTY}'
+            Click Lender Continue Button By Name    ${lender_name}
+        ELSE
+            Click First Available Continue Button
+        END
+        Wait For Bureau Decision
     ELSE
-        Click First Available Continue Button
+        Log    BRE auto-assigned — already on ${cur_url}, skipping lender selection    console=True
     END
-    Wait For Bureau Decision
 
 Create Full Renewal Application With Lender Assignment
     [Documentation]
@@ -419,6 +434,37 @@ Perform KYC Bypass Journey
     [Arguments]    ${journey_type}=new    ${mobile}=${EMPTY}    ${lender_name}=Western Capital
 
     IF    '${journey_type}' == 'new'
+        # Ratnaafin requires a specific GILE institute set + plan; all other lenders use defaults.
+        ${is_ratnaafin}=    Evaluate    'ratnaafin' in '''${lender_name}'''.lower()
+        ${is_mirae}=        Evaluate    'mirae' in '''${lender_name}'''.lower()
+        ${is_csb}=          Evaluate    'csb' in '''${lender_name}'''.lower()
+        IF    ${is_ratnaafin}
+            ${inst}=     Set Variable    ${APP_INSTITUTE_SEARCH_RATNAAFIN}
+            ${loc}=      Set Variable    ${APP_LOCATION_RATNAAFIN}
+            ${brd}=      Set Variable    ${APP_BOARD_RATNAAFIN}
+            ${yr}=       Set Variable    ${APP_ACADEMIC_YEAR_RATNAAFIN}
+            ${plan}=     Set Variable    ${APP_PLAN_ID_RATNAAFIN}
+        ELSE IF    ${is_mirae}
+            # Mirae: Oaksmith institute set (same school dropdown CSB uses) + a specific plan tag.
+            ${inst}=     Set Variable    ${APP_INSTITUTE_SEARCH_RATNAAFIN}
+            ${loc}=      Set Variable    ${APP_LOCATION_RATNAAFIN}
+            ${brd}=      Set Variable    ${APP_BOARD_RATNAAFIN}
+            ${yr}=       Set Variable    ${APP_ACADEMIC_YEAR_RATNAAFIN}
+            ${plan}=     Set Variable    ${APP_PLAN_ID_MIRAE}
+        ELSE IF    ${is_csb}
+            # CSB uses the Oaksmith school dropdown; use APP_PLAN_ID_MIRAE if set, else first plan.
+            ${inst}=     Set Variable    ${APP_INSTITUTE_SEARCH_RATNAAFIN}
+            ${loc}=      Set Variable    ${APP_LOCATION_RATNAAFIN}
+            ${brd}=      Set Variable    ${APP_BOARD_RATNAAFIN}
+            ${yr}=       Set Variable    ${APP_ACADEMIC_YEAR_RATNAAFIN}
+            ${plan}=     Set Variable    ${APP_PLAN_ID_MIRAE}
+        ELSE
+            ${inst}=     Set Variable    ${APP_INSTITUTE_SEARCH}
+            ${loc}=      Set Variable    ${EMPTY}
+            ${brd}=      Set Variable    ${EMPTY}
+            ${yr}=       Set Variable    ${EMPTY}
+            ${plan}=     Set Variable    ${EMPTY}
+        END
         Create Full Application With Lender Assignment
         ...    ${APP_STUDENT_FIRST_NAME}    ${APP_STUDENT_LAST_NAME}    ${APP_LOAN_AMOUNT}
         ...    ${APP_FIRST_NAME}    ${APP_LAST_NAME}    ${APP_PAN_NUMBER}
@@ -426,18 +472,87 @@ Perform KYC Bypass Journey
         ...    ${APP_EMAIL}    ${APP_ADDRESS_LINE1}    ${APP_ADDRESS_LINE2}    ${APP_PINCODE}
         ...    ${APP_EMPLOYER_NAME}    ${APP_MONTHLY_SALARY}
         ...    plan_index=1    lender_name=${lender_name}
+        ...    institute_search=${inst}    location=${loc}    board=${brd}
+        ...    academic_year=${yr}    plan_identifier=${plan}
         ${active_mobile}=    Set Variable    ${LAST_USED_MOBILE}
     ELSE
         ${active_mobile}=    Set Variable If    '${mobile}'.strip() != ''    ${mobile}    ${RENEWAL_MOBILE}
         Create Full Renewal Application With Lender Assignment    plan_index=1    lender_name=${lender_name}
     END
+    # Track journey context for the end-of-run summary (visible even if a later step fails).
+    Set Test Variable    ${JOURNEY_MOBILE}    ${active_mobile}
+    Set Test Variable    ${JOURNEY_LENDER}    ${lender_name}
+    Set Test Variable    ${JOURNEY_STAGE}    Application Created & Lender Assigned
     Successful Lender Assignment Should Be Visible
+    Set Test Variable    ${JOURNEY_STAGE}    Lender Approved (application-status)
     Click Proceed To KYC
     OKYC URL Should Be Active
     ${app_id}=    Extract App ID From OKYC URL
-    Bypass KYC Via Database    ${active_mobile}    ${app_id}
-    Reload
-    Wait Until Keyword Succeeds    ${SUBMISSION_TIMEOUT}    500ms    Esign URL Should Be Active    ${app_id}
+    Set Test Variable    ${JOURNEY_APP_ID}    ${app_id}
+    Set Test Variable    ${JOURNEY_STAGE}    OKYC
+    # KYC: by default the DB bypass inserts the KYC records directly (the live Digio SDK flow
+    # hangs in automation). Set MANUAL_KYC=True to instead pause here so the operator completes
+    # KYC by hand in the browser (Digilocker/OKYC), then the run resumes once it reaches /esign/.
+    IF    ${MANUAL_KYC}
+        Set Test Variable    ${JOURNEY_STAGE}    Awaiting Manual KYC
+        Log    Manual KYC on app ${app_id} — complete Digilocker/OKYC in the browser. The run will resume automatically once the page reaches /esign/ (waiting up to ${MANUAL_KYC_TIMEOUT}).    console=True
+        Wait Until Keyword Succeeds    ${MANUAL_KYC_TIMEOUT}    2s    Esign URL Should Be Active    ${app_id}
+        Set Test Variable    ${JOURNEY_STAGE}    Manual KYC Done
+    ELSE
+        Bypass KYC Via Database    ${active_mobile}    ${app_id}    lender_name=${lender_name}
+        Set Test Variable    ${JOURNEY_STAGE}    KYC Bypassed
+        Reload
+        Wait Until Keyword Succeeds    ${SUBMISSION_TIMEOUT}    500ms    Esign URL Should Be Active    ${app_id}
+    END
+    Set Test Variable    ${JOURNEY_STAGE}    eSign Page
+    # eSign: tick the single consent checkbox and click Accept Terms & Conditions to sign.
+    Complete Esign Step
+    Set Test Variable    ${JOURNEY_STAGE}    eSign Signed
+    # Down payment: proceed-to-pay → online payment → Razorpay UPI (test) → down-payment-status.
+    Complete Down Payment Step    ${app_id}
+    Set Test Variable    ${JOURNEY_STAGE}    Down Payment Paid (down-payment-status)
+    # Final steps: enter the eNACH/selfie flow from the down-payment-status page.
+    ${final_url}=    Enter Final Steps If Present    ${app_id}
+    Set Test Variable    ${JOURNEY_STAGE}    Entered Final Steps (${final_url})
+    # eNACH (Debit Card → Digio → NPCI Accept) then selfie DB bypass.
+    Complete Nach And Selfie Step    ${app_id}
+    Set Test Variable    ${JOURNEY_STAGE}    eNACH Done + Selfie Bypassed
+    RETURN    ${app_id}
+
+Submit Basic Details Until Onboarding
+    [Documentation]
+    ...    Clicks Submit on the applicant-basic-details page and confirms the page advances to
+    ...    /onboarding. UAT intermittently no-ops the first submit (URL stays on
+    ...    /applicant-basic-details), so this re-clicks up to 4 times before failing.
+    Wait Until Keyword Succeeds    4x    1s    Click Basic Details Submit And Confirm Onboarding
+
+Click Basic Details Submit And Confirm Onboarding
+    [Documentation]    One submit attempt — clicks Submit, then waits up to 10s for /onboarding.
+    Click Submit Basic Details
+    Wait Until Keyword Succeeds    10s    500ms    Onboarding URL Should Be Active
+
+Print Journey Summary
+    [Documentation]
+    ...    Prints a summary block of the journey context. Designed to run from Test Teardown
+    ...    so it appears on every run — pass or fail — reporting the furthest stage reached.
+    ...    Reads test variables set during Perform KYC Bypass Journey, with safe fallbacks.
+    ${app_id}=     Get Variable Value    ${JOURNEY_APP_ID}    (not reached)
+    ${lender}=     Get Variable Value    ${JOURNEY_LENDER}    ${LENDER_NAME}
+    ${mobile}=     Get Variable Value    ${JOURNEY_MOBILE}    (not reached)
+    ${stage}=      Get Variable Value    ${JOURNEY_STAGE}     Login / Start
+    # Test status + failure message are exposed by Robot in teardown. Collapse the error to one line.
+    ${status}=     Get Variable Value    ${TEST_STATUS}      (running)
+    ${msg}=        Get Variable Value    ${TEST_MESSAGE}     ${EMPTY}
+    ${error}=      Evaluate    $msg.splitlines()[0] if $msg else 'none'
+    Log    ==================================================    console=True
+    Log    JOURNEY SUMMARY    console=True
+    Log    APP ID: ${app_id}    console=True
+    Log    LENDER: ${lender}    console=True
+    Log    MOBILE: ${mobile}    console=True
+    Log    STAGE: ${stage}    console=True
+    Log    RESULT: ${status}    console=True
+    Log    ERROR: ${error}    console=True
+    Log    ==================================================    console=True
 
 Navigate To Esign New App
     [Documentation]

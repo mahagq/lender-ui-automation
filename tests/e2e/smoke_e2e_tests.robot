@@ -1,63 +1,40 @@
 *** Settings ***
 Documentation
-...    Smoke E2E — complete customer journey from Login to Lender Selection / KYC.
+...    Smoke E2E — complete customer journey from Login → Lender → KYC DB bypass → eSign.
 ...
 ...    Flow:
 ...      Login → Dashboard → Student Details → Choose Plan → Select Applicant →
 ...      Basic Details → Onboarding → Personal Details → Residential Details →
-...      Employment (Salaried) → Confirm Application → Lender Selection → KYC / Bank Statement
+...      Employment (Salaried) → Confirm Application → Lender Selection →
+...      KYC DB bypass (inserts mock records) → eSign page
 ...
 ...    Lender is DYNAMIC:
-...      - Set env var LENDER_NAME=<lender>  to pick a specific lender (e.g. "Western Capital")
-...      - Leave LENDER_NAME blank           to auto-select the first available lender
-...      - Pass lender_name per-row in application_data.xlsx for data-driven runs
+...      - Set LENDER_NAME in variables/variables.robot  e.g. "CSB Bank"
+...      - Leave blank to auto-select first available lender
+...
+...    Requires .env.db in project root with DB credentials for KYC bypass.
 ...
 ...    Run:
-...      ./env/bin/robot --outputdir results/ tests/e2e/smoke_e2e_tests.robot
-...
-...      # With a specific lender:
-...      LENDER_NAME="Western Capital" ./env/bin/robot --outputdir results/ tests/e2e/smoke_e2e_tests.robot
+...      robot --outputdir results/ tests/e2e/smoke_e2e_tests.robot
 
 Library     ../../libraries/ApplicationDataReader.py
+Library     ../../libraries/kyc_bypass_db.py
 Resource    ../../resources/E2EApplicationFlow.robot
 Resource    ../../resources/LenderSelectionPage.robot
+Resource    ../../resources/OKYCPage.robot
 Resource    ../../variables/variables.robot
 Variables   ../../variables/dynamic_variables.py
 
 Test Tags   e2e    smoke
 
 *** Test Cases ***
-Smoke E2E Full Journey — Login To Lender Selection
+Smoke E2E Full Journey — Login To eSign
     [Documentation]
-    ...    Complete happy-path journey: new user, salaried employment, Parent/Guardian applicant.
-    ...    Mobile is auto-generated each run (new account every time).
-    ...    Lender is DYNAMIC — set LENDER_NAME env var or leave blank for first available lender.
-    [Teardown]    Run Keyword And Ignore Error    Close Browser
-    Create Full Application With Lender Assignment
-    ...    student_first_name=${APP_STUDENT_FIRST_NAME}
-    ...    student_last_name=${APP_STUDENT_LAST_NAME}
-    ...    loan_amount=${APP_LOAN_AMOUNT}
-    ...    applicant_first_name=${APP_FIRST_NAME}
-    ...    applicant_last_name=${APP_LAST_NAME}
-    ...    pan_number=${APP_PAN_NUMBER}
-    ...    dob_year=${APP_DOB_YEAR}
-    ...    dob_month=${APP_DOB_MONTH}
-    ...    dob_day=${APP_DOB_DAY}
-    ...    email=${APP_EMAIL}
-    ...    address_line1=${APP_ADDRESS_LINE1}
-    ...    address_line2=${APP_ADDRESS_LINE2}
-    ...    pincode=${APP_PINCODE}
-    ...    employer_name=${APP_EMPLOYER_NAME}
-    ...    monthly_salary=${APP_MONTHLY_SALARY}
-    ...    plan_index=1
+    ...    Complete happy-path journey: new user, salaried, Parent/Guardian.
+    ...    Mobile auto-generated each run. Lender from LENDER_NAME variable.
+    ...    KYC is bypassed via DB insert — no Digilocker redirect needed.
+    [Teardown]    Print Journey Summary
+    ${app_id}=    Perform KYC Bypass Journey
+    ...    journey_type=new
     ...    lender_name=${LENDER_NAME}
-    Wait For Bureau Decision
-    ${url}=    Get Url
-    IF    '/application-status/' in '${url}'
-        Log    ✅ Lender APPROVED — reached KYC page    console=True
-        Successful Lender Assignment Should Be Visible
-    ELSE IF    '/bank-statement/' in '${url}'
-        Log    ℹ️ Lender REJECTED — redirected to Bank Statement    console=True
-    ELSE
-        Log    ⚠️ Unknown state after bureau decision: ${url}    console=True
-    END
+    Log    ✅ Full journey complete — eSign signed, down payment paid    console=True

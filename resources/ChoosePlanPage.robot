@@ -118,7 +118,10 @@ Click Submit Plan Button
     [Documentation]
     ...    Clicks the submit-plan-details-button to proceed to the next wizard step.
     ...    Satisfies: TC-6008, RT-3 (proceed)
-    Wait For Elements State    ${CP_SUBMIT_BUTTON}    visible    timeout=${TIMEOUT}
+    # Small sleep to let the DOM settle after plan card selection (re-render).
+    Sleep    1s
+    Wait For Elements State    ${CP_SUBMIT_BUTTON}    visible    timeout=${LONG_TIMEOUT}
+    Wait For Elements State    ${CP_SUBMIT_BUTTON}    enabled    timeout=${LONG_TIMEOUT}
     Click    ${CP_SUBMIT_BUTTON}
 
 Fee Paying To Text Should Be Visible

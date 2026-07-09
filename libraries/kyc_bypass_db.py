@@ -19,41 +19,64 @@ from db_config import get_db_config
 
 ROBOT_LIBRARY_SCOPE = "GLOBAL"
 
-_OKYC_KYC_PROVIDER = "westcap"
-_OKYC_REFERENCE_ID = "CRN260510163236510YW"
-_OKYC_TRANSACTION_ID = "CRN260510163236510YW"
-_OKYC_MASKED_AADHAAR = "xxxxxxxx6720"
-_OKYC_NAME = "MAMANI DAS"
+# kyc_provider must match the lender that was selected in the journey.
+# Resolved from the lender name via _resolve_kyc_provider(); anything unmapped → gq-credentials.
+_DEFAULT_KYC_PROVIDER = "gq-credentials"
+# vendor_id fallback when a lender has no kyc_lender_vendor_mapping row (vendor 1 = common default).
+_DEFAULT_VENDOR_ID = 1
+_PROVIDER_KEYWORDS = (
+    ("csb", "csb"),          # CSB Bank
+    ("tata", "tcl"),         # Tata Capital Limited
+    ("tcl", "tcl"),
+    ("mirae", "mirae"),      # Mirae
+    ("western", "westcap"),  # Western Capital
+    ("westcap", "westcap"),
+)
+
+
+def _resolve_kyc_provider(lender_name):
+    """Maps a lender display name to its kyc_provider code. Unmapped → gq-credentials."""
+    if not lender_name:
+        return _DEFAULT_KYC_PROVIDER
+    name = str(lender_name).strip().lower()
+    for keyword_text, provider in _PROVIDER_KEYWORDS:
+        if keyword_text in name:
+            return provider
+    return _DEFAULT_KYC_PROVIDER
+
+
+_OKYC_REFERENCE_ID = "CSB231173846"
+_OKYC_TRANSACTION_ID = "003969"
+_OKYC_AADHAAR = "269922040700"
+_OKYC_MASKED_AADHAAR = "XXXX-XXXX-0700"
+_OKYC_NAME = "Mahalakshmi Kumaresan Thevar"
 _OKYC_GENDER = "FEMALE"
-_OKYC_DOB = "13-04-1989"
+_OKYC_DOB = "03-09-1996"
 _OKYC_ADDRESS = json.dumps({
-    "house": "D/O Ahmed Darvesh,Flat No-402 A/Wing Vohra Galaxy",
-    "street": "Santacruz East,Near ICICI Bank,Mumbai,Mumbai,Vidyanagari,Mumbai,Maharashtra,400098",
-    "landmark": "",
-    "loc": "Vidyanagari",
-    "po": "Mumbai",
-    "dist": "Mumbai",
-    "subdist": "Mumbai",
-    "vtc": "Mumbai",
-    "pc": "400098",
+    "house": "Tower A-605, Ritz Life",
+    "street": "Panhalgad Chs Ltd, Shree Complex",
+    "landmark": "Kalyan West",
+    "loc": "Adharwadi Jail Road, Above Oasis Hospital",
+    "po": "Kalyan D.c.",
+    "dist": "Thane",
+    "subdist": "",
+    "vtc": "Kalyan",
+    "pc": "421301",
     "state": "Maharashtra",
-    "country": "",
+    "country": "India",
 })
 _OKYC_PHOTO_URL = (
     "https://gq-uat-media.s3.ap-south-1.amazonaws.com/customer_documents/"
-    "cb41de7b-d582-4276-ace2-eefce1e089e8/okyc/9218bd6a-18ff-42e2-9f4e-0c0d44774cf6.jpg"
+    "cef2ef3b-da95-4cb4-b766-bc83a4bf8ae3/okyc/de46f239-2650-4b61-bf48-140204c318a7_csb.jpg"
 )
 _OKYC_XML_URL = (
     "https://gq-uat-media.s3.ap-south-1.amazonaws.com/customer_documents/"
-    "cb41de7b-d582-4276-ace2-eefce1e089e8/okyc/offline_xml.zip"
+    "cef2ef3b-da95-4cb4-b766-bc83a4bf8ae3/okyc/de46f239-2650-4b61-bf48-140204c318a7_csb.xml"
 )
-_OKYC_PASS_CODE = "1234"
-_OKYC_XML_VALID = "TRUE"
+_OKYC_PASS_CODE = ""
+_OKYC_XML_VALID = ""
 _OKYC_STATUS = "SUCCESS"
-_OKYC_RAW_ADDRESS = (
-    "D/O Ahmed Darvesh,Flat No-402 A/Wing Vohra Galaxy,Kalina Kurla Road,"
-    "Santacruz East,Near ICICI Bank,Mumbai,Mumbai,Vidyanagari,Mumbai,Maharashtra,400098"
-)
+_OKYC_RAW_ADDRESS = ""
 
 
 def _connect():
@@ -70,9 +93,10 @@ def _connect():
 
 
 @keyword("Bypass KYC Via Database")
-def bypass_kyc_via_database(mobile: str, app_id=None):
+def bypass_kyc_via_database(mobile: str, app_id=None, lender_name=None):
     """
     Inserts mock KYC data into DB to skip Digilocker step on UAT.
+    kyc_provider is derived from lender_name (csb/tcl/mirae/westcap, else gq-credentials).
 
     Steps (single transaction):
       1. mobile → customer_id  (gq_customer_auth)
@@ -86,6 +110,9 @@ def bypass_kyc_via_database(mobile: str, app_id=None):
         mobile:  mobile number used to create the application
         app_id:  application id extracted from /okyc/{app_id} URL; resolved from basic_info if None
     """
+    kyc_provider = _resolve_kyc_provider(lender_name)
+    logger.info(f"KYC bypass: lender_name={lender_name!r} -> kyc_provider={kyc_provider}")
+
     conn = _connect()
     try:
         with conn.cursor() as cur:
@@ -135,16 +162,17 @@ def bypass_kyc_via_database(mobile: str, app_id=None):
                     status, is_active, deleted_on, raw_address
                 ) VALUES (
                     UUID(), %s, %s, %s, %s,
-                    NULL, %s, %s, %s, %s,
+                    %s, %s, %s, %s, %s,
                     %s, %s, %s, %s, %s,
                     %s, 1, NULL, %s
                 )
                 """,
                 (
                     customer_id,
-                    _OKYC_KYC_PROVIDER,
+                    kyc_provider,
                     _OKYC_REFERENCE_ID,
                     _OKYC_TRANSACTION_ID,
+                    _OKYC_AADHAAR,
                     _OKYC_MASKED_AADHAAR,
                     _OKYC_NAME,
                     _OKYC_GENDER,
@@ -174,15 +202,55 @@ def bypass_kyc_via_database(mobile: str, app_id=None):
             )
             logger.info(f"KYC bypass: inserted customer_tracker slugs for app_id={app_id}")
 
-            # 6. Insert gq_application_compliance_mapping
+            # 6. Resolve lender_id from the lender master by name (must match selected lender)
+            if not lender_name:
+                raise RuntimeError(
+                    "Bypass KYC failed: lender_name is required to resolve lender_id "
+                    "for gq_application_compliance_mapping."
+                )
+            cur.execute(
+                "SELECT id FROM gq_migrate.gq_internal_lender_master "
+                "WHERE name = %s AND deleted_on IS NULL ORDER BY id DESC LIMIT 1",
+                (lender_name,),
+            )
+            lender_row = cur.fetchone()
+            if not lender_row:
+                raise RuntimeError(
+                    f"Bypass KYC failed: no lender in gq_internal_lender_master "
+                    f"for name={lender_name!r}"
+                )
+            lender_id = lender_row["id"]
+            logger.info(f"KYC bypass: lender_id={lender_id} for lender_name={lender_name!r}")
+
+            # 7. Resolve vendor_id from the lender↔vendor mapping (varies per lender, e.g. CSB=2)
+            cur.execute(
+                "SELECT vendor_id FROM gq_migrate.kyc_lender_vendor_mapping "
+                "WHERE lender_id = %s AND is_active = 1 AND deleted_on IS NULL "
+                "ORDER BY id DESC LIMIT 1",
+                (lender_id,),
+            )
+            vendor_row = cur.fetchone()
+            if vendor_row:
+                vendor_id = vendor_row["vendor_id"]
+                logger.info(f"KYC bypass: vendor_id={vendor_id} for lender_id={lender_id}")
+            else:
+                # Some lenders (e.g. Ratnaafin Lite=186) have no kyc_lender_vendor_mapping row.
+                # Fall back to vendor 1 — the default used by the rest of that lender family.
+                vendor_id = _DEFAULT_VENDOR_ID
+                logger.warn(
+                    f"KYC bypass: no vendor mapping for lender_id={lender_id} "
+                    f"({lender_name!r}); defaulting vendor_id={vendor_id}"
+                )
+
+            # 8. Insert gq_application_compliance_mapping
             cur.execute(
                 """
                 INSERT INTO gq_migrate.gq_application_compliance_mapping (
                     code, application_id, customer_id, lender_id, vendor_id,
                     kyc_type, kyc_detail_id, is_active, deleted_on
-                ) VALUES (UUID(), %s, %s, 34, 1, 'OKYC', %s, 1, NULL)
+                ) VALUES (UUID(), %s, %s, %s, %s, 'OKYC', %s, 1, NULL)
                 """,
-                (app_id, customer_id, okyc_id),
+                (app_id, customer_id, lender_id, vendor_id, okyc_id),
             )
             logger.info(f"KYC bypass: inserted compliance_mapping for app_id={app_id}")
 
@@ -192,5 +260,114 @@ def bypass_kyc_via_database(mobile: str, app_id=None):
     except Exception as exc:
         conn.rollback()
         raise RuntimeError(f"KYC DB bypass transaction rolled back: {exc}") from exc
+    finally:
+        conn.close()
+
+
+# Reusable UAT document images (from app 901433 — existing accepted records).
+_DOC_BUCKET = "gq-customer-loan-doc"
+_SELFIE_URL = (
+    "https://gq-customer-loan-documents-sandbox.s3.ap-south-1.amazonaws.com/"
+    "media/application_documents/901433/ApplicantSelfie_1778152867.jpeg"
+)
+_SELFIE_PATH = "media/application_documents/901433/ApplicantSelfie_1778152867.jpeg"
+_SELFIE_MIME = "image/jpeg"
+_SELFIE_DOC_MASTER_ID = 26  # "Applicant Selfie" (postloan, salaried)
+
+_ADDRESS_PROOF_URL = (
+    "https://gq-customer-loan-documents-sandbox.s3.ap-south-1.amazonaws.com/"
+    "media/application_documents/901433/ElectricityBill_1778152914.pdf"
+)
+_ADDRESS_PROOF_PATH = "media/application_documents/901433/ElectricityBill_1778152914.pdf"
+_ADDRESS_PROOF_MIME = "application/pdf"
+_ADDRESS_PROOF_DOC_MASTER_ID = 234  # Address proof / Electricity Bill
+
+# All customer_tracker slugs to insert after eNACH (father-name-added handled via UI).
+_POST_ENACH_SLUGS = [
+    "faceid-completed",
+    "selfie-completed",
+    "insurance-not-interested",
+    "insurance-step-completed",
+    "address-proof-uploaded",
+]
+
+
+def _insert_doc_if_missing(cur, app_id, doc_master_id, url, path, mime):
+    cur.execute(
+        "SELECT id FROM gq_migrate.application_document_mapping "
+        "WHERE application_id = %s AND document_master_id = %s AND deleted_on IS NULL LIMIT 1",
+        (app_id, doc_master_id),
+    )
+    if cur.fetchone():
+        logger.info(f"Selfie bypass: doc {doc_master_id} already present for app_id={app_id}")
+        return
+    cur.execute(
+        """
+        INSERT INTO gq_migrate.application_document_mapping
+            (code, application_id, document_master_id, document_url,
+             bucket_name, file_path, mime_type, status, is_active, deleted_on)
+        VALUES (UUID(), %s, %s, %s, %s, %s, %s, 'ACCEPTED', 1, NULL)
+        """,
+        (app_id, doc_master_id, url, _DOC_BUCKET, path, mime),
+    )
+    logger.info(f"Selfie bypass: inserted doc {doc_master_id} for app_id={app_id}")
+
+
+def _insert_slug_if_missing(cur, app_id, slug):
+    cur.execute(
+        "SELECT id FROM gq_migrate.customer_tracker "
+        "WHERE application_id = %s AND slug = %s AND deleted_on IS NULL LIMIT 1",
+        (app_id, slug),
+    )
+    if cur.fetchone():
+        logger.info(f"Selfie bypass: slug '{slug}' already present for app_id={app_id}")
+        return
+    cur.execute(
+        "INSERT INTO gq_migrate.customer_tracker "
+        "(application_id, cfd_id, cfd_part_id, slug, deleted_on) "
+        "VALUES (%s, NULL, NULL, %s, NULL)",
+        (app_id, slug),
+    )
+    logger.info(f"Selfie bypass: inserted slug '{slug}' for app_id={app_id}")
+
+
+@keyword("Bypass Selfie Via Database")
+def bypass_selfie_via_database(app_id):
+    """
+    Bypasses all post-eNACH steps (except father-name-added which is filled via UI).
+
+    Inserts into application_document_mapping:
+      - Applicant Selfie (doc_master_id=26)
+      - Address Proof / Electricity Bill (doc_master_id=234)
+
+    Inserts into customer_tracker:
+      - faceid-completed
+      - selfie-completed
+      - insurance-not-interested
+      - insurance-step-completed
+      - address-proof-uploaded
+
+    Args:
+        app_id: application id.
+    """
+    if not app_id:
+        raise RuntimeError("Bypass Selfie failed: app_id is required")
+
+    conn = _connect()
+    try:
+        with conn.cursor() as cur:
+            # Document records
+            _insert_doc_if_missing(cur, app_id, _SELFIE_DOC_MASTER_ID, _SELFIE_URL, _SELFIE_PATH, _SELFIE_MIME)
+            _insert_doc_if_missing(cur, app_id, _ADDRESS_PROOF_DOC_MASTER_ID, _ADDRESS_PROOF_URL, _ADDRESS_PROOF_PATH, _ADDRESS_PROOF_MIME)
+
+            # Tracker slugs
+            for slug in _POST_ENACH_SLUGS:
+                _insert_slug_if_missing(cur, app_id, slug)
+
+        conn.commit()
+        logger.info(f"Selfie bypass: all post-eNACH records committed for app_id={app_id}")
+    except Exception as exc:
+        conn.rollback()
+        raise RuntimeError(f"Selfie DB bypass rolled back: {exc}") from exc
     finally:
         conn.close()
