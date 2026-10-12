@@ -1,6 +1,6 @@
 *** Settings ***
 Documentation
-...    Page object keywords for the GQ Customer Portal Applicant Residential Details page (/applicant-residential-details).
+...    Page object keywords for the GQ Customer Portal Applicant Residential Details page (/applicant-address).
 ...    All locators use data-testid CSS selectors confirmed from gqcustomer_frontend UAT branch.
 ...    Library: Browser (Playwright).
 ...
@@ -20,15 +20,15 @@ ${RD_TITLE}                     css=[data-testid='residential-details-title']
 ${RD_ADDRESS_SUMMARY}           css=[data-testid='address-summary']
 ${RD_EDIT_BUTTON}               css=[data-testid='edit-button']
 ${RD_CURRENT_ADDRESS_TITLE}     css=[data-testid='current-address-title']
-${RD_ADDR_LINE1}                css=[data-testid='addr-line-1-input']
-${RD_ADDR_LINE2}                css=[data-testid='addr-line-2-input']
-${RD_PINCODE}                   css=[data-testid='pincode-input']
-${RD_CITY_STATE}                css=[data-testid='city-state']
+${RD_ADDR_LINE1}                css=input[placeholder='Flat no. / building name']
+${RD_ADDR_LINE2}                css=input[placeholder='Colony / street / locality']
+${RD_PINCODE}                   css=input[placeholder='Pincode']
+${RD_CITY_STATE}                css=p.text-success-700
 ${RD_CITY_INPUT}                css=[data-testid='city-input']
 ${RD_STATE_SELECT}              css=[data-testid='state-react-select']
 ${RD_RESIDENCE_TYPE_TITLE}      css=[data-testid='residence-type-title']
-${RD_TYPE_RADIO}                css=[data-testid='type-radio']
-${RD_PROCEED_BUTTON}            css=[data-testid='proceed-button']
+${RD_TYPE_RADIO}                role=radio
+${RD_PROCEED_BUTTON}            css=button:has-text('Proceed')
 ${RD_RADIO_STEP_PROCEED}        role=button[name=Proceed]
 ${RD_ADDR_LINE1_ERROR}          css=[data-testid='addr-line-1-input-error']
 ${RD_PINCODE_ERROR}             css=[data-testid='pincode-input-error']
@@ -88,7 +88,7 @@ Click First Residence Type Radio
     ...    Radix UI button-based radios; data-state attribute is used instead.
     Wait For Elements State    ${RD_TYPE_RADIO} >> nth=0    visible    timeout=${TIMEOUT}
     Click    ${RD_TYPE_RADIO} >> nth=0
-    Wait For Elements State    css=[data-testid='type-radio'][data-state='checked']    visible    timeout=${TIMEOUT}
+    Wait For Elements State    role=radio[data-state='checked']    visible    timeout=${TIMEOUT}
 
 All Residence Type Radios Should Be Selectable
     [Documentation]
@@ -123,14 +123,14 @@ Click Residence Type Step Proceed
     Click    ${RD_RADIO_STEP_PROCEED}
 
 Click Close Button
-    [Documentation]    Clicks close-button on /applicant-residential-details and waits for dashboard URL.
+    [Documentation]    Clicks close-button on /applicant-address and waits for dashboard URL.
     Click    css=[data-testid='close-button']
     Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    Dashboard URL Should Be Visible
 
 Residential Details URL Should Be Active
-    [Documentation]    Helper — asserts the current URL contains /applicant-residential-details.
+    [Documentation]    Helper — asserts the current URL contains /applicant-address.
     ${url}=    Get Url
-    Should Contain    ${url}    /applicant-residential-details
+    Should Contain    ${url}    /applicant-address
 
 Address Line 1 Error Should Be Visible
     [Documentation]

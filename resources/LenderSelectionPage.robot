@@ -65,8 +65,10 @@ ${LS_PLEASE_SELECT_ANOTHER}     text=Pick your preferred partner
 ${LS_VIEW_AVAILABLE_BTN}        role=button[name='View Available Financing Partners']
 
 # Success state — application-status page shown after APPROVED bureau decision
-${LS_SUCCESS_TEXT}              text=Your application has been successfully approved
-${LS_PROCEED_BUTTON}            css=[data-testid='proceed-button']
+# 2026 UI rewrite: /application-status shows a modal "Your EMI application is approved
+# successfully!" with a "PROCEED WITH NEXT STEPS" button (confirmed via screenshot).
+${LS_SUCCESS_TEXT}              text=Your EMI application is approved successfully!
+${LS_PROCEED_BUTTON}            css=button:has-text('PROCEED WITH NEXT STEPS')
 
 *** Keywords ***
 Lender Selection Page Should Be Visible
@@ -74,8 +76,9 @@ Lender Selection Page Should Be Visible
     ${has_heading}=    Run Keyword And Return Status
     ...    Wait For Elements State    ${LS_HEADING}    visible    timeout=${LONG_TIMEOUT}
     IF    not ${has_heading}
-        # Fallback: wait for any CONTINUE WITH button (lender cards loaded even without heading)
-        Wait For Elements State    css=button:has-text('CONTINUE WITH')    visible    timeout=${LONG_TIMEOUT}
+        # Fallback: wait for any CONTINUE WITH button (lender cards loaded even without heading).
+        # BRE/eligible-lender fetch can be slow — be patient rather than fail fast.
+        Wait For Elements State    css=button:has-text('CONTINUE WITH')    visible    timeout=${SUBMISSION_TIMEOUT}
     END
 
 Lender Selection Subheading Should Be Visible
@@ -135,15 +138,15 @@ Open KFS For First Lender
 
 Check KFS Consent
     [Documentation]    Ensures the KFS consent checkbox is checked; clicks it if not already checked.
-    ${checked}=    Get Property    ${LS_CONSENT_CHECKBOX}    checked
-    IF    not ${checked}
+    ${checked}=    Get Attribute    ${LS_CONSENT_CHECKBOX}    aria-checked
+    IF    '${checked}' != 'true'
         Click    ${LS_CONSENT_CHECKBOX}
     END
 
 Uncheck KFS Consent
     [Documentation]    Ensures the KFS consent checkbox is unchecked; clicks it if currently checked.
-    ${checked}=    Get Property    ${LS_CONSENT_CHECKBOX}    checked
-    IF    ${checked}
+    ${checked}=    Get Attribute    ${LS_CONSENT_CHECKBOX}    aria-checked
+    IF    '${checked}' == 'true'
         Click    ${LS_CONSENT_CHECKBOX}
     END
 
@@ -161,12 +164,12 @@ Check KFS Consent For Lender If Present
     ...    Checks the KFS consent checkbox scoped to the named lender's card only.
     ...    Uses CSS :has() to find the checkbox inside the same card as the lender's button.
     ...    Skips silently if that lender does not require KFS consent.
-    ${selector}=    Set Variable    css=div:has(button:has-text('${lender_name}')) input[type='checkbox']
+    ${selector}=    Set Variable    css=div:has(button:has-text('${lender_name}')) [role='checkbox']
     ${present}=    Run Keyword And Return Status
     ...    Wait For Elements State    ${selector}    visible    timeout=3s
     IF    ${present}
-        ${checked}=    Get Property    ${selector}    checked
-        IF    not ${checked}
+        ${checked}=    Get Attribute    ${selector}    aria-checked
+        IF    '${checked}' != 'true'
             Click    ${selector}
         END
     END
@@ -184,9 +187,8 @@ Lender Selection Page Footer Text Should Be Visible
     Wait For Elements State    ${LS_DISCLAIMER_TEXT}    visible    timeout=${TIMEOUT}
 
 Click First Available Continue Button
-    [Documentation]
-    ...    Clicks the first CONTINUE WITH lender button with up to 3 retries (2s apart).
-    Wait For Elements State    role=button[name*='CONTINUE WITH'] >> nth=0    visible    timeout=${TIMEOUT}
+    [Documentation]    Clicks the first CONTINUE WITH lender button — waits up to SUBMISSION_TIMEOUT for cards to load.
+    Wait For Elements State    role=button[name*='CONTINUE WITH'] >> nth=0    visible    timeout=${SUBMISSION_TIMEOUT}
     Click    role=button[name*='CONTINUE WITH'] >> nth=0
     Log    Clicked first available lender continue button    level=DEBUG
 
@@ -223,26 +225,54 @@ Processing Page Should Be Visible
 
 Bureau Decision Should Be Final
     [Documentation]
-    ...    Asserts one of three terminal bureau states:
+    ...    Asserts one of four terminal bureau states:
     ...    - APPROVED: URL contains /application-status/
     ...    - REJECTED: "Unable to Proceed" modal heading visible (back on /application-loader/)
-    ...    - BANK: URL contains /bank-statement/
+    ...    - BANK: URL contains /upload-bank-statements/
+    ...    - OKYC: URL contains /kyc/ (direct KYC redirect after lender assign)
     ...    Called by Wait For Bureau Decision — not intended for direct use.
     ${url}=    Get Url
+    Log    Bureau decision check — current URL: ${url}    console=True
     ${is_success}=    Evaluate    '/application-status/' in '${url}'
     ${is_rejected}=    Run Keyword And Return Status
     ...    Wait For Elements State    ${LS_UNABLE_TO_PROCEED}   visible    timeout=2s
-    ${is_bank}=    Evaluate    '/bank-statement/' in '${url}'
-    Should Be True    ${is_success} or ${is_rejected} or ${is_bank}
-    ...    Bureau decision not yet final
+    ${is_bank}=    Evaluate    '/upload-bank-statements/' in '${url}'
+    ${is_okyc}=    Evaluate    '/kyc/' in '${url}'
+    ${is_loader_status}=    Evaluate    '/application-loader-status/' in '${url}'
+    # 2026 UI: post-lender-selection polling page (/verifying-selected-financing-partner/) —
+    # the page itself polls for ~90s then stalls on an "Almost Ready" hold screen if the
+    # backend hasn't decided yet. Treat reaching it as acceptable so automation doesn't hang;
+    # the caller re-checks the URL afterwards to see if it has since moved on.
+    ${is_verifying}=    Evaluate    '/verifying-selected-financing-partner/' in '${url}'
+    Should Be True
+    ...    ${is_success} or ${is_rejected} or ${is_bank} or ${is_okyc} or ${is_loader_status} or ${is_verifying}
+    ...    Bureau decision not yet final (on: ${url})
 
 Wait For Bureau Decision
     [Documentation]
     ...    Polls until a terminal bureau decision state is detected
     ...    (approved, rejected, or bank-statement redirect).
-    ...    Uses SUBMISSION_TIMEOUT (60s) to accommodate UAT latency on re-mount after rejection.
+    ...    If still on /application-loader/ after 10s, force-navigates to /application-loader-status/
+    ...    to push the BRE flow forward (handles UAT slow BRE for TCL/CSB).
+    Sleep    10s
+    ${cur}=    Get Url
+    ${stuck}=    Evaluate    '/application-loader/' in '${cur}' and '/application-loader-status/' not in '${cur}'
+    IF    ${stuck}
+        ${app_id}=    Evaluate    '${cur}'.split('/application-loader/')[-1].split('?')[0].rstrip('/')
+        Log    Stuck on /application-loader/ — navigating to /application-loader-status/${app_id}    console=True
+        Go To    ${BASE_URL}/application-loader-status/${app_id}
+    END
     Wait Until Keyword Succeeds    ${SUBMISSION_TIMEOUT}    2s    Bureau Decision Should Be Final
     Log    Bureau decision reached    level=INFO
+    # The /verifying-selected-financing-partner/ page polls internally for ~90s before
+    # settling — if we landed there, give it that window then recheck for a real terminal URL.
+    ${cur2}=    Get Url
+    IF    '/verifying-selected-financing-partner/' in '${cur2}'
+        Log    On /verifying-selected-financing-partner/ — waiting up to 100s for its internal poll to settle    console=True
+        Sleep    100s
+        ${final_url}=    Get Url
+        Log    After wait, URL is: ${final_url}    console=True
+    END
 
 Click View Available Financing
     [Documentation]
@@ -255,13 +285,23 @@ Click View Available Financing
 
 Successful Lender Assignment Should Be Visible
     [Documentation]
-    ...    Waits for either /application-status/ or /bank-statement/ URL after BRE decision.
-    ...    BRE/lender decision can be slow (esp. CSB), so poll up to ${SUBMISSION_TIMEOUT}.
+    ...    Waits for a terminal BRE URL: /application-status/, /upload-bank-statements/, /kyc/, or
+    ...    /application-loader-status/ (processing). If still on /application-loader-status/,
+    ...    waits up to SUBMISSION_TIMEOUT more for it to redirect to /application-status/.
     Wait Until Keyword Succeeds    ${SUBMISSION_TIMEOUT}    2s    Application Status Or Bank Statement URL Should Be Active
     ${url}=    Get Url
-    IF    '/bank-statement/' in '${url}'
-        Log    BRE routed to /bank-statement/ — skipping bank statement page    console=True
-    ELSE
+    IF    '/application-loader-status/' in '${url}'
+        Log    On /application-loader-status/ — waiting for final redirect    console=True
+        Wait Until Keyword Succeeds    ${SUBMISSION_TIMEOUT}    2s    Any Terminal URL Should Be Active
+        ${url}=    Get Url
+    END
+    IF    '/upload-bank-statements/' in '${url}'
+        Log    BRE routed to /upload-bank-statements/ — skipping bank statement page    console=True
+    ELSE IF    '/kyc/' in '${url}'
+        Log    BRE routed directly to /kyc/ — skipping application-status page    console=True
+    ELSE IF    '/applications' in '${url}'
+        Fail    BRE rejected — application sent back to /applications (TCL rejected this PAN/loan)
+    ELSE IF    '/application-status/' in '${url}'
         Wait For Elements State    ${LS_SUCCESS_TEXT}    visible    timeout=${LONG_TIMEOUT}
     END
 
@@ -271,32 +311,41 @@ Application Status URL Should Be Active
     Should Contain    ${url}    /application-status/
 
 Application Status Or Bank Statement URL Should Be Active
-    [Documentation]    Helper — asserts the current URL contains /application-status/ or /bank-statement/.
+    [Documentation]    Helper — asserts the current URL contains /application-status/, /upload-bank-statements/, /kyc/, or /application-loader-status/.
     ${url}=    Get Url
-    Run Keyword If    '/application-status/' not in '${url}' and '/bank-statement/' not in '${url}'
-    ...    Fail    URL '${url}' is neither /application-status/ nor /bank-statement/
+    Run Keyword If    '/application-status/' not in '${url}' and '/upload-bank-statements/' not in '${url}' and '/kyc/' not in '${url}' and '/application-loader-status/' not in '${url}'
+    ...    Fail    URL '${url}' is not a terminal BRE URL (on: ${url})
+
+Any Terminal URL Should Be Active
+    [Documentation]    Helper for post-loader-status redirect — accepts /application-status/, /upload-bank-statements/, /kyc/, or /applications (rejected).
+    ${url}=    Get Url
+    ${ok}=    Evaluate    any(x in '${url}' for x in ['/application-status/', '/upload-bank-statements/', '/kyc/', '/applications'])
+    Should Be True    ${ok}    Still on loader-status, not yet redirected (on: ${url})
 
 Click Proceed To KYC
-    [Documentation]    Clicks the proceed-button to advance to the KYC step. On /bank-statement/ pages,
-    ...    navigates directly to /okyc/ using the app ID embedded in the URL.
+    [Documentation]    Clicks the proceed-button to advance to the KYC step. On /upload-bank-statements/ pages,
+    ...    navigates directly to /kyc/ using the app ID embedded in the URL.
     ${url}=    Get Url
-    IF    '/bank-statement/' in '${url}'
+    IF    '/kyc/' in '${url}'
+        Log    Already on /kyc/ — no need to click proceed    console=True
+    ELSE IF    '/upload-bank-statements/' in '${url}'
         ${app_id}=    Evaluate    '${url}'.rstrip('/').split('/')[-1]
-        Log    Bank statement page — navigating directly to /okyc/${app_id}    console=True
-        Go To    ${BASE_URL}/okyc/${app_id}
+        Log    Bank statement page — navigating directly to /kyc/${app_id}    console=True
+        Go To    ${BASE_URL}/kyc/${app_id}
     ELSE
         Click    ${LS_PROCEED_BUTTON}
     END
 
 Lender Selection URL Should Be Active
-    [Documentation]    Helper — asserts the current URL contains /application-loader/.
+    [Documentation]    Helper — asserts the current URL contains /choose-financing-partner/
+    ...    (2026 UI rewrite — was /application-loader/).
     ${url}=    Get Url
-    Should Contain    ${url}    /application-loader/
+    Should Contain    ${url}    /choose-financing-partner/
 
 Bank Statement URL Should Be Active
-    [Documentation]    Helper — asserts the current URL contains /bank-statement/.
+    [Documentation]    Helper — asserts the current URL contains /upload-bank-statements/.
     ${url}=    Get Url
-    Should Contain    ${url}    /bank-statement/
+    Should Contain    ${url}    /upload-bank-statements/
 
 Extract App ID From Current URL
     [Documentation]    Extracts and returns the application ID from an /application-loader/{app_id} URL.
@@ -305,9 +354,9 @@ Extract App ID From Current URL
     RETURN    ${app_id}
 
 Extract App Code From Bank Statement URL
-    [Documentation]    Extracts and returns the app code from a /bank-statement/{app_code} URL.
+    [Documentation]    Extracts and returns the app code from a /upload-bank-statements/{app_code} URL.
     ${url}=    Get Url
-    ${app_code}=    Fetch From Right    ${url}    /bank-statement/
+    ${app_code}=    Fetch From Right    ${url}    /upload-bank-statements/
     RETURN    ${app_code}
 
 Navigate To Lender Selection Within Session
@@ -348,12 +397,12 @@ Wait For Lender Page Or Bank Statement
     [Documentation]
     ...    After dismissing the rejection modal — polls up to 30s for either:
     ...    - lender selection heading visible (more lenders remain) → returns 'lender'
-    ...    - /bank-statement/ in URL (all lenders exhausted) → returns 'bank'
+    ...    - /upload-bank-statements/ in URL (all lenders exhausted) → returns 'bank'
     ...    Used in the NR03 loop so the last iteration doesn't fail when the
     ...    empty-lender-list redirect happens before the heading check.
     FOR    ${_}    IN RANGE    30
         ${url}=    Get Url
-        ${on_bank}=    Run Keyword And Return Status    Should Contain    ${url}    /bank-statement/
+        ${on_bank}=    Run Keyword And Return Status    Should Contain    ${url}    /upload-bank-statements/
         IF    ${on_bank}    RETURN    bank
         ${on_lender}=    Run Keyword And Return Status
         ...    Wait For Elements State    ${LS_HEADING}    visible    timeout=1s

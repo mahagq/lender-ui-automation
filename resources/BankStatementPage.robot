@@ -3,7 +3,7 @@ Library    Browser
 
 
 *** Variables ***
-# BankStatementSelectBank page (/bank-statement/{app_code})
+# BankStatementSelectBank page (/upload-bank-statements/{app_code})
 # PENDING TESTID: confirm exact heading text and testids from frontend
 ${BSS_PAGE_HEADING}             css=h1[data-testid="verify-your-income-title"]
 ${BSS_PAGE_SUBHEADING}          css=div[data-testid="business-info"]
@@ -14,7 +14,7 @@ ${BSS_BANK_OPTION}              role=option >> nth=0
 ${BSS_PROCEED_BTN}              css=[data-testid='proceed-button']
 
 # URL fragments
-${BSS_URL_FRAG}             /bank-statement/
+${BSS_URL_FRAG}             /upload-bank-statements/
 
 
 *** Keywords ***
@@ -50,11 +50,11 @@ Bank Statement Status URL Should Be Active
 Navigate To Bank Statement Select Bank Within Session
     [Documentation]    Navigates directly to the bank statement select bank page for the given application code.
     [Arguments]    ${app_code}
-    Go To    ${BASE_URL}/bank-statement/${app_code}
+    Go To    ${BASE_URL}/upload-bank-statements/${app_code}
     Bank Statement Select Bank Page Should Be Visible
 
 Navigate To Bank Statement Status Within Session
     [Documentation]    Navigates directly to the bank statement status page for the given application code.
     [Arguments]    ${app_code}
-    Go To    ${BASE_URL}/bank-statement-status/${app_code}
+    Go To    ${BASE_URL}/verifying-bank-statements/${app_code}
     Bank Statement Status Page Should Be Visible

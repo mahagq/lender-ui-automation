@@ -1,13 +1,13 @@
 *** Settings ***
 Documentation
-...    Page object keywords for the GQ Customer Portal Applicant Employment Details page (/applicant-employment-details).
+...    Page object keywords for the GQ Customer Portal Applicant Employment Details page (/applicant-employment).
 ...    All locators use data-testid CSS selectors confirmed from gqcustomer_frontend UAT branch.
 ...    Library: Browser (Playwright).
 ...
-...    This file covers BOTH employment detail variants on the same URL (/applicant-employment-details):
+...    This file covers BOTH employment detail variants on the same URL (/applicant-employment):
 ...      - Salaried: employer name, net monthly salary, consent, in-words display, proceed
 ...      - Self-Employed: business name, annual income, years in business, business description, proceed
-...    The form rendered depends on the selection made on /select-employment.
+...    The form rendered depends on the selection made on /applicant-employment.
 ...    Pattern mirrors DashboardPage.robot (single resource, multiple variant sections).
 ...
 ...    Session model:
@@ -24,12 +24,14 @@ Documentation
 Library     Browser
 
 *** Variables ***
+# 2026 UI rewrite — Employment Type + Details merged onto one page (/applicant-employment),
+# no testids. Fields identified by placeholder (= floating label text).
 # --- SALARIED EMPLOYMENT DETAILS ---
-${SED_WORK_TITLE}               css=[data-testid='work-title']
-${SED_EMPLOYER_NAME}            css=[data-testid='employer-name-input']
-${SED_SALARY_INPUT}             css=[data-testid='net-monthly-salary-input']
-${SED_IN_WORDS}                 css=[data-testid='in-words']
-${SED_CONSENT}                  css=[data-testid='consent-checkbox']
+${SED_WORK_TITLE}               text=Where do you work currently?
+${SED_EMPLOYER_NAME}            css=input[placeholder='Company name']
+${SED_SALARY_INPUT}             css=input[placeholder='Monthly salary you take home (in-hand)']
+${SED_IN_WORDS}                 text=In words:
+${SED_CONSENT}                  role=checkbox
 ${SED_CONSENT_ERROR}            css=[data-testid='consent-checkbox-error']
 ${SED_NOTE}                     css=[data-testid='employment-details-note']
 ${SED_PROCEED_BUTTON}           role=button[name=Proceed]
@@ -38,10 +40,10 @@ ${SED_SALARY_ERROR}             css=[data-testid='net-monthly-salary-input-error
 
 # --- SELF-EMPLOYED DETAILS ---
 ${SE_BUSINESS_NAME_TITLE}       css=[data-testid='business-name-title']
-${SE_BUSINESS_NAME}             css=[data-testid='business-name-input']
-${SE_ANNUAL_INCOME}             css=[data-testid='business-annual-income-input']
-${SE_YEARS}                     css=[data-testid='years-of-current-business-input']
-${SE_DESCRIPTION}               css=[data-testid='business-description-input']
+${SE_BUSINESS_NAME}             css=input[placeholder='Registered name of the business']
+${SE_ANNUAL_INCOME}             css=input[placeholder='Total annual revenue']
+${SE_YEARS}                     css=input[placeholder='Operating since (no. of years)']
+${SE_DESCRIPTION}               css=input[placeholder='Describe your business']
 ${SE_INFO}                      css=[data-testid='info']
 ${SE_PROCEED_BUTTON}            role=button[name=Proceed]
 ${SE_BUSINESS_NAME_ERROR}       css=[data-testid='business-name-input-error']
@@ -79,7 +81,7 @@ Fill Monthly Salary
     ...    Satisfies: TC-12021–12030
     [Arguments]    ${value}
     Wait For Elements State    ${SED_SALARY_INPUT}    visible    timeout=${TIMEOUT}
-    Fill Text    ${SED_SALARY_INPUT}    ${value}
+    Type Text    ${SED_SALARY_INPUT}    ${value}
 
 In Words Display Should Be Visible
     [Documentation]
@@ -97,8 +99,8 @@ Check Salaried Consent
     [Documentation]
     ...    Checks the consent-checkbox if not already checked.
     ...    Satisfies: TC-12032
-    ${checked}=    Get Property    ${SED_CONSENT}    checked
-    IF    not ${checked}
+    ${checked}=    Get Attribute    ${SED_CONSENT}    aria-checked
+    IF    '${checked}' != 'true'
         Click    ${SED_CONSENT}
     END
 
@@ -157,7 +159,7 @@ Fill Annual Income
     ...    Satisfies: TC-12054–12065
     [Arguments]    ${value}
     Wait For Elements State    ${SE_ANNUAL_INCOME}    visible    timeout=${TIMEOUT}
-    Fill Text    ${SE_ANNUAL_INCOME}    ${value}
+    Type Text    ${SE_ANNUAL_INCOME}    ${value}
 
 Years In Business Field Should Be Visible
     [Documentation]
@@ -213,14 +215,14 @@ Click Self Employed Proceed
     Click    ${SE_PROCEED_BUTTON}
 
 Click Close Button
-    [Documentation]    Clicks close-button on /applicant-employment-details and waits for dashboard URL.
+    [Documentation]    Clicks close-button on /applicant-employment and waits for dashboard URL.
     Click    css=[data-testid='close-button']
     Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    Dashboard URL Should Be Visible
 
 Employment Details URL Should Be Active
-    [Documentation]    Helper — asserts the current URL contains /applicant-employment-details.
+    [Documentation]    Helper — asserts the current URL contains /applicant-employment.
     ${url}=    Get Url
-    Should Contain    ${url}    /applicant-employment-details
+    Should Contain    ${url}    /applicant-employment
 
 # =====================================================================
 # SALARIED VALIDATION KEYWORDS
@@ -246,8 +248,8 @@ Salaried Consent Error Should Be Visible
 
 Uncheck Salaried Consent
     [Documentation]    Unchecks the salaried consent-checkbox if currently checked.
-    ${checked}=    Get Property    ${SED_CONSENT}    checked
-    IF    ${checked}
+    ${checked}=    Get Attribute    ${SED_CONSENT}    aria-checked
+    IF    '${checked}' == 'true'
         Click    ${SED_CONSENT}
     END
 

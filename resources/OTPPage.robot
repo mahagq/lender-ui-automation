@@ -27,10 +27,13 @@ Library     Browser
 *** Variables ***
 # Locators — derived from data-testid attributes in gqcustomer_frontend source
 # Satisfies: T1 (all locators use data-testid, no CSS classes or absolute XPath)
-${OTP_FORM}                css=[data-testid='verify-otp-form']
-${OTP_INPUT}               css=[data-testid='otp-input']
+# 2026 UI rewrite (develop-revamp branch) dropped data-testid attributes from this form too —
+# verify-otp-form.tsx renders no wrapper testid. Locators below use placeholder/text matching
+# (verified against src/components/sections/auth/verify-otp-form/verify-otp-form.tsx).
+${OTP_FORM}                css=input[placeholder='Enter OTP']
+${OTP_INPUT}               css=input[placeholder='Enter OTP']
 ${OTP_ERROR}               css=[data-testid='otp-input-error']
-${VERIFY_OTP_BUTTON}       css=[data-testid='verify-otp-button']
+${VERIFY_OTP_BUTTON}       css=button:has-text('Verify OTP')
 ${OTP_TIMER_CONTAINER}     css=[data-testid='send-otp-timer-container']
 ${OTP_TIMER}               css=[data-testid='send-otp-timer']
 ${RESEND_OTP_LINK}         css=[data-testid='resend-otp-link']
@@ -92,7 +95,7 @@ Get OTP Error Message
 
 Wait For Dashboard
     [Documentation]
-    ...    Waits for the post-OTP redirect to /my-applications to complete.
+    ...    Waits for the post-OTP redirect to /applications to complete.
     ...    Uses URL polling (every 500ms) rather than networkidle because React Router
     ...    performs a client-side pushState navigation after the verifyOtpPost response —
     ...    networkidle fires at API response time, before the URL update.
@@ -112,9 +115,9 @@ Wait For Dashboard
     END
 
 Dashboard URL Should Be Visible
-    [Documentation]    Helper — asserts the current URL contains /my-applications.
+    [Documentation]    Helper — asserts the current URL contains /applications.
     ${url}=    Get Url
-    Should Contain    ${url}    /my-applications
+    Should Contain    ${url}    /applications
 
 OTP Page Should Still Be On OTP Page
     [Documentation]
@@ -250,7 +253,7 @@ Dashboard Greeting Should Be Visible
 Existing User Dashboard Should Show Applications
     [Documentation]
     ...    Asserts the EMI tab and at least one application card are visible after login.
-    ...    Confirms an existing customer's post-OTP landing state on /my-applications.
+    ...    Confirms an existing customer's post-OTP landing state on /applications.
     Wait For Elements State    ${EMI_CONTENT_TAB}    visible    timeout=${TIMEOUT}
     Wait For Elements State    ${EMI_APPLICATION_CARD}    visible    timeout=${LONG_TIMEOUT}
 

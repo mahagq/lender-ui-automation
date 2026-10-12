@@ -30,7 +30,7 @@ ${DP_DETAILS}                   css=[data-testid='down-payment-details']
 ${DP_TENURE_VALUE}              css=[data-testid='tenure-value']
 ${DP_EMI_MONTHLY_VALUE}         css=[data-testid='emi-per-month-value']
 ${DP_INTEREST_MONTHLY_VALUE}    css=[data-testid='interest-amt.-per-month-value']
-${DP_PROCEED_BTN}               css=[data-testid='proceed-to-pay-button']
+${DP_PROCEED_BTN}               css=button:has-text('Proceed to pay')
 ${DP_CHANGE_PLAN_CARD}          css=[data-testid='change-plan-flow-card']
 ${DP_CHANGE_PLAN_TYPE}          css=[data-testid='change-plan-type']
 
@@ -38,8 +38,10 @@ ${DP_CHANGE_PLAN_TYPE}          css=[data-testid='change-plan-type']
 ${DP_TITLE}                     css=[data-testid='make-downpayment-title']
 ${DP_METHOD_INFO}               css=[data-testid='info']
 ${DP_PAYMENT_LABEL}             css=[data-testid='payment-title']
-${DP_ONLINE_PAYMENT}            css=[data-testid='online_payment']
-${DP_PAY_BTN}                   css=[data-testid='pay-button']
+${DP_ONLINE_PAYMENT}            css=button[role='radio']:has-text('Pay online')
+# :has-text() is case-insensitive — "Pay Online" also matches the "Pay online" radio card
+# (role='radio'). Exclude radios to target only the actual submit button.
+${DP_PAY_BTN}                   css=button:has-text('Pay Online'):not([role='radio'])
 
 # Step 6 — VirtualAccountBankDetails
 ${DP_VA_HEADING}                css=[data-testid='heading']
@@ -57,7 +59,9 @@ ${DP_STATUS_REF_ID}             css=[data-testid='reference-id-value']
 ${DP_STATUS_NEXT_STEP}          css=[data-testid='next-step-container']
 ${DP_STATUS_NACH}               css=[data-testid='nach']
 ${DP_STATUS_SELFIE}             css=[data-testid='selfie']
-${DP_STATUS_FINAL_BTN}          css=[data-testid='complete-the-final-steps-button']
+# 2026 UI rewrite: button text is "CONTINUE TO SET UP AUTO-PAY" (mandate-setup-intro.tsx),
+# navigates directly to /mandate/{app_id} — no intermediate "next step" page anymore.
+${DP_STATUS_FINAL_BTN}          css=button:has-text('CONTINUE TO SET UP AUTO-PAY')
 
 # Change Plan — Lower EMI flow (Step 1) — ${DP_LOWER_EMI_APP_ID} app only (Ashvini Varhade)
 # TBD — update all DP_LE_* locators from Playwright recording once available
@@ -107,16 +111,19 @@ ${DP_RZ_TEST_UPI_ID}            success@razorpay
 # ── Page visibility ──────────────────────────────────────────────────────────
 
 Down Payment Page Should Be Visible
-    Wait For Elements State    ${DP_DETAILS}    visible    timeout=${LONG_TIMEOUT}
+    # 2026 UI rewrite: no testids — "Proceed to pay" button is the step-1 ready signal.
+    Wait For Elements State    ${DP_PROCEED_BTN}    visible    timeout=${SUBMISSION_TIMEOUT}
 
 Down Payment Step 5 Should Be Visible
-    Wait For Elements State    ${DP_TITLE}    visible    timeout=${LONG_TIMEOUT}
+    # 2026 UI rewrite: no testids — "Choose payment method" heading is the step-5 ready signal.
+    Wait For Elements State    text=Choose payment method    visible    timeout=${LONG_TIMEOUT}
 
 Down Payment Step 6 Should Be Visible
     Wait For Elements State    ${DP_VA_BANK_LABEL}    visible    timeout=${LONG_TIMEOUT}
 
 Down Payment Status Page Should Be Visible
-    Wait For Elements State    ${DP_STATUS_DETAILS}    visible    timeout=${LONG_TIMEOUT}
+    # 2026 UI rewrite: no testids — "Downpayment Successful!" StatusCard title is the signal.
+    Wait For Elements State    text=Downpayment Successful!    visible    timeout=${SUBMISSION_TIMEOUT}
 
 # ── URL assertions ────────────────────────────────────────────────────────────
 
@@ -277,28 +284,27 @@ Fill Manual Bank Details And Proceed
     ...    Re-selecting/re-filling is safe to call repeatedly (used by the refresh-retry loop).
     Wait For Elements State    css=[data-testid='choose-your-bank-react-select']    visible    timeout=${LONG_TIMEOUT}
     Click    css=[data-testid='choose-your-bank-react-select']
-    Sleep    500ms
+    Wait For Elements State    role=option >> nth=0    visible    timeout=${TIMEOUT}
     # Close the react-select dropdown (it floats over the SBI tile and intercepts clicks).
     Keyboard Key    press    Escape
-    Sleep    300ms
+    Wait For Elements State    css=[data-testid='sbi-bank-option']    visible    timeout=${TIMEOUT}
     Click    css=[data-testid='sbi-bank-option']
     Wait For Elements State    css=[data-testid='cust-bank-accont-number']    visible    timeout=${TIMEOUT}
     Fill Text    css=[data-testid='cust-bank-accont-number']    ${NACH_ACCOUNT_NUMBER}
     Fill Text    css=[data-testid='cust-ifsc-code']    ${NACH_IFSC}
     Click    css=[data-testid='select-bank-account-type-radio-container-0']
-    Sleep    500ms
+    Wait For Elements State    css=[data-testid='nach-bank-verifcation-proceed-button']    enabled    timeout=${TIMEOUT}
     Click    css=[data-testid='nach-bank-verifcation-proceed-button']
 
 Complete Nach Bank Verification
     [Arguments]    ${app_id}    ${attempts}=4
     [Documentation]
-    ...    From the /nach intro page: Continue to Setup → Manual Entry → fill SBI account → Proceed.
+    ...    From the /mandate intro page: Continue to Setup → Manual Entry → fill SBI account → Proceed.
     ...    UAT intermittently returns "Failed to create mandate form" (server/vendor hiccup); per the
     ...    known workaround we refresh the page and retry up to ${attempts} times. Succeeds when the
     ...    URL advances to /enach-checkout/{app_id}.
     Wait For Elements State    css=[data-testid='nach-continue-to-setup-button']    visible    timeout=${LONG_TIMEOUT}
     Click    css=[data-testid='nach-continue-to-setup-button']
-    Sleep    2s
     # Some lenders (e.g. Tata Capital) skip the UPI/Manual choice and go straight to bank selection.
     ${has_manual_entry}=    Run Keyword And Return Status
     ...    Wait For Elements State    css=[data-testid='manual_entry']    visible    timeout=8s
@@ -317,7 +323,6 @@ Complete Nach Bank Verification
         END
         Log    "Failed to create mandate form" (attempt ${i + 1}/${attempts}) — refreshing per UAT workaround    level=WARN
         Reload
-        Sleep    3s
         ${on_method}=    Run Keyword And Return Status
         ...    Wait For Elements State    css=[data-testid='manual_entry']    visible    timeout=8s
         IF    ${on_method}    Click    css=[data-testid='manual_entry']
@@ -394,7 +399,6 @@ Complete Enach Checkout
     ...    then drives the Debit Card mandate (Submit Digio Mandate Debit Card → NPCI Accept).
     Wait For Elements State    css=[data-testid='e-mandate-proceed-button']    visible    timeout=${LONG_TIMEOUT}
     Click    css=[data-testid='e-mandate-proceed-button']
-    Sleep    5s
     Submit Digio Mandate Debit Card
 
 Submit Digio Mandate Debit Card
@@ -409,28 +413,24 @@ Submit Digio Mandate Debit Card
     ${frame}=    Set Variable    css=iframe[id^="digio-ifm-"]
     Wait For Elements State    ${frame} >>> text=Debit Card    visible    timeout=${LONG_TIMEOUT}
     Click    ${frame} >>> text=Debit Card
-    Sleep    1s
     # Consent checkbox: the real <input> is hidden behind a styled box, so force-checking the input
     # sets .checked but never fires the click/change event Digio's component listens to (Submit stays
     # disabled). Click the visible label instead — a real click bubbles into Digio's handler and flips
     # its state. Fall back to force-checking the input only if the label click didn't enable Submit.
+    Wait For Elements State    ${frame} >>> input[type=checkbox] >> nth=-1    visible    timeout=${TIMEOUT}
     Scroll To Element    ${frame} >>> input[type=checkbox] >> nth=-1
-    Sleep    500ms
     Click    ${frame} >>> label >> nth=-1
-    Sleep    500ms
     ${submit_enabled}=    Run Keyword And Return Status
     ...    Wait For Elements State    ${frame} >>> button:has-text('Submit')    enabled    timeout=5s
     IF    not ${submit_enabled}
         Log    Label click did not enable Submit — falling back to force-check on input    console=True
         Check Checkbox    ${frame} >>> input[type=checkbox] >> nth=-1    force=True
-        Sleep    500ms
     END
     Wait For Elements State    ${frame} >>> button:has-text('Submit')    enabled    timeout=${LONG_TIMEOUT}
     Take Screenshot    fullPage=True
     Click    ${frame} >>> button:has-text('Submit')
     # Submit pops a new Digio window (NPCI Simulation). Wait for it to open then switch to it.
-    Sleep    4s
-    Switch Page    NEW
+    Wait Until Keyword Succeeds    15s    1s    Switch Page    NEW
     ${npci_url}=    Get Url
     Log    Digio NPCI simulation popup — URL: ${npci_url}    console=True
     Wait For Elements State    text=Accept    visible    timeout=${LONG_TIMEOUT}
@@ -444,24 +444,50 @@ Submit Digio Mandate Debit Card
     Log    eNACH mandate accepted — back on ${url}    console=True
     Take Screenshot    fullPage=True
 
-Complete Nach And Selfie Step
+Handle Address Proof Page If Present
     [Arguments]    ${app_id}
     [Documentation]
-    ...    Full post-down-payment flow:
-    ...      1. eNACH: intro → bank verification (refresh-retry) → enach-checkout
-    ...      2. Digio Debit Card mandate → NPCI Accept (mandate completed)
-    ...      3. eNACH success lands on the selfie page — bypass selfie via DB insert
-    ...         (customer_tracker slug 'selfie-completed'), then reload to advance.
-    Complete Nach Bank Verification    ${app_id}
-    Complete Enach Checkout    ${app_id}
-    ${after_enach}=    Get Url
-    Log    ✅ eNACH mandate completed — landed on ${after_enach} (expecting selfie)    console=True
+    ...    The /upload-address-proof step can surface at any point in the post-down-payment
+    ...    flow, not just right after mandate. loan-execution-guard.tsx wraps this (and sibling)
+    ...    steps and resolves which one to render from tracker state on each evaluation — so
+    ...    inserting the 'address-proof-uploaded' tracker then reloading lets the guard itself
+    ...    redirect past it, no explicit next-URL navigation needed.
+    ${url}=    Get Url
+    IF    '/upload-address-proof/' in '${url}'
+        Log    On /upload-address-proof/ — inserting address-proof-uploaded tracker    console=True
+        Bypass Address Proof Via Database    ${app_id}
+        Reload
+        Wait For Load State    networkidle    timeout=${LONG_TIMEOUT}
+        ${after}=    Get Url
+        Log    ✅ After address-proof bypass — on ${after}    console=True
+    END
+
+Complete Nach And Selfie Step
+    [Arguments]    ${app_id}    ${mobile}=${LAST_USED_MOBILE}
+    [Documentation]
+    ...    Full post-down-payment flow, both steps DB-bypassed (2026 UI rewrite made the
+    ...    live /mandate UI — RPD/manual bank verification, Digio, UPI checkout, pNACH —
+    ...    too complex/unverified to drive reliably):
+    ...      1. Mandate: duplicate template mandate record (cmd_id=3999) + cfd/cmd mapping +
+    ...         customer_tracker 'emandate-completed' + 'mandate-completed', then reload.
+    ...      2. Selfie + Address Proof: existing DB bypass (inserts the Electricity Bill
+    ...         document + 'selfie-completed'/'address-proof-uploaded' etc. trackers).
+    ...    Checks for /upload-address-proof/ (DB-bypassed, not skipped) at every checkpoint,
+    ...    since it can surface at any point in this flow.
+    Bypass Mandate Via Database    ${mobile}    ${app_id}
+    Reload
+    Wait For Load State    networkidle    timeout=${LONG_TIMEOUT}
+    ${after_mandate}=    Get Url
+    Log    ✅ Mandate bypassed via DB — landed on ${after_mandate}    console=True
+    Handle Address Proof Page If Present    ${app_id}
     Bypass Selfie Via Database    ${app_id}
     Log    ✅ Selfie bypassed via DB (selfie-completed) for ${app_id}    console=True
     Reload
-    Sleep    3s
+    Wait For Load State    networkidle    timeout=${LONG_TIMEOUT}
     ${final_url}=    Get Url
     Log    ✅ After selfie bypass — on ${final_url}    console=True
+    Handle Address Proof Page If Present    ${app_id}
+    ${final_url}=    Get Url
     Take Screenshot    fullPage=True
     RETURN    ${final_url}
 
@@ -470,6 +496,55 @@ Explore Nach Flow
     [Documentation]    Back-compat alias — delegates to Complete Nach And Selfie Step.
     ${url}=    Complete Nach And Selfie Step    ${app_id}
     RETURN    ${url}
+
+Complete Additional Details Step
+    [Arguments]    ${app_id}
+    [Documentation]
+    ...    Final step of the journey — /additional-details/{appId}. Per
+    ...    additional-details-form.tsx: alternate mobile + email verification each open
+    ...    the same OTP modal (fixed UAT OTP 9999 applies here too), then "START THE FEE
+    ...    DISBURSAL" submits. Sections are conditional (showSecondaryNumber/
+    ...    showEmailVerification/showFatherName/showStudentId) — each is checked for
+    ...    presence before acting, since not every application shows every field.
+    ${url}=    Get Url
+    IF    '/additional-details/' not in '${url}'
+        Go To    ${BASE_URL}/additional-details/${app_id}
+        Sleep    2s
+    END
+
+    # Alternate mobile number (optional section — random number + OTP 9999)
+    ${has_secondary}=    Run Keyword And Return Status
+    ...    Wait For Elements State    css=input[placeholder='Enter mobile number']    visible    timeout=5s
+    IF    ${has_secondary}
+        ${rand_mobile}=    Evaluate    str(random.randint(9000000000, 9999999999))    modules=random
+        Fill Text    css=input[placeholder='Enter mobile number']    ${rand_mobile}
+        Click    css=button:has-text('Send OTP')
+        Wait For Elements State    css=input[placeholder='Enter OTP']    visible    timeout=${TIMEOUT}
+        Fill Text    css=input[placeholder='Enter OTP']    ${TEST_OTP}
+        Click    css=button:has-text('Verify OTP')
+        Wait For Elements State    text=Mobile number verified successfully    visible    timeout=${TIMEOUT}
+        Log    ✅ Alternate mobile verified (${rand_mobile})    console=True
+    END
+
+    # Email verification (optional section — prefilled email, OTP 9999)
+    ${has_email_verify}=    Run Keyword And Return Status
+    ...    Wait For Elements State    css=button:has-text('Verify Email')    visible    timeout=5s
+    IF    ${has_email_verify}
+        Click    css=button:has-text('Verify Email')
+        Wait For Elements State    css=input[placeholder='Enter OTP']    visible    timeout=${TIMEOUT}
+        Fill Text    css=input[placeholder='Enter OTP']    ${TEST_OTP}
+        Click    css=button:has-text('Verify OTP')
+        Wait For Elements State    text=Email Verified Successfully    visible    timeout=${TIMEOUT}
+        Log    ✅ Email verified    console=True
+    END
+
+    Wait For Elements State    css=button:has-text('START THE FEE DISBURSAL')    visible    timeout=${LONG_TIMEOUT}
+    Wait For Elements State    css=button:has-text('START THE FEE DISBURSAL')    enabled    timeout=${LONG_TIMEOUT}
+    Click    css=button:has-text('START THE FEE DISBURSAL')
+    Sleep    3s
+    ${final_url}=    Get Url
+    Log    ✅ Fee disbursal started for app ${app_id} — on ${final_url}    console=True
+    RETURN    ${final_url}
 
 Enter Final Steps If Present
     [Arguments]    ${app_id}
@@ -488,11 +563,13 @@ Enter Final Steps If Present
     Log    Final steps — eNACH present: ${nach_present} | Selfie present: ${selfie_present} | Button present: ${final_btn_present}    console=True
     IF    ${final_btn_present}
         Click    ${DP_STATUS_FINAL_BTN}
-        Sleep    2s
+        Wait For Load State    networkidle    timeout=${TIMEOUT}
+        Handle Address Proof Page If Present    ${app_id}
         ${url}=    Get Url
         Log    Entered final steps — now at: ${url}    console=True
         RETURN    ${url}
     END
+    Handle Address Proof Page If Present    ${app_id}
     ${url}=    Get Url
     Log    No "complete final steps" button present — staying at: ${url}    console=True
     RETURN    ${url}

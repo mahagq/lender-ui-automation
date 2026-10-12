@@ -11,7 +11,7 @@ Documentation
 ...      Login form:          data-testid='login-form' (reused from LoginPage.robot)
 ...
 ...    Flow:
-...      With ?m=<mobile>  → bypassAuthPost authenticates → redirect to /my-applications
+...      With ?m=<mobile>  → bypassAuthPost authenticates → redirect to /applications
 ...                           or /student-details (based on application state).
 ...      Without ?m=       → useEffect detects missing param → navigateTo('/') immediately.
 ...      bypassAuthPost fails → showNoAccountMessage=true → no-account error state shown.
@@ -48,7 +48,7 @@ Navigate To Bypass Auth Page Without Param
 Bypass Auth Should Redirect Away From Instant Eligibility
     [Documentation]
     ...    After navigation, the URL should no longer contain /instant-eligibility.
-    ...    Accepts redirect to /my-applications, /student-details, or / as valid outcomes.
+    ...    Accepts redirect to /applications, /student-details, or / as valid outcomes.
     ...    Satisfies: TC-401
     Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    URL Should Not Be Instant Eligibility
 

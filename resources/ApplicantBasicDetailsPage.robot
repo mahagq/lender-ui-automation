@@ -1,6 +1,6 @@
 *** Settings ***
 Documentation
-...    Page object keywords for the GQ Customer Portal Applicant Basic Details page (/applicant-basic-details).
+...    Page object keywords for the GQ Customer Portal Applicant Basic Details page (/applicant-name).
 ...    All locators use data-testid CSS selectors confirmed from gqcustomer_frontend UAT branch.
 ...    Library: Browser (Playwright).
 ...
@@ -20,13 +20,13 @@ Library     Browser
 ${BD_TITLE}                     css=[data-testid='applicant-basic-details-title']
 ${BD_NOTE}                      css=[data-testid='applicant-basic-details-note']
 ${BD_INFO}                      css=[data-testid='applicant-basic-details-info']
-${BD_FIRST_NAME}                css=[data-testid='first-name-input']
-${BD_LAST_NAME}                 css=[data-testid='last-name-input']
+${BD_FIRST_NAME}                css=input[placeholder='First name (as per PAN card)']
+${BD_LAST_NAME}                 css=input[placeholder='Last name (as per PAN card)']
 ${BD_FIRST_NAME_ERROR}          css=[data-testid='first-name-input-error']
 ${BD_LAST_NAME_ERROR}           css=[data-testid='last-name-input-error']
-${BD_CONSENT}                   css=[data-testid='consent-checkbox']
+${BD_CONSENT}                   role=checkbox
 ${BD_CONSENT_ERROR}             css=[data-testid='consent-checkbox-error']
-${BD_SUBMIT_BUTTON}             css=[data-testid='submit-button']
+${BD_SUBMIT_BUTTON}             css=button:has-text('Proceed')
 ${BD_BACK_BUTTON}               css=[data-testid='back-button']
 ${BD_CLOSE_BUTTON}              css=[data-testid='close-button']
 
@@ -62,15 +62,15 @@ Check Basic Details Consent
     [Documentation]
     ...    Checks the consent-checkbox if it is not already checked.
     ...    Satisfies: TC-8007
-    ${checked}=    Get Property    ${BD_CONSENT}    checked
-    IF    not ${checked}
+    ${checked}=    Get Attribute    ${BD_CONSENT}    aria-checked
+    IF    '${checked}' != 'true'
         Click    ${BD_CONSENT}
     END
 
 Submit Button Should Be Disabled Without Data
     [Documentation]
     ...    Asserts the submit-button is disabled when required fields are empty.
-    ...    NOTE: /applicant-basic-details submit button does NOT use the HTML disabled
+    ...    NOTE: /applicant-name submit button does NOT use the HTML disabled
     ...    attribute or aria-disabled. Button is always clickable; validation errors appear
     ...    on submit. TC-8006, TC-8N-05, TC-8N-06 are skipped pending UX clarification.
     ...    Satisfies: TC-8006, U2
@@ -90,15 +90,15 @@ Submit Button Should Be Enabled With Valid Data
 
 Click Submit Basic Details
     [Documentation]
-    ...    Clicks the submit-button to proceed to /onboarding.
+    ...    Clicks the submit-button to proceed to /get-started.
     ...    Satisfies: TC-8010, RT-5 (proceed)
     Wait For Elements State    ${BD_SUBMIT_BUTTON}    visible    timeout=${TIMEOUT}
     Click    ${BD_SUBMIT_BUTTON}
 
 Basic Details URL Should Be Active
-    [Documentation]    Helper — asserts the current URL contains /applicant-basic-details.
+    [Documentation]    Helper — asserts the current URL contains /applicant-name.
     ${url}=    Get Url
-    Should Contain    ${url}    /applicant-basic-details
+    Should Contain    ${url}    /applicant-name
 
 Basic Details Info Should Be Visible
     [Documentation]
@@ -126,21 +126,21 @@ Consent Error Should Be Visible
 
 Uncheck Basic Details Consent
     [Documentation]    Unchecks the consent-checkbox if it is currently checked.
-    ${checked}=    Get Property    ${BD_CONSENT}    checked
-    IF    ${checked}
+    ${checked}=    Get Attribute    ${BD_CONSENT}    aria-checked
+    IF    '${checked}' == 'true'
         Click    ${BD_CONSENT}
     END
 
 Navigate Back From Basic Details
     [Documentation]
-    ...    Clicks back-button on /applicant-basic-details to return to /select-applicant.
+    ...    Clicks back-button on /applicant-name to return to /who-is-applying.
     ...    Satisfies: TC-8012
     Wait For Elements State    ${BD_BACK_BUTTON}    visible    timeout=${TIMEOUT}
     Click    ${BD_BACK_BUTTON}
 
 Click Close Button Basic Details
     [Documentation]
-    ...    Clicks the close-button on /applicant-basic-details and waits for dashboard URL.
+    ...    Clicks the close-button on /applicant-name and waits for dashboard URL.
     ...    Satisfies: TC-8013
     Wait For Elements State    ${BD_CLOSE_BUTTON}    visible    timeout=${TIMEOUT}
     Click    ${BD_CLOSE_BUTTON}

@@ -25,6 +25,7 @@ Documentation
 ...    O1 (single application per suite run), TN1 resolution, TN2 resolution
 
 Library     Browser
+Library     Collections
 Resource    LoginPage.robot
 Resource    OTPPage.robot
 Resource    DashboardPage.robot
@@ -47,81 +48,87 @@ Resource    BankStatementPage.robot
 *** Variables ***
 # Wizard page URL fragments — used by Test Setup Go To calls in each test suite
 ${URL_STUDENT_DETAILS}          /student-details
-${URL_CHOOSE_PLAN}              /choose-plan
-${URL_SELECT_APPLICANT}         /select-applicant
-${URL_BASIC_DETAILS}            /applicant-basic-details
-${URL_ONBOARDING}               /onboarding
+${URL_CHOOSE_PLAN}              /emi-plans
+${URL_SELECT_APPLICANT}         /who-is-applying
+${URL_BASIC_DETAILS}            /applicant-name
+${URL_ONBOARDING}               /get-started
 ${URL_PERSONAL_DETAILS}         /applicant-personal-details
-${URL_RESIDENTIAL_DETAILS}      /applicant-residential-details
-${URL_EMPLOYMENT_TYPE}          /select-employment
-${URL_EMPLOYMENT_DETAILS}       /applicant-employment-details
-${URL_CONFIRM_APPLICATION}      /confirm-application
+${URL_RESIDENTIAL_DETAILS}      /applicant-address
+${URL_EMPLOYMENT_TYPE}          /applicant-employment
+${URL_EMPLOYMENT_DETAILS}       /applicant-employment
+${URL_CONFIRM_APPLICATION}      /review-application
 
-# Student details locators (traversal use)
-# NOTE: testid renamed from student-details-title to gile-form-title on UAT (2026-04-23)
-${SD_TITLE}                     css=[data-testid='gile-form-title']
-${SD_FIRST_NAME}                css=[data-testid='first-name-input']
-${SD_LAST_NAME}                 css=[data-testid='last-name-input']
-${SD_STUDENT_TYPE_RADIO}        css=[data-testid='student-type-radio']
-${SD_STUDENT_ID}                css=[data-testid='student-id-input']
-${SD_LOAN_AMOUNT}               css=[data-testid='loan-amount-input']
-# NOTE: show-plans-button uses 'testidfor' attribute, not 'data-testid'
-${SD_SHOW_PLANS_BUTTON}         css=[testidfor='show-plans-button']
-${SD_FORM}                      css=[data-testid='student-details-form']
+# Student details locators (traversal use) — duplicates StudentDetailsPage.robot's definitions;
+# this file's Variables section loads AFTER that Resource import and wins, so it must be kept
+# in sync. 2026 UI rewrite: no testids, placeholder/role-based (student-details-form.tsx).
+${SD_TITLE}                     css=button[role='combobox']:has-text('School / College / University')
+${SD_FIRST_NAME}                css=input[placeholder="Student's first name"]
+${SD_LAST_NAME}                 css=input[placeholder="Student's last name"]
+${SD_STUDENT_TYPE_RADIO}        role=radio
+${SD_STUDENT_ID}                css=input[placeholder^='Student ID']
+${SD_LOAN_AMOUNT}               css=input[placeholder='Annual fee amount']
+${SD_SHOW_PLANS_BUTTON}         css=button:has-text('Show Plans')
+${SD_FORM}                      css=button[role='combobox']:has-text('School / College / University')
 
 # Choose Plan locators (traversal use)
-${CP_PLAN_LIST}                 css=[data-testid='plan-list-container']
-${CP_SUBMIT_BUTTON}             css=[data-testid='submit-plan-details-button']
+# 2026 UI rewrite (/emi-plans): plan cards are Radix RadioGroup.Item (role='radio'), no testids.
+# emi-plans-form.tsx: RadioGroupPrimitive.Root aria-label='EMI plans' wraps the cards; submit
+# button text is "Proceed".
+${CP_PLAN_LIST}                 css=[aria-label='EMI plans']
+${CP_SUBMIT_BUTTON}             css=button:has-text('Proceed')
 
 # Select Applicant locators (traversal use)
-${SA_PARENT_OPTION}             css=[data-testid='Parent/Guardian-0']
-${SA_SUBMIT_BUTTON}             css=[data-testid='submit-applicant-type-button']
+# 2026 UI rewrite (/who-is-applying): native radio wrapped in <label>, no testids;
+# card text is the accessible target. Submit button text is "Proceed".
+${SA_PARENT_OPTION}             css=label:has-text('I am the Parent/Guardian')
+${SA_SUBMIT_BUTTON}             css=button:has-text('Proceed')
 
 # Applicant Basic Details locators (traversal use)
-${BD_FIRST_NAME}                css=[data-testid='first-name-input']
-${BD_LAST_NAME}                 css=[data-testid='last-name-input']
-${BD_CONSENT}                   css=[data-testid='consent-checkbox']
-${BD_SUBMIT_BUTTON}             css=[data-testid='submit-button']
+${BD_FIRST_NAME}                css=input[placeholder='First name (as per PAN card)']
+${BD_LAST_NAME}                 css=input[placeholder='Last name (as per PAN card)']
+${BD_CONSENT}                   role=checkbox
+${BD_SUBMIT_BUTTON}             css=button:has-text('Proceed')
 
 # Onboarding locators (traversal use)
-${OB_INFO_ONE}                  css=[data-testid='onboarding-info-one']
-${OB_PROCEED_BUTTON}            css=[data-testid='proceed-button']
+${OB_INFO_ONE}                  css=button:has-text('Proceed')
+${OB_PROCEED_BUTTON}            css=button:has-text('Proceed')
 
 # Personal Details locators (traversal use)
-${PD_FORM}                      css=[data-testid='applicant-personal-details-form']
-${PD_PAN_INPUT}                 css=[data-testid='pan-number-input']
-${PD_EMAIL_INPUT}               css=[data-testid='email-input']
-${PD_CONSENT}                   css=[data-testid='consent-checkbox']
-${PD_PROCEED_BUTTON}            css=[data-testid='proceed-button']
+${PD_FORM}                      css=input[placeholder='PAN number']
+${PD_PAN_INPUT}                 css=input[placeholder='PAN number']
+${PD_EMAIL_INPUT}               css=input[placeholder='Email address']
+${PD_CONSENT}                   role=checkbox
+${PD_PROCEED_BUTTON}            css=button:has-text('Proceed')
 
 # Residential Details locators (traversal use)
-${RD_ADDR_LINE1}                css=[data-testid='addr-line-1-input']
-${RD_ADDR_LINE2}                css=[data-testid='addr-line-2-input']
-${RD_PINCODE}                   css=[data-testid='pincode-input']
-${RD_RESIDENCE_TYPE_RADIO}      css=[data-testid='type-radio']
-${RD_PROCEED_BUTTON}            css=[data-testid='proceed-button']
+${RD_ADDR_LINE1}                css=input[placeholder='Flat no. / building name']
+${RD_ADDR_LINE2}                css=input[placeholder='Colony / street / locality']
+${RD_PINCODE}                   css=input[placeholder='Pincode']
+${RD_RESIDENCE_TYPE_RADIO}      role=radio
+${RD_PROCEED_BUTTON}            css=button:has-text('Proceed')
 
-# Employment Type locators (traversal use)
-${ET_SALARIED_CARD}             css=[data-testid='salaried']
-${ET_SELF_EMPLOYED_CARD}        css=[data-testid='self-employed']
-${ET_TITLE}                     css=[data-testid='select-employment-type-title']
+# Employment Type locators (traversal use) — 2026 UI: type + details merged onto one page
+# (/applicant-employment), no testids. Cards are plain buttons with label text.
+${ET_SALARIED_CARD}             css=button:has-text('Salaried')
+${ET_SELF_EMPLOYED_CARD}        css=button:has-text('Self Employed')
+${ET_TITLE}                     text=Are you Salaried or Self-Employed?
 
 # Salaried Employment Details locators (traversal use)
-${SED_EMPLOYER_NAME}            css=[data-testid='employer-name-input']
-${SED_SALARY}                   css=[data-testid='net-monthly-salary-input']
-${SED_CONSENT}                  css=[data-testid='consent-checkbox']
+${SED_EMPLOYER_NAME}            css=input[placeholder='Company name']
+${SED_SALARY}                   css=input[placeholder='Monthly salary you take home (in-hand)']
+${SED_CONSENT}                  role=checkbox
 ${SED_PROCEED_BUTTON}           role=button[name=Proceed]
 
 # Self-Employed Details locators (traversal use)
-${SE_BUSINESS_NAME}             css=[data-testid='business-name-input']
-${SE_ANNUAL_INCOME}             css=[data-testid='business-annual-income-input']
-${SE_YEARS}                     css=[data-testid='years-of-current-business-input']
-${SE_DESCRIPTION}               css=[data-testid='business-description-input']
+${SE_BUSINESS_NAME}             css=input[placeholder='Registered name of the business']
+${SE_ANNUAL_INCOME}             css=input[placeholder='Total annual revenue']
+${SE_YEARS}                     css=input[placeholder='Operating since (no. of years)']
+${SE_DESCRIPTION}               css=input[placeholder='Describe your business']
 ${SE_PROCEED_BUTTON}            role=button[name=Proceed]
 
 # Confirm Application locators (traversal use)
-${CA_FORM}                      css=[data-testid='confirm-application-form']
-${CA_TITLE}                     css=[data-testid='confirm-application-title']
+${CA_FORM}                      css=button:has-text('Confirm & Submit')
+${CA_TITLE}                     text=Confirm all the details.
 
 *** Keywords ***
 Login And Create Application
@@ -130,7 +137,7 @@ Login And Create Application
     ...    Shared login step for all application-creation suite setups.
     ...    Opens browser, logs in with ${mobile} (defaults to ${APP_CREATION_MOBILE}), handles
     ...    checkMobilePost and verifyOtpPost rate limits (same pattern as Login And Navigate To Dashboard).
-    ...    Leaves browser on /my-applications (dashboard) after completion.
+    ...    Leaves browser on /applications (dashboard) after completion.
     ...    Satisfies: RT-1, T7, S2, TN2 resolution
     New Browser    ${BROWSER}    headless=${HEADLESS}
     Open Login Page
@@ -152,7 +159,7 @@ Login And Create Application
         Log    verifyOtpPost rate limit in App Creation Suite Setup — waiting ${RATE_LIMIT_WAIT} then retrying.    console=True
         Sleep    ${RATE_LIMIT_WAIT}
         ${url_after}=    Get Url
-        IF    '/my-applications' in '${url_after}'
+        IF    '/applications' in '${url_after}'
             No Operation    # already on dashboard — OTP succeeded during sleep
         ELSE IF    '/verify' in '${url_after}'
             Enter OTP    ${TEST_OTP}
@@ -175,26 +182,22 @@ Click Create Application Button And Wait For Student Details
     ...    Also handles modal (existing-application confirmation modal).
     ...    NOTE: 'create-new-application-button' testid removed from UAT.
     ...    Satisfies: RT-1, TN1, O1
-    Wait For Elements State    ${EMI_TAB}    visible    timeout=${TIMEOUT}
-    Click    ${EMI_TAB}
-    Sleep    1s
-    # Try header button first (present when account has existing applications)
-    ${has_header_btn}=    Run Keyword And Return Status
-    ...    Wait For Elements State    ${CREATE_APP_BUTTON}    visible    timeout=4s
-    IF    ${has_header_btn}
-        Click    ${CREATE_APP_BUTTON}
-    ELSE
-        # Fresh account (no applications) — button is in the empty-state container
-        Wait For Elements State    ${CREATE_APP_BUTTON_EMPTY}    visible    timeout=${TIMEOUT}
-        Click    ${CREATE_APP_BUTTON_EMPTY}
-    END
+    # 2026 UI rewrite: /applications lands directly on the EMI view — no separate tab click
+    # needed. EMI_TAB testid is stale; try it but don't fail if it's not there.
+    ${has_tab}=    Run Keyword And Return Status
+    ...    Wait For Elements State    ${EMI_TAB}    visible    timeout=4s
+    IF    ${has_tab}    Click    ${EMI_TAB}
+    # Same "Start New Application" button text covers both header (existing apps) and
+    # empty-state (fresh account) — just wait for it directly.
+    Wait For Elements State    ${CREATE_APP_BUTTON}    visible    timeout=${LONG_TIMEOUT}
+    Click    ${CREATE_APP_BUTTON}
     # After clicking, a "Before you proceed" dialog may appear when an in-progress application
     # exists. The dialog (Radix UI, role='dialog') has a "+ CREATE NEW APPLICATION" button.
     ${dialog_appeared}=    Run Keyword And Return Status
     ...    Wait For Elements State    css=[role='dialog']    visible    timeout=10s
     IF    ${dialog_appeared}
         Log    "Before you proceed" dialog detected — clicking Create New Application inside dialog.    console=True
-        Click    css=[role='dialog'] >> text=CREATE NEW APPLICATION
+        Click    css=[role='dialog'] button:has-text('Create New Application')
     END
     Wait Until Keyword Succeeds    60s    500ms    Student Details URL Should Be Active
     Wait For Elements State    ${SD_TITLE}    visible    timeout=${TIMEOUT}
@@ -210,7 +213,7 @@ Create Application And Navigate To Student Details
 Navigate To Choose Plan
     [Documentation]
     ...    Suite Setup for choose_plan_tests.robot.
-    ...    Traverses from login → create app → student-details (quick fill) → /choose-plan.
+    ...    Traverses from login → create app → student-details (quick fill) → /emi-plans.
     ...    Uses stub data from APP_* variables. Selects first option in each GILE dropdown.
     ...    Satisfies: RT-1, RT-3
     Login And Create Application
@@ -221,8 +224,8 @@ Navigate To Choose Plan
 Navigate To Select Applicant
     [Documentation]
     ...    Suite Setup for select_applicant_tests.robot.
-    ...    Traverses through student-details and choose-plan to reach /select-applicant.
-    ...    If the wizard skips /select-applicant (applicant type already set on the account),
+    ...    Traverses through student-details and choose-financing-partner to reach /who-is-applying.
+    ...    If the wizard skips /who-is-applying (applicant type already set on the account),
     ...    falls back to a direct URL navigation.
     ...    Satisfies: RT-1, RT-4
     Navigate To Choose Plan
@@ -233,14 +236,14 @@ Navigate To Select Applicant
     ${on_select_applicant}=    Run Keyword And Return Status
     ...    Wait Until Keyword Succeeds    10s    500ms    Select Applicant URL Should Be Active
     IF    not ${on_select_applicant}
-        Log    Wizard skipped /select-applicant — falling back to direct navigation.    console=True
+        Log    Wizard skipped /who-is-applying — falling back to direct navigation.    console=True
         Navigate To Select Applicant Within Session
     END
 
 Navigate To Applicant Basic Details
     [Documentation]
     ...    Suite Setup for applicant_basic_details_tests.robot.
-    ...    Traverses through student-details, choose-plan, and select-applicant to reach /applicant-basic-details.
+    ...    Traverses through student-details, choose-financing-partner, and select-applicant to reach /applicant-name.
     ...    Satisfies: RT-1, RT-5
     Navigate To Select Applicant
     Wait For Elements State    ${SA_PARENT_OPTION}    visible    timeout=${TIMEOUT}
@@ -252,14 +255,14 @@ Navigate To Applicant Basic Details
 Navigate To Onboarding
     [Documentation]
     ...    Suite Setup for onboarding_tests.robot.
-    ...    Fills basic details and proceeds to /onboarding.
+    ...    Fills basic details and proceeds to /get-started.
     ...    Satisfies: RT-1, RT-5
     Navigate To Applicant Basic Details
     Wait For Elements State    ${BD_FIRST_NAME}    visible    timeout=${TIMEOUT}
     Fill Text    ${BD_FIRST_NAME}    ${APP_FIRST_NAME}
     Fill Text    ${BD_LAST_NAME}    ${APP_LAST_NAME}
-    ${checked}=    Get Property    ${BD_CONSENT}    checked
-    IF    not ${checked}
+    ${checked}=    Get Attribute    ${BD_CONSENT}    aria-checked
+    IF    '${checked}' != 'true'
         Click    ${BD_CONSENT}
     END
     Click    ${BD_SUBMIT_BUTTON}
@@ -279,7 +282,7 @@ Navigate To Personal Details
 Navigate To Residential Details
     [Documentation]
     ...    Suite Setup for residential_details_tests.robot.
-    ...    Fills personal details with stub data and proceeds to /applicant-residential-details.
+    ...    Fills personal details with stub data and proceeds to /applicant-address.
     ...    Satisfies: RT-1, RT-5
     Navigate To Personal Details
     Fill Personal Details With Stub Data
@@ -288,7 +291,7 @@ Navigate To Residential Details
 Navigate To Employment Type
     [Documentation]
     ...    Suite Setup for employment_tests.robot.
-    ...    Traverses through all preceding wizard steps to reach /select-employment.
+    ...    Traverses through all preceding wizard steps to reach /applicant-employment.
     ...    Satisfies: RT-1, RT-6
     Navigate To Residential Details
     Fill Residential Details With Stub Data
@@ -298,7 +301,7 @@ Navigate To Employment Type
 Navigate To Salaried Employment Details In Session
     [Documentation]
     ...    Test Setup for salaried employment tests within employment_tests.robot.
-    ...    Navigates within session to /select-employment, selects Salaried, and proceeds to /applicant-employment-details.
+    ...    Navigates within session to /applicant-employment, selects Salaried, and proceeds to /applicant-employment.
     ...    Satisfies: RT-1, RT-6, TN3
     Go To    ${BASE_URL}${URL_EMPLOYMENT_TYPE}
     Wait For Elements State    ${ET_TITLE}    visible    timeout=${TIMEOUT}
@@ -308,7 +311,7 @@ Navigate To Salaried Employment Details In Session
 Navigate To Self Employed Details In Session
     [Documentation]
     ...    Test Setup for self-employed tests within employment_tests.robot.
-    ...    Navigates within session to /select-employment, selects Self Employed, and proceeds to /applicant-employment-details.
+    ...    Navigates within session to /applicant-employment, selects Self Employed, and proceeds to /applicant-employment.
     ...    Satisfies: RT-1, RT-6, TN3
     Go To    ${BASE_URL}${URL_EMPLOYMENT_TYPE}
     Wait For Elements State    ${ET_TITLE}    visible    timeout=${TIMEOUT}
@@ -318,7 +321,7 @@ Navigate To Self Employed Details In Session
 Navigate To Confirm Application
     [Documentation]
     ...    Suite Setup for confirm_application_tests.robot.
-    ...    Traverses through all wizard steps including salaried employment to reach /confirm-application.
+    ...    Traverses through all wizard steps including salaried employment to reach /review-application.
     ...    Satisfies: RT-1, RT-7
     Navigate To Employment Type
     Navigate To Salaried Employment Details In Session
@@ -372,21 +375,20 @@ Navigate To Student Details With All Fields Filled
     Fill Text    ${SD_FIRST_NAME}    ${APP_STUDENT_FIRST_NAME}
     Fill Text    ${SD_LAST_NAME}    ${APP_STUDENT_LAST_NAME}
     Click    ${SD_STUDENT_TYPE_RADIO} >> nth=0
-    Sleep    500ms
     Select First Option In React Select    class-id-react-select
     Fill Text    ${SD_LOAN_AMOUNT}    ${APP_LOAN_AMOUNT}
 
 Navigate To Choose Plan Within Session
     [Documentation]
     ...    Test Setup for choose_plan_tests.robot.
-    ...    Hard-navigates to /choose-plan within the active wizard session.
+    ...    Hard-navigates to /emi-plans within the active wizard session.
     Go To    ${BASE_URL}${URL_CHOOSE_PLAN}
-    Wait For Elements State    css=[data-testid='choose-plan-title']    visible    timeout=${TIMEOUT}
+    Wait For Elements State    css=[data-testid='choose-financing-partner-title']    visible    timeout=${TIMEOUT}
 
 Navigate To Select Applicant Within Session
     [Documentation]
     ...    Test Setup for select_applicant_tests.robot.
-    ...    Hard-navigates to /select-applicant within the active wizard session.
+    ...    Hard-navigates to /who-is-applying within the active wizard session.
     Go To    ${BASE_URL}${URL_SELECT_APPLICANT}
     Wait For Elements State    css=[data-testid='select-applicant-title']    visible    timeout=${TIMEOUT}
 
@@ -406,7 +408,7 @@ Navigate To Personal Details Within Session
 Navigate To Residential Details Within Session
     [Documentation]
     ...    Test Setup for residential_details_tests.robot.
-    ...    Hard-navigates to /applicant-residential-details within the active wizard session.
+    ...    Hard-navigates to /applicant-address within the active wizard session.
     Go To    ${BASE_URL}${URL_RESIDENTIAL_DETAILS}
     Wait For Elements State    css=[data-testid='residential-details-title']    visible    timeout=${TIMEOUT}
 
@@ -419,7 +421,7 @@ Navigate To Employment Type Within Session
 Navigate To Confirm Application Within Session
     [Documentation]
     ...    Test Setup for confirm_application_tests.robot.
-    ...    Hard-navigates to /confirm-application and auto-dismisses the referral code popup
+    ...    Hard-navigates to /review-application and auto-dismisses the referral code popup
     ...    if present, so it does not block confirm-application test execution.
     Go To    ${BASE_URL}${URL_CONFIRM_APPLICATION}
     Wait For Elements State    ${CA_FORM}    visible    timeout=${TIMEOUT}
@@ -428,7 +430,7 @@ Navigate To Confirm Application Within Session
 Navigate To Confirm Application Without Popup Handling
     [Documentation]
     ...    Test Setup for referral code test cases in confirm_application_tests.robot.
-    ...    Hard-navigates to /confirm-application WITHOUT dismissing the referral popup.
+    ...    Hard-navigates to /review-application WITHOUT dismissing the referral popup.
     ...    Use this setup for tests that explicitly test the referral code popup behaviour.
     Go To    ${BASE_URL}${URL_CONFIRM_APPLICATION}
     Wait For Elements State    ${CA_FORM}    visible    timeout=${TIMEOUT}
@@ -444,42 +446,48 @@ Select First Option In React Select
     ...    Satisfies: TN1 (wizard traversal cost), RT-1
     [Arguments]    ${testid}
     Click    css=[data-testid='${testid}']
-    Sleep    500ms
+    Wait For Elements State    role=option >> nth=0    visible    timeout=${TIMEOUT}
     Keyboard Key    press    ArrowDown
     Keyboard Key    press    Enter
 
 Search And Select First Option In React Select
     [Documentation]
-    ...    Traversal helper for async/search react-select dropdowns (e.g., institute search).
-    ...    Types a search term, waits for options to load from the API, then selects the first.
-    ...    Uses ${LONG_TIMEOUT} for the API response wait.
-    ...    This is an approved T1 exception for Suite Setup traversal helpers only.
+    ...    2026 UI rewrite — institute search is the custom Select (cmdk) component with
+    ...    showSearch=true: open the combobox trigger (button[role='combobox'], label
+    ...    "School / College / University"), type into the visible search input
+    ...    (placeholder="Search institutes" — SearchRow in select.tsx), then select first result.
+    ...    ${testid} kept for call-site compatibility (only 'institute-id-react-select' used).
     ...    Satisfies: TN1 (wizard traversal cost), RT-1
     [Arguments]    ${testid}    ${search_term}
-    Click    css=[data-testid='${testid}'] input[role='combobox']
-    Type Text    css=[data-testid='${testid}'] input[role='combobox']    ${search_term}
+    ${combobox}=    Set Variable    css=button[role='combobox']:has-text('School / College / University') >> nth=0
+    Wait For Elements State    ${combobox}    visible    timeout=${LONG_TIMEOUT}
+    Click    ${combobox}
+    Wait For Elements State    css=input[placeholder='Search institutes']    visible    timeout=${TIMEOUT}
+    Type Text    css=input[placeholder='Search institutes']    ${search_term}
     Wait For Elements State    role=option >> nth=0    visible    timeout=${LONG_TIMEOUT}
-    Keyboard Key    press    ArrowDown
-    Keyboard Key    press    Enter
+    Click    role=option >> nth=0
 
 Select Specific Option In React Select
     [Documentation]
-    ...    Traversal helper — types a value into a react-select to filter options, then selects it.
-    ...    Used for DOB (year/month/day) where a pinned value is required.
-    ...    This is an approved T1 exception for Suite Setup traversal helpers only.
+    ...    2026 UI rewrite — DOB Year/Month/Day use the same custom Select (cmdk) component as
+    ...    other dropdowns: button[role='combobox'] with its label as accessible text, options
+    ...    render as role='option'. ${testid} kept for call-site compatibility, mapped to label.
     ...    Satisfies: TN1 (wizard traversal cost), RT-1
     [Arguments]    ${testid}    ${value}
-    Click    css=[data-testid='${testid}'] input[role='combobox']
-    Type Text    css=[data-testid='${testid}'] input[role='combobox']    ${value}
-    Sleep    300ms
-    Keyboard Key    press    ArrowDown
-    Keyboard Key    press    Enter
+    ${label_map}=    Create Dictionary    year-react-select=Year    month-react-select=Month    day-react-select=Date
+    ${label}=    Get From Dictionary    ${label_map}    ${testid}
+    ${combobox}=    Set Variable    css=button[role='combobox']:has-text('${label}') >> nth=0
+    Wait For Elements State    ${combobox}    enabled    timeout=${LONG_TIMEOUT}
+    Click    ${combobox}
+    Wait For Elements State    role=option >> nth=0    visible    timeout=${LONG_TIMEOUT}
+    # Exact match (quoted) — Year/Date values like "1" otherwise substring-match "10", "11", etc.
+    Click    role=option >> text="${value}"
 
 Fill Student Details With Stub Data
     [Documentation]
     ...    Quick-fill the student details wizard step with APP_* stub variables.
     ...    Selects first option in each GILE dropdown and the first radio.
-    ...    Calls Show Plans to proceed to /choose-plan.
+    ...    Calls Show Plans to proceed to /emi-plans.
     ...    Satisfies: RT-1 (traversal infrastructure)
     Wait For Elements State    ${SD_FORM}    visible    timeout=${TIMEOUT}
     # Institute: async search — type search term then select first result
@@ -496,33 +504,32 @@ Fill Student Details With Stub Data
     Click    ${SD_STUDENT_TYPE_RADIO} >> nth=0
     # Class dropdown (keyboard nav — also uses portal)
     Click    css=[data-testid='class-id-react-select']
-    Sleep    500ms
+    Wait For Elements State    role=option >> nth=0    visible    timeout=${TIMEOUT}
     Keyboard Key    press    ArrowDown
     Keyboard Key    press    Enter
     Fill Text    ${SD_STUDENT_ID}    SD12345
     Fill Text    ${SD_LOAN_AMOUNT}    ${APP_LOAN_AMOUNT}
-    # Click Show Plans to advance to /choose-plan
+    # Click Show Plans to advance to /emi-plans
     Wait For Elements State    ${SD_SHOW_PLANS_BUTTON}    visible    timeout=${LONG_TIMEOUT}
     Click    ${SD_SHOW_PLANS_BUTTON}
 
 Click First Plan In List
     [Documentation]
-    ...    Traversal helper — clicks the first available plan in the plan list container.
-    ...    The plan list renders items with dynamic testids (index-planId).
-    ...    Uses > div:first-child to explicitly target the first plan card inside the container.
+    ...    Traversal helper — clicks the first available plan card (role='radio').
     ...    Satisfies: RT-1 (traversal)
     Wait For Elements State    ${CP_PLAN_LIST}    visible    timeout=${LONG_TIMEOUT}
-    Click    css=[data-testid='plan-list-container'] > div:first-child
+    Click    css=[aria-label='EMI plans'] [role='radio'] >> nth=0
 
 Click Plan In List By Index
     [Arguments]    ${plan_index}=1
     Wait For Elements State    ${CP_PLAN_LIST}    visible    timeout=${LONG_TIMEOUT}
-    Click    css=[data-testid='plan-list-container'] > div:nth-child(${plan_index})
+    ${idx0}=    Evaluate    ${plan_index} - 1
+    Click    css=[aria-label='EMI plans'] [role='radio'] >> nth=${idx0}
 
 Select Plan By Identifier
     [Documentation]
-    ...    Selects a specific plan card by its identifier (e.g. RCPL-dlg-prod-4).
-    ...    Tries: (1) data-testid contains match, (2) exact text match, (3) partial text match.
+    ...    Selects a specific plan card by its identifier/tag text (e.g. RCPL-dlg-prod-4).
+    ...    Plan cards are role='radio' items; identifier appears in a tag chip within the card.
     [Arguments]    ${plan_id}
     Wait For Elements State    ${CP_PLAN_LIST}    visible    timeout=${LONG_TIMEOUT}
     # Log available plans for debugging
@@ -532,9 +539,9 @@ Select Plan By Identifier
     ${plan_trimmed}=    Evaluate    '${plan_id}'.strip()
     ${clicked}=    Evaluate JavaScript    ${None}
     ...    (() => {
-    ...        const container = document.querySelector('[data-testid="plan-list-container"]');
+    ...        const container = document.querySelector("[aria-label='EMI plans']");
     ...        if (!container) return false;
-    ...        const cards = container.querySelectorAll('[data-testid]');
+    ...        const cards = container.querySelectorAll("[role='radio']");
     ...        for (const card of cards) {
     ...            if (card.textContent.includes('${plan_trimmed}')) {
     ...                card.click();
@@ -544,8 +551,17 @@ Select Plan By Identifier
     ...        return false;
     ...    })()
     IF    not ${clicked}
-        Log    JS click failed for '${plan_trimmed}' — plan not found in list    level=WARN
-        Fail    Plan '${plan_trimmed}' not found in plan list
+        ${testids}=    Evaluate JavaScript    ${None}
+        ...    (() => {
+        ...        const container = document.querySelector("[aria-label='EMI plans']");
+        ...        if (!container) return '(no container)';
+        ...        const cards = container.querySelectorAll("[role='radio']");
+        ...        const ids = new Set();
+        ...        cards.forEach(c => ids.add(c.textContent.slice(0, 40)));
+        ...        return Array.from(ids).join(' | ');
+        ...    })()
+        Log    JS click failed for '${plan_trimmed}' — plan not found in list. Card testids: ${testids}    level=WARN
+        Fail    Plan '${plan_trimmed}' not found in plan list. Card testids: ${testids}
     END
     Log    ✅ Selected plan: ${plan_id}    console=True
 
@@ -556,11 +572,9 @@ Fill Personal Details With Stub Data
     ...    Satisfies: RT-1 (traversal)
     Wait For Elements State    ${PD_FORM}    visible    timeout=${TIMEOUT}
     Fill Text    ${PD_PAN_INPUT}    ${APP_PAN_NUMBER}
-    Sleep    5s    # Wait for PAN lookup to complete (UAT can be slow)
-    # Gender — click radio by APP_GENDER variable (MALE or FEMALE)
+    # Gender — retry click for up to 45s to handle slow UAT page render after PAN lookup
     ${gender_upper}=    Evaluate    '${APP_GENDER}'.upper()
-    Wait For Elements State    css=button[value='${gender_upper}']    visible    timeout=${LONG_TIMEOUT}
-    Click    css=button[value='${gender_upper}']
+    Wait Until Keyword Succeeds    45s    3s    Click Gender Button    ${gender_upper}
     # Date of birth — year/month/day react-selects (pinned to APP_DOB_* variables)
     Select Specific Option In React Select    year-react-select    ${APP_DOB_YEAR}
     Select Specific Option In React Select    month-react-select    ${APP_DOB_MONTH}
@@ -568,10 +582,12 @@ Fill Personal Details With Stub Data
     # Marital status radio
     Click    css=[data-testid='marital-status-radio'] >> nth=0
     Fill Text    ${PD_EMAIL_INPUT}    ${APP_EMAIL}
-    ${consent_checked}=    Get Property    ${PD_CONSENT}    checked
-    IF    not ${consent_checked}
+    ${consent_checked}=    Get Attribute    ${PD_CONSENT}    aria-checked
+    IF    '${consent_checked}' != 'true'
         Click    ${PD_CONSENT}
     END
+    Scroll To Element    ${PD_PROCEED_BUTTON}
+    Wait For Elements State    ${PD_PROCEED_BUTTON}    enabled    timeout=${LONG_TIMEOUT}
     Click    ${PD_PROCEED_BUTTON}
 
 Fill Residential Details With Stub Data
@@ -582,11 +598,11 @@ Fill Residential Details With Stub Data
     Fill Text    ${RD_ADDR_LINE1}    ${APP_ADDRESS_LINE1}
     Fill Text    ${RD_ADDR_LINE2}    ${APP_ADDRESS_LINE2}
     Fill Text    ${RD_PINCODE}    ${APP_PINCODE}
-    Sleep    2s    # Wait for city/state to auto-populate from pincode
+    Wait For Elements State    ${RD_CITY_STATE}    visible    timeout=${LONG_TIMEOUT}
     Click    ${RD_PROCEED_BUTTON}
     Wait For Elements State    ${RD_RESIDENCE_TYPE_RADIO} >> nth=0    visible    timeout=${TIMEOUT}
     Click    ${RD_RESIDENCE_TYPE_RADIO} >> nth=0
-    Wait For Elements State    css=[data-testid='type-radio'][data-state='checked']    visible    timeout=${TIMEOUT}
+    Wait For Elements State    role=radio[checked]    visible    timeout=${TIMEOUT}
     Click    role=button[name=Proceed]
 
 # ════════════════════════════════════════════════════════════════════════════════
@@ -622,7 +638,7 @@ Login And Create Renewal Application
     IF    not ${redirected}
         Sleep    ${RATE_LIMIT_WAIT}
         ${url_after}=    Get Url
-        IF    '/my-applications' in '${url_after}'
+        IF    '/applications' in '${url_after}'
             No Operation    # already on dashboard — OTP succeeded during sleep
         ELSE IF    '/verify' in '${url_after}'
             Enter OTP    ${TEST_OTP}
@@ -646,7 +662,7 @@ Navigate To Student Details Via Renewal
 Navigate To Choose Plan Via Renewal
     [Documentation]
     ...    Suite Setup for renewal_journey_flow/choose_plan_tests.robot.
-    ...    Traverses student details with stub data then proceeds to /choose-plan.
+    ...    Traverses student details with stub data then proceeds to /emi-plans.
     Login And Create Renewal Application
     Wait For Elements State    ${SD_FORM}    visible    timeout=${TIMEOUT}
     Fill Student Details With Stub Data
@@ -689,9 +705,9 @@ Navigate To Verify Details Within Session
 Navigate To Verify Details New Application Within Session
     [Documentation]
     ...    Special Test Setup for TC-VD62 only.
-    ...    TC-VD61 navigates shared application to /confirm-application; this creates a fresh renewal application
+    ...    TC-VD61 navigates shared application to /review-application; this creates a fresh renewal application
     ...    within the existing browser session (no re-login) and traverses to /renewal-details.
-    Go To    ${BASE_URL}/my-applications
+    Go To    ${BASE_URL}/applications
     Wait For Elements State    ${DASHBOARD_TITLE}    visible    timeout=${TIMEOUT}
     Click Create Application Button And Wait For Student Details
     Wait For Elements State    ${SD_FORM}    visible    timeout=${TIMEOUT}
@@ -711,7 +727,6 @@ Resume In Progress Application
     ...    Use this in resume journey tests AFTER re-logging in with ${RESUME_MOBILE}.
     Wait For Elements State    ${EMI_TAB}    visible    timeout=${TIMEOUT}
     Click    ${EMI_TAB}
-    Sleep    1s
     Wait For Elements State    ${CREATE_APP_BUTTON}    visible    timeout=${TIMEOUT}
     Click    ${CREATE_APP_BUTTON}
     Wait For Elements State    css=[role='dialog']    visible    timeout=${LONG_TIMEOUT}
@@ -756,7 +771,7 @@ Create Application For SE Resume Tests
     [Documentation]
     ...    Suite Setup for resume_journey_se_e2e_tests.robot.
     ...    Logs in with ${APP_CREATION_MOBILE} (fresh account each run), creates a new application,
-    ...    and traverses all wizard steps to land on /select-employment ready for SE resume tests.
+    ...    and traverses all wizard steps to land on /applicant-employment ready for SE resume tests.
     Navigate To Employment Type
 
 Fill Student Details Data
@@ -775,7 +790,7 @@ Fill Student Details Data
     Fill Text    ${SD_LAST_NAME}    ${APP_STUDENT_LAST_NAME}
     Click    ${SD_STUDENT_TYPE_RADIO} >> nth=0
     Click    css=[data-testid='class-id-react-select']
-    Sleep    500ms
+    Wait For Elements State    role=option >> nth=0    visible    timeout=${TIMEOUT}
     Keyboard Key    press    ArrowDown
     Keyboard Key    press    Enter
     Fill Text    ${SD_STUDENT_ID}    SD12345
@@ -784,9 +799,9 @@ Fill Student Details Data
 Select Plan And Wait For Basic Details
     [Documentation]
     ...    Clicks the first plan, submits, and waits for the next wizard step.
-    ...    Fresh accounts skip /select-applicant and land on /applicant-basic-details directly.
-    ...    Handles both outcomes: /select-applicant (if shown) → submits parent option → basic-details,
-    ...    or /applicant-basic-details directly.
+    ...    Fresh accounts skip /who-is-applying and land on /applicant-name directly.
+    ...    Handles both outcomes: /who-is-applying (if shown) → submits parent option → basic-details,
+    ...    or /applicant-name directly.
     Click First Plan In List
     Click    ${CP_SUBMIT_BUTTON}
     ${on_sa}=    Run Keyword And Return Status
@@ -801,7 +816,7 @@ Select Plan And Wait For Basic Details
 
 Select Salaried And Wait For Employment Details
     [Documentation]
-    ...    Clicks the Salaried card on /select-employment and waits for /applicant-employment-details.
+    ...    Clicks the Salaried card on /applicant-employment and waits for /applicant-employment.
     ...    Used in resume journey TC-RE08 to reach employment details without filling data.
     Wait For Elements State    ${ET_TITLE}    visible    timeout=${TIMEOUT}
     Click    ${ET_SALARIED_CARD}
@@ -809,7 +824,7 @@ Select Salaried And Wait For Employment Details
 
 Select Self Employed And Wait For Employment Details
     [Documentation]
-    ...    Clicks the Self-Employed card on /select-employment and waits for /applicant-employment-details.
+    ...    Clicks the Self-Employed card on /applicant-employment and waits for /applicant-employment.
     ...    Used in SE resume journey tests to reach employment details without filling data.
     Wait For Elements State    ${ET_TITLE}    visible    timeout=${TIMEOUT}
     Click    ${ET_SELF_EMPLOYED_CARD}
@@ -818,9 +833,9 @@ Select Self Employed And Wait For Employment Details
 Fill SE Employment Data And Proceed
     [Documentation]
     ...    Fills business name, annual income, years in business, business description on
-    ...    /applicant-employment-details (SE form) and proceeds to /confirm-application.
-    ...    Starts from /applicant-employment-details with SE form loaded.
-    ...    Dismisses referral code popup if present after landing on /confirm-application.
+    ...    /applicant-employment (SE form) and proceeds to /review-application.
+    ...    Starts from /applicant-employment with SE form loaded.
+    ...    Dismisses referral code popup if present after landing on /review-application.
     Wait For Elements State    ${SE_BUSINESS_NAME}    visible    timeout=${TIMEOUT}
     Fill Text    ${SE_BUSINESS_NAME}    ${APP_BUSINESS_NAME}
     Fill Text    ${SE_ANNUAL_INCOME}    ${APP_BUSINESS_INCOME}
@@ -832,8 +847,8 @@ Fill SE Employment Data And Proceed
 
 Fill Salaried Employment Data And Proceed
     [Documentation]
-    ...    Fills employer name, monthly salary on /applicant-employment-details and proceeds
-    ...    — navigates to /confirm-application. Starts from /applicant-employment-details.
+    ...    Fills employer name, monthly salary on /applicant-employment and proceeds
+    ...    — navigates to /review-application. Starts from /applicant-employment.
     ...    Consent checkbox only appears when salary < 25000; checked conditionally if visible.
     ...    Used in resume journey TC-RE09.
     Wait For Elements State    ${SED_EMPLOYER_NAME}    visible    timeout=${TIMEOUT}
@@ -842,8 +857,8 @@ Fill Salaried Employment Data And Proceed
     ${consent_visible}=    Run Keyword And Return Status
     ...    Wait For Elements State    ${SED_CONSENT}    visible    timeout=3s
     IF    ${consent_visible}
-        ${checked}=    Get Property    ${SED_CONSENT}    checked
-        IF    not ${checked}
+        ${checked}=    Get Attribute    ${SED_CONSENT}    aria-checked
+        IF    '${checked}' != 'true'
             Click    ${SED_CONSENT}
         END
     END
@@ -853,8 +868,8 @@ Fill Salaried Employment Data And Proceed
 
 Select Parent Guardian And Submit
     [Documentation]
-    ...    Selects the Parent/Guardian applicant option and submits — navigates to /applicant-basic-details.
-    ...    Used in resume journey TC-RE04 to advance from /select-applicant.
+    ...    Selects the Parent/Guardian applicant option and submits — navigates to /applicant-name.
+    ...    Used in resume journey TC-RE04 to advance from /who-is-applying.
     Wait For Elements State    ${SA_PARENT_OPTION}    visible    timeout=${TIMEOUT}
     Click    ${SA_PARENT_OPTION}
     Wait For Elements State    ${SA_SUBMIT_BUTTON}    visible    timeout=${TIMEOUT}
@@ -864,12 +879,12 @@ Select Parent Guardian And Submit
 Fill And Submit Basic Details
     [Documentation]
     ...    Fills applicant basic details (first name, last name, consent) and submits
-    ...    — navigates to /onboarding. Used in resume journey TC-RE05.
+    ...    — navigates to /get-started. Used in resume journey TC-RE05.
     Wait For Elements State    ${BD_FIRST_NAME}    visible    timeout=${TIMEOUT}
     Fill Text    ${BD_FIRST_NAME}    ${APP_FIRST_NAME}
     Fill Text    ${BD_LAST_NAME}    ${APP_LAST_NAME}
-    ${checked}=    Get Property    ${BD_CONSENT}    checked
-    IF    not ${checked}
+    ${checked}=    Get Attribute    ${BD_CONSENT}    aria-checked
+    IF    '${checked}' != 'true'
         Click    ${BD_CONSENT}
     END
     Click    ${BD_SUBMIT_BUTTON}
@@ -878,7 +893,7 @@ Fill And Submit Basic Details
 Fill And Submit Salaried Employment
     [Documentation]
     ...    Selects Salaried employment type, fills employer name + monthly salary, and proceeds
-    ...    — navigates to /confirm-application. Consent checkbox only appears when salary < 25000.
+    ...    — navigates to /review-application. Consent checkbox only appears when salary < 25000.
     Wait For Elements State    ${ET_TITLE}    visible    timeout=${TIMEOUT}
     Click    ${ET_SALARIED_CARD}
     Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    Employment Details URL Should Be Active
@@ -888,8 +903,8 @@ Fill And Submit Salaried Employment
     ${consent_visible}=    Run Keyword And Return Status
     ...    Wait For Elements State    ${SED_CONSENT}    visible    timeout=3s
     IF    ${consent_visible}
-        ${checked}=    Get Property    ${SED_CONSENT}    checked
-        IF    not ${checked}
+        ${checked}=    Get Attribute    ${SED_CONSENT}    aria-checked
+        IF    '${checked}' != 'true'
             Click    ${SED_CONSENT}
         END
     END
@@ -910,11 +925,11 @@ Navigate To Lender Selection New App
     ...    LENDER_APP_ID as a suite variable.
     Navigate To Confirm Application
     Handle Referral Code Popup If Present
-    ${consent_checked}=    Get Property    css=[data-testid='consent-checkbox']    checked
-    IF    not ${consent_checked}
+    ${consent_checked}=    Get Attribute    css=[data-testid='consent-checkbox']    aria-checked
+    IF    '${consent_checked}' != 'true'
         Click    css=[data-testid='consent-checkbox']
     END
-    Click    css=[data-testid='proceed-button']
+    Click    css=button:has-text('Proceed')
     Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    Lender Selection URL Should Be Active
     ${app_id}=    Extract App ID From Current URL
     Set Suite Variable    ${LENDER_APP_ID}    ${app_id}
@@ -926,7 +941,7 @@ Navigate To Lender Selection New App Within Session
     ...    Creates a fresh new application within the existing browser session (no re-login).
     ...    Accepts plan_index (default 1) to select a specific plan from the plan list.
     ...    Overwrites LENDER_APP_ID suite variable with the new application's id.
-    Go To    ${BASE_URL}/my-applications
+    Go To    ${BASE_URL}/applications
     Wait For Elements State    ${DASHBOARD_TITLE}    visible    timeout=${TIMEOUT}
     Click Create Application Button And Wait For Student Details
     Wait For Elements State    ${SD_FORM}    visible    timeout=${TIMEOUT}
@@ -943,8 +958,8 @@ Navigate To Lender Selection New App Within Session
     Wait For Elements State    ${BD_FIRST_NAME}    visible    timeout=${TIMEOUT}
     Fill Text    ${BD_FIRST_NAME}    ${APP_FIRST_NAME}
     Fill Text    ${BD_LAST_NAME}    ${APP_LAST_NAME}
-    ${checked}=    Get Property    ${BD_CONSENT}    checked
-    IF    not ${checked}
+    ${checked}=    Get Attribute    ${BD_CONSENT}    aria-checked
+    IF    '${checked}' != 'true'
         Click    ${BD_CONSENT}
     END
     Click    ${BD_SUBMIT_BUTTON}
@@ -964,11 +979,11 @@ Navigate To Lender Selection New App Within Session
     Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    Confirm Application URL Should Be Active
     Wait For Elements State    ${CA_FORM}    visible    timeout=${TIMEOUT}
     Handle Referral Code Popup If Present
-    ${consent_checked}=    Get Property    css=[data-testid='consent-checkbox']    checked
-    IF    not ${consent_checked}
+    ${consent_checked}=    Get Attribute    css=[data-testid='consent-checkbox']    aria-checked
+    IF    '${consent_checked}' != 'true'
         Click    css=[data-testid='consent-checkbox']
     END
-    Click    css=[data-testid='proceed-button']
+    Click    css=button:has-text('Proceed')
     Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    Lender Selection URL Should Be Active
     ${app_id}=    Extract App ID From Current URL
     Set Suite Variable    ${LENDER_APP_ID}    ${app_id}
@@ -988,9 +1003,9 @@ Login And Submit New App
     ...    Opens a fresh browser, logs in, fills the wizard with the given plan index,
     ...    and clicks proceed on confirm-application. Does NOT wait for lender selection.
     ...    Use as [Setup] when the expected post-submit destination is not lender selection
-    ...    (e.g., plan_index=4 → all bureau lenders ineligible → direct /bank-statement/ redirect).
+    ...    (e.g., plan_index=4 → all bureau lenders ineligible → direct /upload-bank-statements/ redirect).
     Login And Create Application    ${mobile}
-    Go To    ${BASE_URL}/my-applications
+    Go To    ${BASE_URL}/applications
     Wait For Elements State    ${DASHBOARD_TITLE}    visible    timeout=${TIMEOUT}
     Click Create Application Button And Wait For Student Details
     Wait For Elements State    ${SD_FORM}    visible    timeout=${TIMEOUT}
@@ -1007,8 +1022,8 @@ Login And Submit New App
     Wait For Elements State    ${BD_FIRST_NAME}    visible    timeout=${TIMEOUT}
     Fill Text    ${BD_FIRST_NAME}    ${APP_FIRST_NAME}
     Fill Text    ${BD_LAST_NAME}    ${APP_LAST_NAME}
-    ${checked}=    Get Property    ${BD_CONSENT}    checked
-    IF    not ${checked}
+    ${checked}=    Get Attribute    ${BD_CONSENT}    aria-checked
+    IF    '${checked}' != 'true'
         Click    ${BD_CONSENT}
     END
     Click    ${BD_SUBMIT_BUTTON}
@@ -1028,11 +1043,11 @@ Login And Submit New App
     Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    Confirm Application URL Should Be Active
     Wait For Elements State    ${CA_FORM}    visible    timeout=${TIMEOUT}
     Handle Referral Code Popup If Present
-    ${consent_checked}=    Get Property    css=[data-testid='consent-checkbox']    checked
-    IF    not ${consent_checked}
+    ${consent_checked}=    Get Attribute    css=[data-testid='consent-checkbox']    aria-checked
+    IF    '${consent_checked}' != 'true'
         Click    css=[data-testid='consent-checkbox']
     END
-    Click    css=[data-testid='proceed-button']
+    Click    css=button:has-text('Proceed')
 
 Navigate To Lender Selection Renewal App
     [Documentation]
@@ -1076,7 +1091,7 @@ Navigate To Lender Selection Renewal App Within Session
     ...    Creates a fresh renewal application within the existing browser session (no re-login).
     ...    Used by TC-LS-R06 Setup to get a clean lender selection state for the approval test.
     ...    Overwrites LENDER_RENEWAL_APP_ID suite variable with the new application's id.
-    Go To    ${BASE_URL}/my-applications
+    Go To    ${BASE_URL}/applications
     Wait For Elements State    ${DASHBOARD_TITLE}    visible    timeout=${TIMEOUT}
     Click Create Application Button And Wait For Student Details
     Wait For Elements State    ${SD_FORM}    visible    timeout=${TIMEOUT}
@@ -1107,14 +1122,14 @@ Navigate To Bank Statement Via BRE Rejection
     [Documentation]
     ...    Suite Setup for bank_statement_tests.robot.
     ...    Creates a fresh new application, submits it, mocks BRE REJECTED, triggers lender
-    ...    assignment, waits for redirect to /bank-statement/{code}, captures BS_APP_CODE.
+    ...    assignment, waits for redirect to /upload-bank-statements/{code}, captures BS_APP_CODE.
     Navigate To Confirm Application
     Handle Referral Code Popup If Present
-    ${consent_checked}=    Get Property    css=[data-testid='consent-checkbox']    checked
-    IF    not ${consent_checked}
+    ${consent_checked}=    Get Attribute    css=[data-testid='consent-checkbox']    aria-checked
+    IF    '${consent_checked}' != 'true'
         Click    css=[data-testid='consent-checkbox']
     END
-    Click    css=[data-testid='proceed-button']
+    Click    css=button:has-text('Proceed')
     Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    Lender Selection URL Should Be Active
     # Mock BRE Assign Lender    REJECTED
     Lender Selection Page Should Be Visible
@@ -1122,7 +1137,7 @@ Navigate To Bank Statement Via BRE Rejection
     Click First Available Continue Button
     Wait For Bureau Decision
     ${url}=    Get Url
-    ${on_bank}=    Run Keyword And Return Status    Should Contain    ${url}    /bank-statement/
+    ${on_bank}=    Run Keyword And Return Status    Should Contain    ${url}    /upload-bank-statements/
     IF    not ${on_bank}
         Click View Available Financing
         Check KFS Consent If Present
@@ -1130,7 +1145,7 @@ Navigate To Bank Statement Via BRE Rejection
         Wait For Bureau Decision
         ${url}=    Get Url
     END
-    Should Contain    ${url}    /bank-statement/
+    Should Contain    ${url}    /upload-bank-statements/
     ${app_code}=    Extract App Code From Bank Statement URL
     Set Suite Variable    ${BS_APP_CODE}    ${app_code}
     # Unroute BRE Mock
@@ -1139,7 +1154,7 @@ Navigate To Bank Statement Via Plan Two
     [Documentation]
     ...    Suite Setup for bank_statement_tests.robot (plan 2 path — no mock).
     ...    Creates fresh app with plan 2 (BANK_STATEMENT_MOBILE), navigates to lender selection,
-    ...    selects first available lender. Real BRE with plan 2 redirects directly to /bank-statement/.
+    ...    selects first available lender. Real BRE with plan 2 redirects directly to /upload-bank-statements/.
     ...    Captures BS_APP_CODE from the redirect URL.
     Login And Create Application    ${BANK_STATEMENT_MOBILE}
     Navigate To Lender Selection New App Within Session    2
@@ -1150,3 +1165,8 @@ Navigate To Bank Statement Via Plan Two
     Bank Statement URL Should Be Active
     ${app_code}=    Extract App Code From Bank Statement URL
     Set Suite Variable    ${BS_APP_CODE}    ${app_code}
+
+Click Gender Button
+    [Arguments]    ${gender_upper}
+    Wait For Elements State    css=button[value='${gender_upper}']    visible    timeout=10s
+    Click    css=button[value='${gender_upper}']

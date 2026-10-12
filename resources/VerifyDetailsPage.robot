@@ -92,12 +92,12 @@ Verify Employment Info Banner Text
 # ── Confirm flow ────────────────────────────────────────────────────────────────
 
 Click Confirm And Proceed Without Consent
-    [Documentation]    Clicks CONFIRM AND PROCEED then lands on /confirm-application without checking consent.
+    [Documentation]    Clicks CONFIRM AND PROCEED then lands on /review-application without checking consent.
     Wait For Elements State    ${VD_CONFIRM_BUTTON}    visible    timeout=${LONG_TIMEOUT}
     Click    ${VD_CONFIRM_BUTTON}
 
 Verify Details Consent Error Should Be Visible
-    [Documentation]    Verifies PROCEED button is disabled when consent is not checked on /confirm-application.
+    [Documentation]    Verifies PROCEED button is disabled when consent is not checked on /review-application.
     ${disabled}=    Get Property    css=[data-testid='proceed-button']    disabled
     Should Be True    ${disabled}    msg=PROCEED button must be disabled when consent is not checked
 
@@ -315,15 +315,15 @@ Business Description Field Should Have Value
 # ── Confirm Application page assertion ───────────────────────────────────────────
 
 Confirm Application Page Should Be Visible
-    [Documentation]    Verifies URL reached /confirm-application and consent checkbox is visible.
+    [Documentation]    Verifies URL reached /review-application and consent checkbox is visible.
     ${url}=    Get Url
-    Should Contain    ${url}    /confirm-application
+    Should Contain    ${url}    /review-application
     Wait For Elements State    css=[data-testid='consent-checkbox']    visible    timeout=${TIMEOUT}
 
 Confirm Application Proceed Button Should Be Enabled With Consent
-    [Documentation]    Checks consent on /confirm-application and verifies PROCEED becomes enabled.
-    ${checked}=    Get Property    css=[data-testid='consent-checkbox']    checked
-    IF    not ${checked}
+    [Documentation]    Checks consent on /review-application and verifies PROCEED becomes enabled.
+    ${checked}=    Get Attribute    css=[data-testid='consent-checkbox']    aria-checked
+    IF    '${checked}' != 'true'
         Click    css=[data-testid='consent-checkbox']
     END
     ${disabled}=    Get Property    css=[data-testid='proceed-button']    disabled

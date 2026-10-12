@@ -1,6 +1,6 @@
 *** Settings ***
 Documentation
-...    Page object keywords for the GQ Customer Portal Confirm Application page (/confirm-application).
+...    Page object keywords for the GQ Customer Portal Confirm Application page (/review-application).
 ...    All locators use data-testid CSS selectors confirmed from gqcustomer_frontend UAT branch.
 ...    Library: Browser (Playwright).
 ...
@@ -29,10 +29,10 @@ Documentation
 Library     Browser
 
 *** Variables ***
-${CA_TITLE}                     css=[data-testid='confirm-application-title']
-${CA_FORM}                      css=[data-testid='confirm-application-form']
-${CA_CONSENT}                   css=[data-testid='consent-checkbox']
-${CA_PROCEED_BUTTON}            css=[data-testid='proceed-button']
+${CA_TITLE}                     text=Confirm all the details.
+${CA_FORM}                      css=button:has-text('Confirm & Submit')
+${CA_CONSENT}                   role=checkbox
+${CA_PROCEED_BUTTON}            css=button:has-text('Confirm & Submit')
 
 # Section edit buttons — testid: {section-name}-edit-button
 # Section name is lowercased + spaces → hyphens from the heading text passed to testIdFor
@@ -44,11 +44,12 @@ ${CA_RESIDENTIAL_EDIT}          css=[data-testid='your-residential-details-edit-
 ${CA_EMPLOYMENT_EDIT}           css=[data-testid='your-employment-details-edit-button']
 
 # Referral code popup locators
-${RC_SKIP_BUTTON}               css=[data-testid='skip-button']
+# 2026 UI rewrite: referral modal now titled "Assisted by our Campus Executive?" — no testids.
+${RC_SKIP_BUTTON}               css=button:has-text('SKIP')
 ${RC_INPUT}                     css=input[placeholder='Enter Referral Code']
 ${RC_PROCEED_BUTTON}            role=button[name=PROCEED]
 ${RC_ERROR}                     css=[data-testid='undefined-error']
-${RC_HEADING}                   css=[data-testid='referral-code-heading']
+${RC_HEADING}                   text=Assisted by our Campus Executive?
 ${RC_CODE_VALUE}                css=[data-testid='code-value']
 ${RC_EDIT_BUTTON}               css=[data-testid='referral-code-edit-button']
 
@@ -86,7 +87,7 @@ EMI Plan Section Edit Button Should Be Visible
 
 Click EMI Plan Edit Button
     [Documentation]
-    ...    Clicks the EMI Plan Details edit button — should navigate back to /choose-plan.
+    ...    Clicks the EMI Plan Details edit button — should navigate back to /emi-plans.
     ...    Satisfies: TC-13004, U4
     Wait For Elements State    ${CA_EMI_PLAN_EDIT}    visible    timeout=${TIMEOUT}
     Click    ${CA_EMI_PLAN_EDIT}
@@ -99,7 +100,7 @@ Who Is Applying Section Edit Button Should Be Visible
 
 Click Who Is Applying Edit Button
     [Documentation]
-    ...    Clicks the Who Is Applying edit button — navigates back to /select-applicant.
+    ...    Clicks the Who Is Applying edit button — navigates back to /who-is-applying.
     ...    Satisfies: TC-13007, U4
     Wait For Elements State    ${CA_WHO_APPLYING_EDIT}    visible    timeout=${TIMEOUT}
     Click    ${CA_WHO_APPLYING_EDIT}
@@ -125,7 +126,7 @@ Residential Section Edit Button Should Be Visible
 
 Click Residential Details Edit Button
     [Documentation]
-    ...    Clicks the Residential Details edit button — navigates back to /applicant-residential-details.
+    ...    Clicks the Residential Details edit button — navigates back to /applicant-address.
     ...    Satisfies: TC-13013, U4
     Wait For Elements State    ${CA_RESIDENTIAL_EDIT}    visible    timeout=${TIMEOUT}
     Click    ${CA_RESIDENTIAL_EDIT}
@@ -138,7 +139,7 @@ Employment Section Edit Button Should Be Visible
 
 Click Employment Details Edit Button
     [Documentation]
-    ...    Clicks the Employment Details edit button — navigates back to /select-employment or employment details.
+    ...    Clicks the Employment Details edit button — navigates back to /applicant-employment or employment details.
     ...    Satisfies: TC-13016, U4
     Wait For Elements State    ${CA_EMPLOYMENT_EDIT}    visible    timeout=${TIMEOUT}
     Click    ${CA_EMPLOYMENT_EDIT}
@@ -164,8 +165,10 @@ Check Confirm Application Consent
     [Documentation]
     ...    Checks the consent checkbox if not already checked.
     ...    Satisfies: TC-13020
-    ${checked}=    Get Property    ${CA_CONSENT}    checked
-    IF    not ${checked}
+    # UAT render of this page is occasionally slow — be patient rather than fail fast.
+    Wait For Elements State    ${CA_CONSENT}    visible    timeout=${SUBMISSION_TIMEOUT}
+    ${checked}=    Get Attribute    ${CA_CONSENT}    aria-checked
+    IF    '${checked}' != 'true'
         Click    ${CA_CONSENT}
     END
 
@@ -198,23 +201,23 @@ Click Confirm Application Proceed
     Click    ${CA_PROCEED_BUTTON}
 
 Click Close Button
-    [Documentation]    Clicks close-button on /confirm-application and waits for dashboard URL.
+    [Documentation]    Clicks close-button on /review-application and waits for dashboard URL.
     Click    css=[data-testid='close-button']
     Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    Dashboard URL Should Be Visible
 
 Confirm Application URL Should Be Active
-    [Documentation]    Helper — asserts the current URL contains /confirm-application.
+    [Documentation]    Helper — asserts the current URL contains /review-application.
     ${url}=    Get Url
-    Should Contain    ${url}    /confirm-application
+    Should Contain    ${url}    /review-application
 
 Confirm Application Submitted Successfully
     [Documentation]
-    ...    Asserts the wizard has advanced past /confirm-application after the application is submitted.
-    ...    Checks that the URL no longer contains /confirm-application, confirming navigation to the
+    ...    Asserts the wizard has advanced past /review-application after the application is submitted.
+    ...    Checks that the URL no longer contains /review-application, confirming navigation to the
     ...    post-submission page (e.g. /loan-summary, /application-submitted, or similar).
     ...    Satisfies: TC-13023, RT-7 (final wizard submission)
     ${url}=    Get Url
-    Should Not Contain    ${url}    /confirm-application
+    Should Not Contain    ${url}    /review-application
 
 # =====================================================================
 # REFERRAL CODE KEYWORDS

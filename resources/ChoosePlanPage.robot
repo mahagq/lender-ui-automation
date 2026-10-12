@@ -1,6 +1,6 @@
 *** Settings ***
 Documentation
-...    Page object keywords for the GQ Customer Portal Choose Plan page (/choose-plan).
+...    Page object keywords for the GQ Customer Portal Choose Plan page (/emi-plans).
 ...    All locators use data-testid CSS selectors confirmed from gqcustomer_frontend UAT branch.
 ...    Library: Browser (Playwright).
 ...
@@ -18,7 +18,7 @@ Documentation
 Library     Browser
 
 *** Variables ***
-${CP_TITLE}                     css=[data-testid='choose-plan-title']
+${CP_TITLE}                     css=[data-testid='choose-financing-partner-title']
 ${CP_PLANS_COUNT}               css=[data-testid='plans-count']
 ${CP_NO_PLANS_FOUND}            css=[data-testid='no-plans-found']
 ${CP_PLAN_LIST}                 css=[data-testid='plan-list-container']
@@ -38,13 +38,13 @@ ${CP_CLOSE_BUTTON}              css=[data-testid='close-button']
 *** Keywords ***
 Choose Plan Title Should Be Visible
     [Documentation]
-    ...    Asserts the choose-plan-title element is visible.
+    ...    Asserts the choose-financing-partner-title element is visible.
     ...    Satisfies: TC-6001, RT-3, U1
     Wait For Elements State    ${CP_TITLE}    visible    timeout=${TIMEOUT}
 
 Choose Plan Title Text Should Be Correct
     [Documentation]
-    ...    Asserts the choose-plan-title contains expected text.
+    ...    Asserts the choose-financing-partner-title contains expected text.
     ...    Satisfies: TC-6001, U1
     Wait For Elements State    ${CP_TITLE}    visible    timeout=${TIMEOUT}
     ${text}=    Get Text    ${CP_TITLE}
@@ -126,7 +126,7 @@ Click Submit Plan Button
 
 Fee Paying To Text Should Be Visible
     [Documentation]
-    ...    Asserts the "Fee paying to" text is visible on the choose-plan page.
+    ...    Asserts the "Fee paying to" text is visible on the choose-financing-partner page.
     ...    Satisfies: TC-6010, U1
     Wait For Elements State    ${CP_FEE_PAYING_TO}    visible    timeout=${LONG_TIMEOUT}
 
@@ -176,33 +176,33 @@ Please Select Plan Error Should Not Be Visible
 
 Click Back Button
     [Documentation]
-    ...    Clicks the back-button on the choose-plan page to navigate back to /student-details.
+    ...    Clicks the back-button on the choose-financing-partner page to navigate back to /student-details.
     ...    Satisfies: TC-6016
     Wait For Elements State    ${CP_BACK_BUTTON}    visible    timeout=${TIMEOUT}
     Click    ${CP_BACK_BUTTON}
 
 Click Close Button
     [Documentation]
-    ...    Clicks the close-button on the choose-plan page and waits for dashboard URL.
+    ...    Clicks the close-button on the choose-financing-partner page and waits for dashboard URL.
     ...    Satisfies: TC-6017
     Wait For Elements State    ${CP_CLOSE_BUTTON}    visible    timeout=${TIMEOUT}
     Click    ${CP_CLOSE_BUTTON}
     Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    Dashboard URL Should Be Visible
 
 Choose Plan URL Should Be Active
-    [Documentation]    Helper — asserts the current URL contains /choose-plan.
+    [Documentation]    Helper — asserts the current URL contains /emi-plans.
     ${url}=    Get Url
-    Should Contain    ${url}    /choose-plan
+    Should Contain    ${url}    /emi-plans
 
 Choose Plan Wizard Advanced
     [Documentation]
-    ...    Helper — asserts the wizard moved past /choose-plan.
-    ...    Accepts /select-applicant or /applicant-basic-details as valid next steps
-    ...    (the app skips /select-applicant when the applicant type is already set).
+    ...    Helper — asserts the wizard moved past /emi-plans.
+    ...    Accepts /who-is-applying or /applicant-name as valid next steps
+    ...    (the app skips /who-is-applying when the applicant type is already set).
     ${url}=    Get Url
-    Should Not Contain    ${url}    /choose-plan
+    Should Not Contain    ${url}    /emi-plans
 
 Dashboard URL Should Be Active
-    [Documentation]    Helper — asserts the current URL contains /my-applications.
+    [Documentation]    Helper — asserts the current URL contains /applications.
     ${url}=    Get Url
-    Should Contain    ${url}    /my-applications
+    Should Contain    ${url}    /applications

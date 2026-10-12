@@ -8,7 +8,7 @@ Documentation
 ...    marital status (radio), email address, and consent.
 ...
 ...    Session model (personal_details_tests.robot):
-...      Visited after /onboarding is submitted.
+...      Visited after /get-started is submitted.
 ...      Suite Teardown → Close Browser
 ...
 ...    Satisfies: RT-5 (personal details keywords + locators), T1 (data-testid locators only)
@@ -17,9 +17,9 @@ Library     Browser
 
 *** Variables ***
 ${PD_TITLE}                         css=[data-testid='personal-details-title']
-${PD_FORM}                          css=[data-testid='applicant-personal-details-form']
+${PD_FORM}                          css=input[placeholder='PAN number']
 ${PD_PAN_DETAILS_TITLE}             css=[data-testid='pan-details-title']
-${PD_PAN_INPUT}                     css=[data-testid='pan-number-input']
+${PD_PAN_INPUT}                     css=input[placeholder='PAN number']
 ${PD_GENDER_TITLE}                  css=[data-testid='gender-title']
 ${PD_GENDER_SELECT}                 css=[data-testid='gender-title']
 ${PD_DOB_TITLE}                     css=[data-testid='dob-title']
@@ -32,9 +32,9 @@ ${PD_MARITAL_STATUS_ERROR}          css=[data-testid='marital-status-radio-error
 ${PD_MARITAL_STATUS_TITLE}          css=[data-testid='marital-status-title']
 ${PD_MARITAL_STATUS_RADIO}          css=[data-testid='marital-status-radio']
 ${PD_EMAIL_TITLE}                   css=[data-testid='email-title']
-${PD_EMAIL_INPUT}                   css=[data-testid='email-input']
-${PD_CONSENT}                       css=[data-testid='consent-checkbox']
-${PD_PROCEED_BUTTON}                css=[data-testid='proceed-button']
+${PD_EMAIL_INPUT}                   css=input[placeholder='Email address']
+${PD_CONSENT}                       role=checkbox
+${PD_PROCEED_BUTTON}                css=button:has-text('Proceed')
 ${PD_PAN_ERROR}                     css=[data-testid='pan-number-input-error']
 ${PD_EMAIL_ERROR}                   css=[data-testid='email-input-error']
 ${PD_CONSENT_ERROR}                 css=[data-testid='consent-checkbox-error']
@@ -101,8 +101,8 @@ Fill Email
 
 Check Personal Details Consent
     [Documentation]    Checks the consent-checkbox if not already checked.
-    ${checked}=    Get Property    ${PD_CONSENT}    checked
-    IF    not ${checked}
+    ${checked}=    Get Attribute    ${PD_CONSENT}    aria-checked
+    IF    '${checked}' != 'true'
         Click    ${PD_CONSENT}
     END
 
@@ -122,7 +122,7 @@ Select Gender Male
 
 Click Personal Details Proceed
     [Documentation]
-    ...    Waits for the proceed-button to become enabled, then clicks it to advance to /applicant-residential-details.
+    ...    Waits for the proceed-button to become enabled, then clicks it to advance to /applicant-address.
     ...    Uses LONG_TIMEOUT to allow React form state to settle after all fields are filled.
     ...    Satisfies: TC-10010, RT-5 (proceed)
     Wait For Elements State    ${PD_PROCEED_BUTTON}    enabled    timeout=${LONG_TIMEOUT}
@@ -168,8 +168,8 @@ Personal Details Consent Error Should Be Visible
 
 Uncheck Personal Details Consent
     [Documentation]    Unchecks the consent-checkbox on personal details if currently checked.
-    ${checked}=    Get Property    ${PD_CONSENT}    checked
-    IF    ${checked}
+    ${checked}=    Get Attribute    ${PD_CONSENT}    aria-checked
+    IF    '${checked}' == 'true'
         Click    ${PD_CONSENT}
     END
 

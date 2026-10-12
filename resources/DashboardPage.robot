@@ -1,6 +1,6 @@
 *** Settings ***
 Documentation
-...    Page object keywords for the GQ Customer Portal Dashboard (/my-applications).
+...    Page object keywords for the GQ Customer Portal Dashboard (/applications).
 ...    All locators use data-testid CSS selectors confirmed from gqcustomer_frontend UAT branch.
 ...    Library: Browser (Playwright).
 ...
@@ -31,8 +31,11 @@ ${GQ_LOGO_DASHBOARD}            css=[data-testid='desktop-view-gq-logo']
 # When account is fresh (no applications), the button is inside the emi-not-data-found
 # empty-state container (no testid). Click Create Application Button And Wait For Student
 # Details handles both states automatically.
-${CREATE_APP_BUTTON}            css=[data-testid='create-new-application-button']
-${CREATE_APP_BUTTON_EMPTY}      css=[data-testid='emi-not-data-found'] button
+# 2026 UI rewrite: both the toolbar (has applications) and empty-state (no applications)
+# buttons render the same "Start New Application" text, no testid (emi-toolbar.tsx /
+# emi-empty-state.tsx). Same locator covers both dashboard states.
+${CREATE_APP_BUTTON}            css=button:has-text('Start New Application') >> nth=0
+${CREATE_APP_BUTTON_EMPTY}      css=button:has-text('Start New Application') >> nth=0
 
 # Profile menu — U3: container must be visible before asserting child options
 ${PROFILE_BUTTON}               css=[data-testid='profile-button']
@@ -121,7 +124,7 @@ ${HASH_PG}                      \#direct
 Login And Navigate To Dashboard
     [Documentation]
     ...    Suite Setup keyword. Opens a browser, logs in with ${DASHBOARD_MOBILE},
-    ...    enters the fixed UAT OTP (9999), and waits for /my-applications to load.
+    ...    enters the fixed UAT OTP (9999), and waits for /applications to load.
     ...    Mirrors the checkMobilePost + verifyOtpPost rate-limit retry pattern from
     ...    Navigate To OTP Page (OTPPage.robot) — T3 boundary.
     ...    Satisfies: RT-1, RT-1.1, T2, O1, S1
@@ -153,7 +156,7 @@ Login And Navigate To Dashboard
 Login And Navigate To Dashboard As
     [Documentation]
     ...    Parameterized Suite Setup keyword. Opens a fresh browser, logs in with ${mobile},
-    ...    enters the fixed UAT OTP (9999), and waits for /my-applications to load.
+    ...    enters the fixed UAT OTP (9999), and waits for /applications to load.
     ...    Used by dashboard_ad_tests.robot (AD_MOBILE) and dashboard_pg_tests.robot (PG_MOBILE).
     ...    Includes checkMobilePost and verifyOtpPost rate-limit retry handling.
     ...    Satisfies: RT-1, T2, O1, S1
@@ -185,18 +188,18 @@ Login And Navigate To Dashboard As
 
 Navigate To Dashboard
     [Documentation]
-    ...    Per-test navigation reset (TN4 resolution). Hard-navigates to /my-applications
+    ...    Per-test navigation reset (TN4 resolution). Hard-navigates to /applications
     ...    and waits for the dashboard title to be visible. Resets active tab (default #emi),
     ...    filter panel (closed), profile dropdown (closed), and scroll position.
     ...    Called as Test Setup for every test in the suite (except those with [Setup] NONE).
     ...    Satisfies: RT-2, O1
-    Go To    ${BASE_URL}/my-applications
+    Go To    ${BASE_URL}/applications
     Wait For Elements State    ${DASHBOARD_TITLE}    visible    timeout=${TIMEOUT}
 
 Login Fresh And Navigate To Dashboard As
     [Documentation]
     ...    Logs in from scratch as ${mobile} — navigates to the login page, submits the form,
-    ...    enters OTP, and waits for /my-applications to load. Does NOT open or close the
+    ...    enters OTP, and waits for /applications to load. Does NOT open or close the
     ...    browser; reuses the existing browser context (session-agnostic).
     ...    Includes checkMobilePost and verifyOtpPost rate-limit retry handling.
     ...    Used as the [Setup] for TC-4009 (Logout) to make it fully independent of any
@@ -238,7 +241,7 @@ Switch To Account
     ...    Called from TC-4030 body (→ PG_MOBILE). TC-4031 inherits the PG_MOBILE session. TN2 resolution.
     ...    Satisfies: TN2, O1
     [Arguments]    ${mobile}
-    Go To    ${BASE_URL}/my-applications
+    Go To    ${BASE_URL}/applications
     Wait For Elements State    ${DASHBOARD_TITLE}    visible    timeout=${TIMEOUT}
     ${logout_ok}=    Run Keyword And Return Status    Click    ${PROFILE_BUTTON}
     IF    ${logout_ok}
@@ -381,7 +384,7 @@ Create New Application Button Should Be Visible And Clickable In Header
     ...    After clicking, accepts either:
     ...      (a) Radix UI dialog (role='dialog') — "Before you proceed" / "Still want to create"
     ...          modal; asserts modal text and closes via close-button testid.
-    ...      (b) URL change away from /my-applications — direct wizard navigation.
+    ...      (b) URL change away from /applications — direct wizard navigation.
     ...    Precondition: logged in as an account with at least one prior application.
     ...    Satisfies: TC-4034, B1, T1
     Click    ${EMI_TAB}
@@ -466,7 +469,7 @@ PG Online Empty State Should Be Visible
     ...    URL is asserted to confirm sub-tab navigation succeeded.
     ...    Satisfies: TC-4049
     ${url}=    Get Url
-    Should Contain    ${url}    /my-applications
+    Should Contain    ${url}    /applications
 
 PG Offline Empty State Should Be Visible
     [Documentation]
@@ -489,7 +492,7 @@ Click Filter Container Clear
 Create New Application Button Should Be Visible And Clickable In Empty State
     [Documentation]
     ...    Asserts the create-new-application button is visible in the emi-not-data-found
-    ...    empty-state container and that clicking it navigates away from /my-applications
+    ...    empty-state container and that clicking it navigates away from /applications
     ...    (TC-4035 / new-user scenario).
     ...    The yellow "+ CREATE NEW APPLICATION" button renders only when the account has NO
     ...    existing applications. Clicking it goes directly to /student-details (no dialog).

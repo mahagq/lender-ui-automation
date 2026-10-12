@@ -1,11 +1,11 @@
 *** Settings ***
 Documentation
-...    Page object keywords for the GQ Customer Portal Select Employment Type page (/select-employment).
+...    Page object keywords for the GQ Customer Portal Select Employment Type page (/applicant-employment).
 ...    All locators use data-testid CSS selectors confirmed from gqcustomer_frontend UAT branch.
 ...    Library: Browser (Playwright).
 ...
 ...    The page presents two employment type cards: Salaried and Self Employed.
-...    Selecting one and proceeding navigates to /applicant-employment-details (shared URL,
+...    Selecting one and proceeding navigates to /applicant-employment (shared URL,
 ...    form variant depends on selection).
 ...
 ...    Session model:
@@ -90,11 +90,11 @@ Self Employed Card Should Appear Selected
     ...    Self Employed card selected state confirmed.
 
 Click Close Button
-    [Documentation]    Clicks close-button on /select-employment and waits for dashboard URL.
+    [Documentation]    Clicks close-button on /applicant-employment and waits for dashboard URL.
     Click    css=[data-testid='close-button']
     Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    Dashboard URL Should Be Visible
 
 Employment Type URL Should Be Active
-    [Documentation]    Helper — asserts the current URL contains /select-employment.
+    [Documentation]    Helper — asserts the current URL contains /applicant-employment.
     ${url}=    Get Url
-    Should Contain    ${url}    /select-employment
+    Should Contain    ${url}    /applicant-employment

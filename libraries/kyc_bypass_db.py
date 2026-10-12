@@ -33,6 +33,16 @@ _PROVIDER_KEYWORDS = (
     ("westcap", "westcap"),
 )
 
+# Maps lender display names (as passed by tests) to the exact name stored in gq_internal_lender_master.
+# Add an entry whenever the UI name differs from the DB name.
+_DB_LENDER_NAME_MAP = {
+    "ratnaafin capital": "RCPL",
+    "ratnaafin": "RCPL",
+    "rcpl": "RCPL",
+    "mirae asset": "Mirae",
+    "mirae": "Mirae",
+}
+
 
 def _resolve_kyc_provider(lender_name):
     """Maps a lender display name to its kyc_provider code. Unmapped → gq-credentials."""
@@ -208,16 +218,17 @@ def bypass_kyc_via_database(mobile: str, app_id=None, lender_name=None):
                     "Bypass KYC failed: lender_name is required to resolve lender_id "
                     "for gq_application_compliance_mapping."
                 )
+            db_lender_name = _DB_LENDER_NAME_MAP.get(str(lender_name).strip().lower(), lender_name)
             cur.execute(
                 "SELECT id FROM gq_migrate.gq_internal_lender_master "
                 "WHERE name = %s AND deleted_on IS NULL ORDER BY id DESC LIMIT 1",
-                (lender_name,),
+                (db_lender_name,),
             )
             lender_row = cur.fetchone()
             if not lender_row:
                 raise RuntimeError(
                     f"Bypass KYC failed: no lender in gq_internal_lender_master "
-                    f"for name={lender_name!r}"
+                    f"for name={db_lender_name!r} (original: {lender_name!r})"
                 )
             lender_id = lender_row["id"]
             logger.info(f"KYC bypass: lender_id={lender_id} for lender_name={lender_name!r}")
@@ -334,13 +345,9 @@ def _insert_slug_if_missing(cur, app_id, slug):
 @keyword("Bypass Selfie Via Database")
 def bypass_selfie_via_database(app_id):
     """
-    Bypasses all post-eNACH steps (except father-name-added which is filled via UI).
-
-    Inserts into application_document_mapping:
-      - Applicant Selfie (doc_master_id=26)
-      - Address Proof / Electricity Bill (doc_master_id=234)
-
-    Inserts into customer_tracker:
+    Bypasses all post-eNACH steps via customer_tracker slugs only (tracker-only
+    convention — document_master_id values differ per DB instance/environment and
+    aren't worth chasing; the loan-execution-guard routes purely on tracker state):
       - faceid-completed
       - selfie-completed
       - insurance-not-interested
@@ -356,18 +363,158 @@ def bypass_selfie_via_database(app_id):
     conn = _connect()
     try:
         with conn.cursor() as cur:
-            # Document records
-            _insert_doc_if_missing(cur, app_id, _SELFIE_DOC_MASTER_ID, _SELFIE_URL, _SELFIE_PATH, _SELFIE_MIME)
-            _insert_doc_if_missing(cur, app_id, _ADDRESS_PROOF_DOC_MASTER_ID, _ADDRESS_PROOF_URL, _ADDRESS_PROOF_PATH, _ADDRESS_PROOF_MIME)
-
-            # Tracker slugs
             for slug in _POST_ENACH_SLUGS:
                 _insert_slug_if_missing(cur, app_id, slug)
 
         conn.commit()
-        logger.info(f"Selfie bypass: all post-eNACH records committed for app_id={app_id}")
+        logger.info(f"Selfie bypass: all post-eNACH tracker slugs committed for app_id={app_id}")
     except Exception as exc:
         conn.rollback()
         raise RuntimeError(f"Selfie DB bypass rolled back: {exc}") from exc
+    finally:
+        conn.close()
+
+
+@keyword("Bypass Address Proof Via Database")
+def bypass_address_proof_via_database(app_id):
+    """
+    Minimal bypass for the /upload-address-proof step — inserts ONLY the
+    'address-proof-uploaded' customer_tracker slug, nothing else (no document
+    record). Note: this page has no self-redirect guard (confirmed from
+    use-upload-address-proof-page.ts — it reads the tracker into local state but
+    never acts on it), so the caller must still navigate away explicitly after
+    this; a reload of the same URL will not skip it.
+
+    Args:
+        app_id: application id.
+    """
+    if not app_id:
+        raise RuntimeError("Bypass Address Proof failed: app_id is required")
+
+    conn = _connect()
+    try:
+        with conn.cursor() as cur:
+            _insert_slug_if_missing(cur, app_id, "address-proof-uploaded")
+        conn.commit()
+        logger.info(f"Address proof bypass: inserted tracker for app_id={app_id}")
+    except Exception as exc:
+        conn.rollback()
+        raise RuntimeError(f"Address proof DB bypass rolled back: {exc}") from exc
+    finally:
+        conn.close()
+
+
+# Mandate (eNACH) bypass — team-confirmed UAT fixture convention, five steps:
+#   1. cfd_id      = gq_internal_old_application_cfd_mapping.cfd_id for this app_id
+#   2. customer_id = gq_customer_auth.id for this mobile
+#   3. Duplicate gq_customer_mandate_details template row (id=3999) into a NEW row,
+#      customer_id overridden — a fresh row avoids mutating the shared template
+#      when runs are parallel.
+#   4. Insert gq_customer_fd_cmd_mapping (cfd_id, cmd_id=<new row's id>).
+#   5. Insert customer_tracker 'emandate-completed' then 'mandate-completed' —
+#      the same slugs the FE itself sets after a real Digio/RPD mandate completes
+#      (tracker.types.ts MandateTrackerSlug, mandate-fetch.ts completeMandate()),
+#      mirroring the OKYC/selfie bypass mechanism.
+_MANDATE_TEMPLATE_CMD_ID = 3999
+_MANDATE_SLUGS = ["emandate-completed", "mandate-completed"]
+
+
+@keyword("Bypass Mandate Via Database")
+def bypass_mandate_via_database(mobile, app_id):
+    """
+    Bypasses the /mandate (eNACH) step via the real backend tables plus the
+    frontend tracker state, so the app genuinely sees a completed mandate.
+    See module-level _MANDATE_* comment above for the five-step sequence.
+
+    After this, reload /mandate/{app_id} (or navigate to /selfie/{app_id} directly) —
+    the app will see a real completed mandate and the frontend's tracker-based
+    routing guard will skip past the mandate UI.
+
+    Args:
+        mobile: mobile number used to create the application (resolves customer_id).
+        app_id: application id (resolves cfd_id).
+    """
+    if not app_id:
+        raise RuntimeError("Bypass Mandate failed: app_id is required")
+    if not mobile:
+        raise RuntimeError("Bypass Mandate failed: mobile is required")
+
+    conn = _connect()
+    try:
+        with conn.cursor() as cur:
+            # 1. cfd_id for this application
+            cur.execute(
+                "SELECT cfd_id FROM gq_migrate.gq_internal_old_application_cfd_mapping "
+                "WHERE application_id = %s ORDER BY id DESC LIMIT 1",
+                (app_id,),
+            )
+            cfd_row = cur.fetchone()
+            if not cfd_row:
+                raise RuntimeError(
+                    f"Bypass Mandate failed: no cfd_id in "
+                    f"gq_internal_old_application_cfd_mapping for application_id={app_id}"
+                )
+            cfd_id = cfd_row["cfd_id"]
+            logger.info(f"Mandate bypass: cfd_id={cfd_id} for app_id={app_id}")
+
+            # 2. customer_id for this mobile
+            cur.execute(
+                "SELECT id FROM gq_migrate.gq_customer_auth WHERE mobile = %s",
+                (mobile,),
+            )
+            auth_row = cur.fetchone()
+            if not auth_row:
+                raise RuntimeError(
+                    f"Bypass Mandate failed: no customer in gq_customer_auth for mobile={mobile}"
+                )
+            customer_id = auth_row["id"]
+            logger.info(f"Mandate bypass: customer_id={customer_id} for mobile={mobile}")
+
+            # 3. Duplicate the template mandate record (id=3999) into a new row,
+            #    overriding customer_id — never UPDATE the template row itself.
+            cur.execute(
+                "SELECT * FROM gq_migrate.gq_customer_mandate_details WHERE id = %s",
+                (_MANDATE_TEMPLATE_CMD_ID,),
+            )
+            template_row = cur.fetchone()
+            if not template_row:
+                raise RuntimeError(
+                    f"Bypass Mandate failed: template row id={_MANDATE_TEMPLATE_CMD_ID} "
+                    "not found in gq_customer_mandate_details"
+                )
+            new_row = dict(template_row)
+            new_row.pop("id", None)
+            new_row["customer_id"] = customer_id
+            columns = list(new_row.keys())
+            placeholders = ", ".join(["%s"] * len(columns))
+            column_list = ", ".join(f"`{c}`" for c in columns)
+            cur.execute(
+                f"INSERT INTO gq_migrate.gq_customer_mandate_details ({column_list}) "
+                f"VALUES ({placeholders})",
+                tuple(new_row[c] for c in columns),
+            )
+            new_cmd_id = cur.lastrowid
+            logger.info(
+                f"Mandate bypass: duplicated template cmd_id={_MANDATE_TEMPLATE_CMD_ID} "
+                f"-> new cmd_id={new_cmd_id} for customer_id={customer_id}"
+            )
+
+            # 4. Map this application's cfd_id to the new mandate record.
+            cur.execute(
+                "INSERT INTO gq_migrate.gq_customer_fd_cmd_mapping (cfd_id, cmd_id) "
+                "VALUES (%s, %s)",
+                (cfd_id, new_cmd_id),
+            )
+            logger.info(f"Mandate bypass: mapped cfd_id={cfd_id} -> cmd_id={new_cmd_id}")
+
+            # 5. Frontend tracker state — matches what completeMandate() itself sets.
+            for slug in _MANDATE_SLUGS:
+                _insert_slug_if_missing(cur, app_id, slug)
+
+        conn.commit()
+        logger.info(f"Mandate bypass: all records committed for app_id={app_id}")
+    except Exception as exc:
+        conn.rollback()
+        raise RuntimeError(f"Mandate DB bypass rolled back: {exc}") from exc
     finally:
         conn.close()

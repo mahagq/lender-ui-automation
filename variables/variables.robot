@@ -138,19 +138,32 @@ ${APP_ACADEMIC_YEAR_RATNAAFIN}       2022-2023
 ${APP_PLAN_ID_RATNAAFIN}             RCPL-dlg-prod-4
 
 # Mirae uses the default institute (Masira Darvesh) but a specific plan tag.
-${APP_PLAN_ID_MIRAE}                 Mirae-11-EMI-1dp - 0IRR - Signoff
+${APP_PLAN_ID_MIRAE}                 Mirae-10-EMI-Hybrid- Signoff
+
+# TCL default plan.
+# TCL plan is selected by matching "TCL" text in the plan card (falls back to position if absent).
+${APP_PLAN_ID_TCL}                   TCL
+
+# CSB default plan.
+${APP_PLAN_ID_CSB}                   CSB-Hybrid-int-2.95-sub-5-12-months-1-advanceEMI
 
 # KYC mode: False = DB bypass (default); True = wait for manual KYC entry in the browser.
 ${MANUAL_KYC}                        ${False}
 # How long the manual-KYC wait polls for the /esign/ page before giving up.
 ${MANUAL_KYC_TIMEOUT}                 900s
 
+# Confirm & Submit mode: True = pause at the Confirm Application page for manual review/submit.
+# False (default) = automation clicks Confirm Application Proceed automatically.
+${MANUAL_SUBMIT}                      ${False}
+# How long to wait for the user to manually submit before giving up.
+${MANUAL_SUBMIT_TIMEOUT}              900s
+
 # Applicant (parent/guardian) details
 ${APP_FIRST_NAME}             MAMANI
 ${APP_LAST_NAME}              DAS
 ${APP_PAN_NUMBER}             DDDPD1621M
-${APP_EMAIL}                  testparent@example.com
-${APP_GENDER}                 MALE
+
+${APP_GENDER}                 FEMALE
 ${APP_DOB_YEAR}               1989
 ${APP_DOB_MONTH}              Apr
 ${APP_DOB_DAY}                13
@@ -174,7 +187,7 @@ ${APP_BUSINESS_DESC}          Software consulting and services
 # Set LENDER_NAME env var to pick a specific lender by name (e.g. "Western Capital", "Prefr", "IDFC").
 # Leave blank to automatically click the first available lender on the page.
 # Can also be overridden per-row in application_data.xlsx via the lender_name column.
-${LENDER_NAME}                      %{LENDER_NAME=Tata Capital Limited}
+${LENDER_NAME}                      %{LENDER_NAME=Tata Capital}
 
 # eNACH (mandate) account details — entered on the NACH page during final steps.
 # Auth method + authorization creds TBD (pending live page inspection).

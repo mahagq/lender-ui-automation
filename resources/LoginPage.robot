@@ -22,17 +22,21 @@ Library     Browser
 *** Variables ***
 # Locators — derived from data-testid attributes in gqcustomer_frontend source
 # Satisfies: T1 (all locators use data-testid, no CSS classes or absolute XPath)
+# 2026 UI rewrite (develop-revamp branch) dropped data-testid attributes entirely from this
+# form — login-form.tsx renders no wrapper testid, TextField/Button/Checkbox are untagged.
+# Locators below are placeholder/role/text based (verified against src/components/sections/
+# auth/login-form/login-form.tsx and src/components/ui/{text-field,button,checkbox}).
 ${LOGIN_FORM}            css=[data-testid='login-form']
 ${LOGIN_FORM_TITLE}      css=[data-testid='desktop-view-form-title']
-${MOBILE_INPUT}          css=[data-testid='mobile-number-input']
+${MOBILE_INPUT}          css=input[placeholder='Enter mobile number']
 ${MOBILE_ERROR}          css=[data-testid='mobile-number-input-error']
 ${MOBILE_NOTE}           css=[data-testid='mobile-number-input-note']
-${CONSENT_CHECKBOX}      css=[data-testid='consent-checkbox']
+${CONSENT_CHECKBOX}      role=checkbox
 ${CONSENT_LABEL}         css=[data-testid='consent-checkbox-label']
 ${CONSENT_ERROR}         css=[data-testid='consent-checkbox-error']
-${SEND_OTP_BUTTON}       css=[data-testid='send-otp-button']
-${TERMS_LINK_FORM}       css=a[data-testid='terms-link']
-${PRIVACY_LINK_FORM}     css=a[data-testid='privacy-policy-link']
+${SEND_OTP_BUTTON}       css=button:has-text('Send OTP')
+${TERMS_LINK_FORM}       css=a:has-text('Terms of Service')
+${PRIVACY_LINK_FORM}     css=a:has-text('Privacy Policy')
 ${MOBILE_FOOTER}         css=[data-testid='mobile-footer-container']
 
 *** Keywords ***
@@ -47,7 +51,9 @@ Open Login Page
     New Context    viewport=${None}
     Set Browser Timeout    60s
     New Page    ${BASE_URL}
-    Wait For Elements State    ${LOGIN_FORM}    visible    timeout=${TIMEOUT}
+    # 2026 UI rewrite ("Register for EMI Plans") removed the login-form wrapper testid
+    # entirely — wait directly on the mobile input (no fallback probe, saves ~10s/run).
+    Wait For Elements State    ${MOBILE_INPUT}    visible    timeout=${LONG_TIMEOUT}
 
 Enter Mobile Number
     [Documentation]

@@ -3,7 +3,7 @@ Library    Browser
 
 
 *** Variables ***
-${OKYC_URL_FRAG}           /okyc/
+${OKYC_URL_FRAG}           /kyc/
 ${OKYC_EKYC_OPTION}        css=[data-testid='ekyc-option']
 ${OKYC_VIDEO_OPTION}       css=[data-testid='video-kyc-option']
 ${OKYC_PROCEED_BUTTON}     css=[data-testid='kyc-method-proceed']
@@ -20,9 +20,9 @@ OKYC URL Should Be Active
     Should Contain    ${url}    ${OKYC_URL_FRAG}
 
 Extract App ID From OKYC URL
-    [Documentation]    Extracts {app_id} from current URL /okyc/{app_id}.
+    [Documentation]    Extracts {app_id} from current URL /kyc/{app_id}.
     ${url}=    Get Url
-    ${app_id}=    Evaluate    '${url}'.split('/okyc/')[-1].split('?')[0].rstrip('/')
+    ${app_id}=    Evaluate    '${url}'.split('/kyc/')[-1].split('?')[0].split('#')[0].rstrip('/')
     RETURN    ${app_id}
 
 Select E-KYC Method
@@ -50,7 +50,6 @@ Click KYC Proceed Button
     Wait For Elements State    ${OKYC_PROCEED_BUTTON}    visible    timeout=${LONG_TIMEOUT}
     Wait For Elements State    ${OKYC_PROCEED_BUTTON}    enabled    timeout=${LONG_TIMEOUT}
     Scroll To Element         ${OKYC_PROCEED_BUTTON}
-    Sleep    500ms
     ${clicked}=    Run Keyword And Return Status
     ...    Click With Options    ${OKYC_PROCEED_BUTTON}    force=True    noWaitAfter=True
     IF    not ${clicked}
@@ -60,7 +59,7 @@ Click KYC Proceed Button
     Log    ✅ KYC Proceed button clicked    console=True
 
 Esign URL Should Be Active
-    [Documentation]    Asserts current URL contains /esign/{app_id} after KYC bypass + page reload.
+    [Documentation]    Asserts current URL contains /sign-agreement/{app_id} after KYC bypass + page reload.
     [Arguments]    ${app_id}
     ${url}=    Get Url
-    Should Contain    ${url}    /esign/${app_id}
+    Should Contain    ${url}    /sign-agreement/${app_id}

@@ -13,7 +13,7 @@ Documentation
 ...      Test Setup    → Navigate To Student Details Within Session
 ...      Test Teardown → NONE (shared session)
 ...      Suite Teardown → Close Browser
-...    The submit (Show Plans) test runs last — it advances the wizard to /choose-plan.
+...    The submit (Show Plans) test runs last — it advances the wizard to /emi-plans.
 ...
 ...    Satisfies: RT-2 (student details keywords + locators), T1 (data-testid locators only)
 
@@ -24,7 +24,7 @@ Library     Browser
 # NOTE: Both gile-form-title (GILE section) and student-details-title (personal details section)
 # coexist on the page. student-details-title is only visible after GILE dropdowns are filled.
 # Confirmed by recording login_20260424_145708.js (lines 30, 64).
-${SD_TITLE}                         css=[data-testid='gile-form-title']
+${SD_TITLE}                         css=button[role='combobox']:has-text('School / College / University')
 ${SD_STUDENT_DETAILS_TITLE}         css=[data-testid='student-details-title']
 
 # Page subtitle (visible on initial page load, above GILE section)
@@ -46,19 +46,20 @@ ${SD_ACADEMIC_YEAR_SELECT}          css=[data-testid='academic-year-id-react-sel
 # Student details form and section titles
 # NOTE: admission-type-title and annual-fee-title were previously believed removed.
 # Recording login_20260424_145708.js (lines 65–66) confirms both exist on UAT.
-${SD_FORM}                          css=[data-testid='student-details-form']
+${SD_FORM}                          css=button[role='combobox']:has-text('School / College / University')
 ${SD_ADMISSION_TYPE_TITLE}          css=[data-testid='admission-type-title']
 ${SD_ANNUAL_FEE_TITLE}              css=[data-testid='annual-fee-title']
 
-# Student personal detail inputs
-${SD_FIRST_NAME}                    css=[data-testid='first-name-input']
-${SD_LAST_NAME}                     css=[data-testid='last-name-input']
-${SD_STUDENT_TYPE_RADIO}            css=[data-testid='student-type-radio']
+# Student personal detail inputs — 2026 UI rewrite: no testids, TextField uses label as
+# placeholder (student-details-form.tsx). role=radio for admission type (Radix RadioGroup).
+${SD_FIRST_NAME}                    css=input[placeholder="Student's first name"]
+${SD_LAST_NAME}                     css=input[placeholder="Student's last name"]
+${SD_STUDENT_TYPE_RADIO}            role=radio
 ${SD_EXISTING_STUDENT}              text=Existing Student
 ${SD_NEW_ADMISSION}                 text=New Admission
-${SD_CLASS_SELECT}                  css=[data-testid='class-id-react-select']
-${SD_STUDENT_ID}                    css=[data-testid='student-id-input']
-${SD_LOAN_AMOUNT}                   css=[data-testid='loan-amount-input']
+${SD_CLASS_SELECT}                  css=button[role='combobox']:has-text('Class') >> nth=-1
+${SD_STUDENT_ID}                    css=input[placeholder^='Student ID']
+${SD_LOAN_AMOUNT}                   css=input[placeholder='Annual fee amount']
 
 # Validation error messages (visible after Show Plans clicked with empty required fields)
 ${SD_FIRST_NAME_ERROR}              css=[data-testid='first-name-input-error']
@@ -66,8 +67,7 @@ ${SD_LAST_NAME_ERROR}               css=[data-testid='last-name-input-error']
 ${SD_CLASS_ERROR}                   css=[data-testid='class-id-react-select-error']
 ${SD_LOAN_AMOUNT_ERROR}             css=[data-testid='loan-amount-input-error']
 
-# NOTE: show-plans-button uses 'testidfor' attribute, not 'data-testid'
-${SD_SHOW_PLANS_BUTTON}             css=[testidfor='show-plans-button']
+${SD_SHOW_PLANS_BUTTON}             css=button:has-text('Show Plans')
 
 # Close button — /student-details has no back-button; the exit control is a Close button
 ${SD_CLOSE_BUTTON}                  css=[data-testid='close-button']
@@ -385,7 +385,7 @@ Click Show Plans Button
 
 Navigate Back From Student Details
     [Documentation]
-    ...    Clicks the Close button on /student-details to return to /my-applications.
+    ...    Clicks the Close button on /student-details to return to /applications.
     ...    /student-details has no back-button — the exit control is data-testid='close-button'.
     ...    Satisfies: TC-5027
     Wait For Elements State    ${SD_CLOSE_BUTTON}    visible    timeout=${TIMEOUT}

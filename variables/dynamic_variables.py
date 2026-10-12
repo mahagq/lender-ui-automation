@@ -23,6 +23,7 @@ To override DASHBOARD_NEW_MOBILE for a specific suite run:
 
 import os
 import time
+import uuid
 
 _ts = int(time.time())
 
@@ -45,3 +46,6 @@ LENDER_NR03_MOBILE = '73' + str(_ts)[-8:]
 LENDER_NR04_MOBILE = '74' + str(_ts)[-8:]
 LENDER_NR05_MOBILE = '75' + str(_ts)[-8:]
 BANK_STATEMENT_MOBILE = '76' + str(_ts)[-8:]
+
+# Unique email per run — UUID ensures no collisions even when runs start simultaneously.
+APP_EMAIL = f'mahathevar.{uuid.uuid4().hex[:10]}@grayquest.com'

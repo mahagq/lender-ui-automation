@@ -1,12 +1,12 @@
 *** Settings ***
 Documentation
-...    Page object keywords for the GQ Customer Portal Agreement/Esign page (/esign/{app_id}).
+...    Page object keywords for the GQ Customer Portal Agreement/Esign page (/sign-agreement/{app_id}).
 ...    All locators derived from Playwright recording (login_20260513_194822.js).
 ...    Library: Browser (Playwright).
 ...
 ...    Session model:
 ...      Suite Setup   → Navigate To Esign New App (E2EApplicationFlow.robot)
-...      Test Setup    → Go To ${BASE_URL}/esign/${ESIGN_APP_ID}
+...      Test Setup    → Go To ${BASE_URL}/sign-agreement/${ESIGN_APP_ID}
 ...      Test Teardown → NONE (shared session)
 ...      Suite Teardown → Close Browser
 
@@ -15,12 +15,14 @@ Library    String
 
 
 *** Variables ***
-${ESIGN_URL_FRAG}               /esign/
+${ESIGN_URL_FRAG}               /sign-agreement/
 ${DOWN_PAYMENT_URL_FRAG}        /down-payment/
-${NACH_URL_FRAG}                /nach/
+${NACH_URL_FRAG}                /mandate/
 
 # Page headers
-${ESIGN_SUMMARY_TITLE}          css=[data-testid='agreement-summary-title']
+# 2026 UI rewrite (/sign-agreement): no testids — agreement-form.tsx renders the KFS summary
+# plus an "Accept KFS, Sanction Letter..." button and a plain consent checkbox.
+${ESIGN_SUMMARY_TITLE}          css=button:has-text('Accept KFS, Sanction Letter')
 ${ESIGN_AGREEMENT_TITLE}        css=[data-testid='agreement-title']
 
 # Loan summary fields
@@ -48,13 +50,13 @@ ${ESIGN_LENDER_GRIEVANCE_MOBILE}    css=[data-testid='lender-grievance-redressal
 ${ESIGN_GQ_GRIEVANCE}               css=[data-testid='grayquest-grievance-redressal-office-details']
 
 # Consent
-${ESIGN_CONSENT_CHECKBOX}       css=[data-testid='consent-checkbox']
-${ESIGN_CONSENT_LABEL}          css=[data-testid='consent-checkbox-label']
+${ESIGN_CONSENT_CHECKBOX}       role=checkbox
+${ESIGN_CONSENT_LABEL}          css=label:has-text('I have read and understood')
 ${ESIGN_CONSENT_ERROR}          css=[data-testid='consent-checkbox-error']
 
 # Action buttons
 ${ESIGN_VIEW_AGREEMENT_BTN}     css=[data-testid='view-agreement-button']
-${ESIGN_ACCEPT_TERMS_BTN}       css=[data-testid='accept-terms-conditions-button']
+${ESIGN_ACCEPT_TERMS_BTN}       css=button:has-text('Accept KFS, Sanction Letter')
 ${ESIGN_CLOSE_BTN}              css=[data-testid='close-button']
 ${ESIGN_PREVIEW_PROCEED_BTN}    css=[data-testid='agreement-preview-proceed-button']
 ${ESIGN_BACK_BTN}               css=[data-testid='back-button']
@@ -62,16 +64,17 @@ ${ESIGN_BACK_BTN}               css=[data-testid='back-button']
 
 *** Keywords ***
 Esign Page Should Be Visible
-    Wait For Elements State    ${ESIGN_SUMMARY_TITLE}    visible    timeout=${LONG_TIMEOUT}
+    # Agreement HTML/summary can take a while to fetch — be patient rather than fail fast.
+    Wait For Elements State    ${ESIGN_SUMMARY_TITLE}    visible    timeout=${SUBMISSION_TIMEOUT}
 
 Esign URL Should Contain App ID
     [Arguments]    ${app_id}
     ${url}=    Get Url
-    Should Contain    ${url}    /esign/${app_id}
+    Should Contain    ${url}    /sign-agreement/${app_id}
 
 Extract App ID From Esign URL
     ${url}=    Get Url
-    ${app_id}=    Evaluate    '${url}'.split('/esign/')[-1].split('?')[0].rstrip('/')
+    ${app_id}=    Evaluate    '${url}'.split('/sign-agreement/')[-1].split('?')[0].rstrip('/')
     RETURN    ${app_id}
 
 Extract App ID From Down Payment URL
@@ -87,17 +90,17 @@ Down Payment URL Should Be Active
 Nach URL Should Be Active
     [Arguments]    ${app_id}
     ${url}=    Get Url
-    Should Contain    ${url}    /nach/${app_id}
+    Should Contain    ${url}    /mandate/${app_id}
 
 Signing Initiated Successfully
     ${url}=    Get Url
-    Should Not Contain    ${url}    /esign/
+    Should Not Contain    ${url}    /sign-agreement/
 
 Redirect URL Should Be Down Payment Or NACH
     ${url}=    Get Url
     ${is_dp}=    Evaluate    '/down-payment/' in '${url}'
-    ${is_nach}=    Evaluate    '/nach/' in '${url}'
-    Should Be True    ${is_dp} or ${is_nach}    Expected /down-payment/ or /nach/ in URL but got: ${url}
+    ${is_nach}=    Evaluate    '/mandate/' in '${url}'
+    Should Be True    ${is_dp} or ${is_nach}    Expected /down-payment/ or /mandate/ in URL but got: ${url}
 
 Agreement Summary Title Should Be Visible
     Wait For Elements State    ${ESIGN_SUMMARY_TITLE}    visible    timeout=${TIMEOUT}
@@ -160,23 +163,23 @@ GrayQuest Grievance Redressal Section Should Be Visible
     Wait For Elements State    ${ESIGN_GQ_GRIEVANCE}    visible    timeout=${TIMEOUT}
 
 Consent Checkbox Should Be Unchecked
-    ${checked}=    Get Property    ${ESIGN_CONSENT_CHECKBOX}    checked
-    Should Be True    not ${checked}
+    ${checked}=    Get Attribute    ${ESIGN_CONSENT_CHECKBOX}    aria-checked
+    Should Be True    '${checked}' != 'true'
 
 Consent Label Click Should Check Checkbox
     Click    ${ESIGN_CONSENT_LABEL}
-    ${checked}=    Get Property    ${ESIGN_CONSENT_CHECKBOX}    checked
-    Should Be True    ${checked}
+    ${checked}=    Get Attribute    ${ESIGN_CONSENT_CHECKBOX}    aria-checked
+    Should Be True    '${checked}' == 'true'
 
 Check Esign Consent
-    ${checked}=    Get Property    ${ESIGN_CONSENT_CHECKBOX}    checked
-    IF    not ${checked}
+    ${checked}=    Get Attribute    ${ESIGN_CONSENT_CHECKBOX}    aria-checked
+    IF    '${checked}' != 'true'
         Click    ${ESIGN_CONSENT_CHECKBOX}
     END
 
 Uncheck Esign Consent
-    ${checked}=    Get Property    ${ESIGN_CONSENT_CHECKBOX}    checked
-    IF    ${checked}
+    ${checked}=    Get Attribute    ${ESIGN_CONSENT_CHECKBOX}    aria-checked
+    IF    '${checked}' == 'true'
         Click    ${ESIGN_CONSENT_CHECKBOX}
     END
 

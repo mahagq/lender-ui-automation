@@ -1,6 +1,6 @@
 *** Settings ***
 Documentation
-...    Page object keywords for the Insurance tab (/my-applications#ins).
+...    Page object keywords for the Insurance tab (/applications#ins).
 ...    All data-testid locators derived from gqcustomer_frontend UAT branch.
 ...    Non-testid elements use alt-text or text selectors — no CSS class selectors.
 ...    Library: Browser (Playwright) — TN3 resolution.
@@ -11,7 +11,7 @@ Documentation
 ...
 ...    Session model:
 ...      Suite Setup   → Login And Navigate To Insurance Tab (login once, land on #ins)
-...      Test Setup    → Navigate To Insurance Tab (hard-nav to /my-applications + click INS tab)
+...      Test Setup    → Navigate To Insurance Tab (hard-nav to /applications + click INS tab)
 ...      Test Teardown → NONE (shared session preserved)
 ...      Suite Teardown → Close Browser
 ...    Satisfies: T1 (data-testid locators), U2 (explicit waits)
@@ -79,10 +79,10 @@ Login And Navigate To Insurance Tab
 
 Navigate To Insurance Tab
     [Documentation]
-    ...    Per-test navigation reset. Hard-navigates to /my-applications and clicks the
+    ...    Per-test navigation reset. Hard-navigates to /applications and clicks the
     ...    Insurance tab so every test starts cleanly on #ins with no stale scroll/state.
     ...    Satisfies: RT-2, O1
-    Go To    ${BASE_URL}/my-applications
+    Go To    ${BASE_URL}/applications
     Wait For Elements State    ${DASHBOARD_TITLE}    visible    timeout=${TIMEOUT}
     Click    ${INS_TAB}
     Wait Until Keyword Succeeds    ${TIMEOUT}    200ms    URL Should Contain Hash    ${HASH_INS}

@@ -1,6 +1,6 @@
 *** Settings ***
 Documentation
-...    Page object keywords for the GQ Customer Portal Onboarding page (/onboarding).
+...    Page object keywords for the GQ Customer Portal Onboarding page (/get-started).
 ...    All locators use data-testid CSS selectors confirmed from gqcustomer_frontend UAT branch.
 ...    Library: Browser (Playwright).
 ...
@@ -8,7 +8,7 @@ Documentation
 ...    The applicant clicks Proceed to continue to /applicant-personal-details.
 ...
 ...    Session model (onboarding_tests.robot):
-...      Visited after /applicant-basic-details is submitted.
+...      Visited after /applicant-name is submitted.
 ...      Suite Teardown → Close Browser
 ...
 ...    Satisfies: RT-5 (onboarding keywords + locators), T1 (data-testid locators only)
@@ -18,10 +18,10 @@ Library     Browser
 *** Variables ***
 ${OB_TITLE}                 css=[data-testid='onboarding-title']
 ${OB_ILLUSTRATION}          css=img[alt='a boy on a rocket ship']
-${OB_INFO_ONE}              css=[data-testid='onboarding-info-one']
+${OB_INFO_ONE}              css=button:has-text('Proceed')
 ${OB_INFO_TWO}              css=[data-testid='onboarding-info-two']
 ${OB_INFO_THREE}            css=[data-testid='onboarding-info-three']
-${OB_PROCEED_BUTTON}        css=[data-testid='proceed-button']
+${OB_PROCEED_BUTTON}        css=button:has-text('Proceed')
 ${OB_BACK_BUTTON}           css=[data-testid='back-button']
 
 *** Keywords ***
@@ -48,9 +48,14 @@ Click Onboarding Proceed
     Click    ${OB_PROCEED_BUTTON}
 
 Onboarding URL Should Be Active
-    [Documentation]    Helper — asserts the current URL contains /onboarding.
+    [Documentation]
+    ...    Helper — asserts the current URL contains /get-started. The app sometimes
+    ...    auto-skips the onboarding intro and lands directly on /applicant-personal-details —
+    ...    accept that too, since the caller only cares that basic-details was really submitted.
     ${url}=    Get Url
-    Should Contain    ${url}    /onboarding
+    ${ok}=    Evaluate    '/get-started' in '''${url}''' or '/applicant-personal-details' in '''${url}'''
+    Should Be True    ${ok}
+    ...    Expected /get-started or /applicant-personal-details, got: ${url}
 
 Onboarding Title Should Be Visible
     [Documentation]
@@ -66,19 +71,19 @@ Onboarding Illustration Should Be Visible
 
 Navigate Back From Onboarding
     [Documentation]
-    ...    Clicks back-button on /onboarding to return to /applicant-basic-details.
+    ...    Clicks back-button on /get-started to return to /applicant-name.
     ...    Satisfies: TC-9N-01
     Wait For Elements State    ${OB_BACK_BUTTON}    visible    timeout=${TIMEOUT}
     Click    ${OB_BACK_BUTTON}
 
 Click Close Button
-    [Documentation]    Clicks close-button on /onboarding and waits for dashboard URL.
+    [Documentation]    Clicks close-button on /get-started and waits for dashboard URL.
     Click    css=[data-testid='close-button']
     Wait Until Keyword Succeeds    ${LONG_TIMEOUT}    500ms    Dashboard URL Should Be Visible
 
 Navigate To Onboarding Within Session
     [Documentation]
-    ...    Hard-navigates to /onboarding within the current session.
+    ...    Hard-navigates to /get-started within the current session.
     ...    Used as [Setup] for tests that follow a back-navigation from onboarding.
-    Go To    ${BASE_URL}/onboarding
+    Go To    ${BASE_URL}/get-started
     Wait For Elements State    ${OB_PROCEED_BUTTON}    visible    timeout=${TIMEOUT}
