@@ -62,6 +62,49 @@ _RULES = [
 ]
 
 
+_NET_HOOK = """() => {
+  if (window.__gqPatched) return 'already';
+  window.__gqPatched = true;
+  const noise = ['google','analytics','sentry','hotjar','clarity','mixpanel','segment','doubleclick','facebook','clevertap','gtm'];
+  const exts = ['.png','.jpg','.jpeg','.svg','.gif','.css','.js','.woff','.woff2'];
+  const skip = {test: (u) => { u = String(u).toLowerCase(); const path = u.split('?')[0];
+    return noise.some(n => u.indexOf(n) >= 0) || exts.some(x => path.endsWith(x)); }};
+  const save = (e) => { try {
+    const a = JSON.parse(sessionStorage.getItem('__gqNet') || '[]'); a.push(e);
+    sessionStorage.setItem('__gqNet', JSON.stringify(a.slice(-100))); } catch (_) {} };
+  const rec = (m, u, s, ms, b) => save({m, u: String(u).split('?')[0], s, ms, b: String(b || '').slice(0, 300),
+                                         at: new Date().toISOString(), page: location.pathname});
+  const of = window.fetch;
+  window.fetch = async function (input, init) {
+    const url = typeof input === 'string' ? input : ((input && input.url) || '');
+    const method = (init && init.method) || (input && input.method) || 'GET';
+    const t = Date.now();
+    try {
+      const r = await of.apply(this, arguments);
+      if (r.status >= 400 && !skip.test(url)) {
+        let b = ''; try { b = await r.clone().text(); } catch (_) {}
+        rec(method, url, r.status, Date.now() - t, b);
+      }
+      return r;
+    } catch (err) { if (!skip.test(url)) rec(method, url, 0, Date.now() - t, err); throw err; }
+  };
+  const xo = XMLHttpRequest.prototype.open, xs = XMLHttpRequest.prototype.send;
+  XMLHttpRequest.prototype.open = function (m, u) { this.__m = m; this.__u = u; return xo.apply(this, arguments); };
+  XMLHttpRequest.prototype.send = function () {
+    const t = Date.now();
+    this.addEventListener('loadend', () => {
+      if ((this.status >= 400 || this.status === 0) && !skip.test(this.__u || ''))
+        rec(this.__m, this.__u, this.status, Date.now() - t, this.status ? this.responseText : 'network error');
+    });
+    return xs.apply(this, arguments);
+  };
+  return 'patched';
+}"""
+
+# library keywords after which the hook is (re)installed; it is idempotent per document
+_HOOK_AFTER = {"go to", "reload", "new page", "new context", "click"}
+
+
 def _classify(message):
     for pattern, headline, cause in _RULES:
         if re.search(pattern, message or "", re.IGNORECASE | re.DOTALL):
@@ -82,6 +125,7 @@ class failure_reporter:
         self.test_name = ""
         self.t0 = None
         self.out_dir = None
+        self.api_failures = []
 
     # ---------- helpers ----------
     def _bi(self):
@@ -104,6 +148,24 @@ class failure_reporter:
                     self.meta[key] = str(v)
         if "lender" not in self.meta:
             self.meta["lender"] = str(self._var("LENDER_NAME", ""))
+
+    def _install_net_hook(self):
+        try:
+            self._bi().run_keyword_and_ignore_error("Evaluate JavaScript", None, _NET_HOOK)
+        except Exception:
+            pass
+
+    def _harvest_net(self):
+        """Pull failed API calls recorded by the page hook (kept in sessionStorage)."""
+        try:
+            status, raw = self._bi().run_keyword_and_ignore_error(
+                "Evaluate JavaScript", None,
+                "() => { const v = sessionStorage.getItem('__gqNet') || '[]';"
+                " sessionStorage.removeItem('__gqNet'); return v; }")
+            if status == "PASS" and raw:
+                self.api_failures.extend(json.loads(raw))
+        except Exception:
+            pass
 
     def _capture_page(self):
         """Best-effort capture of URL, visible text and a screenshot. Never raises."""
@@ -145,6 +207,7 @@ class failure_reporter:
     def start_test(self, data, result):
         self.stack, self.stages, self.failures = [], [], []
         self.in_teardown, self.screenshot, self.page, self.meta = False, None, {}, {}
+        self.api_failures = []
         self.test_name = data.name
         self.t0 = time.time()
 
@@ -166,6 +229,12 @@ class failure_reporter:
             if stage:
                 self.stages.append({"stage": str(stage), "t": round(time.time() - self.t0, 1)})
             self._snapshot_meta()
+
+        if name in _HOOK_AFTER and not result.failed:
+            self._install_net_hook()
+
+        if depth == 1:
+            self._harvest_net()
 
         if result.failed:
             msg = result.message or ""
@@ -211,7 +280,16 @@ class failure_reporter:
             "why": {"headline": headline, "likely_cause": cause},
             "page": {"alerts": self.page.get("alerts", ""), "visible_text": self.page.get("body", "")},
             "screenshot": self.screenshot,
+            "api_failures": self.api_failures,
         }
+        if failed and self.api_failures:
+            worst = [a for a in self.api_failures if a["s"] >= 500 or a["s"] == 0] or self.api_failures
+            a = worst[-1]
+            report["why"]["api_note"] = (
+                "%d API call(s) failed during the run. Last relevant: %s %s -> %s%s. "
+                "If this happened just before the failure, the backend error is the likely root cause."
+                % (len(self.api_failures), a["m"], a["u"], a["s"] or "network error",
+                   (" " + a["b"][:120]) if a.get("b") else ""))
         out = self.out_dir or Path(".")
         try:
             (out / "journey_report.json").write_text(json.dumps(report, indent=2))
@@ -233,6 +311,14 @@ class failure_reporter:
         stages = "".join(
             "<li><b>%s</b> <span class=t>+%ss</span></li>" % (e(s["stage"]), s["t"])
             for s in r["stages_reached"]) or "<li>No stage reached</li>"
+        api_rows = "".join(
+            "<tr><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%sms</td><td>%s</td></tr>" % (
+                e(a.get("at", "")[11:19]), e(a["m"]), e(a["u"]), a["s"] or "ERR", a["ms"],
+                e(a.get("b", ""))) for a in r.get("api_failures", []))
+        api_html = ("<h2>API failures during run (%d)</h2><table><tr><th>Time (UTC)</th><th>Method</th>"
+                    "<th>URL</th><th>Status</th><th>Took</th><th>Response</th></tr>%s</table>"
+                    % (len(r["api_failures"]), api_rows)) if api_rows else \
+            "<h2>API failures during run</h2><p>None captured.</p>"
         img = ""
         if r["screenshot"] and Path(r["screenshot"]).exists():
             b64 = base64.b64encode(Path(r["screenshot"]).read_bytes()).decode()
@@ -247,7 +333,7 @@ class failure_reporter:
 <h2>Where</h2><table>%s%s%s%s</table>
 <p class=t>Keyword path: %s</p>
 <h2>What</h2><pre>%s</pre>
-<h2>Why (likely cause)</h2><p><b>%s</b></p><p>%s</p>
+<h2>Why (likely cause)</h2><p><b>%s</b></p><p>%s</p><p>%s</p>
 <h2>What the page was showing</h2><table>%s%s</table>
 %s""" % (
                 row("Journey stage reached", r["last_stage"]),
@@ -255,6 +341,7 @@ class failure_reporter:
                 row("Page URL at failure", w["page_url"]),
                 row("Time into run", "%ss" % w["at_seconds"] if w["at_seconds"] is not None else ""),
                 path, e(r["what"]), e(r["why"]["headline"]), e(r["why"]["likely_cause"]),
+                e(r["why"].get("api_note", "")),
                 row("Alerts / toasts", r["page"]["alerts"]),
                 row("Visible page text", r["page"]["visible_text"]), img)
 
@@ -269,10 +356,11 @@ img{max-width:100%%;border:1px solid #ddd}.t{color:#6b7280;font-size:12px}h2{mar
 <div class=banner>%s &mdash; %s</div>
 <h2>Run</h2><table>%s%s%s%s%s%s</table>
 %s
+%s
 <h2>Journey stages reached</h2><ol>%s</ol>
 </body></html>""" % (
             color, "PASSED" if ok else "FAILED at: " + e(r["last_stage"]), e(r["test"]),
             row("App ID", meta.get("app_id")), row("Lender", meta.get("lender")),
             row("PAN", meta.get("pan")), row("Mobile", meta.get("mobile")),
             row("Duration", "%ss" % r["duration_s"]), row("Status", r["status"]),
-            body, stages)
+            body, api_html, stages)
