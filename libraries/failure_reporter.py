@@ -347,74 +347,146 @@ class failure_reporter:
     def _render(self, r):
         e = html.escape
         ok = r["status"] == "PASS"
-        color = "#16a34a" if ok else "#dc2626"
-        meta = r["meta"]
+        meta, w = r["meta"], r["where"]
 
-        def row(k, v):
-            return "<tr><th>%s</th><td>%s</td></tr>" % (e(k), e(str(v or "-")))
+        def kv(k, v, mono=False):
+            v = e(str(v)) if v not in (None, "") else "&mdash;"
+            return "<div class=kv><span>%s</span><b%s>%s</b></div>" % (e(k), " class=mono" if mono else "", v)
 
         stages = "".join(
-            "<li><b>%s</b> <span class=t>+%ss</span></li>" % (e(s["stage"]), s["t"])
-            for s in r["stages_reached"]) or "<li>No stage reached</li>"
-        api_rows = "".join(
-            "<tr><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%sms</td><td>%s</td>"
-            "<td><button onclick=\"cp(%d)\">Copy cURL</button></td></tr>"
-            "<tr><td colspan=7><details><summary>cURL</summary><pre id=c%d>%s</pre></details></td></tr>" % (
-                e(a.get("at", "")[11:19]), e(a["m"]), e(a["u"]), a["s"] or "ERR", a["ms"],
-                e(a.get("b", "")), n, n, e(a.get("curl", "")))
-            for n, a in enumerate(r.get("api_failures", [])))
-        api_html = ("<h2>API failures during run (%d)</h2><p class=t>Secrets (Authorization/Cookie) are "
-                    "redacted in the cURL; also saved as api_failures_curl.sh next to this report.</p>"
-                    "<table><tr><th>Time (UTC)</th><th>Method</th><th>URL</th><th>Status</th>"
-                    "<th>Took</th><th>Response</th><th></th></tr>%s</table>"
-                    "<script>function cp(n){var t=document.getElementById('c'+n).innerText;"
-                    "if(navigator.clipboard){navigator.clipboard.writeText(t).catch(function(){fb(t)})}else{fb(t)}}"
-                    "function fb(t){var a=document.createElement('textarea');a.value=t;document.body.appendChild(a);"
-                    "a.select();document.execCommand('copy');a.remove()}</script>"
-                    % (len(r["api_failures"]), api_rows)) if api_rows else \
-            "<h2>API failures during run</h2><p>None captured.</p>"
-        img = ""
-        if r["screenshot"] and Path(r["screenshot"]).exists():
-            b64 = base64.b64encode(Path(r["screenshot"]).read_bytes()).decode()
-            img = "<h2>Screenshot at failure</h2><img src='data:image/png;base64,%s'>" % b64
+            "<li class=done><i></i><div><b>%s</b><span>+%ss</span></div></li>" % (e(x["stage"]), x["t"])
+            for x in r["stages_reached"])
+        if not ok:
+            stages += "<li class=fail><i></i><div><b>Failed here</b><span>%s</span></div></li>" % e(
+                w["failing_step"] or "")
+        if not stages:
+            stages = "<li class=fail><i></i><div><b>No stage reached</b></div></li>"
 
-        if ok:
-            body = "<p>All steps completed.</p>"
+        # ---- API failures ----
+        api_rows = ""
+        for n, a in enumerate(r.get("api_failures", [])):
+            code = a["s"]
+            cls = "c5" if (code >= 500 or code == 0) else "c4"
+            api_rows += (
+                "<tr><td class=mono>%s</td><td><span class=m>%s</span></td><td class=mono>%s</td>"
+                "<td><span class='code %s'>%s</span></td><td>%sms</td><td class=mono>%s</td>"
+                "<td><button onclick='cp(%d,this)'>Copy cURL</button></td></tr>"
+                "<tr class=sub><td colspan=7><details><summary>Show cURL</summary><pre id=c%d>%s</pre>"
+                "</details></td></tr>" % (
+                    e(a.get("at", "")[11:19]), e(a["m"]), e(a["u"]), cls, code or "ERR", a["ms"],
+                    e(a.get("b", "")[:160]), n, n, e(a.get("curl", ""))))
+        if api_rows:
+            api_html = (
+                "<section class=card><h2>API failures <em>%d</em></h2>"
+                "<p class=hint>Authorization / Cookie are redacted. Same commands saved in "
+                "<code>api_failures_curl.sh</code>.</p><div class=scroll><table class=grid><tr><th>Time (UTC)</th>"
+                "<th>Method</th><th>Endpoint</th><th>Status</th><th>Took</th><th>Response</th><th></th></tr>%s"
+                "</table></div></section>" % (len(r["api_failures"]), api_rows))
         else:
-            w = r["where"]
-            path = " &rarr; ".join(e(p) for p in w["keyword_path"])
-            body = """
-<h2>Where</h2><table>%s%s%s%s</table>
-<p class=t>Keyword path: %s</p>
-<h2>What</h2><pre>%s</pre>
-<h2>Why (likely cause)</h2><p><b>%s</b></p><p>%s</p><p>%s</p>
-<h2>What the page was showing</h2><table>%s%s</table>
-%s""" % (
-                row("Journey stage reached", r["last_stage"]),
-                row("Failing step", w["failing_step"]),
-                row("Page URL at failure", w["page_url"]),
-                row("Time into run", "%ss" % w["at_seconds"] if w["at_seconds"] is not None else ""),
-                path, e(r["what"]), e(r["why"]["headline"]), e(r["why"]["likely_cause"]),
-                e(r["why"].get("api_note", "")),
-                row("Alerts / toasts", r["page"]["alerts"]),
-                row("Visible page text", r["page"]["visible_text"]), img)
+            api_html = ("<section class=card><h2>API failures</h2>"
+                        "<p class=okline>&#10003; No failed API calls captured.</p></section>")
 
-        return """<!doctype html><html><head><meta charset=utf-8><title>Journey report</title><style>
-body{font:14px system-ui;margin:24px;max-width:1000px;color:#111}
-.banner{background:%s;color:#fff;padding:14px 18px;border-radius:8px;font-size:18px}
-table{border-collapse:collapse;width:100%%;margin:8px 0}th{text-align:left;width:220px;background:#f3f4f6}
-th,td{border:1px solid #e5e7eb;padding:6px 10px;vertical-align:top}
-pre{background:#fef2f2;border:1px solid #fecaca;padding:10px;white-space:pre-wrap;word-break:break-word}
-img{max-width:100%%;border:1px solid #ddd}.t{color:#6b7280;font-size:12px}h2{margin-top:22px}
-</style></head><body>
-<div class=banner>%s &mdash; %s</div>
-<h2>Run</h2><table>%s%s%s%s%s%s</table>
-%s
-%s
-<h2>Journey stages reached</h2><ol>%s</ol>
-</body></html>""" % (
-            color, "PASSED" if ok else "FAILED at: " + e(r["last_stage"]), e(r["test"]),
-            row("App ID", meta.get("app_id")), row("Lender", meta.get("lender")),
-            row("PAN", meta.get("pan")), row("Mobile", meta.get("mobile")),
-            row("Duration", "%ss" % r["duration_s"]), row("Status", r["status"]),
-            body, api_html, stages)
+        # ---- failure detail ----
+        if ok:
+            detail = ("<section class='card good'><h2>All steps completed</h2>"
+                      "<p>The journey ran to the end without a failure.</p></section>")
+        else:
+            path = "".join("<span>%s</span>" % e(x) for x in w["keyword_path"])
+            api_note = ("<p class=note>%s</p>" % e(r["why"]["api_note"])) if r["why"].get("api_note") else ""
+            img = ""
+            if r["screenshot"] and Path(r["screenshot"]).exists():
+                b64 = base64.b64encode(Path(r["screenshot"]).read_bytes()).decode()
+                img = ("<section class=card><h2>Screenshot at failure</h2>"
+                       "<img src='data:image/png;base64,%s'></section>" % b64)
+            alerts = ("<div class=kv><span>Alerts / toasts</span><b>%s</b></div>" % e(r["page"]["alerts"])
+                      ) if r["page"]["alerts"] else ""
+            detail = """
+<div class=cols>
+  <section class='card where'><h2>Where</h2>%s%s%s%s
+    <div class=path>%s</div></section>
+  <section class='card why'><h2>Why</h2><p class=headline>%s</p><p>%s</p>%s</section>
+</div>
+<section class=card><h2>What</h2><pre class=err>%s</pre></section>
+<section class=card><h2>What the page was showing</h2>%s
+  <div class=kv><span>Visible text</span><b class=clip>%s</b></div></section>
+%s""" % (
+                kv("Journey stage", r["last_stage"]), kv("Failing step", w["failing_step"]),
+                kv("Page URL", w["page_url"], True),
+                kv("Time into run", "%ss" % w["at_seconds"] if w["at_seconds"] is not None else ""),
+                path, e(r["why"]["headline"]), e(r["why"]["likely_cause"]), api_note,
+                e(r["what"]), alerts, e(r["page"]["visible_text"] or "—"), img)
+
+        pill = "PASSED" if ok else "FAILED"
+        sub = "Journey completed" if ok else "Failed at: " + e(r["last_stage"])
+        return """<!doctype html><html lang=en><head><meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1"><title>Journey report</title><style>
+:root{--bg:#f6f7fb;--card:#fff;--ink:#0f172a;--mut:#64748b;--line:#e5e7eb;--ok:#16a34a;--bad:#dc2626;
+--okbg:#ecfdf5;--badbg:#fef2f2;--accent:#4f46e5}
+@media(prefers-color-scheme:dark){:root{--bg:#0b1020;--card:#131a2e;--ink:#e5e7eb;--mut:#94a3b8;--line:#243049;
+--okbg:#052e1a;--badbg:#2a1215;--accent:#818cf8}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);
+font:14px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,sans-serif}
+.wrap{max-width:1040px;margin:0 auto;padding:28px 20px 60px}
+.hero{border-radius:16px;padding:22px 26px;color:#fff;display:flex;justify-content:space-between;
+align-items:center;gap:16px;flex-wrap:wrap;background:linear-gradient(135deg,%(g1)s,%(g2)s);
+box-shadow:0 10px 30px -12px %(g1)s}
+.hero h1{margin:0;font-size:22px;letter-spacing:-.01em}.hero p{margin:4px 0 0;opacity:.9}
+.badge{background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.4);padding:6px 16px;border-radius:999px;
+font-weight:700;letter-spacing:.08em}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin-top:16px;
+box-shadow:0 1px 2px rgba(0,0,0,.04)}
+.card h2{margin:0 0 12px;font-size:12px;text-transform:uppercase;letter-spacing:.09em;color:var(--mut)}
+.card h2 em{font-style:normal;background:var(--badbg);color:var(--bad);border-radius:999px;padding:1px 9px;margin-left:6px}
+.good{background:var(--okbg);border-color:transparent}.good h2{color:var(--ok)}
+.grid4{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin-top:16px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+.stat span{display:block;color:var(--mut);font-size:11px;text-transform:uppercase;letter-spacing:.07em}
+.stat b{font-size:15px;word-break:break-all}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:16px}@media(max-width:760px){.cols{grid-template-columns:1fr}}
+.cols .card{margin-top:16px}.where{border-left:4px solid var(--accent)}.why{border-left:4px solid var(--bad)}
+.kv{display:flex;gap:12px;padding:6px 0;border-bottom:1px dashed var(--line)}.kv:last-of-type{border:0}
+.kv span{flex:0 0 120px;color:var(--mut)}.kv b{font-weight:600;word-break:break-word}.clip{font-weight:400!important;
+max-height:110px;overflow:auto;display:block}
+.mono,code,pre{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12.5px}
+.path{margin-top:12px;display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.path span{background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:2px 8px;font-size:12px}
+.path span:not(:last-child)::after{content:" \203A";color:var(--mut);margin-left:6px}
+.path span:last-child{border-color:var(--bad);color:var(--bad);font-weight:600}
+.headline{font-size:17px;font-weight:700;margin:0 0 6px}.note{background:var(--badbg);border-radius:8px;padding:8px 10px}
+pre{margin:0;white-space:pre-wrap;word-break:break-word}.err{background:var(--badbg);border-radius:8px;padding:12px;color:var(--bad)}
+.scroll{overflow-x:auto}table.grid{width:100%%;border-collapse:collapse}
+.grid th{text-align:left;color:var(--mut);font-size:11px;text-transform:uppercase;letter-spacing:.06em;padding:6px 8px}
+.grid td{padding:8px;border-top:1px solid var(--line);vertical-align:top}.grid tr.sub td{border-top:0;padding-top:0}
+.m{background:var(--bg);border:1px solid var(--line);border-radius:5px;padding:1px 7px;font-size:12px;font-weight:600}
+.code{border-radius:5px;padding:1px 8px;font-weight:700;color:#fff}.c5{background:var(--bad)}.c4{background:#d97706}
+button{cursor:pointer;border:1px solid var(--accent);color:var(--accent);background:transparent;border-radius:8px;
+padding:4px 10px;font-weight:600}button:hover{background:var(--accent);color:#fff}
+details summary{cursor:pointer;color:var(--mut);font-size:12px}details pre{background:var(--bg);border-radius:8px;
+padding:10px;margin-top:6px}
+.hint{color:var(--mut);margin:0 0 10px}.okline{color:var(--ok);margin:0;font-weight:600}
+ol.tl{list-style:none;margin:0;padding:0}.tl li{display:flex;gap:12px;position:relative;padding-bottom:14px}
+.tl li:not(:last-child)::before{content:"";position:absolute;left:6px;top:16px;bottom:0;width:2px;background:var(--line)}
+.tl i{width:14px;height:14px;border-radius:50%%;background:var(--ok);flex:none;margin-top:3px}
+.tl li.fail i{background:var(--bad)}.tl div{display:flex;gap:10px;align-items:baseline;flex-wrap:wrap}
+.tl span{color:var(--mut);font-size:12px}img{max-width:100%%;border-radius:10px;border:1px solid var(--line)}
+</style></head><body><div class=wrap>
+<div class=hero><div><h1>%(test)s</h1><p>%(sub)s</p></div><div class=badge>%(pill)s</div></div>
+<div class=grid4>
+<div class=stat><span>App ID</span><b>%(app)s</b></div><div class=stat><span>Lender</span><b>%(lender)s</b></div>
+<div class=stat><span>PAN</span><b>%(pan)s</b></div><div class=stat><span>Mobile</span><b>%(mobile)s</b></div>
+<div class=stat><span>Duration</span><b>%(dur)ss</b></div></div>
+%(detail)s
+%(api)s
+<section class=card><h2>Journey stages</h2><ol class=tl>%(stages)s</ol></section>
+</div>
+<script>function cp(n,btn){var t=document.getElementById('c'+n).innerText;
+function fb(){var a=document.createElement('textarea');a.value=t;document.body.appendChild(a);a.select();
+document.execCommand('copy');a.remove()}
+if(navigator.clipboard){navigator.clipboard.writeText(t).catch(fb)}else{fb()}
+btn.textContent='Copied';setTimeout(function(){btn.textContent='Copy cURL'},1500)}</script>
+</body></html>""" % {
+            "g1": "#16a34a" if ok else "#dc2626", "g2": "#0d9488" if ok else "#9333ea",
+            "test": e(r["test"]), "sub": sub, "pill": pill,
+            "app": e(meta.get("app_id") or "—"), "lender": e(meta.get("lender") or "—"),
+            "pan": e(meta.get("pan") or "—"), "mobile": e(meta.get("mobile") or "—"),
+            "dur": r["duration_s"], "detail": detail, "api": api_html, "stages": stages}
