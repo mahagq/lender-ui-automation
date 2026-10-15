@@ -72,29 +72,42 @@ _NET_HOOK = """() => {
   const save = (e) => { try {
     const a = JSON.parse(sessionStorage.getItem('__gqNet') || '[]'); a.push(e);
     sessionStorage.setItem('__gqNet', JSON.stringify(a.slice(-100))); } catch (_) {} };
-  const rec = (m, u, s, ms, b) => save({m, u: String(u).split('?')[0], s, ms, b: String(b || '').slice(0, 300),
-                                         at: new Date().toISOString(), page: location.pathname});
+  const abs = (u) => { try { return new URL(u, location.href).href; } catch (_) { return String(u); } };
+  const hdrs = (h) => { const o = {}; try {
+    if (!h) return o;
+    if (typeof h.forEach === 'function' && !Array.isArray(h)) h.forEach((v, k) => { o[k] = v; });
+    else if (Array.isArray(h)) h.forEach(p => { o[p[0]] = p[1]; });
+    else Object.keys(h).forEach(k => { o[k] = h[k]; });
+  } catch (_) {} return o; };
+  const bodyStr = (b) => (typeof b === 'string') ? b.slice(0, 4000) : (b ? '[non-text body: ' + Object.prototype.toString.call(b) + ']' : '');
+  const rec = (m, u, s, ms, b, rh, rb) => save({m, u: String(u).split('?')[0], full: abs(u), s, ms,
+    b: String(b || '').slice(0, 300), rh: rh || {}, rb: rb || '', at: new Date().toISOString(), page: location.pathname});
   const of = window.fetch;
   window.fetch = async function (input, init) {
-    const url = typeof input === 'string' ? input : ((input && input.url) || '');
-    const method = (init && init.method) || (input && input.method) || 'GET';
+    const isReq = input && typeof input === 'object' && 'url' in input;
+    const url = isReq ? input.url : input;
+    const method = (init && init.method) || (isReq && input.method) || 'GET';
+    const rh = Object.assign({}, isReq ? hdrs(input.headers) : {}, hdrs(init && init.headers));
+    const rb = bodyStr(init && init.body);
     const t = Date.now();
     try {
       const r = await of.apply(this, arguments);
       if (r.status >= 400 && !skip.test(url)) {
         let b = ''; try { b = await r.clone().text(); } catch (_) {}
-        rec(method, url, r.status, Date.now() - t, b);
+        rec(method, url, r.status, Date.now() - t, b, rh, rb);
       }
       return r;
-    } catch (err) { if (!skip.test(url)) rec(method, url, 0, Date.now() - t, err); throw err; }
+    } catch (err) { if (!skip.test(url)) rec(method, url, 0, Date.now() - t, err, rh, rb); throw err; }
   };
-  const xo = XMLHttpRequest.prototype.open, xs = XMLHttpRequest.prototype.send;
-  XMLHttpRequest.prototype.open = function (m, u) { this.__m = m; this.__u = u; return xo.apply(this, arguments); };
-  XMLHttpRequest.prototype.send = function () {
-    const t = Date.now();
+  const xo = XMLHttpRequest.prototype.open, xs = XMLHttpRequest.prototype.send,
+        xh = XMLHttpRequest.prototype.setRequestHeader;
+  XMLHttpRequest.prototype.open = function (m, u) { this.__m = m; this.__u = u; this.__h = {}; return xo.apply(this, arguments); };
+  XMLHttpRequest.prototype.setRequestHeader = function (k, v) { (this.__h = this.__h || {})[k] = v; return xh.apply(this, arguments); };
+  XMLHttpRequest.prototype.send = function (body) {
+    const t = Date.now(), rb = bodyStr(body);
     this.addEventListener('loadend', () => {
       if ((this.status >= 400 || this.status === 0) && !skip.test(this.__u || ''))
-        rec(this.__m, this.__u, this.status, Date.now() - t, this.status ? this.responseText : 'network error');
+        rec(this.__m, this.__u, this.status, Date.now() - t, this.status ? this.responseText : 'network error', this.__h, rb);
     });
     return xs.apply(this, arguments);
   };
@@ -103,6 +116,24 @@ _NET_HOOK = """() => {
 
 # library keywords after which the hook is (re)installed; it is idempotent per document
 _HOOK_AFTER = {"go to", "reload", "new page", "new context", "click"}
+
+
+_SENSITIVE = ("authorization", "cookie", "x-api-key", "x-auth-token", "token")
+
+
+def _curl(a, include_secrets=False):
+    """Build a curl command for a captured failed request. Secrets are redacted by default."""
+    import shlex
+    parts = ["curl", "-i", "-X", a.get("m", "GET"), shlex.quote(a.get("full") or a["u"])]
+    for k, v in (a.get("rh") or {}).items():
+        if k.lower() in ("content-length", "host", "user-agent"):
+            continue
+        if not include_secrets and any(t in k.lower() for t in _SENSITIVE):
+            v = "<REDACTED>"
+        parts += ["-H", shlex.quote("%s: %s" % (k, v))]
+    if a.get("rb"):
+        parts += ["--data-raw", shlex.quote(a["rb"])]
+    return " ".join(parts)
 
 
 def _classify(message):
@@ -291,6 +322,20 @@ class failure_reporter:
                 % (len(self.api_failures), a["m"], a["u"], a["s"] or "network error",
                    (" " + a["b"][:120]) if a.get("b") else ""))
         out = self.out_dir or Path(".")
+        import os
+        incl = os.environ.get("FAILURE_REPORT_INCLUDE_AUTH") == "1"
+        for a in self.api_failures:
+            a["curl"] = _curl(a, incl)
+            a.pop("rh", None)
+        if self.api_failures:
+            try:
+                (out / "api_failures_curl.sh").write_text(
+                    "#!/bin/sh\n# Failed API calls captured during the run (secrets redacted unless "
+                    "FAILURE_REPORT_INCLUDE_AUTH=1)\n\n" + "\n\n".join(
+                        "# %s %s -> %s\n%s" % (a["m"], a["u"], a["s"] or "network error", a["curl"])
+                        for a in self.api_failures) + "\n")
+            except Exception:
+                pass
         try:
             (out / "journey_report.json").write_text(json.dumps(report, indent=2))
             (out / "journey_report.html").write_text(self._render(report))
@@ -312,11 +357,20 @@ class failure_reporter:
             "<li><b>%s</b> <span class=t>+%ss</span></li>" % (e(s["stage"]), s["t"])
             for s in r["stages_reached"]) or "<li>No stage reached</li>"
         api_rows = "".join(
-            "<tr><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%sms</td><td>%s</td></tr>" % (
+            "<tr><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%sms</td><td>%s</td>"
+            "<td><button onclick=\"cp(%d)\">Copy cURL</button></td></tr>"
+            "<tr><td colspan=7><details><summary>cURL</summary><pre id=c%d>%s</pre></details></td></tr>" % (
                 e(a.get("at", "")[11:19]), e(a["m"]), e(a["u"]), a["s"] or "ERR", a["ms"],
-                e(a.get("b", ""))) for a in r.get("api_failures", []))
-        api_html = ("<h2>API failures during run (%d)</h2><table><tr><th>Time (UTC)</th><th>Method</th>"
-                    "<th>URL</th><th>Status</th><th>Took</th><th>Response</th></tr>%s</table>"
+                e(a.get("b", "")), n, n, e(a.get("curl", "")))
+            for n, a in enumerate(r.get("api_failures", [])))
+        api_html = ("<h2>API failures during run (%d)</h2><p class=t>Secrets (Authorization/Cookie) are "
+                    "redacted in the cURL; also saved as api_failures_curl.sh next to this report.</p>"
+                    "<table><tr><th>Time (UTC)</th><th>Method</th><th>URL</th><th>Status</th>"
+                    "<th>Took</th><th>Response</th><th></th></tr>%s</table>"
+                    "<script>function cp(n){var t=document.getElementById('c'+n).innerText;"
+                    "if(navigator.clipboard){navigator.clipboard.writeText(t).catch(function(){fb(t)})}else{fb(t)}}"
+                    "function fb(t){var a=document.createElement('textarea');a.value=t;document.body.appendChild(a);"
+                    "a.select();document.execCommand('copy');a.remove()}</script>"
                     % (len(r["api_failures"]), api_rows)) if api_rows else \
             "<h2>API failures during run</h2><p>None captured.</p>"
         img = ""
