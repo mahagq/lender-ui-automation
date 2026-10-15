@@ -59,7 +59,7 @@ def run_robot(label, variables: dict, test="smoke"):
     out_dir.mkdir(parents=True, exist_ok=True)
     test_file = str(BASE / "tests/e2e/smoke_e2e_tests.robot" if test == "smoke"
                     else BASE / "tests/e2e/nach_resume_tests.robot")
-    cmd = [str(ROBOT), "--outputdir", str(out_dir)]
+    cmd = [str(ROBOT), "--listener", str(BASE / "libraries/failure_reporter.py"), "--outputdir", str(out_dir)]
     for k, v in variables.items():
         cmd += ["--variable", f"{k}:{v}"]
     cmd.append(test_file)
